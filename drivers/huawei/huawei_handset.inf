@@ -1,0 +1,69 @@
+; ==============================================================================
+; HUAWEI Android Adapter PCUI & DBAdapter Driver (Manufacture Mode)
+; Hardware IDs: 
+; USB\VID_12D1&PID_1035&MI_00 (PCUI)
+; USB\VID_12D1&PID_1035&MI_01 (DBAdapter)
+; USB\VID_12D1&PID_1051&MI_00 / USB\VID_12D1&PID_1052&MI_00
+; USB\VID_12D1&PID_1037&MI_00 / USB\VID_12D1&PID_107E&MI_00 / USB\VID_12D1&PID_107E&MI_01
+; ==============================================================================
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=Ports
+ClassGuid={4D36E978-E325-11CE-BFC1-08002BE10318}
+Provider=%ProviderName%
+DriverVer=09/18/2021,2.0.6.726
+CatalogFile=huawei_handset.cat
+
+[Manufacturer]
+%ManufacturerName%=Huawei,NTx86,NTamd64
+
+[Huawei.NTx86]
+%USB\VID_12D1&PID_1035&MI_00.DeviceDesc%=ComPort, USB\VID_12D1&PID_1035&MI_00
+%USB\VID_12D1&PID_1035&MI_01.DeviceDesc%=ComPort, USB\VID_12D1&PID_1035&MI_01
+%USB\VID_12D1&PID_1051&MI_00.DeviceDesc%=ComPort, USB\VID_12D1&PID_1051&MI_00
+%USB\VID_12D1&PID_1052&MI_00.DeviceDesc%=ComPort, USB\VID_12D1&PID_1052&MI_00
+%USB\VID_12D1&PID_1037&MI_00.DeviceDesc%=ComPort, USB\VID_12D1&PID_1037&MI_00
+%USB\VID_12D1&PID_107E&MI_00.DeviceDesc%=ComPort, USB\VID_12D1&PID_107E&MI_00
+%USB\VID_12D1&PID_107E&MI_01.DeviceDesc%=ComPort, USB\VID_12D1&PID_107E&MI_01
+
+[Huawei.NTamd64]
+%USB\VID_12D1&PID_1035&MI_00.DeviceDesc%=ComPort, USB\VID_12D1&PID_1035&MI_00
+%USB\VID_12D1&PID_1035&MI_01.DeviceDesc%=ComPort, USB\VID_12D1&PID_1035&MI_01
+%USB\VID_12D1&PID_1051&MI_00.DeviceDesc%=ComPort, USB\VID_12D1&PID_1051&MI_00
+%USB\VID_12D1&PID_1052&MI_00.DeviceDesc%=ComPort, USB\VID_12D1&PID_1052&MI_00
+%USB\VID_12D1&PID_1037&MI_00.DeviceDesc%=ComPort, USB\VID_12D1&PID_1037&MI_00
+%USB\VID_12D1&PID_107E&MI_00.DeviceDesc%=ComPort, USB\VID_12D1&PID_107E&MI_00
+%USB\VID_12D1&PID_107E&MI_01.DeviceDesc%=ComPort, USB\VID_12D1&PID_107E&MI_01
+
+[ComPort.NT]
+Include=mdmcpq.inf
+Needs=FakeModemCopyFileSection
+AddReg=ComPort.NT.AddReg
+
+[ComPort.NT.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,usbser.sys
+HKR,,EnumPropPages32,,"MsPorts.dll,PortsPageProvider"
+
+[ComPort.NT.Services]
+AddService = usbser, 0x00000002, Service_Inst
+
+[Service_Inst]
+DisplayName = %Serial.SvcDesc%
+ServiceType = 1
+StartType = 3
+ErrorControl = 1
+ServiceBinary = %12%\usbser.sys
+
+[Strings]
+ProviderName = "Huawei Technologies Co., Ltd."
+ManufacturerName = "Huawei Technologies Co., Ltd."
+Serial.SvcDesc = "HUAWEI Handset USB Driver"
+USB\VID_12D1&PID_1035&MI_00.DeviceDesc = "HUAWEI Android Adapter PCUI"
+USB\VID_12D1&PID_1035&MI_01.DeviceDesc = "HUAWEI DBAdapter Reserved Interface"
+USB\VID_12D1&PID_1051&MI_00.DeviceDesc = "HUAWEI Mobile Adapter PCUI"
+USB\VID_12D1&PID_1052&MI_00.DeviceDesc = "HUAWEI Mobile Adapter DBAdapter"
+USB\VID_12D1&PID_1037&MI_00.DeviceDesc = "HUAWEI USB Serial Port (PCUI)"
+USB\VID_12D1&PID_107E&MI_00.DeviceDesc = "HUAWEI USB COM Port"
+USB\VID_12D1&PID_107E&MI_01.DeviceDesc = "HUAWEI USB Diag Port"

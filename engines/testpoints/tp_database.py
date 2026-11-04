@@ -600,6 +600,210 @@ TEST_POINT_DATABASE = {
                 {"name": "GND Shield", "pos": (315, 300), "color": "#10B981", "is_signal": False}
             ]
         }
+    },
+
+    # -------------------------------------------------------------------------
+    # HUAWEI & HONOR (HISILICON KIRIN)
+    # -------------------------------------------------------------------------
+    "Huawei Mate 10 Lite (RNE-L21)": {
+        "brand": "Huawei",
+        "chipset": "HiSilicon Kirin 659",
+        "mode": "HUAWEI USB COM 1.0 (Hardware Test Point)",
+        "difficulty": "Easy (Pads near SIM slot / Upper shield)",
+        "tp_type": "Kirin Test Point to GND",
+        "instructions": (
+            "1. Power off device and disconnect battery cable.\n"
+            "2. Locate the golden test point pad on the upper motherboard left of the shielding can.\n"
+            "3. Short the TP pad to the shielding can (GND) using precision tweezers.\n"
+            "4. Connect USB cable to PC.\n"
+            "5. Tool detects HUAWEI USB COM 1.0 (VID: 12D1, PID: 3609) — release tweezers."
+        ),
+        "schematic": {
+            "board_color": "#1A2535",
+            "cpu_pos": (200, 120, 120, 110),
+            "emmc_pos": (200, 250, 110, 100),
+            "pmic_pos": (80, 150, 80, 80),
+            "battery_pos": (70, 370, 110, 50),
+            "sim_pos": (340, 100, 90, 150),
+            "tp_pads": [
+                {"name": "TP (Kirin 659)", "pos": (315, 185), "color": "#EF4444", "is_signal": True},
+                {"name": "GND Shield", "pos": (300, 230), "color": "#F59E0B", "is_signal": False}
+            ]
+        }
+    },
+    "Honor 8X (JSN-L21)": {
+        "brand": "Huawei",
+        "chipset": "HiSilicon Kirin 710",
+        "mode": "HUAWEI USB COM 1.0 (Force BSL / Kirin Rescue)",
+        "difficulty": "Easy (Beside PMIC shielding)",
+        "tp_type": "Kirin TP to GND",
+        "instructions": (
+            "1. Disconnect battery connector.\n"
+            "2. Identify the marked test point pinout near the bottom side of the CPU metal shield.\n"
+            "3. Bridge the TP point to ground copper / shield.\n"
+            "4. Insert USB cable. Tool detects Kirin USB COM 1.0."
+        ),
+        "schematic": {
+            "board_color": "#1E2A38",
+            "cpu_pos": (210, 130, 120, 110),
+            "emmc_pos": (210, 260, 100, 90),
+            "pmic_pos": (90, 160, 70, 70),
+            "battery_pos": (80, 370, 110, 50),
+            "sim_pos": (350, 110, 90, 150),
+            "tp_pads": [
+                {"name": "TP (Kirin 710)", "pos": (320, 230), "color": "#EF4444", "is_signal": True},
+                {"name": "GND Shield", "pos": (310, 275), "color": "#10B981", "is_signal": False}
+            ]
+        }
+    },
+    "Huawei Y9 Prime 2019 (STK-L21)": {
+        "brand": "Huawei",
+        "chipset": "HiSilicon Kirin 710F",
+        "mode": "HUAWEI USB COM 1.0",
+        "difficulty": "Easy",
+        "tp_type": "Test Point to Motherboard Ground",
+        "instructions": (
+            "1. Disassemble back cover and remove plastic shield.\n"
+            "2. Unplug battery flex.\n"
+            "3. Short the single test point pin beside the battery flex connector to GND shield.\n"
+            "4. Insert Type-C cable and hold short for 2 seconds until COM 1.0 is detected."
+        ),
+        "schematic": {
+            "board_color": "#182635",
+            "cpu_pos": (220, 130, 120, 110),
+            "emmc_pos": (220, 260, 100, 90),
+            "pmic_pos": (90, 160, 80, 80),
+            "battery_pos": (80, 360, 120, 50),
+            "sim_pos": (360, 110, 90, 150),
+            "tp_pads": [
+                {"name": "TP (STK-L21)", "pos": (330, 270), "color": "#EF4444", "is_signal": True},
+                {"name": "GND Shield", "pos": (320, 315), "color": "#10B981", "is_signal": False}
+            ]
+        }
+    },
+    "Huawei P30 Lite (MAR-LX1A)": {
+        "brand": "Huawei",
+        "chipset": "HiSilicon Kirin 710",
+        "mode": "HUAWEI USB COM 1.0",
+        "difficulty": "Easy",
+        "tp_type": "Test Point to GND",
+        "instructions": (
+            "1. Remove rear glass and disconnect battery.\n"
+            "2. Locate test point pad next to the camera flex / shield corner.\n"
+            "3. Ground test point pad with tweezers.\n"
+            "4. Connect Type-C cable; release tweezers once driver binds."
+        ),
+        "schematic": {
+            "board_color": "#1E3045",
+            "cpu_pos": (210, 140, 120, 110),
+            "emmc_pos": (210, 270, 100, 100),
+            "pmic_pos": (90, 170, 70, 70),
+            "battery_pos": (80, 370, 110, 50),
+            "sim_pos": (350, 120, 90, 150),
+            "tp_pads": [
+                {"name": "TP (P30 Lite)", "pos": (315, 240), "color": "#EF4444", "is_signal": True},
+                {"name": "GND Shield", "pos": (300, 285), "color": "#F59E0B", "is_signal": False}
+            ]
+        }
+    },
+    "Huawei P20 / P20 Pro (EML / CLT)": {
+        "brand": "Huawei",
+        "chipset": "HiSilicon Kirin 970",
+        "mode": "HUAWEI USB COM 1.0 (Kirin 970 Rescue Mode)",
+        "difficulty": "Easy",
+        "tp_type": "TP Pad to Metal Shield",
+        "instructions": (
+            "1. Detach battery flex.\n"
+            "2. Short the test point pin right under the motherboard metal casing to GND.\n"
+            "3. Plug in USB cable.\n"
+            "4. Kirin 970 BROM connects as USB COM 1.0."
+        ),
+        "schematic": {
+            "board_color": "#1A2234",
+            "cpu_pos": (200, 130, 130, 120),
+            "emmc_pos": (200, 270, 110, 100),
+            "pmic_pos": (80, 160, 80, 80),
+            "battery_pos": (70, 370, 110, 50),
+            "sim_pos": (350, 110, 90, 150),
+            "tp_pads": [
+                {"name": "TP (Kirin 970)", "pos": (325, 210), "color": "#EF4444", "is_signal": True},
+                {"name": "GND Shield", "pos": (310, 255), "color": "#10B981", "is_signal": False}
+            ]
+        }
+    },
+    "Huawei Nova 3i (INE-LX1)": {
+        "brand": "Huawei",
+        "chipset": "HiSilicon Kirin 710",
+        "mode": "HUAWEI USB COM 1.0",
+        "difficulty": "Easy",
+        "tp_type": "Test Point to GND",
+        "instructions": (
+            "1. Disconnect battery.\n"
+            "2. Locate the test point pad near the LCD flex connector.\n"
+            "3. Short to metal ground and insert USB cable."
+        ),
+        "schematic": {
+            "board_color": "#1E2A38",
+            "cpu_pos": (210, 130, 120, 110),
+            "emmc_pos": (210, 260, 100, 90),
+            "pmic_pos": (90, 150, 70, 70),
+            "battery_pos": (80, 360, 110, 50),
+            "sim_pos": (350, 110, 90, 150),
+            "tp_pads": [
+                {"name": "TP (Nova 3i)", "pos": (320, 250), "color": "#EF4444", "is_signal": True},
+                {"name": "GND Shield", "pos": (305, 295), "color": "#F59E0B", "is_signal": False}
+            ]
+        }
+    },
+    "Huawei P30 Pro (VOG-L29)": {
+        "brand": "Huawei",
+        "chipset": "HiSilicon Kirin 980",
+        "mode": "HUAWEI USB COM 1.0 (Kirin 980 Bootloader)",
+        "difficulty": "Medium (Near Periscope Camera shield)",
+        "tp_type": "TP to Shield Ground",
+        "instructions": (
+            "1. Remove wireless charging coil and disconnect battery.\n"
+            "2. Locate the golden test point pad situated beside the main Kirin 980 shielding cover.\n"
+            "3. Short to shield ground with tweezers and insert Type-C cable."
+        ),
+        "schematic": {
+            "board_color": "#1B2838",
+            "cpu_pos": (190, 120, 140, 130),
+            "emmc_pos": (190, 270, 120, 100),
+            "pmic_pos": (70, 160, 80, 80),
+            "battery_pos": (70, 370, 110, 50),
+            "sim_pos": (350, 100, 90, 150),
+            "tp_pads": [
+                {"name": "TP (Kirin 980)", "pos": (335, 230), "color": "#EF4444", "is_signal": True},
+                {"name": "GND Shield", "pos": (320, 275), "color": "#10B981", "is_signal": False}
+            ]
+        }
+    },
+    "Universal Huawei HiSilicon Kirin (USB COM 1.0)": {
+        "brand": "Huawei",
+        "chipset": "HiSilicon Kirin (65x / 710 / 960 / 970 / 980 / 990)",
+        "mode": "HUAWEI USB COM 1.0 Universal Handshake",
+        "difficulty": "Universal Method",
+        "tp_type": "Hardware Test Point to Ground (GND)",
+        "instructions": (
+            "1. Unplug battery completely.\n"
+            "2. Locate device model test point (TP) pad from pinout diagram.\n"
+            "3. Use curved tweezers to short TP pad to motherboard metal shield / copper ground.\n"
+            "4. Connect USB cable to PC while maintaining short for 1.5 - 2 seconds.\n"
+            "5. Release short once device manager registers 'HUAWEI USB COM 1.0'."
+        ),
+        "schematic": {
+            "board_color": "#1A253A",
+            "cpu_pos": (200, 130, 130, 120),
+            "emmc_pos": (200, 270, 110, 100),
+            "pmic_pos": (80, 160, 80, 80),
+            "battery_pos": (70, 370, 110, 50),
+            "sim_pos": (350, 110, 90, 150),
+            "tp_pads": [
+                {"name": "Kirin TP", "pos": (325, 225), "color": "#EF4444", "is_signal": True},
+                {"name": "GND Shield", "pos": (310, 270), "color": "#10B981", "is_signal": False}
+            ]
+        }
     }
 }
 
@@ -649,6 +853,8 @@ def find_testpoint_for_model(brand: str = "", model_name: str = "", platform: st
     plat_lower = platform.lower() if platform else ""
     if "qualcomm" in plat_lower or "qc" in plat_lower or "snapdragon" in m_lower:
         return ("Universal Qualcomm Snapdragon (EDL 9008)", TEST_POINT_DATABASE["Universal Qualcomm Snapdragon (EDL 9008)"])
+    elif "huawei" in b_lower or "honor" in b_lower or "kirin" in plat_lower or "hisi" in plat_lower or "kirin" in m_lower:
+        return ("Universal Huawei HiSilicon Kirin (USB COM 1.0)", TEST_POINT_DATABASE["Universal Huawei HiSilicon Kirin (USB COM 1.0)"])
     elif "unisoc" in plat_lower or "spd" in plat_lower or "sprd" in m_lower or "tiger" in m_lower:
         return ("Universal Unisoc SPRD (BSL / Diag)", TEST_POINT_DATABASE["Universal Unisoc SPRD (BSL / Diag)"])
     elif "samsung" in b_lower or "exynos" in plat_lower:

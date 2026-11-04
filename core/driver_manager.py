@@ -40,6 +40,7 @@ class DriverManager:
             "mtk": False,
             "qualcomm": False,
             "unisoc": False,
+            "huawei": False,
             "usbdk": False,
             "libusb": False
         }
@@ -61,6 +62,8 @@ class DriverManager:
                 status["qualcomm"] = True
             if "unisoc" in out or "sprd" in out or "spreadtrum" in out:
                 status["unisoc"] = True
+            if "huawei" in out or "hwusb" in out or "hisi" in out or "12d1" in out:
+                status["huawei"] = True
             if "libusb" in out or "winusb" in out:
                 status["libusb"] = True
         except Exception as e:
@@ -157,6 +160,8 @@ class DriverManager:
             ("mtk_cdc", "MediaTek CDC ACM Driver", os.path.join("mtk", "cdc-acm.inf")),
             ("qualcomm", "Qualcomm HS-USB QDLoader 9008 Driver", os.path.join("qualcomm", "qcser.inf")),
             ("unisoc", "Unisoc SPRD U2S Diag / Flash Driver", os.path.join("unisoc", "sprd_u2s.inf")),
+            ("huawei_com", "Huawei USB COM 1.0 Driver", os.path.join("huawei", "huawei_usb_com.inf")),
+            ("huawei_pcui", "Huawei PCUI Handset Driver", os.path.join("huawei", "huawei_handset.inf")),
             ("libusb", "LibUSB-Win32 Endpoint Filter", os.path.join("libusb", "libusb_filter.inf"))
         ]
 
@@ -190,3 +195,11 @@ class DriverManager:
         self.log("==================================================", "success")
 
         return results
+
+    def install_huawei_drivers(self) -> (bool, str):
+        """Installs Huawei USB COM 1.0 and PCUI Handset signed drivers."""
+        com_inf = os.path.join(self.DRIVERS_BASE_DIR, "huawei", "huawei_usb_com.inf")
+        pcui_inf = os.path.join(self.DRIVERS_BASE_DIR, "huawei", "huawei_handset.inf")
+        ok1, m1 = self.install_inf_driver(com_inf)
+        ok2, m2 = self.install_inf_driver(pcui_inf)
+        return (ok1 and ok2), f"COM 1.0: {m1} | PCUI: {m2}"

@@ -4,12 +4,12 @@ import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 import customtkinter as ctk
 
-from engines.unpackers import SamsungTarUnpacker, SuperSparseUnpacker, OfpOpsUnpacker, PayloadUnpacker
+from engines.unpackers import SamsungTarUnpacker, SuperSparseUnpacker, OfpOpsUnpacker, PayloadUnpacker, HuaweiAppUnpacker
 from utils.file_utils import format_bytes
 from ui.theme import Theme
 
 class FirmwareUnpackerView:
-    """Universal Firmware Unpacker View (.ofp, .ops, Samsung .tar.md5, Android super.img)."""
+    """Universal Firmware Unpacker View (.ofp, .ops, Samsung .tar.md5, Huawei UPDATE.APP, Android super.img)."""
 
     def __init__(self, master_body, controller):
         self.body_frame = master_body
@@ -17,7 +17,7 @@ class FirmwareUnpackerView:
         self.logger = controller.logger
 
         # State Variables
-        self.format_var = tk.StringVar(value="Samsung (.tar.md5 + LZ4)")
+        self.format_var = tk.StringVar(value="Huawei Firmware (UPDATE.APP)")
         self.input_file_var = tk.StringVar(value="")
         self.output_dir_var = tk.StringVar(value=os.path.join(os.getcwd(), "unpacked"))
         self.chk_lz4_var = tk.BooleanVar(value=True)
@@ -50,6 +50,7 @@ class FirmwareUnpackerView:
         self.format_menu = ctk.CTkOptionMenu(
             self.left_panel_unp,
             values=[
+                "Huawei Firmware (UPDATE.APP)",
                 "Android OTA (payload.bin)",
                 "Samsung (.tar.md5 + LZ4)",
                 "Oppo / Realme (.ofp)",
@@ -206,7 +207,9 @@ class FirmwareUnpackerView:
 
     def _browse_input(self):
         fmt = self.format_var.get()
-        if "payload.bin" in fmt:
+        if "UPDATE.APP" in fmt or "Huawei" in fmt:
+            f = filedialog.askopenfilename(title="Select Huawei UPDATE.APP Firmware", filetypes=[("Huawei UPDATE.APP", "UPDATE.APP;*.app"), ("All Files", "*.*")])
+        elif "payload.bin" in fmt:
             f = filedialog.askopenfilename(title="Select Android OTA Payload File", filetypes=[("Payload Binary", "payload.bin;*.bin"), ("All Files", "*.*")])
         elif "Samsung" in fmt:
             f = filedialog.askopenfilename(title="Select Samsung .tar.md5 Firmware", filetypes=[("Samsung TAR", "*.tar.md5;*.tar"), ("All Files", "*.*")])
@@ -265,7 +268,14 @@ class FirmwareUnpackerView:
                     self.logger.info(f"[UNPACK] {msg}")
 
                 files = []
-                if "payload.bin" in fmt:
+                if "UPDATE.APP" in fmt or "Huawei" in fmt:
+                    files = HuaweiAppUnpacker.unpack_update_app(
+                        app_path=in_file,
+                        out_dir=out_dir,
+                        progress_cb=prog_cb,
+                        log_cb=log_cb
+                    )
+                elif "payload.bin" in fmt:
                     unpacker = PayloadUnpacker(logger=self.logger)
                     extracted_paths = unpacker.unpack(
                         payload_path=in_file,

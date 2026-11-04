@@ -16,7 +16,7 @@ from mtk.flasher import ScatterParser, MtkFirmwareFlasher
 from mtk.meta_engine import MtkMetaEngine
 from engines.qualcomm import QualcommEngine, QualcommQcnEngine
 from engines.unisoc import UnisocEngine, UnisocNvEngine
-from engines.huawei import KirinEngine
+from engines.huawei import KirinEngine, HuaweiPCUIEngine
 
 from ui.components.header_bar import HeaderBar
 from ui.components.module_ribbon import ModuleRibbon
@@ -77,6 +77,7 @@ class BSLabApp(ctk.CTk):
         self.qc_qcn_engine = QualcommQcnEngine(self.logger)
         self.spd_nv_engine = UnisocNvEngine(self.logger)
         self.kirin_engine = KirinEngine(self.logger)
+        self.huawei_pcui = HuaweiPCUIEngine(self.logger)
         self.cloud_sync = CloudSyncManager(self.logger)
 
         self.active_ports = {}
@@ -1489,6 +1490,118 @@ class BSLabApp(ctk.CTk):
         if self.is_busy: return
         serial = getattr(self, "selected_serial", None)
         self.kirin_engine.reboot(target_serial=serial)
+
+    # =========================================================================
+    # HUAWEI MANUFACTURE MODE (PCUI AT COMMANDS) CONTROLLER METHODS
+    # =========================================================================
+    def huawei_pcui_read_info(self):
+        """Reads deep hardware passport from Huawei phone in Manufacture Mode (*#*#2846579#*#*)."""
+        if self.is_busy: return
+        def run():
+            self.is_busy = True
+            self._set_ui_busy(True)
+            try:
+                port = getattr(self, "selected_port", None) or self.huawei_pcui.find_pcui_port()
+                passport = self.huawei_pcui.read_device_passport(port=port)
+                if passport:
+                    info_text = (
+                        f"Hardware Board: {passport.get('board', 'Unknown')}\n"
+                        f"Firmware Build: {passport.get('build', 'Unknown')}\n"
+                        f"Serial Number:  {passport.get('sn', 'Unknown')}\n"
+                        f"Primary IMEI 1: {passport.get('imei1', 'Unknown')}\n"
+                        f"Secondary IMEI: {passport.get('imei2', 'Unknown')}\n"
+                        f"Port / Vendor:  {passport.get('vendor_country', 'Unknown')}"
+                    )
+                    self.after(0, lambda: messagebox.showinfo("Huawei Manufacture Passport", info_text))
+                else:
+                    self.after(0, lambda: messagebox.showwarning("Huawei PCUI", "Failed to communicate with Huawei Manufacture Mode. Ensure code *#*#2846579#*#* is active."))
+            finally:
+                self.is_busy = False
+                self.after(0, self._set_ui_busy, False)
+        threading.Thread(target=run, daemon=True).start()
+
+    def huawei_pcui_reboot_fastboot(self):
+        """Commands Huawei device in Manufacture Mode to jump directly into Fastboot Rescue Mode."""
+        if self.is_busy: return
+        def run():
+            self.is_busy = True
+            self._set_ui_busy(True)
+            try:
+                port = getattr(self, "selected_port", None) or self.huawei_pcui.find_pcui_port()
+                ok, msg = self.huawei_pcui.reboot(mode="fastboot", port=port)
+                if ok:
+                    self.logger.success("[✓] Fastboot jump signal dispatched. Phone is entering Fastboot Rescue Mode.")
+                else:
+                    self.after(0, lambda: messagebox.showwarning("Huawei PCUI", f"Fastboot jump failed: {msg}"))
+            finally:
+                self.is_busy = False
+                self.after(0, self._set_ui_busy, False)
+        threading.Thread(target=run, daemon=True).start()
+
+    def huawei_pcui_repair_imei(self):
+        """Interactive 1-Click IMEI repair over PCUI AT commands."""
+        if self.is_busy: return
+        from tkinter import simpledialog
+        imei1 = simpledialog.askstring("Huawei IMEI Repair", "Enter New 15-Digit Primary IMEI 1:", parent=self)
+        if not imei1:
+            return
+        imei1 = imei1.strip()
+        if not imei1.isdigit() or len(imei1) not in (14, 15):
+            messagebox.showerror("Invalid IMEI", "IMEI must be 14 or 15 numeric digits.")
+            return
+
+        imei2 = simpledialog.askstring("Huawei IMEI Repair", "Enter Secondary IMEI 2 (Optional, leave blank if single SIM):", parent=self)
+        datalock = simpledialog.askstring("Huawei DataLock Key", "Enter Manufacture DataLock Code (Optional, leave blank if unlocked):", parent=self)
+
+        def run():
+            self.is_busy = True
+            self._set_ui_busy(True)
+            try:
+                port = getattr(self, "selected_port", None) or self.huawei_pcui.find_pcui_port()
+                ok, msg = self.huawei_pcui.repair_imei(
+                    imei1=imei1,
+                    imei2=imei2.strip() if imei2 else None,
+                    datalock_key=datalock.strip() if datalock else "",
+                    port=port
+                )
+                if ok:
+                    self.after(0, lambda: messagebox.showinfo("Huawei IMEI Repair", f"IMEI 1: {imei1} successfully written to baseband!\nReboot device to finalize."))
+                else:
+                    self.after(0, lambda: messagebox.showerror("Huawei IMEI Repair", f"Failed to write IMEI: {msg}"))
+            finally:
+                self.is_busy = False
+                self.after(0, self._set_ui_busy, False)
+        threading.Thread(target=run, daemon=True).start()
+
+    def huawei_pcui_rebrand(self):
+        """Interactive Vendor / Country Rebranding over PCUI AT commands."""
+        if self.is_busy: return
+        from tkinter import simpledialog
+        vendor = simpledialog.askstring("Huawei Rebranding", "Enter Vendor Code (e.g. 'hw', 'all', 'telecom'):", parent=self)
+        if not vendor: return
+        country = simpledialog.askstring("Huawei Rebranding", "Enter Country Code (e.g. 'spcseas', 'meafnaf', 'eu', 'ru'):", parent=self)
+        if not country: return
+
+        def run():
+            self.is_busy = True
+            self._set_ui_busy(True)
+            try:
+                port = getattr(self, "selected_port", None) or self.huawei_pcui.find_pcui_port()
+                ok, msg = self.huawei_pcui.rebrand_device(vendor=vendor, country=country, port=port)
+                if ok:
+                    self.after(0, lambda: messagebox.showinfo("Huawei Rebranding", f"Rebranded to {vendor.lower()}/{country.lower()} successfully!"))
+                else:
+                    self.after(0, lambda: messagebox.showerror("Huawei Rebranding", f"Rebranding failed: {msg}"))
+            finally:
+                self.is_busy = False
+                self.after(0, self._set_ui_busy, False)
+        threading.Thread(target=run, daemon=True).start()
+
+    def huawei_pcui_reboot_normal(self):
+        """Reboots Huawei device normally from Manufacture Mode."""
+        if self.is_busy: return
+        port = getattr(self, "selected_port", None) or self.huawei_pcui.find_pcui_port()
+        self.huawei_pcui.reboot(mode="normal", port=port)
 
     # =========================================================================
     # UNISOC / SPREADTRUM (SPD) PAC FLASHER & BSL CONTROLLER METHODS

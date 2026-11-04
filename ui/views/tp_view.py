@@ -35,7 +35,7 @@ class TestPointView:
         ctk.CTkLabel(self.left_panel_tp, text="Filter by Brand:", font=ctk.CTkFont(size=10), text_color="#94A3B8").pack(anchor="w", padx=12, pady=(2, 0))
         self.brand_menu = ctk.CTkOptionMenu(
             self.left_panel_tp,
-            values=["All Brands", "Infinix", "Xiaomi", "Vivo", "Realme", "Tecno", "Samsung"],
+            values=["All Brands", "Huawei / Honor", "Infinix", "Xiaomi", "Vivo", "Realme", "Tecno", "Samsung"],
             variable=self.selected_brand_var,
             fg_color="#0284C7",
             height=30,
@@ -166,8 +166,13 @@ class TestPointView:
 
         filtered = []
         for name, data in TEST_POINT_DATABASE.items():
-            if brand_filter != "All Brands" and data.get("brand") != brand_filter:
-                continue
+            if brand_filter != "All Brands":
+                b_val = data.get("brand", "")
+                if brand_filter == "Huawei / Honor":
+                    if b_val not in ("Huawei", "Honor"):
+                        continue
+                elif b_val != brand_filter:
+                    continue
             if query and (query not in name.lower() and query not in data.get("chipset", "").lower()):
                 continue
             filtered.append(name)

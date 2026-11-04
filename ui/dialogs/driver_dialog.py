@@ -55,6 +55,7 @@ class DriverDialog(ctk.CTkToplevel):
         self.lbl_mtk = self._make_status_row(self.content_card, "MediaTek USB VCOM Driver (CDC / Preloader)")
         self.lbl_qc = self._make_status_row(self.content_card, "Qualcomm HS-USB QDLoader 9008 Driver")
         self.lbl_spd = self._make_status_row(self.content_card, "Unisoc SPRD U2S Diag & Flash Driver")
+        self.lbl_huawei = self._make_status_row(self.content_card, "Huawei USB COM 1.0 & PCUI Handset Driver")
         self.lbl_usbdk = self._make_status_row(self.content_card, "UsbDk 64-bit Service (Port Disconnection Fix)")
         self.lbl_libusb = self._make_status_row(self.content_card, "LibUSB-Win32 Endpoint Filter Driver")
 
@@ -156,6 +157,7 @@ class DriverDialog(ctk.CTkToplevel):
         set_b(self.lbl_mtk, st.get("mtk", False))
         set_b(self.lbl_qc, st.get("qualcomm", False))
         set_b(self.lbl_spd, st.get("unisoc", False))
+        set_b(self.lbl_huawei, st.get("huawei", False))
         set_b(self.lbl_usbdk, st.get("usbdk", False))
         set_b(self.lbl_libusb, st.get("libusb", False))
 

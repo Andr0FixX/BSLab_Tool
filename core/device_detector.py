@@ -62,6 +62,15 @@ class DeviceDetector:
                         "mode": "HUAWEI",
                         "details": {"port": c.device, "desc": c.description, "vid": hex(vid), "pid": hex(pid), "profile": profile}
                     }
+                # Huawei HiSilicon Manufacture Mode (PCUI / DBAdapter)
+                elif (vid == 0x12D1 and any(k in desc_lower for k in ["pcui", "dbadapter", "manufacture"])) or any(k in desc_lower for k in ["adapter pcui", "dbadapter", "huawei pcui"]):
+                    profile = ModelDatabase.resolve(c.description, mode="HUAWEI_PCUI", details={"port": c.device, "vid": hex(vid), "pid": hex(pid), "is_pcui": True})
+                    return {
+                        "detected": True,
+                        "text": f"🟢 Huawei PCUI: {profile['name']} ({c.device})",
+                        "mode": "HUAWEI_PCUI",
+                        "details": {"port": c.device, "desc": c.description, "vid": hex(vid), "pid": hex(pid), "profile": profile}
+                    }
                 # Unisoc / Spreadtrum BSL / Diag
                 elif any(k in desc_lower for k in ["spd", "sprd", "spreadtrum", "unisoc", "u2s"]):
                     profile = ModelDatabase.resolve(c.description, mode="SPD", details={"port": c.device, "vid": hex(vid), "pid": hex(pid)})
@@ -273,6 +282,14 @@ class DeviceDetector:
                         "detected": True,
                         "text": f"🟢 Huawei Kirin: {profile['name']} ({c.device})",
                         "mode": "HUAWEI",
+                        "details": {"port": c.device, "desc": c.description, "vid": hex(vid), "pid": hex(pid), "profile": profile}
+                    })
+                elif (vid == 0x12D1 and any(k in desc_lower for k in ["pcui", "dbadapter", "manufacture"])) or any(k in desc_lower for k in ["adapter pcui", "dbadapter", "huawei pcui"]):
+                    profile = ModelDatabase.resolve(c.description, mode="HUAWEI_PCUI", details={"port": c.device, "vid": hex(vid), "pid": hex(pid), "is_pcui": True})
+                    devices.append({
+                        "detected": True,
+                        "text": f"🟢 Huawei PCUI: {profile['name']} ({c.device})",
+                        "mode": "HUAWEI_PCUI",
                         "details": {"port": c.device, "desc": c.description, "vid": hex(vid), "pid": hex(pid), "profile": profile}
                     })
                 elif any(k in desc_lower for k in ["spd", "sprd", "spreadtrum", "unisoc", "u2s"]):

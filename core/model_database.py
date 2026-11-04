@@ -367,6 +367,16 @@ class ModelDatabase:
                 "category": "huawei",
                 "icon_badge": "Huawei"
             }
+        elif mode == "HUAWEI_PCUI":
+            return {
+                "name": "Huawei Handset (Manufacture Mode PCUI)",
+                "soc": "HiSilicon Kirin Baseband Processor",
+                "brand": "Huawei",
+                "family": "HiSilicon Kirin Series",
+                "codename": "huawei_pcui",
+                "category": "huawei",
+                "icon_badge": "Huawei"
+            }
         elif mode == "SPD":
             return {
                 "name": "Unisoc / Spreadtrum Device (BSL Mode)",

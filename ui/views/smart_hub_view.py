@@ -887,6 +887,59 @@ class SmartHubView:
                     "cmd": c.huawei_reboot
                 }
             ]
+        elif mode == "HUAWEI_PCUI":
+            return [
+                {
+                    "icon": "📋",
+                    "title": "Read Deep Huawei Diagnostics (PCUI)",
+                    "desc": "Reads Hardware board ID, firmware build, serial number, and IMEI 1 & 2 via AT commands.",
+                    "btn_text": "📋 Read Manufacture Specs",
+                    "category": "all",
+                    "badge": "MANUFACTURE PASSPORT",
+                    "color": "#0284C7", "hover": "#0369A1",
+                    "cmd": c.huawei_pcui_read_info
+                },
+                {
+                    "icon": "⚡",
+                    "title": "Jump from Manufacture to Fastboot Rescue",
+                    "desc": "Sends AT^REBOOT=FASTBOOT to enter Huawei Fastboot Rescue Mode directly without button press.",
+                    "btn_text": "⚡ Jump to Fastboot Rescue",
+                    "category": "reboot",
+                    "badge": "FASTBOOT JUMP",
+                    "color": "#D97706", "hover": "#B45309",
+                    "cmd": c.huawei_pcui_reboot_fastboot
+                },
+                {
+                    "icon": "🔧",
+                    "title": "Repair / Write IMEI 1 & IMEI 2",
+                    "desc": "Writes calibrated 15-digit IMEI 1 & IMEI 2 over AT^PHYNUM with optional DataLock key.",
+                    "btn_text": "🔧 Repair IMEI (1-Click)",
+                    "category": "unlock",
+                    "badge": "IMEI REPAIR",
+                    "color": "#059669", "hover": "#047857",
+                    "cmd": c.huawei_pcui_repair_imei
+                },
+                {
+                    "icon": "🌍",
+                    "title": "Rebrand Vendor & Country Code",
+                    "desc": "Sets carrier vendor and country partition flags (AT^SETVND, AT^SETCTRY).",
+                    "btn_text": "🌍 Rebrand Vendor/Country",
+                    "category": "unlock",
+                    "badge": "REBRANDING",
+                    "color": "#4F46E5", "hover": "#4338CA",
+                    "cmd": c.huawei_pcui_rebrand
+                },
+                {
+                    "icon": "🔄",
+                    "title": "Normal System Reboot (PCUI)",
+                    "desc": "Exits Manufacture Mode and restarts Huawei phone normally.",
+                    "btn_text": "🔄 Reboot to Normal OS",
+                    "category": "reboot",
+                    "badge": "NORMAL BOOT",
+                    "color": "#475569", "hover": "#334155",
+                    "cmd": c.huawei_pcui_reboot_normal
+                }
+            ]
         elif mode == "SAMSUNG":
             return [
                 {
