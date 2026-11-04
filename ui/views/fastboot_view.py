@@ -522,6 +522,23 @@ class FastbootADBView:
                 self.logger.error(f"[Fastboot] Error checking devices: {str(e)}")
         threading.Thread(target=run, daemon=True).start()
 
+    def _get_target_adb_serial(self):
+        """Resolves target ADB serial from active controller selection or Smart Hub."""
+        if hasattr(self.controller, "selected_serial") and self.controller.selected_serial:
+            return self.controller.selected_serial
+        if hasattr(self.controller, "smart_hub_view") and hasattr(self.controller.smart_hub_view, "current_details"):
+            s = self.controller.smart_hub_view.current_details.get("serial")
+            if s:
+                return s
+        try:
+            dev_res = self._run_tool(["adb", "devices"], capture_output=True, text=True)
+            lines = [l.strip() for l in dev_res.stdout.splitlines() if l.strip() and not l.startswith("List of")]
+            if lines:
+                return lines[0].split()[0]
+        except Exception:
+            pass
+        return None
+
     def _adb_check_device(self):
         self.logger.info("Scanning for connected ADB devices (USB Debugging)...")
         def run():
@@ -542,44 +559,43 @@ class FastbootADBView:
 
     def _reboot_device_mode(self, mode):
         self.logger.info(f"Triggering Reboot to: {mode.upper()}...")
+        target_serial = self._get_target_adb_serial()
+        adb_cmd = ["adb", "-s", target_serial] if target_serial else ["adb"]
         def run():
             if mode == "system":
-                self._run_tool(["adb", "reboot"], capture_output=True)
+                self._run_tool(adb_cmd + ["reboot"], capture_output=True)
                 self._run_tool(["fastboot", "reboot"], capture_output=True)
                 self.logger.success("[Reboot] Command sent to reboot system normally.")
             elif mode == "bootloader":
-                self._run_tool(["adb", "reboot", "bootloader"], capture_output=True)
+                self._run_tool(adb_cmd + ["reboot", "bootloader"], capture_output=True)
                 self.logger.success("[Reboot] Sent 'adb reboot bootloader' payload.")
             elif mode == "recovery":
-                self._run_tool(["adb", "reboot", "recovery"], capture_output=True)
+                self._run_tool(adb_cmd + ["reboot", "recovery"], capture_output=True)
                 self._run_tool(["fastboot", "reboot-recovery"], capture_output=True)
                 self.logger.success("[Reboot] Command sent to reboot into Recovery Mode.")
             elif mode == "edl":
-                self._run_tool(["adb", "reboot", "edl"], capture_output=True)
+                self._run_tool(adb_cmd + ["reboot", "edl"], capture_output=True)
                 self._run_tool(["fastboot", "oem", "edl"], capture_output=True)
                 self.logger.brom("[Reboot] Command sent to force Qualcomm EDL 9008 Mode.")
             elif mode == "fastbootd":
                 self._run_tool(["fastboot", "reboot", "fastboot"], capture_output=True)
                 self.logger.success("[Reboot] Sent 'fastboot reboot fastboot' for Dynamic Partitions.")
             elif mode == "poweroff":
-                self._run_tool(["adb", "shell", "reboot", "-p"], capture_output=True)
+                self._run_tool(adb_cmd + ["shell", "reboot", "-p"], capture_output=True)
                 self.logger.info("[Power] Sent power off command.")
         threading.Thread(target=run, daemon=True).start()
 
     def _adb_read_info(self):
         self.logger.info("Querying Android Device Properties via ADB (getprop)...")
+        serial = self._get_target_adb_serial()
         def run():
             try:
-                dev_res = self._run_tool(["adb", "devices"], capture_output=True, text=True)
-                lines = [l.strip() for l in dev_res.stdout.splitlines() if l.strip() and not l.startswith("List of")]
-                if not lines:
+                target_s = serial or self._get_target_adb_serial()
+                if not target_s:
                     self.logger.error("[ADB] No connected ADB device found. Please verify cable and USB Debugging.")
                     return
-                if any("unauthorized" in l for l in lines):
-                    self.logger.warn("[ADB] Device UNAUTHORIZED! Check phone screen and tap Always allow from this computer -> OK.")
-                    return
-                serial = lines[0].split()[0]
-                res = self._run_tool(["adb", "-s", serial, "shell", "getprop"], capture_output=True, text=True)
+                dev_s = target_s
+                res = self._run_tool(["adb", "-s", dev_s, "shell", "getprop"], capture_output=True, text=True)
                 if not res.stdout or not res.stdout.strip():
                     self.logger.error("[ADB] Device shell returned empty response or permission denied.")
                     return
@@ -599,7 +615,7 @@ class FastbootADBView:
                 build = props.get("ro.build.display.id", "UNKNOWN")
                 cpu = props.get("ro.product.cpu.abi", "UNKNOWN")
                 soc = props.get("ro.board.platform", props.get("ro.hardware", "UNKNOWN"))
-                bat_res = self._run_tool(["adb", "-s", serial, "shell", "dumpsys", "battery"], capture_output=True, text=True)
+                bat_res = self._run_tool(["adb", "-s", dev_s, "shell", "dumpsys", "battery"], capture_output=True, text=True)
                 bat_lvl = "Unknown"
                 if bat_res and bat_res.stdout:
                     for bline in bat_res.stdout.splitlines():
@@ -610,7 +626,7 @@ class FastbootADBView:
                 self.logger.success("ANDROID DEVICE SPECIFICATIONS (ADB READ INFO)")
                 self.logger.success("==================================================")
                 self.logger.info(f"Brand / Maker   : {brand} ({mfg})")
-                self.logger.info(f"Model Name      : {model} [Serial: {serial}]")
+                self.logger.info(f"Model Name      : {model} [Serial: {dev_s}]")
                 self.logger.info(f"Android Version : Android {ver} (SDK API {sdk})")
                 self.logger.info(f"Security Patch  : {sec}")
                 self.logger.info(f"Build Display ID: {build}")
@@ -622,13 +638,15 @@ class FastbootADBView:
         threading.Thread(target=run, daemon=True).start()
     def _adb_reset_frp(self):
         self.logger.warn("Executing One-Click Google FRP Bypass via ADB...")
+        target_s = self._get_target_adb_serial()
+        adb_p = ["adb", "-s", target_s] if target_s else ["adb"]
         def run():
             cmds = [
-                ["adb", "shell", "content", "insert", "--uri", "content://settings/secure", "--bind", "name:s:user_setup_complete", "--bind", "value:s:1"],
-                ["adb", "shell", "settings", "put", "secure", "user_setup_complete", "1"],
-                ["adb", "shell", "settings", "put", "global", "device_provisioned", "1"],
-                ["adb", "shell", "settings", "put", "secure", "device_provisioned", "1"],
-                ["adb", "shell", "am", "start", "-n", "com.google.android.gsf.login/"]
+                adb_p + ["shell", "content", "insert", "--uri", "content://settings/secure", "--bind", "name:s:user_setup_complete", "--bind", "value:s:1"],
+                adb_p + ["shell", "settings", "put", "secure", "user_setup_complete", "1"],
+                adb_p + ["shell", "settings", "put", "global", "device_provisioned", "1"],
+                adb_p + ["shell", "settings", "put", "secure", "device_provisioned", "1"],
+                adb_p + ["shell", "am", "start", "-n", "com.google.android.gsf.login/"]
             ]
             for cmd in cmds:
                 self._run_tool(cmd, capture_output=True)
@@ -641,9 +659,9 @@ class FastbootADBView:
     def _adb_bypass_setup_wizard(self):
         self.logger.info("Bypassing Initial Setup Wizard...")
         def run():
-            self._run_tool(["adb", "shell", "settings", "put", "global", "setup_wizard_has_run", "1"], capture_output=True)
-            self._run_tool(["adb", "shell", "settings", "put", "secure", "user_setup_complete", "1"], capture_output=True)
-            self._run_tool(["adb", "shell", "settings", "put", "global", "device_provisioned", "1"], capture_output=True)
+            self._run_tool(adb_p + ["shell", "settings", "put", "global", "setup_wizard_has_run", "1"], capture_output=True)
+            self._run_tool(adb_p + ["shell", "settings", "put", "secure", "user_setup_complete", "1"], capture_output=True)
+            self._run_tool(adb_p + ["shell", "settings", "put", "global", "device_provisioned", "1"], capture_output=True)
             self.logger.success("[✓] Setup Wizard Bypassed Successfully!")
         threading.Thread(target=run, daemon=True).start()
 
@@ -1143,7 +1161,7 @@ class FastbootADBView:
         self.logger.info(f"Triggering MTP Browser Intent Push for: {url}")
         def run():
             # Method 1: Check if ADB is alive
-            adb_res = self._run_tool(["adb", "shell", "am", "start", "-a", "android.intent.action.VIEW", "-d", url], capture_output=True, text=True)
+            adb_res = self._run_tool(adb_p + ["shell", "am", "start", "-a", "android.intent.action.VIEW", "-d", url], capture_output=True, text=True)
             if "Starting:" in adb_res.stdout:
                 self.logger.success("[✓] Browser Intent launched successfully via ADB channel.")
                 return
@@ -1218,9 +1236,9 @@ class FastbootADBView:
                 time.sleep(3)
 
                 self.logger.info("[*] Applying device setup configuration...")
-                adb_res1 = self._run_tool(["adb", "shell", "settings", "put", "secure", "user_setup_complete", "1"], capture_output=True, text=True)
-                adb_res2 = self._run_tool(["adb", "shell", "settings", "put", "global", "device_provisioned", "1"], capture_output=True, text=True)
-                self._run_tool(["adb", "shell", "am", "start", "-c", "android.intent.category.HOME", "-a", "android.intent.action.MAIN"], capture_output=True)
+                adb_res1 = self._run_tool(adb_p + ["shell", "settings", "put", "secure", "user_setup_complete", "1"], capture_output=True, text=True)
+                adb_res2 = self._run_tool(adb_p + ["shell", "settings", "put", "global", "device_provisioned", "1"], capture_output=True, text=True)
+                self._run_tool(adb_p + ["shell", "am", "start", "-c", "android.intent.category.HOME", "-a", "android.intent.action.MAIN"], capture_output=True)
 
                 if adb_res1.returncode == 0 or adb_res2.returncode == 0:
                     self.logger.success("[✓] Samsung Service Routine Finished Successfully!")

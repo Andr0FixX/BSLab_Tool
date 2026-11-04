@@ -319,12 +319,39 @@ class DeviceDetector:
                 parts = line.strip().split()
                 if len(parts) >= 2 and parts[1] == "device":
                     dev_serial = parts[0]
-                    profile = ModelDatabase.resolve(dev_serial, mode="ADB", details={"serial": dev_serial})
+                    model_name = dev_serial
+                    brand_name = ""
+                    soc_name = ""
+                    try:
+                        res_m = subprocess.run([adb_bin, "-s", dev_serial, "shell", "getprop", "ro.product.model"],
+                                               capture_output=True, text=True, timeout=2, creationflags=cls._CREATE_NO_WINDOW)
+                        if res_m.stdout.strip():
+                            model_name = res_m.stdout.strip()
+                        res_b = subprocess.run([adb_bin, "-s", dev_serial, "shell", "getprop", "ro.product.brand"],
+                                               capture_output=True, text=True, timeout=2, creationflags=cls._CREATE_NO_WINDOW)
+                        if res_b.stdout.strip():
+                            brand_name = res_b.stdout.strip()
+                        res_s = subprocess.run([adb_bin, "-s", dev_serial, "shell", "getprop", "ro.board.platform"],
+                                               capture_output=True, text=True, timeout=2, creationflags=cls._CREATE_NO_WINDOW)
+                        if res_s.stdout.strip():
+                            soc_name = res_s.stdout.strip()
+                    except Exception:
+                        pass
+
+                    profile = ModelDatabase.resolve(model_name, mode="ADB", details={"model": model_name, "brand": brand_name, "soc": soc_name, "serial": dev_serial})
+                    display_brand = (brand_name or profile.get("brand") or "Android").upper()
+                    display_model = profile.get("name") or model_name
                     devices.append({
                         "detected": True,
-                        "text": f"🟢 ADB: {profile['name']} ({dev_serial[:10]})",
+                        "text": f"🟢 ADB: {display_brand} {display_model} ({dev_serial[:8]})",
                         "mode": "ADB",
-                        "details": {"serial": dev_serial, "profile": profile}
+                        "details": {
+                            "serial": dev_serial,
+                            "model": display_model,
+                            "brand": display_brand,
+                            "soc": soc_name,
+                            "profile": profile
+                        }
                     })
         except Exception:
             pass

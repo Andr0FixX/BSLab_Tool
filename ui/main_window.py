@@ -43,6 +43,13 @@ ctk.set_widget_scaling(SettingsManager.get("scaling", 0.90))
 class BSLabApp(ctk.CTk):
     """BS Lab Tool v2.0 PRO — Master Application Controller."""
 
+    def report_callback_exception(self, exc, val, tb):
+        """Suppresses harmless Tkinter orphaned after-script notices on widget redraw / DPI scaling."""
+        err_msg = str(val)
+        if "invalid command name" in err_msg and ("update" in err_msg or "check_dpi_scaling" in err_msg):
+            return
+        super().report_callback_exception(exc, val, tb)
+
     def __init__(self, user_data=None):
         super().__init__()
         self.user_data = user_data or {}
@@ -817,6 +824,15 @@ class BSLabApp(ctk.CTk):
         self.header_bar.set_connected_usb(text, is_online)
         if is_online:
             self.status_bar.set_device_status(text, "#34D399")
+            soc = ""
+            if details and isinstance(details, dict):
+                soc = details.get("profile", {}).get("soc") or details.get("soc", "")
+            if not soc and hasattr(self, "smart_hub_view") and hasattr(self.smart_hub_view, "current_profile"):
+                soc = self.smart_hub_view.current_profile.get("soc", "")
+            if soc:
+                self.status_bar.set_chipset_status(f"⚡ SoC: {soc}")
+            else:
+                self.status_bar.set_chipset_status(f"Platform: {mode} Interface Active")
             self.logger.success(f"[USB Hardware] {text}")
 
             if not prev_online or prev_mode != mode:
