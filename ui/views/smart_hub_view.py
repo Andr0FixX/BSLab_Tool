@@ -433,17 +433,18 @@ class SmartHubView:
         ).pack(pady=22)
 
     def _update_multi_device_bar(self):
-        """Renders interactive multi-device switcher pills when >1 phone is connected."""
+        """Renders interactive multi-device switcher pills when phone(s) are connected."""
         for w in self.multi_device_buttons_frame.winfo_children():
             w.destroy()
 
-        if len(self.all_connected_devices) > 1:
+        if len(self.all_connected_devices) >= 1:
             self.multi_device_frame.pack(fill="x", pady=(2, 4))
             curr_serial = self.current_details.get("serial")
             curr_port = self.current_details.get("port")
 
             for idx, dev in enumerate(self.all_connected_devices):
-                dev_text = dev.get("text", f"Device {idx+1}")
+                raw_text = dev.get("text", f"Device {idx+1}")
+                clean_name = raw_text.replace("🟢 ", "").replace("🟡 ", "").replace("⚪ ", "")
                 dev_serial = dev.get("details", {}).get("serial")
                 dev_port = dev.get("details", {}).get("port")
 
@@ -457,16 +458,17 @@ class SmartHubView:
 
                 fg = "#064E3B" if is_active else "#182236"
                 txt_color = "#34D399" if is_active else "#94A3B8"
-                border = "#34D399" if is_active else "#334155"
+                border = "#10B981" if is_active else "#334155"
+                prefix = "● ACTIVE TARGET: " if is_active else "📱 Switch to "
 
                 btn = ctk.CTkButton(
                     self.multi_device_buttons_frame,
-                    text=f"📱 {dev_text[:32]}",
+                    text=f"{prefix}{clean_name[:36]}",
                     font=Theme.font_bold(size=10),
                     height=28,
                     fg_color=fg,
                     text_color=txt_color,
-                    border_width=1,
+                    border_width=2 if is_active else 1,
                     border_color=border,
                     hover_color="#065F46" if is_active else "#243350",
                     command=lambda d=dev, i=idx: self._select_active_device(d, i)

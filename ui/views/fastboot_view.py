@@ -522,6 +522,16 @@ class FastbootADBView:
                 self.logger.error(f"[Fastboot] Error checking devices: {str(e)}")
         threading.Thread(target=run, daemon=True).start()
 
+    def _get_target_fastboot_serial(self):
+        """Resolves target Fastboot serial from active controller selection or Smart Hub."""
+        if hasattr(self.controller, "selected_serial") and self.controller.selected_serial:
+            return self.controller.selected_serial
+        if hasattr(self.controller, "smart_hub_view") and hasattr(self.controller.smart_hub_view, "current_details"):
+            s = self.controller.smart_hub_view.current_details.get("serial")
+            if s:
+                return s
+        return None
+
     def _get_target_adb_serial(self):
         """Resolves target ADB serial from active controller selection or Smart Hub."""
         if hasattr(self.controller, "selected_serial") and self.controller.selected_serial:
@@ -857,7 +867,17 @@ class FastbootADBView:
     def _run_cmd_log(self, cmd_list, tag):
         try:
             cmd = list(cmd_list)
+            bin_name = cmd[0].lower()
             cmd[0] = get_platform_tool_path(cmd[0])
+            if "-s" not in cmd:
+                if "adb" in bin_name:
+                    s = self._get_target_adb_serial()
+                    if s:
+                        cmd = [cmd[0], "-s", s] + cmd[1:]
+                elif "fastboot" in bin_name:
+                    s = self._get_target_fastboot_serial()
+                    if s:
+                        cmd = [cmd[0], "-s", s] + cmd[1:]
             cflags = 0x08000000 if sys.platform == "win32" else 0
             p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, creationflags=cflags)
             for line in iter(p.stdout.readline, ''):

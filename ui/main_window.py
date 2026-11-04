@@ -801,11 +801,37 @@ class BSLabApp(ctk.CTk):
         self.logger.info("Scanning for connected USB hardware (COM, ADB, Fastboot)...")
         def run():
             all_devices = DeviceDetector.scan_all_connected_devices()
-            res = DeviceDetector.scan_all_devices()
-            is_online = res["detected"]
-            text = res["text"]
-            mode = res.get("mode", "NONE")
-            details = res.get("details", {})
+            active_dev = None
+            if all_devices:
+                curr_serial = getattr(self, "selected_serial", None)
+                curr_port = getattr(self, "selected_port", None)
+                if curr_serial:
+                    for d in all_devices:
+                        if d.get("details", {}).get("serial") == curr_serial:
+                            active_dev = d
+                            break
+                if not active_dev and curr_port:
+                    for d in all_devices:
+                        if d.get("details", {}).get("port") == curr_port:
+                            active_dev = d
+                            break
+                if not active_dev:
+                    active_dev = all_devices[0]
+                    self.selected_serial = active_dev.get("details", {}).get("serial")
+                    self.selected_port = active_dev.get("details", {}).get("port")
+
+                is_online = True
+                text = active_dev["text"]
+                mode = active_dev.get("mode", "NONE")
+                details = active_dev.get("details", {})
+            else:
+                is_online = False
+                text = "⚪ No Device Connected (Listening...)"
+                mode = "NONE"
+                details = {}
+                self.selected_serial = None
+                self.selected_port = None
+
             self.after(0, lambda: self._apply_usb_detection(text, is_online, mode, details, all_devices))
         threading.Thread(target=run, daemon=True).start()
 

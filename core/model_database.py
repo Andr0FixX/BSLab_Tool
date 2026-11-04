@@ -150,6 +150,13 @@ class ModelDatabase:
 
     # 5. Huawei / Honor HiSilicon Kirin Registry
     HUAWEI = {
+        "rne-l21": {"name": "Huawei Mate 10 Lite (RNE-L21)", "soc": "HiSilicon Kirin 659 (Octa-Core)", "brand": "Huawei", "family": "Mate Series"},
+        "rne-lx1": {"name": "Huawei Mate 10 Lite (RNE-LX1)", "soc": "HiSilicon Kirin 659", "brand": "Huawei", "family": "Mate Series"},
+        "rne-l01": {"name": "Huawei Mate 10 Lite (RNE-L01)", "soc": "HiSilicon Kirin 659", "brand": "Huawei", "family": "Mate Series"},
+        "rne-l22": {"name": "Huawei Nova 2i (RNE-L22)", "soc": "HiSilicon Kirin 659", "brand": "Huawei", "family": "Nova Series"},
+        "rne-l23": {"name": "Huawei Mate 10 Lite (RNE-L23)", "soc": "HiSilicon Kirin 659", "brand": "Huawei", "family": "Mate Series"},
+        "pra-lx1": {"name": "Huawei P8 Lite 2017 / P9 Lite", "soc": "HiSilicon Kirin 655", "brand": "Huawei", "family": "P Series"},
+        "pra-la1": {"name": "Huawei P9 Lite 2017", "soc": "HiSilicon Kirin 655", "brand": "Huawei", "family": "P Series"},
         "vog-l29": {"name": "Huawei P30 Pro", "soc": "HiSilicon Kirin 980", "brand": "Huawei", "family": "P Series"},
         "ele-l29": {"name": "Huawei P30", "soc": "HiSilicon Kirin 980", "brand": "Huawei", "family": "P Series"},
         "hma-l29": {"name": "Huawei Mate 20", "soc": "HiSilicon Kirin 980", "brand": "Huawei", "family": "Mate Series"},
@@ -165,6 +172,9 @@ class ModelDatabase:
         "bkl-l09": {"name": "Honor View 10", "soc": "HiSilicon Kirin 970", "brand": "Honor", "family": "Honor Series"},
         "clt-l29": {"name": "Huawei P20 Pro", "soc": "HiSilicon Kirin 970", "brand": "Huawei", "family": "P Series"},
         "eml-l29": {"name": "Huawei P20", "soc": "HiSilicon Kirin 970", "brand": "Huawei", "family": "P Series"},
+        "vtr-l29": {"name": "Huawei P10", "soc": "HiSilicon Kirin 960", "brand": "Huawei", "family": "P Series"},
+        "bla-l29": {"name": "Huawei Mate 10 Pro", "soc": "HiSilicon Kirin 970", "brand": "Huawei", "family": "Mate Series"},
+        "alp-l29": {"name": "Huawei Mate 10", "soc": "HiSilicon Kirin 970", "brand": "Huawei", "family": "Mate Series"},
     }
 
     # 6. MediaTek SoC Hardware Codes
@@ -297,14 +307,25 @@ class ModelDatabase:
             }
         elif mode == "ADB":
             model = details.get("model") or identifier or "Android Device"
+            b_brand = details.get("brand") or "Android"
+            b_soc = details.get("soc") or "Android Smart Platform"
+            category = "generic_phone"
+            if "huawei" in b_brand.lower() or "honor" in b_brand.lower():
+                category = "huawei"
+            elif "pixel" in model.lower() or "google" in b_brand.lower():
+                category = "pixel"
+            elif "samsung" in b_brand.lower():
+                category = "samsung"
+            elif "xiaomi" in b_brand.lower() or "redmi" in b_brand.lower():
+                category = "xiaomi"
             return {
                 "name": f"{model}",
-                "soc": "Android Smart Platform",
-                "brand": "Android",
-                "family": "ADB Interface",
+                "soc": b_soc,
+                "brand": b_brand.title(),
+                "family": f"{b_brand.title()} ADB Interface",
                 "codename": raw,
-                "category": "generic_phone",
-                "icon_badge": "Android"
+                "category": category,
+                "icon_badge": b_brand.title()
             }
         elif mode == "SAMSUNG":
             return {
