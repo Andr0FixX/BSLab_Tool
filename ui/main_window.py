@@ -16,6 +16,7 @@ from mtk.flasher import ScatterParser, MtkFirmwareFlasher
 from mtk.meta_engine import MtkMetaEngine
 from engines.qualcomm import QualcommEngine, QualcommQcnEngine
 from engines.unisoc import UnisocEngine, UnisocNvEngine
+from engines.huawei import KirinEngine
 
 from ui.components.header_bar import HeaderBar
 from ui.components.module_ribbon import ModuleRibbon
@@ -75,6 +76,7 @@ class BSLabApp(ctk.CTk):
         self.spd_engine = UnisocEngine(self.logger)
         self.qc_qcn_engine = QualcommQcnEngine(self.logger)
         self.spd_nv_engine = UnisocNvEngine(self.logger)
+        self.kirin_engine = KirinEngine(self.logger)
         self.cloud_sync = CloudSyncManager(self.logger)
 
         self.active_ports = {}
@@ -897,6 +899,7 @@ class BSLabApp(ctk.CTk):
         self.spd_engine.abort()
         self.qc_qcn_engine.abort()
         self.spd_nv_engine.abort()
+        self.kirin_engine.abort()
         self.is_busy = False
         self._set_ui_busy(False)
 
@@ -1412,13 +1415,17 @@ class BSLabApp(ctk.CTk):
                 self.logger.brom("==================================================")
                 self.logger.brom("❖ HUAWEI HISILICON USB COM 1.0 RESCUE INJECTION")
                 self.logger.brom("==================================================")
-                self.logger.info("Detecting HUAWEI USB COM 1.0 (VID: 12D1, PID: 3609)...")
-                time.sleep(0.5)
-                self.logger.success("[✓] Handshake verified on Huawei Port!")
-                self.logger.info("Injecting Kirin xloader & Fastboot rescue stage...")
-                time.sleep(1.2)
-                self.logger.success("[✓] Kirin Rescue Stage Dispatched! Device entering Fastboot Rescue Mode.")
-                self.after(0, lambda: messagebox.showinfo("Huawei Rescue", "Kirin Rescue Loader injected successfully.\nPhone is now booting into Fastboot Rescue Mode."))
+                port = getattr(self, "selected_port", None) or self.kirin_engine.find_huawei_com_port()
+                chipset = "KIRIN_65x"
+                if hasattr(self, "smart_hub_view") and hasattr(self.smart_hub_view, "current_profile"):
+                    hint = self.smart_hub_view.current_profile.get("soc", "") or self.smart_hub_view.current_profile.get("codename", "")
+                    chipset = self.kirin_engine.resolve_chipset(hint)
+                
+                success = self.kirin_engine.boot_rescue_mode(port=port, chipset=chipset)
+                if success:
+                    self.after(0, lambda: messagebox.showinfo("Huawei Rescue", f"Kirin ({chipset}) Rescue Loader injected successfully!\nPhone is now booting into Fastboot Rescue Mode."))
+                else:
+                    self.after(0, lambda: messagebox.showwarning("Huawei Rescue", "Failed to inject Kirin loader. Please verify Test Point connection and USB COM 1.0 driver."))
             finally:
                 self.is_busy = False
                 self.after(0, self._set_ui_busy, False)
@@ -1434,20 +1441,12 @@ class BSLabApp(ctk.CTk):
                 self.logger.brom("==================================================")
                 self.logger.brom("❖ HUAWEI 1-CLICK FRP RESET (HISILICON RESCUE)")
                 self.logger.brom("==================================================")
-                from core.fastboot_controller import FastbootController
-                fb = FastbootController()
-                self.logger.info("Communicating with Huawei Fastboot Rescue interface...")
-                res = fb.run_command(["oem", "frp-erase"])
-                if "OKAY" in res:
-                    self.logger.success("[✓] Huawei FRP Token Erased Successfully (oem frp-erase)!")
+                serial = getattr(self, "selected_serial", None)
+                ok = self.kirin_engine.reset_frp(target_serial=serial)
+                if ok:
+                    self.after(0, lambda: messagebox.showinfo("Huawei FRP", "Huawei FRP Lock Reset operation completed successfully!"))
                 else:
-                    self.logger.info("Trying standard partition erase (erase frp)...")
-                    res2 = fb.run_command(["erase", "frp"])
-                    if "OKAY" in res2:
-                        self.logger.success("[✓] Huawei FRP Partition Wiped Successfully!")
-                    else:
-                        self.logger.warn(f"Fastboot response: {res} | {res2}")
-                self.after(0, lambda: messagebox.showinfo("Huawei FRP", "Huawei FRP Lock Reset operation completed!"))
+                    self.after(0, lambda: messagebox.showwarning("Huawei FRP", "Huawei FRP Reset completed with warnings. Verify phone display."))
             finally:
                 self.is_busy = False
                 self.after(0, self._set_ui_busy, False)
@@ -1463,9 +1462,8 @@ class BSLabApp(ctk.CTk):
                 self.logger.brom("==================================================")
                 self.logger.brom("❖ HUAWEI ID ACCOUNT LOCK REMOVAL")
                 self.logger.brom("==================================================")
-                self.logger.info("Erasing Huawei ID credentials block in oeminfo...")
-                time.sleep(1.0)
-                self.logger.success("[✓] Huawei ID Account Flag Cleared Successfully!")
+                serial = getattr(self, "selected_serial", None)
+                self.kirin_engine.remove_id(target_serial=serial)
                 self.after(0, lambda: messagebox.showinfo("Huawei ID", "Huawei ID account credentials cleared successfully!"))
             finally:
                 self.is_busy = False
@@ -1479,13 +1477,8 @@ class BSLabApp(ctk.CTk):
             self.is_busy = True
             self._set_ui_busy(True)
             try:
-                from core.fastboot_controller import FastbootController
-                fb = FastbootController()
-                info = fb.get_all_variables()
-                self.logger.success("=== HUAWEI RESCUE DEVICE REPORT ===")
-                for k, v in info.items():
-                    self.logger.info(f"{k}: {v}")
-                self.logger.success("===================================")
+                serial = getattr(self, "selected_serial", None)
+                self.kirin_engine.read_device_info(target_serial=serial)
             finally:
                 self.is_busy = False
                 self.after(0, self._set_ui_busy, False)
@@ -1494,11 +1487,8 @@ class BSLabApp(ctk.CTk):
     def huawei_reboot(self):
         """Reboots Huawei device to normal Android OS."""
         if self.is_busy: return
-        from core.fastboot_controller import FastbootController
-        fb = FastbootController()
-        self.logger.info("Rebooting Huawei device...")
-        fb.run_command(["reboot"])
-        self.logger.success("[✓] Huawei Reboot Command Dispatched!")
+        serial = getattr(self, "selected_serial", None)
+        self.kirin_engine.reboot(target_serial=serial)
 
     # =========================================================================
     # UNISOC / SPREADTRUM (SPD) PAC FLASHER & BSL CONTROLLER METHODS

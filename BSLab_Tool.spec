@@ -35,6 +35,8 @@ hidden_imports = [
     'PIL.ImageTk',
     'PIL._tkinter_finder',
     'engines',
+    'engines.huawei',
+    'engines.huawei.kirin_engine',
     'engines.samsung',
     'engines.samsung.samsung_modem',
     'engines.samsung.odin_protocol',

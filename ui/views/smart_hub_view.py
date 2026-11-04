@@ -974,6 +974,66 @@ class SmartHubView:
                 }
             ]
         elif mode == "FASTBOOT":
+            is_huawei = False
+            brand_str = (self.current_profile.get("brand") or self.current_details.get("brand") or "").lower()
+            soc_str = (self.current_profile.get("soc") or self.current_details.get("soc") or "").lower()
+            if self.current_profile.get("category") == "huawei" or "huawei" in brand_str or "honor" in brand_str or "kirin" in soc_str:
+                is_huawei = True
+
+            if is_huawei:
+                return [
+                    {
+                        "icon": "🔓",
+                        "title": "1-Click Reset FRP Lock (Huawei Rescue)",
+                        "desc": "Directly erases FRP security token in Huawei Fastboot Rescue Mode.",
+                        "btn_text": "🔓 Reset FRP (Huawei Rescue)",
+                        "category": "unlock",
+                        "badge": "1-CLICK SAFE",
+                        "color": "#059669", "hover": "#047857",
+                        "cmd": c.huawei_reset_frp
+                    },
+                    {
+                        "icon": "🛡️",
+                        "title": "Remove Huawei ID (Account Lock)",
+                        "desc": "Wipes Huawei ID account credential token from oeminfo partition.",
+                        "btn_text": "🛡️ Remove Huawei ID",
+                        "category": "unlock",
+                        "badge": "OEMINFO WIPE",
+                        "color": "#4F46E5", "hover": "#4338CA",
+                        "cmd": c.huawei_remove_id
+                    },
+                    {
+                        "icon": "📋",
+                        "title": "Read Huawei Rescue Hardware Specs",
+                        "desc": "Queries bootloader info, vendor, country, build number, and root state.",
+                        "btn_text": "📋 Read Rescue Specs",
+                        "category": "all",
+                        "badge": "DEVICE SPECS",
+                        "color": "#0284C7", "hover": "#0369A1",
+                        "cmd": c.huawei_read_info
+                    },
+                    {
+                        "icon": "⚡",
+                        "title": "1-Click Bootloader Unlock",
+                        "desc": "Executes OEM bootloader flashing unlock safely.",
+                        "btn_text": "⚡ Unlock Bootloader",
+                        "category": "unlock",
+                        "badge": "OEM UNLOCK",
+                        "color": "#D97706", "hover": "#B45309",
+                        "cmd": c.fastboot_view._fb_unlock_bootloader
+                    },
+                    {
+                        "icon": "🔄",
+                        "title": "Reboot Huawei to Normal Android OS",
+                        "desc": "Exits Fastboot Rescue mode and reboots phone to normal system.",
+                        "btn_text": "🔄 Reboot to Normal OS",
+                        "category": "reboot",
+                        "badge": "NORMAL BOOT",
+                        "color": "#475569", "hover": "#334155",
+                        "cmd": c.huawei_reboot
+                    }
+                ]
+
             return [
                 {
                     "icon": "📱",
@@ -1047,6 +1107,66 @@ class SmartHubView:
                 }
             ]
         elif mode == "ADB":
+            is_huawei = False
+            brand_str = (self.current_profile.get("brand") or self.current_details.get("brand") or "").lower()
+            soc_str = (self.current_profile.get("soc") or self.current_details.get("soc") or "").lower()
+            if self.current_profile.get("category") == "huawei" or "huawei" in brand_str or "honor" in brand_str or "kirin" in soc_str:
+                is_huawei = True
+
+            if is_huawei:
+                return [
+                    {
+                        "icon": "📱",
+                        "title": "Read Huawei Specs & EMUI Build (ADB)",
+                        "desc": "Extracts EMUI version, build display ID, HiSilicon Kirin SoC, and battery status.",
+                        "btn_text": "📱 Read Full Huawei Specs",
+                        "category": "all",
+                        "badge": "LIVE DIAGNOSTICS",
+                        "color": "#0284C7", "hover": "#0369A1",
+                        "cmd": c.fastboot_view._adb_read_info
+                    },
+                    {
+                        "icon": "🟢",
+                        "title": "Reset FRP Lock (Setup Wizard Bypass)",
+                        "desc": "Cleans persistent Google setup wizard tokens and unlocks home screen.",
+                        "btn_text": "🔓 Bypass FRP (1-Click)",
+                        "category": "unlock",
+                        "badge": "1-CLICK WIZARD",
+                        "color": "#059669", "hover": "#047857",
+                        "cmd": c.fastboot_view._adb_reset_frp
+                    },
+                    {
+                        "icon": "⚡",
+                        "title": "Reboot to Huawei Fastboot Rescue Mode",
+                        "desc": "Reboots phone directly into Huawei Fastboot & Rescue Mode for 1-click servicing.",
+                        "btn_text": "⚡ Jump to Fastboot Rescue",
+                        "category": "reboot",
+                        "badge": "RESCUE MODE",
+                        "color": "#D97706", "hover": "#B45309",
+                        "cmd": lambda: c.fastboot_view._reboot_device_mode("bootloader")
+                    },
+                    {
+                        "icon": "🛡️",
+                        "title": "Reboot to Huawei eRecovery Mode",
+                        "desc": "Reboots Huawei device into eRecovery / Emergency Recovery interface.",
+                        "btn_text": "🛡️ Jump to eRecovery",
+                        "category": "reboot",
+                        "badge": "ERECOVERY",
+                        "color": "#4F46E5", "hover": "#4338CA",
+                        "cmd": lambda: c.fastboot_view._reboot_device_mode("recovery")
+                    },
+                    {
+                        "icon": "🔄",
+                        "title": "Normal System Reboot",
+                        "desc": "Restarts Huawei phone normally into Android OS.",
+                        "btn_text": "🔄 Reboot to Normal OS",
+                        "category": "reboot",
+                        "badge": "SYSTEM REBOOT",
+                        "color": "#475569", "hover": "#334155",
+                        "cmd": lambda: c.fastboot_view._reboot_device_mode("system")
+                    }
+                ]
+
             return [
                 {
                     "icon": "📱",
