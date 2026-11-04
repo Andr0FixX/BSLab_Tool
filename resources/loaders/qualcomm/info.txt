@@ -1,0 +1,3 @@
+# Qualcomm EDL 9008 Firehose Programmers Directory
+# Supported formats: *.elf, *.mbn, *.bin
+# Drop custom Firehose loaders here for automatic detection by ModelRepository.

@@ -1,0 +1,3 @@
+# Unisoc / Spreadtrum FDL1 & FDL2 Bootloader Directory
+# Supported formats: *.bin
+# Drop custom FDL binaries here for automatic detection by ModelRepository.

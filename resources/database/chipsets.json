@@ -1,0 +1,39 @@
+{
+  "mediatek": {
+    "0x0321": {"soc": "MT6735", "name": "Quad-core Cortex-A53 64-bit", "family": "Legacy 4G", "da": "DA_SWSEC_MT6735.bin"},
+    "0x0335": {"soc": "MT6737", "name": "Entry Quad-core 4G", "family": "Legacy 4G", "da": "DA_SWSEC_MT6737.bin"},
+    "0x0326": {"soc": "MT6739", "name": "Modern Entry Quad-core", "family": "Helio Series", "da": "DA_SWSEC_MT6739.bin"},
+    "0x0717": {"soc": "MT6761", "name": "Helio A22 / A20", "family": "Helio Series", "da": "DA_SWSEC_MT6765.bin"},
+    "0x0658": {"soc": "MT6765", "name": "Helio P35 / G35 / G37", "family": "Helio Series", "da": "DA_SWSEC_MT6765.bin"},
+    "0x0766": {"soc": "MT6768", "name": "Helio G80 / G85", "family": "Helio Gaming", "da": "DA_PL_MT6768.bin"},
+    "0x0707": {"soc": "MT6771", "name": "Helio P60 / P70", "family": "Helio Series", "da": "DA_PL_MT6771.bin"},
+    "0x0679": {"soc": "MT6779", "name": "Helio P90", "family": "Helio High-End", "da": "DA_PL_MT6779.bin"},
+    "0x0788": {"soc": "MT6785", "name": "Helio G90 / G90T / G95", "family": "Helio Gaming", "da": "DA_PL_MT6785.bin"},
+    "0x0699": {"soc": "MT6781", "name": "Helio G96 / G99", "family": "Helio Gaming 6nm", "da": "DA_PL_MT6781.bin"},
+    "0x0816": {"soc": "MT6873", "name": "Dimensity 800 / 800U", "family": "Dimensity 5G", "da": "DA_PL_MT6873.bin"},
+    "0x0817": {"soc": "MT6877", "name": "Dimensity 900 / 920 / 1080", "family": "Dimensity 5G", "da": "DA_PL_MT6877.bin"},
+    "0x0842": {"soc": "MT6833", "name": "Dimensity 700 / 6020 / 6080", "family": "Dimensity 5G", "da": "DA_PL_MT6833.bin"},
+    "0x0866": {"soc": "MT6893", "name": "Dimensity 1200 / 1300", "family": "Dimensity Flagship", "da": "DA_PL_MT6893.bin"},
+    "0x0922": {"soc": "MT6895", "name": "Dimensity 8100 / 8000", "family": "Dimensity High-End", "da": "DA_PL_MT6895.bin"},
+    "0x0989": {"soc": "MT6983", "name": "Dimensity 9000 / 9000+", "family": "Dimensity Ultra", "da": "DA_PL_MT6983.bin"}
+  },
+  "qualcomm": {
+    "0x0004f0e1": {"soc": "SDM660", "name": "Snapdragon 660", "loader": "prog_firehose_sdm660_ddr.elf"},
+    "0x000a60e1": {"soc": "SM6125", "name": "Snapdragon 665", "loader": "prog_firehose_sm6125_ddr.elf"},
+    "0x000bf0e1": {"soc": "SM6115", "name": "Snapdragon 662 / 460", "loader": "prog_firehose_sm6115_ddr.elf"},
+    "0x0014d0e1": {"soc": "SM6225", "name": "Snapdragon 680 4G", "loader": "prog_firehose_sm6225_ddr.elf"},
+    "0x000940e1": {"soc": "SDM450", "name": "Snapdragon 450", "loader": "prog_firehose_sdm450_ddr.elf"},
+    "0x000b30e1": {"soc": "SM7125", "name": "Snapdragon 720G", "loader": "prog_firehose_sm7125_ddr.elf"},
+    "0x000bb0e1": {"soc": "SM7150", "name": "Snapdragon 730 / 732G", "loader": "prog_firehose_sm7150_ddr.elf"},
+    "0x001380e1": {"soc": "SM7325", "name": "Snapdragon 778G 5G", "loader": "prog_firehose_sm7325_ddr.elf"},
+    "0x0009b0e1": {"soc": "SM8250", "name": "Snapdragon 865 / 870", "loader": "prog_firehose_sm8250_ddr.elf"}
+  },
+  "unisoc": {
+    "0x9863": {"soc": "SC9863A", "name": "Octa-core 1.6GHz A55", "family": "SC Series", "fdl1": "fdl1_sc9863a.bin", "fdl2": "fdl2_sc9863a.bin"},
+    "0x0606": {"soc": "Tiger T606", "name": "Octa-core 1.6GHz (2xA75 + 6xA55)", "family": "Tiger Series", "fdl1": "fdl1_t606.bin", "fdl2": "fdl2_t606.bin"},
+    "0x0610": {"soc": "Tiger T610", "name": "Octa-core 1.8GHz (2xA75 + 6xA55)", "family": "Tiger Series", "fdl1": "fdl1_t610.bin", "fdl2": "fdl2_t610.bin"},
+    "0x0612": {"soc": "Tiger T612", "name": "Octa-core 1.8GHz 12nm", "family": "Tiger Series", "fdl1": "fdl1_t612.bin", "fdl2": "fdl2_t612.bin"},
+    "0x0616": {"soc": "Tiger T616", "name": "Octa-core 2.0GHz 12nm", "family": "Tiger Series", "fdl1": "fdl1_t616.bin", "fdl2": "fdl2_t616.bin"},
+    "0x0700": {"soc": "Tiger T700", "name": "Octa-core 1.8GHz", "family": "Tiger Series", "fdl1": "fdl1_t700.bin", "fdl2": "fdl2_t700.bin"}
+  }
+}

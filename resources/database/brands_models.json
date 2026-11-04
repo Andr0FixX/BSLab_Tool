@@ -1,0 +1,899 @@
+{
+  "Infinix": {
+    "Hot 12 Play (X6816)": {
+      "chipset": "Unisoc Tiger T610 / MT6765",
+      "platform": "unisoc",
+      "cpu_family": "Tiger Series",
+      "loader_file": "fdl_t610.bin",
+      "testpoint": "CLK to GND (Pads beside eMMC can)",
+      "edl_voltage": "1.8V",
+      "features": [
+        "Flash",
+        "FRP Reset",
+        "Factory Reset",
+        "IMEI Repair",
+        "Read Info"
+      ]
+    },
+    "Hot 11 (X662)": {
+      "chipset": "MediaTek Helio G70 (MT6768)",
+      "platform": "mtk",
+      "cpu_family": "Helio Gaming",
+      "loader_file": "DA_PL_MT6768.bin",
+      "testpoint": "CLK to GND",
+      "edl_voltage": "1.8V",
+      "features": [
+        "BROM Flash",
+        "Auth Bypass",
+        "FRP",
+        "NVRAM Backup",
+        "RPMB Read"
+      ]
+    },
+    "Hot 10 Play (X688B)": {
+      "chipset": "MediaTek Helio G25 / G35 (MT6765)",
+      "platform": "mtk",
+      "cpu_family": "Helio Series",
+      "loader_file": "DA_SWSEC_MT6765.bin",
+      "testpoint": "CLK to GND",
+      "edl_voltage": "1.8V",
+      "features": [
+        "BROM Flash",
+        "Auth Bypass",
+        "FRP Reset",
+        "Demo Remove"
+      ],
+      "preloader_file": "preloader_x688b_h659.bin"
+    },
+    "Smart 7 (X6515)": {
+      "chipset": "Unisoc SC9863A1",
+      "platform": "unisoc",
+      "cpu_family": "SC Series",
+      "loader_file": "fdl_sc9863a.bin",
+      "testpoint": "Volume Down Boot / Testpoint beside SIM",
+      "edl_voltage": "1.8V",
+      "features": [
+        "PAC Flash",
+        "FRP Reset",
+        "Direct Format",
+        "NV Diag"
+      ]
+    },
+    "Note 12 (X670)": {
+      "chipset": "MediaTek Helio G96 (MT6781)",
+      "platform": "mtk",
+      "cpu_family": "Helio Gaming 6nm",
+      "loader_file": "DA_PL_MT6781.bin",
+      "testpoint": "CLK to GND",
+      "edl_voltage": "1.8V",
+      "features": [
+        "High-Speed Flash",
+        "Auth Bypass",
+        "FRP Reset",
+        "Partition Manager"
+      ]
+    },
+    "Hot 10 (X682B)": {
+      "chipset": "MediaTek Helio G70 (MT6769)",
+      "platform": "mtk",
+      "cpu_family": "Helio Gaming",
+      "loader_file": "DA_PL_MT6769.bin",
+      "preloader_file": "preloader_x682b_h694.bin",
+      "testpoint": "CLK to GND (Lower right shield)",
+      "edl_voltage": "1.8V",
+      "features": [
+        "BROM Flash",
+        "SLA/DAA Bypass",
+        "FRP Reset",
+        "DRAM Recovery",
+        "Factory Reset"
+      ]
+    },
+    "Hot 9 (X680)": {
+      "chipset": "MediaTek Helio P22 (MT6762)",
+      "platform": "mtk",
+      "cpu_family": "Helio Series",
+      "loader_file": "DA_SWSEC_MT6765.bin",
+      "preloader_file": "preloader_x680_h6116.bin",
+      "testpoint": "CLK to GND",
+      "edl_voltage": "1.8V",
+      "features": [
+        "BROM Flash",
+        "Auth Bypass",
+        "FRP Reset",
+        "Userdata Format"
+      ]
+    },
+    "Hot 10 Lite (X657B)": {
+      "chipset": "MediaTek Helio A22 (MT6761)",
+      "platform": "mtk",
+      "cpu_family": "Helio Series",
+      "loader_file": "DA_SWSEC_MT6765.bin",
+      "preloader_file": "preloader_x657b_h6117.bin",
+      "testpoint": "CLK to GND (Near SIM tray)",
+      "edl_voltage": "1.8V",
+      "features": [
+        "BROM Flash",
+        "Auth Bypass",
+        "FRP Reset",
+        "IMEI Repair"
+      ]
+    },
+    "Smart 4 (X653C)": {
+      "chipset": "MediaTek Helio A22 (MT6761)",
+      "platform": "mtk",
+      "cpu_family": "Helio Series",
+      "loader_file": "DA_SWSEC_MT6765.bin",
+      "preloader_file": "preloader_x653c_h6114go.bin",
+      "testpoint": "CLK to GND",
+      "edl_voltage": "1.8V",
+      "features": [
+        "BROM Flash",
+        "Auth Bypass",
+        "FRP Reset",
+        "Factory Reset"
+      ]
+    }
+  },
+  "Tecno": {
+    "Spark 8C (KG5k)": {
+      "chipset": "Unisoc Tiger T606",
+      "platform": "unisoc",
+      "cpu_family": "Tiger Series",
+      "loader_file": "fdl_t606.bin",
+      "testpoint": "CLK to GND (Lower right shield)",
+      "edl_voltage": "1.8V",
+      "features": [
+        "PAC Flash",
+        "FRP Reset",
+        "Factory Reset",
+        "NV Backup"
+      ]
+    },
+    "Spark 7 (KF6j)": {
+      "chipset": "MediaTek Helio A25 (MT6762D)",
+      "platform": "mtk",
+      "cpu_family": "Helio Series",
+      "loader_file": "DA_SWSEC_MT6765.bin",
+      "testpoint": "CLK to GND",
+      "edl_voltage": "1.8V",
+      "features": [
+        "BROM Flash",
+        "Auth Bypass",
+        "FRP Reset",
+        "Format Userdata"
+      ]
+    },
+    "Pova 2 (LE7)": {
+      "chipset": "MediaTek Helio G85 (MT6768)",
+      "platform": "mtk",
+      "cpu_family": "Helio Gaming",
+      "loader_file": "DA_PL_MT6768.bin",
+      "testpoint": "CLK to GND",
+      "edl_voltage": "1.8V",
+      "features": [
+        "BROM Flash",
+        "SLA/DAA Bypass",
+        "FRP",
+        "Partition Dump"
+      ]
+    },
+    "Camon 18 (CH6)": {
+      "chipset": "MediaTek Helio G88 (MT6769)",
+      "platform": "mtk",
+      "cpu_family": "Helio Gaming",
+      "loader_file": "DA_PL_MT6769.bin",
+      "testpoint": "CLK to GND",
+      "edl_voltage": "1.8V",
+      "features": [
+        "BROM Flash",
+        "FRP Reset",
+        "Demo Remove",
+        "RPMB Erase"
+      ]
+    },
+    "Spark 5 Pro (KC3)": {
+      "chipset": "MediaTek Helio P22 (MT6762)",
+      "platform": "mtk",
+      "cpu_family": "Helio Series",
+      "loader_file": "DA_SWSEC_MT6765.bin",
+      "preloader_file": "preloader_kc3_h627mt62.bin",
+      "testpoint": "CLK to GND (Lower left pad)",
+      "edl_voltage": "1.8V",
+      "features": [
+        "BROM Flash",
+        "Auth Bypass",
+        "FRP Reset",
+        "Direct Format"
+      ]
+    },
+    "Spark 5 Air (KC1)": {
+      "chipset": "MediaTek Helio A22 (MT6761)",
+      "platform": "mtk",
+      "cpu_family": "Helio Series",
+      "loader_file": "DA_SWSEC_MT6765.bin",
+      "preloader_file": "preloader_kc1_h6114.bin",
+      "testpoint": "CLK to GND",
+      "edl_voltage": "1.8V",
+      "features": [
+        "BROM Flash",
+        "Auth Bypass",
+        "FRP Reset",
+        "Factory Reset"
+      ]
+    },
+    "Camon 12 / Spark 4 (K5fpr)": {
+      "chipset": "MediaTek Helio P22 / P35 (MT6762/MT6765)",
+      "platform": "mtk",
+      "cpu_family": "Helio Series",
+      "loader_file": "DA_SWSEC_MT6765.bin",
+      "preloader_file": "preloader_k5fpr.bin",
+      "testpoint": "CLK to GND",
+      "edl_voltage": "1.8V",
+      "features": [
+        "BROM Flash",
+        "Auth Bypass",
+        "FRP Reset",
+        "DRAM Recovery"
+      ]
+    }
+  },
+  "Xiaomi": {
+    "Redmi 9A / 9C (Dandelion/Angelica)": {
+      "chipset": "MediaTek Helio G25 / G35 (MT6765G)",
+      "platform": "mtk",
+      "cpu_family": "Helio Series",
+      "loader_file": "DA_SWSEC_MT6765.bin",
+      "testpoint": "CLK to GND (Dual golden pads above battery)",
+      "edl_voltage": "1.8V",
+      "features": [
+        "BROM Flash",
+        "Auth Bypass (No Auth Needed)",
+        "Mi Account Reset",
+        "FRP Reset"
+      ]
+    },
+    "Redmi 10C (Fog / Rain)": {
+      "chipset": "Qualcomm Snapdragon 680 (SM6225)",
+      "platform": "qualcomm",
+      "cpu_family": "Snapdragon 6-Series",
+      "loader_file": "prog_firehose_sm6225_ddr.elf",
+      "testpoint": "EDL Point: 2 Golden dots next to Battery Connector",
+      "edl_voltage": "1.8V",
+      "features": [
+        "EDL 9008 Flash",
+        "Mi Account Bypass",
+        "FRP Reset",
+        "QCN IMEI Repair"
+      ]
+    },
+    "Redmi Note 10 (Sunny)": {
+      "chipset": "Qualcomm Snapdragon 678 (SM6150)",
+      "platform": "qualcomm",
+      "cpu_family": "Snapdragon 6-Series",
+      "loader_file": "prog_firehose_sm6150_ddr.elf",
+      "testpoint": "EDL 9008 Points under main motherboard shield",
+      "edl_voltage": "1.8V",
+      "features": [
+        "EDL 9008 Flash",
+        "RawProgram XML",
+        "Mi Account Reset",
+        "FRP Reset"
+      ]
+    },
+    "Redmi Note 11 4G (Spes)": {
+      "chipset": "Qualcomm Snapdragon 680 (SM6225)",
+      "platform": "qualcomm",
+      "cpu_family": "Snapdragon 6-Series",
+      "loader_file": "prog_firehose_sm6225_ddr.elf",
+      "testpoint": "EDL Point: Near volume flex connector",
+      "edl_voltage": "1.8V",
+      "features": [
+        "EDL 9008 Flash",
+        "Mi Account Bypass",
+        "QCN Repair",
+        "FRP Reset"
+      ]
+    },
+    "Redmi Note 8 (Ginkgo)": {
+      "chipset": "Qualcomm Snapdragon 665 (SM6125)",
+      "platform": "qualcomm",
+      "cpu_family": "Snapdragon 6-Series",
+      "loader_file": "prog_firehose_sm6125_ddr.elf",
+      "testpoint": "EDL 9008: 2 Golden dots above sub-flex connector",
+      "edl_voltage": "1.8V",
+      "features": [
+        "EDL 9008 Flash",
+        "Unbrick Hard-brick",
+        "Mi Account Reset",
+        "FRP Reset"
+      ]
+    },
+    "Redmi Note 9 Pro / 9S (Curtana)": {
+      "chipset": "Qualcomm Snapdragon 720G (SM7125)",
+      "platform": "qualcomm",
+      "cpu_family": "Snapdragon 7-Series",
+      "loader_file": "prog_firehose_sm7125_ddr.elf",
+      "testpoint": "EDL 9008: 2 Golden pads beside camera module",
+      "edl_voltage": "1.8V",
+      "features": [
+        "EDL 9008 Flash",
+        "Mi Account Reset",
+        "FRP Reset",
+        "Dual SIM QCN"
+      ]
+    },
+    "Redmi Note 7 / 7S (Lavender)": {
+      "chipset": "Qualcomm Snapdragon 660 (SDM660)",
+      "platform": "qualcomm",
+      "cpu_family": "Snapdragon 6-Series",
+      "loader_file": "prog_firehose_sdm660_ddr.elf",
+      "testpoint": "EDL 9008: Dual pads next to fingerprint socket",
+      "edl_voltage": "1.8V",
+      "features": [
+        "EDL 9008 Flash",
+        "Mi Account Reset",
+        "FRP Reset",
+        "Partition Erase"
+      ]
+    },
+    "POCO X3 Pro (Vayu)": {
+      "chipset": "Qualcomm Snapdragon 860 (SM8150-AC)",
+      "platform": "qualcomm",
+      "cpu_family": "Snapdragon 8-Series Flagship",
+      "loader_file": "prog_firehose_sm8150_ddr.elf",
+      "testpoint": "EDL 9008: 2 Gold testpoints under battery tab",
+      "edl_voltage": "1.8V",
+      "features": [
+        "EDL 9008 Flash",
+        "Hard-brick Dead Boot Repair",
+        "Mi Account",
+        "FRP"
+      ]
+    },
+    "POCO F3 / Mi 11X (Alioth)": {
+      "chipset": "Qualcomm Snapdragon 870 5G (SM8250-AC)",
+      "platform": "qualcomm",
+      "cpu_family": "Snapdragon 8-Series Flagship",
+      "loader_file": "prog_firehose_sm8250_ddr.elf",
+      "testpoint": "EDL 9008: Behind lower thermal paste shield",
+      "edl_voltage": "1.8V",
+      "features": [
+        "High-Speed 9008 Flash",
+        "Mi Account Removal",
+        "FRP Reset",
+        "QCN Write"
+      ]
+    }
+  },
+  "Vivo": {
+    "Vivo Y20 / Y20i (V2029)": {
+      "chipset": "Qualcomm Snapdragon 460 (SM4250)",
+      "platform": "qualcomm",
+      "cpu_family": "Snapdragon 4-Series",
+      "loader_file": "prog_firehose_sm4250_vivo.elf",
+      "testpoint": "EDL 9008: 2 Pins right beside battery socket",
+      "edl_voltage": "1.8V",
+      "features": [
+        "EDL 9008 Flash",
+        "Demo Unlock",
+        "FRP Reset",
+        "Screen Lock Wipe"
+      ]
+    },
+    "Vivo Y21 (V2111)": {
+      "chipset": "MediaTek Helio P35 (MT6765)",
+      "platform": "mtk",
+      "cpu_family": "Helio Series",
+      "loader_file": "DA_SWSEC_MT6765.bin",
+      "testpoint": "CLK to GND (Lower edge of CPU shield)",
+      "edl_voltage": "1.8V",
+      "features": [
+        "BROM Flash",
+        "Auth Bypass",
+        "Demo Mode Unlock",
+        "FRP Reset"
+      ]
+    },
+    "Vivo Y11 / Y12 / Y15 (1906)": {
+      "chipset": "Qualcomm Snapdragon 439 (SDM439)",
+      "platform": "qualcomm",
+      "cpu_family": "Snapdragon 4-Series",
+      "loader_file": "prog_firehose_sdm439_vivo.elf",
+      "testpoint": "EDL 9008: 2 Test points above fingerprint FPC",
+      "edl_voltage": "1.8V",
+      "features": [
+        "EDL 9008 Flash",
+        "FRP Reset",
+        "Factory Reset",
+        "QCN Write"
+      ]
+    },
+    "Vivo V20 (V2040)": {
+      "chipset": "Qualcomm Snapdragon 720G (SM7125)",
+      "platform": "qualcomm",
+      "cpu_family": "Snapdragon 7-Series",
+      "loader_file": "prog_firehose_sm7125_ddr.elf",
+      "testpoint": "EDL 9008: 2 Golden dots near sub-board flex",
+      "edl_voltage": "1.8V",
+      "features": [
+        "EDL 9008 Flash",
+        "Demo Mode Unlock",
+        "FRP Reset",
+        "QCN Repair"
+      ]
+    },
+    "Vivo Y50 / Y51 (V2030)": {
+      "chipset": "Qualcomm Snapdragon 665 (SM6125)",
+      "platform": "qualcomm",
+      "cpu_family": "Snapdragon 6-Series",
+      "loader_file": "prog_firehose_sm6125_ddr.elf",
+      "testpoint": "EDL 9008: Beside SIM slot",
+      "edl_voltage": "1.8V",
+      "features": [
+        "EDL 9008 Flash",
+        "FRP Reset",
+        "Userdata Format"
+      ]
+    }
+  },
+  "Samsung": {
+    "Galaxy A12 (SM-A125F)": {
+      "chipset": "MediaTek Helio P35 (MT6765)",
+      "platform": "mtk",
+      "cpu_family": "Helio Series",
+      "loader_file": "DA_SWSEC_MT6765.bin",
+      "testpoint": "CLK to GND (Right side of SIM tray)",
+      "edl_voltage": "1.8V",
+      "features": [
+        "BROM Flash",
+        "Odin 4-File Flasher",
+        "FRP Reset",
+        "Test Mode *#0*#"
+      ]
+    },
+    "Galaxy A03s (SM-A037F)": {
+      "chipset": "MediaTek Helio P35 (MT6765)",
+      "platform": "mtk",
+      "cpu_family": "Helio Series",
+      "loader_file": "DA_SWSEC_MT6765.bin",
+      "testpoint": "CLK to GND (Near PMIC shield)",
+      "edl_voltage": "1.8V",
+      "features": [
+        "BROM Force Flash",
+        "Odin 4-File Flash",
+        "FRP Reset",
+        "Knox Status"
+      ]
+    },
+    "Galaxy A02s (SM-A025F)": {
+      "chipset": "Qualcomm Snapdragon 450 (SDM450)",
+      "platform": "qualcomm",
+      "cpu_family": "Snapdragon 4-Series",
+      "loader_file": "prog_firehose_sdm450_samsung.elf",
+      "testpoint": "EDL 9008 Points near volume keys",
+      "edl_voltage": "1.8V",
+      "features": [
+        "EDL 9008 Flash",
+        "Odin Flasher",
+        "FRP Reset",
+        "Dump eMMC"
+      ]
+    },
+    "Galaxy A13 (SM-A135F)": {
+      "chipset": "Samsung Exynos 850",
+      "platform": "samsung",
+      "cpu_family": "Exynos Series",
+      "loader_file": "odin_bl_a135.tar",
+      "testpoint": "EUB / Exynos USB Boot Point",
+      "edl_voltage": "1.8V",
+      "features": [
+        "4-File Odin Flash",
+        "FRP Reset *#0*#",
+        "Soft-brick Repair",
+        "PIT Inspection"
+      ]
+    },
+    "Galaxy A11 (SM-A115F)": {
+      "chipset": "Qualcomm Snapdragon 450 (SDM450)",
+      "platform": "qualcomm",
+      "cpu_family": "Snapdragon 4-Series",
+      "loader_file": "prog_firehose_sdm450_samsung.elf",
+      "testpoint": "EDL 9008: 2 Golden pads beside SIM tray",
+      "edl_voltage": "1.8V",
+      "features": [
+        "EDL 9008 Direct Flash",
+        "FRP Reset",
+        "Factory Wipe",
+        "Unbrick"
+      ]
+    },
+    "Galaxy A52 4G (SM-A525F)": {
+      "chipset": "Qualcomm Snapdragon 720G (SM7125)",
+      "platform": "qualcomm",
+      "cpu_family": "Snapdragon 7-Series",
+      "loader_file": "prog_firehose_sm7125_ddr.elf",
+      "testpoint": "EDL 9008: Pads next to display connector",
+      "edl_voltage": "1.8V",
+      "features": [
+        "EDL 9008 Flash",
+        "FRP Reset *#0*#",
+        "Partition Manager",
+        "EFS Backup"
+      ]
+    },
+    "Galaxy A71 (SM-A715F)": {
+      "chipset": "Qualcomm Snapdragon 730 (SM7150)",
+      "platform": "qualcomm",
+      "cpu_family": "Snapdragon 7-Series",
+      "loader_file": "prog_firehose_sm7150_ddr.elf",
+      "testpoint": "EDL 9008: 2 Pads upper right motherboard shield",
+      "edl_voltage": "1.8V",
+      "features": [
+        "EDL 9008 Flash",
+        "FRP Reset",
+        "Firmware Unbrick",
+        "NV Data Write"
+      ]
+    },
+    "Galaxy A70 (SM-A705F)": {
+      "chipset": "Qualcomm Snapdragon 675 (SM6150)",
+      "platform": "qualcomm",
+      "cpu_family": "Snapdragon 6-Series",
+      "loader_file": "prog_firehose_sm6150_ddr.elf",
+      "testpoint": "EDL 9008: Left of battery connector",
+      "edl_voltage": "1.8V",
+      "features": [
+        "EDL 9008 Flash",
+        "FRP Reset",
+        "Dead Boot Repair"
+      ]
+    },
+    "Galaxy S20 FE 4G/5G (SM-G780G/G781B)": {
+      "chipset": "Qualcomm Snapdragon 865 (SM8250)",
+      "platform": "qualcomm",
+      "cpu_family": "Snapdragon 8-Series",
+      "loader_file": "prog_firehose_sm8250_ddr.elf",
+      "testpoint": "EDL 9008 Test Points near main camera connector",
+      "edl_voltage": "1.8V",
+      "features": [
+        "EDL 9008 Flash",
+        "UFS Unbrick",
+        "FRP Reset",
+        "Partition Read"
+      ]
+    }
+  },
+  "Realme": {
+    "Realme C11 (RMX2185)": {
+      "chipset": "MediaTek Helio G35 (MT6765)",
+      "platform": "mtk",
+      "cpu_family": "Helio Series",
+      "loader_file": "DA_SWSEC_MT6765.bin",
+      "testpoint": "CLK to GND (Left of CPU)",
+      "edl_voltage": "1.8V",
+      "features": [
+        "BROM Flash",
+        "Auth Bypass",
+        "OFP Unpack",
+        "FRP Reset"
+      ]
+    },
+    "Realme C21Y (RMX3261)": {
+      "chipset": "Unisoc Tiger T610",
+      "platform": "unisoc",
+      "cpu_family": "Tiger Series",
+      "loader_file": "fdl_t610.bin",
+      "testpoint": "Testpoint beside main rear camera",
+      "edl_voltage": "1.8V",
+      "features": [
+        "PAC Flash",
+        "FRP Reset",
+        "Factory Reset",
+        "NV Backup"
+      ]
+    },
+    "Realme C25s (RMX3195)": {
+      "chipset": "MediaTek Helio G85 (MT6768)",
+      "platform": "mtk",
+      "cpu_family": "Helio Gaming",
+      "loader_file": "DA_PL_MT6768.bin",
+      "testpoint": "CLK to GND",
+      "edl_voltage": "1.8V",
+      "features": [
+        "BROM Flash",
+        "Auth Bypass",
+        "FRP Reset",
+        "OFP Extract"
+      ]
+    }
+  },
+  "Motorola": {
+    "Moto G20 (XT2128)": {
+      "chipset": "Unisoc Tiger T700",
+      "platform": "unisoc",
+      "cpu_family": "Tiger Series",
+      "loader_file": "fdl_t700.bin",
+      "testpoint": "CLK to GND (Between CPU and PMIC)",
+      "edl_voltage": "1.8V",
+      "features": [
+        "PAC Flash",
+        "FRP Reset",
+        "Factory Reset"
+      ]
+    },
+    "Moto G30 (XT2129)": {
+      "chipset": "Qualcomm Snapdragon 662 (SM6115)",
+      "platform": "qualcomm",
+      "cpu_family": "Snapdragon 6-Series",
+      "loader_file": "prog_firehose_sm6115_ddr.elf",
+      "testpoint": "EDL 9008: 2 Golden pads near display flex",
+      "edl_voltage": "1.8V",
+      "features": [
+        "EDL 9008 Flash",
+        "FRP Reset",
+        "BlankFlash Unbrick",
+        "QCN Repair"
+      ]
+    },
+    "Moto G52 / G42": {
+      "chipset": "Qualcomm Snapdragon 680 (SM6225)",
+      "platform": "qualcomm",
+      "cpu_family": "Snapdragon 6-Series",
+      "loader_file": "prog_firehose_sm6225_ddr.elf",
+      "testpoint": "EDL 9008: Near SIM tray",
+      "edl_voltage": "1.8V",
+      "features": [
+        "EDL 9008 Flash",
+        "BlankFlash Unbrick",
+        "FRP Reset"
+      ]
+    },
+    "Moto G60 / G40 Fusion": {
+      "chipset": "Qualcomm Snapdragon 732G (SM7150)",
+      "platform": "qualcomm",
+      "cpu_family": "Snapdragon 7-Series",
+      "loader_file": "prog_firehose_sm7150_ddr.elf",
+      "testpoint": "EDL 9008: 2 Golden dots above battery",
+      "edl_voltage": "1.8V",
+      "features": [
+        "EDL 9008 Flash",
+        "FRP Reset",
+        "Firmware Unbrick"
+      ]
+    }
+  },
+  "Oppo": {
+    "A12 / A15 / A15s (CPH2083/CPH2185)": {
+      "chipset": "MediaTek Helio P35 (MT6765)",
+      "platform": "mtk",
+      "cpu_family": "Helio Series",
+      "loader_file": "DA_SWSEC_MT6765.bin",
+      "preloader_file": "preloader_oppo6762_18540.bin",
+      "testpoint": "TP CLK to GND (Upper motherboard edge)",
+      "edl_voltage": "1.8V",
+      "features": [
+        "BROM Flash",
+        "SLA/DAA Auth Bypass",
+        "Oppo ID / FRP Reset",
+        "OFP Extract",
+        "Factory Reset"
+      ]
+    },
+    "F5 / F5 Youth / A73 (CPH1723)": {
+      "chipset": "MediaTek Helio P23 (MT6763)",
+      "platform": "mtk",
+      "cpu_family": "Helio Series",
+      "loader_file": "DA_SWSEC_MT6765.bin",
+      "preloader_file": "preloader_oppo6763_17031.bin",
+      "testpoint": "CLK to GND",
+      "edl_voltage": "1.8V",
+      "features": [
+        "BROM Flash",
+        "Auth Bypass",
+        "Screen Lock Remove",
+        "FRP Reset"
+      ]
+    },
+    "A37 / F1s (A1601)": {
+      "chipset": "MediaTek MT6750",
+      "platform": "mtk",
+      "cpu_family": "Legacy MT67xx",
+      "loader_file": "DA_SWSEC_MT6765.bin",
+      "preloader_file": "preloader_oppo6750_15127.bin",
+      "testpoint": "Vol Down + Power or Short Test Point",
+      "edl_voltage": "1.8V",
+      "features": [
+        "BROM Flash",
+        "Pattern / PIN Wipe",
+        "FRP Reset",
+        "NVRAM Backup"
+      ]
+    },
+    "Realme 9 5G (RMX3471)": {
+      "chipset": "Qualcomm Snapdragon 695 5G (SM6375)",
+      "platform": "qualcomm",
+      "cpu_family": "Snapdragon 6-Series 5G",
+      "loader_file": "prog_firehose_sm6375_ddr.elf",
+      "testpoint": "EDL 9008: 2 Points above battery connector",
+      "edl_voltage": "1.8V",
+      "features": [
+        "EDL 9008 Flash",
+        "Oppo ID / FRP Reset",
+        "OFP Extract",
+        "Factory Reset"
+      ]
+    },
+    "Realme 7 Pro / 8 Pro (RMX2170/RMX3081)": {
+      "chipset": "Qualcomm Snapdragon 720G (SM7125)",
+      "platform": "qualcomm",
+      "cpu_family": "Snapdragon 7-Series",
+      "loader_file": "prog_firehose_sm7125_ddr.elf",
+      "testpoint": "EDL 9008: Under motherboard thermal tape",
+      "edl_voltage": "1.8V",
+      "features": [
+        "EDL 9008 Flash",
+        "FRP Reset",
+        "Pattern Lock Remove",
+        "QCN Repair"
+      ]
+    },
+    "Oppo Reno 5 4G (CPH2159)": {
+      "chipset": "Qualcomm Snapdragon 720G (SM7125)",
+      "platform": "qualcomm",
+      "cpu_family": "Snapdragon 7-Series",
+      "loader_file": "prog_firehose_sm7125_ddr.elf",
+      "testpoint": "EDL 9008: 2 Golden dots above CPU shield",
+      "edl_voltage": "1.8V",
+      "features": [
+        "EDL 9008 Flash",
+        "Oppo ID Reset",
+        "FRP",
+        "QCN Write"
+      ]
+    },
+    "Oppo A53 / A33 (CPH2127)": {
+      "chipset": "Qualcomm Snapdragon 460 (SM4250)",
+      "platform": "qualcomm",
+      "cpu_family": "Snapdragon 4-Series",
+      "loader_file": "prog_firehose_sm4250_vivo.elf",
+      "testpoint": "EDL 9008: Beside battery connector",
+      "edl_voltage": "1.8V",
+      "features": [
+        "EDL 9008 Flash",
+        "Pattern / PIN Wipe",
+        "FRP Reset"
+      ]
+    }
+  },
+  "Generic MTK": {
+    "MT6762 Generic BSP (Helio P22)": {
+      "chipset": "MediaTek Helio P22 (MT6762)",
+      "platform": "mtk",
+      "cpu_family": "Helio Series",
+      "loader_file": "DA_SWSEC_MT6765.bin",
+      "preloader_file": "preloader_k62v1_64_bsp.bin",
+      "testpoint": "CLK to GND",
+      "edl_voltage": "1.8V",
+      "features": [
+        "Universal BROM Flash",
+        "DRAM Initialization",
+        "Auth Bypass",
+        "FRP Reset"
+      ]
+    },
+    "MT6765 Generic BSP (Helio P35)": {
+      "chipset": "MediaTek Helio P35 (MT6765)",
+      "platform": "mtk",
+      "cpu_family": "Helio Series",
+      "loader_file": "DA_SWSEC_MT6765.bin",
+      "preloader_file": "preloader_k65v1_64_bsp.bin",
+      "testpoint": "CLK to GND",
+      "edl_voltage": "1.8V",
+      "features": [
+        "Universal BROM Flash",
+        "DRAM Initialization",
+        "Auth Bypass",
+        "FRP Reset"
+      ]
+    }
+  },
+  "OnePlus": {
+    "OnePlus Nord N30 5G": {
+      "chipset": "Qualcomm Snapdragon 695 5G (SM6375)",
+      "platform": "qualcomm",
+      "cpu_family": "Snapdragon 6-Series 5G",
+      "loader_file": "prog_firehose_sm6375_ddr.elf",
+      "testpoint": "EDL 9008: Near volume flex connector",
+      "edl_voltage": "1.8V",
+      "features": [
+        "EDL 9008 Flash",
+        "MSM Download Tool Unbrick",
+        "FRP Reset"
+      ]
+    },
+    "OnePlus Nord N10 5G": {
+      "chipset": "Qualcomm Snapdragon 690 5G (SM6350)",
+      "platform": "qualcomm",
+      "cpu_family": "Snapdragon 6-Series 5G",
+      "loader_file": "prog_firehose_sm6350_ddr.elf",
+      "testpoint": "EDL 9008: 2 Golden dots beside camera module",
+      "edl_voltage": "1.8V",
+      "features": [
+        "EDL 9008 Flash",
+        "Unbrick Dead Boot",
+        "FRP Reset"
+      ]
+    },
+    "OnePlus Nord N100": {
+      "chipset": "Qualcomm Snapdragon 460 (SM4250)",
+      "platform": "qualcomm",
+      "cpu_family": "Snapdragon 4-Series",
+      "loader_file": "prog_firehose_sm4250_ddr.elf",
+      "testpoint": "EDL 9008: Upper right corner of motherboard",
+      "edl_voltage": "1.8V",
+      "features": [
+        "EDL 9008 Flash",
+        "FRP Reset",
+        "Factory Reset"
+      ]
+    },
+    "OnePlus 8 / 8T / 8 Pro": {
+      "chipset": "Qualcomm Snapdragon 865 5G (SM8250)",
+      "platform": "qualcomm",
+      "cpu_family": "Snapdragon 8-Series Flagship",
+      "loader_file": "prog_firehose_sm8250_ddr.elf",
+      "testpoint": "EDL 9008: Lower shield testpoints",
+      "edl_voltage": "1.8V",
+      "features": [
+        "High-Speed 9008 Flash",
+        "Crashdump Mode Unbrick",
+        "FRP Reset",
+        "EFS Backup"
+      ]
+    },
+    "OnePlus 7 / 7T / 7 Pro": {
+      "chipset": "Qualcomm Snapdragon 855 / 855+ (SM8150)",
+      "platform": "qualcomm",
+      "cpu_family": "Snapdragon 8-Series Flagship",
+      "loader_file": "prog_firehose_sm8150_ddr.elf",
+      "testpoint": "EDL 9008: Near battery flex",
+      "edl_voltage": "1.8V",
+      "features": [
+        "EDL 9008 Flash",
+        "Qualcomm BlankFlash",
+        "FRP Reset",
+        "QCN Write"
+      ]
+    }
+  },
+  "Schok": {
+    "Schok Volt SV55 (SV55216)": {
+      "platform": "qualcomm",
+      "chipset": "MSM8937 (Snapdragon 430/439)",
+      "storage": "eMMC",
+      "loader_file": "prog_emmc_firehose_8937_sv55.mbn",
+      "supported_ops": [
+        "flash",
+        "factory_reset",
+        "frp_erase",
+        "qcn_backup",
+        "qcn_restore",
+        "partition_manager"
+      ]
+    },
+    "Schok Classic Flip (QM215)": {
+      "platform": "qualcomm",
+      "chipset": "QM215 (Snapdragon 215)",
+      "storage": "eMMC",
+      "loader_file": "prog_emmc_firehose_QM215.mbn",
+      "supported_ops": [
+        "flash",
+        "factory_reset",
+        "frp_erase",
+        "qcn_backup",
+        "qcn_restore"
+      ]
+    }
+  }
+}

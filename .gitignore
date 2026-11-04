@@ -1,0 +1,44 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyd
+
+# PyInstaller / Build outputs
+build/
+dist/
+*.spec.bak
+installer_output/
+test_install_verify/
+*.zip
+crash_log.txt
+
+# Backups and Dumps (keep repository lightweight and protect sensitive device user data)
+backups/
+dump/
+dumps/
+*.bin
+*.raw
+*.tar
+*.iso
+
+# Logs
+*.log
+logs/
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# OS generated
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp

@@ -1,0 +1,18 @@
+{
+  "theme": "dark",
+  "scaling": 0.9,
+  "recent_scatter": "",
+  "recent_da": "",
+  "recent_preloader": "",
+  "recent_auth": "",
+  "recent_qc_prog": "",
+  "recent_qc_rawprog": "",
+  "recent_qc_patch": "",
+  "recent_spd_pac": "",
+  "auto_reboot": true,
+  "force_brom": true,
+  "server_auth": true,
+  "language": "en",
+  "auto_switch": true,
+  "sound_enabled": true
+}

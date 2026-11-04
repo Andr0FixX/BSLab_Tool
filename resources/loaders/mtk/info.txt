@@ -1,0 +1,3 @@
+# MediaTek Download Agents (DA) & Auth Payloads Directory
+# Supported formats: *.bin, *.auth
+# Drop custom MTK DAs here for automatic detection by ModelRepository.
