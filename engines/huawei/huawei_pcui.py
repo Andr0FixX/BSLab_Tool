@@ -38,25 +38,25 @@ class HuaweiPCUIEngine:
     # =========================================================================
     def find_pcui_port(self) -> Optional[str]:
         """
-        Scans Windows COM ports for Huawei Android Adapter PCUI or DBAdapter interface.
-        Returns the COM port string (e.g. 'COM7') or None.
+        Scans Windows COM ports for Huawei Android Adapter PCUI interface.
+        Strictly prioritizes actual PCUI AT command channel (e.g. COM79) over DBAdapter.
+        Returns the COM port string (e.g. 'COM79') or None.
         """
         try:
             ports = list(serial.tools.list_ports.comports())
-            # 1. Exact match for PCUI in description
+            # 1. Exact match for genuine PCUI port (Highest priority - real AT command channel)
             for p in ports:
                 desc_lower = (p.description or "").lower()
-                vid = getattr(p, "vid", 0) or 0
-                if vid == self.HUAWEI_VID or "huawei" in desc_lower:
-                    if "pcui" in desc_lower or "dbadapter" in desc_lower or "manufacture" in desc_lower:
-                        return p.device
-
-            # 2. Match Huawei COM port
-            for p in ports:
-                desc_lower = (p.description or "").lower()
-                vid = getattr(p, "vid", 0) or 0
-                if vid == self.HUAWEI_VID or "huawei" in desc_lower:
+                if "pcui" in desc_lower:
                     return p.device
+
+            # 2. Match other Huawei communication ports (excluding DBAdapter which doesn't accept AT)
+            for p in ports:
+                desc_lower = (p.description or "").lower()
+                vid = getattr(p, "vid", 0) or 0
+                if (vid == self.HUAWEI_VID or "huawei" in desc_lower) and "dbadapter" not in desc_lower:
+                    if "serial" in desc_lower or "modem" in desc_lower:
+                        return p.device
         except Exception as e:
             self.log(f"Error scanning serial ports: {str(e)}", "warn")
 
@@ -344,8 +344,17 @@ class HuaweiPCUIEngine:
         if mode.lower() == "fastboot":
             self.log("[*] Commanding device to reboot into Fastboot Rescue Mode...", "info")
             ok, res = self.send_at_command("AT^REBOOT=FASTBOOT", port=target_port)
-            if not ok:
-                ok, res = self.send_at_command("AT^FASTBOOT", port=target_port)
+            if not ok or "no permission" in res.lower():
+                self.log("[*] AT command restricted by security. Engaging ADB Fastboot bridge fallback...", "info")
+                from core.path_utils import get_platform_tool_path
+                import subprocess
+                adb_bin = get_platform_tool_path("adb")
+                try:
+                    p = subprocess.run([adb_bin, "reboot", "bootloader"], capture_output=True, text=True, timeout=5)
+                    if p.returncode == 0:
+                        return True, "Rebooted to Fastboot Rescue via ADB Bridge"
+                except Exception as e:
+                    self.log(f"ADB bridge error: {e}", "warn")
             return ok, "Rebooted to Fastboot Rescue"
         elif mode.lower() == "recovery":
             self.log("[*] Commanding device to reboot into Recovery Mode...", "info")
@@ -354,4 +363,13 @@ class HuaweiPCUIEngine:
         else:
             self.log("[*] Commanding device to normal restart...", "info")
             ok, res = self.send_at_command("AT^RESET", port=target_port)
+            if not ok or "no permission" in res.lower():
+                from core.path_utils import get_platform_tool_path
+                import subprocess
+                adb_bin = get_platform_tool_path("adb")
+                try:
+                    subprocess.run([adb_bin, "reboot"], capture_output=True, text=True, timeout=5)
+                    return True, "Normal reboot initiated via ADB"
+                except Exception:
+                    pass
             return ok, "Normal reboot initiated"
