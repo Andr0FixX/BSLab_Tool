@@ -33,7 +33,8 @@ class ModuleRibbon(ctk.CTkFrame):
                 "🤖 FASTBOOT & ADB",
                 "📌 TEST POINTS",
                 "📦 FIRMWARE UNPACKER",
-                "🧠 AI LOG ANALYZER"
+                "🧠 AI LOG ANALYZER",
+                "🩺 PARTITION DOCTOR"
             ],
             command=self.on_module_changed,
             font=Theme.font_bold(size=11),
@@ -77,7 +78,9 @@ class ModuleRibbon(ctk.CTkFrame):
             "tp": "📌 TEST POINTS",
             "unpacker": "📦 FIRMWARE UNPACKER",
             "analyzer": "🧠 AI LOG ANALYZER",
-            "ai": "🧠 AI LOG ANALYZER"
+            "ai": "🧠 AI LOG ANALYZER",
+            "doctor": "🩺 PARTITION DOCTOR",
+            "partition": "🩺 PARTITION DOCTOR"
         }
         val = mapping.get(platform_key.lower())
         if val:

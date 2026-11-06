@@ -31,6 +31,7 @@ from ui.views.tp_view import TestPointView
 from ui.views.unpacker_view import FirmwareUnpackerView
 from ui.views.samsung_view import SamsungView
 from ui.views.ai_analyzer_view import AILogAnalyzerView
+from ui.views.partition_doctor_view import PartitionDoctorView
 from ui.views.smart_hub_view import SmartHubView
 from ui.dialogs.driver_dialog import DriverDialog
 from core.cloud_sync import CloudSyncManager
@@ -130,6 +131,7 @@ class BSLabApp(ctk.CTk):
         self.unpacker_view = FirmwareUnpackerView(self.body_frame, self)
         self.samsung_view = SamsungView(self.body_frame, self)
         self.ai_analyzer_view = AILogAnalyzerView(self.body_frame, self)
+        self.doctor_view = PartitionDoctorView(self.body_frame, self)
 
         # Right Console Panel
         self.console_panel = ConsolePanel(self.body_frame, logger=self.logger)
@@ -180,6 +182,7 @@ class BSLabApp(ctk.CTk):
         self.tp_view.hide()
         self.unpacker_view.hide()
         self.ai_analyzer_view.hide()
+        self.doctor_view.hide()
 
         if "AUTO-HUB" in choice or "SMART" in choice:
             self.active_platform_module = "smart"
@@ -243,6 +246,13 @@ class BSLabApp(ctk.CTk):
             self.module_ribbon.set_status("● AI LOG & HARDWARE UART ANALYZER ACTIVE", "#1E3A8A", "#60A5FA")
             self.status_bar.set_chipset_status("Diagnostics: AI Flashing & Hardware UART Root-Cause Engine")
             self.logger.info("❖ Platform Switched: AI Log & Hardware UART Diagnostic Analyzer.")
+
+        elif "PARTITION DOCTOR" in choice or "DOCTOR" in choice:
+            self.active_platform_module = "doctor"
+            self.doctor_view.show()
+            self.module_ribbon.set_status("● SURGICAL PARTITION DOCTOR ACTIVE", "#064E3B", "#34D399")
+            self.status_bar.set_chipset_status("Diagnostics: Surgical Single-Partition Unbricking (Zero Data Loss)")
+            self.logger.info("❖ Platform Switched: Surgical Partition Doctor & Zero-Data-Loss Unbricking Suite.")
 
     def switch_to_platform(self, platform_key: str):
         """Switches active platform view and updates ribbon dynamically."""
