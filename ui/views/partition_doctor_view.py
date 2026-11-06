@@ -87,9 +87,9 @@ class PartitionDoctorView:
             self.left_panel,
             values=["Auto Detect Mode", "Fastboot Mode (A/B Slots)", "Qualcomm EDL (9008)", "MediaTek (BROM/DA)"],
             variable=self.mode_var,
-            fg_color=Theme.BG_CARD,
+            fg_color=Theme.SURFACE_CARD,
             button_color=Theme.ACCENT_BLUE,
-            text_color=Theme.TEXT_MAIN
+            text_color=Theme.TEXT_PRIMARY
         )
         self.mode_menu.pack(fill="x", padx=12, pady=(2, 10))
 
@@ -110,7 +110,7 @@ class PartitionDoctorView:
             self.left_panel,
             text="🔄 INSTANT A/B SLOT SWITCH",
             font=Theme.font_bold(size=10),
-            fg_color=Theme.BG_CARD,
+            fg_color=Theme.SURFACE_CARD,
             text_color=Theme.ACCENT_GOLD,
             border_width=1,
             border_color=Theme.ACCENT_GOLD,
@@ -125,7 +125,7 @@ class PartitionDoctorView:
         fw_row.pack(fill="x", padx=12, pady=(2, 8))
         self.ent_fw = ctk.CTkEntry(fw_row, textvariable=self.fw_path_var, placeholder_text="Select ROM (.zip, .tar, folder)...", font=Theme.font_ui(size=9))
         self.ent_fw.pack(side="left", fill="x", expand=True, padx=(0, 6))
-        ctk.CTkButton(fw_row, text="📁", width=36, fg_color=Theme.BG_CARD, command=self.browse_firmware).pack(side="right")
+        ctk.CTkButton(fw_row, text="📁", width=36, fg_color=Theme.SURFACE_CARD, command=self.browse_firmware).pack(side="right")
 
         # Surgical Repair Button
         self.btn_surgical_fix = ctk.CTkButton(
@@ -194,7 +194,7 @@ class PartitionDoctorView:
             self.center_panel,
             height=110,
             fg_color=Theme.BG_PANEL,
-            text_color=Theme.TEXT_MAIN,
+            text_color=Theme.TEXT_PRIMARY,
             font=Theme.font_mono(size=10),
             border_width=1,
             border_color=Theme.BORDER_CARD

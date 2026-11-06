@@ -18,11 +18,13 @@ class Theme:
     BG_HEADER = "#161B26"        # Top header & bottom status bar
     BG_PANEL = "#111622"         # Sidebars & container frames
     SURFACE_CARD = "#161D2B"     # Elevated card blocks
+    BG_CARD = "#161D2B"          # Compatibility alias for SURFACE_CARD
     BORDER_CARD = "#232D42"      # 1px Subtle luminous card outlines
     SURFACE_INPUT = "#0A0E17"    # Input fields, textboxes, tree backgrounds
 
     # Text Contrast Hierarchy (92% luminance soft white, no retina fatigue)
     TEXT_PRIMARY = "#F1F5F9"     # High readability soft slate white
+    TEXT_MAIN = "#F1F5F9"        # Compatibility alias for TEXT_PRIMARY
     TEXT_SECONDARY = "#94A3B8"   # Balanced silver slate
     TEXT_MUTED = "#64748B"       # Muted hints and secondary captions
 
