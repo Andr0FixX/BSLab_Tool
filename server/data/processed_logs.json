@@ -1,0 +1,798 @@
+{
+  "2026_11_08_17_23_12.log": {
+    "mtime": 1794140592.9031394,
+    "size": 643,
+    "brand": "HUAWEI",
+    "model": "RNE-L21",
+    "hardware": "HI6250",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Huawei -> Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659] (Android 8.0.0, Patch 2018-05-05)",
+    "processed_at": "2026-11-16 12:42:37"
+  },
+  "2026_11_08_17_35_31.log": {
+    "mtime": 1794141331.7548013,
+    "size": 643,
+    "brand": "HUAWEI",
+    "model": "RNE-L21",
+    "hardware": "HI6250",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Huawei -> Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659] (Android 8.0.0, Patch 2018-05-05)",
+    "processed_at": "2026-11-16 12:42:39"
+  },
+  "fastboot_2026_11_08_17_36_58.log": {
+    "mtime": 1794141424.797388,
+    "size": 451,
+    "brand": "HUAWEI",
+    "model": "RNE-L21",
+    "hardware": "N/A",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Huawei -> Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659] (Android , Patch )",
+    "processed_at": "2026-11-17 15:00:35"
+  },
+  "fastboot_2026_11_08_17_37_28.log": {
+    "mtime": 1794141456.657175,
+    "size": 451,
+    "brand": "HUAWEI",
+    "model": "RNE-L21",
+    "hardware": "N/A",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Huawei -> Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659] (Android , Patch )",
+    "processed_at": "2026-11-17 15:00:38"
+  },
+  "fastboot_2026_11_08_17_37_49.log": {
+    "mtime": 1794141476.7547467,
+    "size": 451,
+    "brand": "HUAWEI",
+    "model": "RNE-L21",
+    "hardware": "N/A",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Huawei -> Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659] (Android , Patch )",
+    "processed_at": "2026-11-17 15:00:41"
+  },
+  "2026_11_08_18_28_00.log": {
+    "mtime": 1794144480.9544804,
+    "size": 643,
+    "brand": "HUAWEI",
+    "model": "RNE-L21",
+    "hardware": "HI6250",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Huawei -> Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659] (Android 8.0.0, Patch 2018-05-05)",
+    "processed_at": "2026-11-16 12:42:41"
+  },
+  "fastboot_2026_11_08_18_28_20.log": {
+    "mtime": 1794144501.6688812,
+    "size": 451,
+    "brand": "HUAWEI",
+    "model": "RNE-L21",
+    "hardware": "N/A",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Huawei -> Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659] (Android , Patch )",
+    "processed_at": "2026-11-17 15:00:47"
+  },
+  "fastboot_2026_11_08_18_28_28.log": {
+    "mtime": 1794144509.5944574,
+    "size": 451,
+    "brand": "HUAWEI",
+    "model": "RNE-L21",
+    "hardware": "N/A",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Huawei -> Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659] (Android , Patch )",
+    "processed_at": "2026-11-17 15:00:50"
+  },
+  "fastboot_2026_11_08_19_04_35.log": {
+    "mtime": 1794146677.2247398,
+    "size": 451,
+    "brand": "HUAWEI",
+    "model": "RNE-L21",
+    "hardware": "N/A",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Huawei -> Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659] (Android , Patch )",
+    "processed_at": "2026-11-17 15:00:53"
+  },
+  "fastboot_2026_11_08_19_05_06.log": {
+    "mtime": 1794146708.0153568,
+    "size": 451,
+    "brand": "HUAWEI",
+    "model": "RNE-L21",
+    "hardware": "N/A",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Huawei -> Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659] (Android , Patch )",
+    "processed_at": "2026-11-17 15:00:56"
+  },
+  "fastboot_2026_11_08_19_06_06.log": {
+    "mtime": 1794146767.4054525,
+    "size": 451,
+    "brand": "HUAWEI",
+    "model": "RNE-L21",
+    "hardware": "N/A",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Huawei -> Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659] (Android , Patch )",
+    "processed_at": "2026-11-17 15:01:06"
+  },
+  "2026_11_08_19_08_19.log": {
+    "mtime": 1794146899.7126265,
+    "size": 643,
+    "brand": "HUAWEI",
+    "model": "RNE-L21",
+    "hardware": "HI6250",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Huawei -> Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659] (Android 8.0.0, Patch 2018-05-05)",
+    "processed_at": "2026-11-16 12:42:48"
+  },
+  "2026_11_08_21_11_11.log": {
+    "mtime": 1794154271.3396876,
+    "size": 644,
+    "brand": "HUAWEI",
+    "model": "RNE-L21",
+    "hardware": "HI6250",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Huawei -> Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659] (Android 8.0.0, Patch 2018-05-05)",
+    "processed_at": "2026-11-16 12:42:52"
+  },
+  "2026_11_08_23_07_53.log": {
+    "mtime": 1794161273.0789173,
+    "size": 643,
+    "brand": "HUAWEI",
+    "model": "RNE-L21",
+    "hardware": "HI6250",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Huawei -> Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659] (Android 8.0.0, Patch 2018-05-05)",
+    "processed_at": "2026-11-16 12:42:54"
+  },
+  "2026_11_09_01_10_24.log": {
+    "mtime": 1794168624.376502,
+    "size": 643,
+    "brand": "HUAWEI",
+    "model": "RNE-L21",
+    "hardware": "HI6250",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Huawei -> Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659] (Android 8.0.0, Patch 2018-05-05)",
+    "processed_at": "2026-11-16 12:42:56"
+  },
+  "2026_11_09_01_13_19.log": {
+    "mtime": 1794168799.525576,
+    "size": 643,
+    "brand": "HUAWEI",
+    "model": "RNE-L21",
+    "hardware": "HI6250",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Huawei -> Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659] (Android 8.0.0, Patch 2018-05-05)",
+    "processed_at": "2026-11-16 12:43:05"
+  },
+  "2026_11_09_01_47_05.log": {
+    "mtime": 1794170825.1463373,
+    "size": 643,
+    "brand": "HUAWEI",
+    "model": "RNE-L21",
+    "hardware": "HI6250",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Huawei -> Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659] (Android 8.0.0, Patch 2018-05-05)",
+    "processed_at": "2026-11-16 12:43:09"
+  },
+  "2026_11_14_04_59_11.log": {
+    "mtime": 1794614351.17546,
+    "size": 600,
+    "brand": "GOOGLE",
+    "model": "Pixel 4 XL",
+    "hardware": "CORAL",
+    "status": "LEARNED",
+    "action": "ADDED NEW MODEL: Pixel -> 4 XL (Universal Chipset (CORAL))",
+    "processed_at": "2026-11-16 12:43:14"
+  },
+  "2026_11_14_05_39_35.log": {
+    "mtime": 1794616775.1320846,
+    "size": 600,
+    "brand": "GOOGLE",
+    "model": "Pixel 4 XL",
+    "hardware": "CORAL",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Pixel -> 4 XL (Android 13, Patch 2022-10-05)",
+    "processed_at": "2026-11-16 12:43:21"
+  },
+  "2026_11_14_05_41_04.log": {
+    "mtime": 1794616864.2703018,
+    "size": 600,
+    "brand": "GOOGLE",
+    "model": "Pixel 4 XL",
+    "hardware": "CORAL",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Pixel -> 4 XL (Android 13, Patch 2022-10-05)",
+    "processed_at": "2026-11-16 12:43:24"
+  },
+  "2026_11_14_05_47_00.log": {
+    "mtime": 1794617220.8462665,
+    "size": 600,
+    "brand": "GOOGLE",
+    "model": "Pixel 4 XL",
+    "hardware": "CORAL",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Pixel -> 4 XL (Android 13, Patch 2022-10-05)",
+    "processed_at": "2026-11-16 12:43:30"
+  },
+  "2026_11_14_05_48_58.log": {
+    "mtime": 1794617338.604594,
+    "size": 600,
+    "brand": "GOOGLE",
+    "model": "Pixel 4 XL",
+    "hardware": "CORAL",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Pixel -> 4 XL (Android 13, Patch 2022-10-05)",
+    "processed_at": "2026-11-16 12:43:35"
+  },
+  "2026_11_14_05_53_17.log": {
+    "mtime": 1794617597.9094422,
+    "size": 600,
+    "brand": "GOOGLE",
+    "model": "Pixel 4 XL",
+    "hardware": "CORAL",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Pixel -> 4 XL (Android 13, Patch 2022-10-05)",
+    "processed_at": "2026-11-16 12:43:38"
+  },
+  "2026_11_14_06_25_42.log": {
+    "mtime": 1794619542.6005075,
+    "size": 607,
+    "brand": "GOOGLE",
+    "model": "Pixel 4 XL",
+    "hardware": "CORAL",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Pixel -> 4 XL (Android 13, Patch 2022-10-05)",
+    "processed_at": "2026-11-16 12:43:44"
+  },
+  "2026_11_14_07_14_23.log": {
+    "mtime": 1794622463.9210339,
+    "size": 607,
+    "brand": "GOOGLE",
+    "model": "Pixel 4 XL",
+    "hardware": "CORAL",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Pixel -> 4 XL (Android 13, Patch 2022-10-05)",
+    "processed_at": "2026-11-16 12:43:48"
+  },
+  "2026_11_14_07_30_56.log": {
+    "mtime": 1794623456.41334,
+    "size": 592,
+    "brand": "GOOGLE",
+    "model": "Pixel 4 XL",
+    "hardware": "CORAL",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Pixel -> 4 XL (Android 13, Patch 2022-10-05)",
+    "processed_at": "2026-11-16 12:43:50"
+  },
+  "2026_11_14_07_31_07.log": {
+    "mtime": 1794623467.0551312,
+    "size": 592,
+    "brand": "GOOGLE",
+    "model": "Pixel 4 XL",
+    "hardware": "CORAL",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Pixel -> 4 XL (Android 13, Patch 2022-10-05)",
+    "processed_at": "2026-11-16 12:43:55"
+  },
+  "2026_11_14_07_31_55.log": {
+    "mtime": 1794623515.4887004,
+    "size": 600,
+    "brand": "GOOGLE",
+    "model": "Pixel 4 XL",
+    "hardware": "CORAL",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Pixel -> 4 XL (Android 13, Patch 2022-10-05)",
+    "processed_at": "2026-11-16 12:44:00"
+  },
+  "2026_11_14_07_32_22.log": {
+    "mtime": 1794623542.3337824,
+    "size": 600,
+    "brand": "GOOGLE",
+    "model": "Pixel 4 XL",
+    "hardware": "CORAL",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Pixel -> 4 XL (Android 13, Patch 2022-10-05)",
+    "processed_at": "2026-11-16 12:44:03"
+  },
+  "2026_11_14_07_32_25.log": {
+    "mtime": 1794623545.6773982,
+    "size": 600,
+    "brand": "GOOGLE",
+    "model": "Pixel 4 XL",
+    "hardware": "CORAL",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Pixel -> 4 XL (Android 13, Patch 2022-10-05)",
+    "processed_at": "2026-11-16 12:44:06"
+  },
+  "2026_11_14_07_33_17.log": {
+    "mtime": 1794623597.7843876,
+    "size": 599,
+    "brand": "GOOGLE",
+    "model": "Pixel 4 XL",
+    "hardware": "CORAL",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Pixel -> 4 XL (Android 13, Patch 2022-10-05)",
+    "processed_at": "2026-11-16 12:44:12"
+  },
+  "2026_11_14_07_47_13.log": {
+    "mtime": 1794624433.8465724,
+    "size": 600,
+    "brand": "GOOGLE",
+    "model": "Pixel 4 XL",
+    "hardware": "CORAL",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Pixel -> 4 XL (Android 13, Patch 2022-10-05)",
+    "processed_at": "2026-11-16 12:44:14"
+  },
+  "2026_11_14_07_49_29.log": {
+    "mtime": 1794624569.2163708,
+    "size": 600,
+    "brand": "GOOGLE",
+    "model": "Pixel 4 XL",
+    "hardware": "CORAL",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Pixel -> 4 XL (Android 13, Patch 2022-10-05)",
+    "processed_at": "2026-11-16 12:44:18"
+  },
+  "2026_11_14_07_50_53.log": {
+    "mtime": 1794624653.3061764,
+    "size": 607,
+    "brand": "GOOGLE",
+    "model": "Pixel 4 XL",
+    "hardware": "CORAL",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Pixel -> 4 XL (Android 13, Patch 2022-10-05)",
+    "processed_at": "2026-11-16 12:44:29"
+  },
+  "2026_11_14_07_51_42.log": {
+    "mtime": 1794624702.1342318,
+    "size": 600,
+    "brand": "GOOGLE",
+    "model": "Pixel 4 XL",
+    "hardware": "CORAL",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Pixel -> 4 XL (Android 13, Patch 2022-10-05)",
+    "processed_at": "2026-11-16 12:44:32"
+  },
+  "2026_11_14_07_52_34.log": {
+    "mtime": 1794624754.829345,
+    "size": 600,
+    "brand": "GOOGLE",
+    "model": "Pixel 4 XL",
+    "hardware": "CORAL",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Pixel -> 4 XL (Android 13, Patch 2022-10-05)",
+    "processed_at": "2026-11-16 12:44:34"
+  },
+  "2026_11_14_08_18_30.log": {
+    "mtime": 1794626310.661683,
+    "size": 607,
+    "brand": "GOOGLE",
+    "model": "Pixel 4 XL",
+    "hardware": "CORAL",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Pixel -> 4 XL (Android 13, Patch 2022-10-05)",
+    "processed_at": "2026-11-16 12:44:35"
+  },
+  "2026_11_14_08_22_03.log": {
+    "mtime": 1794626523.97,
+    "size": 607,
+    "brand": "GOOGLE",
+    "model": "Pixel 4 XL",
+    "hardware": "CORAL",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Pixel -> 4 XL (Android 13, Patch 2022-10-05)",
+    "processed_at": "2026-11-16 12:44:38"
+  },
+  "2026_11_14_13_10_25.log": {
+    "mtime": 1794643825.0949361,
+    "size": 600,
+    "brand": "GOOGLE",
+    "model": "Pixel 4 XL",
+    "hardware": "CORAL",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Pixel -> 4 XL (Android 13, Patch 2022-10-05)",
+    "processed_at": "2026-11-16 12:44:43"
+  },
+  "2026_11_14_13_12_12.log": {
+    "mtime": 1794643932.1372883,
+    "size": 607,
+    "brand": "GOOGLE",
+    "model": "Pixel 4 XL",
+    "hardware": "CORAL",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Pixel -> 4 XL (Android 13, Patch 2022-10-05)",
+    "processed_at": "2026-11-16 12:44:47"
+  },
+  "2026_11_14_13_13_09.log": {
+    "mtime": 1794643989.4543445,
+    "size": 607,
+    "brand": "GOOGLE",
+    "model": "Pixel 4 XL",
+    "hardware": "CORAL",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Pixel -> 4 XL (Android 13, Patch 2022-10-05)",
+    "processed_at": "2026-11-16 12:44:48"
+  },
+  "2026_11_14_22_37_26.log": {
+    "mtime": 1794677846.6843045,
+    "size": 610,
+    "brand": "REALME",
+    "model": "RMX3834",
+    "hardware": "UMS9230_HULK",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Realme -> Note 50 (RMX3834) (Android 15, Patch 2026-07-01)",
+    "processed_at": "2026-11-16 12:44:50"
+  },
+  "2026_11_14_22_39_11.log": {
+    "mtime": 1794677951.232419,
+    "size": 610,
+    "brand": "REALME",
+    "model": "RMX3834",
+    "hardware": "UMS9230_HULK",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Realme -> Note 50 (RMX3834) (Android 15, Patch 2026-07-01)",
+    "processed_at": "2026-11-16 12:44:52"
+  },
+  "2026_11_14_22_50_26.log": {
+    "mtime": 1794678626.181768,
+    "size": 602,
+    "brand": "REALME",
+    "model": "RMX3834",
+    "hardware": "UMS9230_HULK",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Realme -> Note 50 (RMX3834) (Android 15, Patch 2026-07-01)",
+    "processed_at": "2026-11-16 12:44:57"
+  },
+  "2026_11_14_22_51_34.log": {
+    "mtime": 1794678694.132725,
+    "size": 602,
+    "brand": "REALME",
+    "model": "RMX3834",
+    "hardware": "UMS9230_HULK",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Realme -> Note 50 (RMX3834) (Android 15, Patch 2026-07-01)",
+    "processed_at": "2026-11-16 12:45:01"
+  },
+  "2026_11_15_01_39_21.log": {
+    "mtime": 1794688761.5085876,
+    "size": 610,
+    "brand": "REALME",
+    "model": "RMX3834",
+    "hardware": "UMS9230_HULK",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Realme -> Note 50 (RMX3834) (Android 15, Patch 2026-07-01)",
+    "processed_at": "2026-11-16 12:45:03"
+  },
+  "2026_11_15_02_03_30.log": {
+    "mtime": 1794690210.6003103,
+    "size": 667,
+    "brand": "INFINIX",
+    "model": "Infinix X6728B",
+    "hardware": "MT6768",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Infinix -> Hot 60i (X6728B) (Android 15, Patch 2026-05-01)",
+    "processed_at": "2026-11-16 12:45:05"
+  },
+  "2026_11_15_02_15_42.log": {
+    "mtime": 1794690942.2633016,
+    "size": 667,
+    "brand": "INFINIX",
+    "model": "Infinix X6728B",
+    "hardware": "MT6768",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Infinix -> Hot 60i (X6728B) (Android 15, Patch 2026-05-01)",
+    "processed_at": "2026-11-16 12:45:06"
+  },
+  "fastboot_2026_11_15_02_21_26.log": {
+    "mtime": 1794691287.5023973,
+    "size": 317,
+    "status": "SKIPPED_NO_TELEMETRY",
+    "processed_at": "2026-11-19 03:50:02"
+  },
+  "2026_11_15_02_36_35.log": {
+    "mtime": 1794692195.0835676,
+    "size": 720,
+    "brand": "INFINIX",
+    "model": "Infinix X6728B",
+    "hardware": "MT6768",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Infinix -> Hot 60i (X6728B) (Android 15, Patch 2026-05-01)",
+    "processed_at": "2026-11-16 12:45:11"
+  },
+  "2026_11_15_02_38_14.log": {
+    "mtime": 1794692294.336529,
+    "size": 720,
+    "brand": "INFINIX",
+    "model": "Infinix X6728B",
+    "hardware": "MT6768",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Infinix -> Hot 60i (X6728B) (Android 15, Patch 2026-05-01)",
+    "processed_at": "2026-11-16 12:45:14"
+  },
+  "2026_11_15_02_42_24.log": {
+    "mtime": 1794692544.1120973,
+    "size": 720,
+    "brand": "INFINIX",
+    "model": "Infinix X6728B",
+    "hardware": "MT6768",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Infinix -> Hot 60i (X6728B) (Android 15, Patch 2026-05-01)",
+    "processed_at": "2026-11-16 12:45:17"
+  },
+  "2026_11_15_02_42_43.log": {
+    "mtime": 1794692563.7673736,
+    "size": 720,
+    "brand": "INFINIX",
+    "model": "Infinix X6728B",
+    "hardware": "MT6768",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Infinix -> Hot 60i (X6728B) (Android 15, Patch 2026-05-01)",
+    "processed_at": "2026-11-16 12:45:19"
+  },
+  "2026_11_15_04_16_03.log": {
+    "mtime": 1794698163.2742436,
+    "size": 720,
+    "brand": "INFINIX",
+    "model": "Infinix X6728B",
+    "hardware": "MT6768",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Infinix -> Hot 60i (X6728B) (Android 15, Patch 2026-05-01)",
+    "processed_at": "2026-11-16 12:45:20"
+  },
+  "2026_11_15_20_57_27.log": {
+    "mtime": 1794758247.471403,
+    "size": 720,
+    "brand": "INFINIX",
+    "model": "Infinix X6728B",
+    "hardware": "MT6768",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Infinix -> Hot 60i (X6728B) (Android 15, Patch 2026-09-05)",
+    "processed_at": "2026-11-16 12:45:22"
+  },
+  "2026_11_15_21_33_15.log": {
+    "mtime": 1794760395.6444738,
+    "size": 720,
+    "brand": "INFINIX",
+    "model": "Infinix X6728B",
+    "hardware": "MT6768",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Infinix -> Hot 60i (X6728B) (Android 15, Patch 2026-09-05)",
+    "processed_at": "2026-11-16 12:45:29"
+  },
+  "2026_11_16_01_55_59.log": {
+    "mtime": 1794776159.995366,
+    "size": 720,
+    "brand": "INFINIX",
+    "model": "Infinix X6728B",
+    "hardware": "MT6768",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Infinix -> Hot 60i (X6728B) (Android 15, Patch 2026-09-05)",
+    "processed_at": "2026-11-16 12:45:32"
+  },
+  "2026_11_16_12_42_04.log": {
+    "mtime": 1794814924.8180747,
+    "size": 720,
+    "brand": "INFINIX",
+    "model": "Infinix X6728B",
+    "hardware": "MT6768",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Infinix -> Hot 60i (X6728B) (Android 15, Patch 2026-09-05)",
+    "processed_at": "2026-11-16 12:45:33"
+  },
+  "2026_11_16_12_42_23.log": {
+    "mtime": 1794814943.9437468,
+    "size": 720,
+    "brand": "INFINIX",
+    "model": "Infinix X6728B",
+    "hardware": "MT6768",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Infinix -> Hot 60i (X6728B) (Android 15, Patch 2026-09-05)",
+    "processed_at": "2026-11-16 12:45:36"
+  },
+  "2026_11_16_23_13_11.log": {
+    "mtime": 1794852791.7698264,
+    "size": 620,
+    "brand": "OPPO",
+    "model": "CPH2321",
+    "hardware": "MT6833",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Oppo -> A53s 5G (CPH2321) (Android 12, Patch 2022-06-05)",
+    "processed_at": "2026-11-17 13:39:42"
+  },
+  "2026_11_17_02_16_34.log": {
+    "mtime": 1794863794.5574255,
+    "size": 645,
+    "brand": "HUAWEI",
+    "model": "RNE-L21",
+    "hardware": "HI6250",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Huawei -> Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659] (Android 8.0.0, Patch 2020-07-01)",
+    "processed_at": "2026-11-17 13:39:43"
+  },
+  "fastboot_2026_11_17_02_32_01.log": {
+    "mtime": 1794864724.0420358,
+    "size": 451,
+    "brand": "HUAWEI",
+    "model": "RNE-L21",
+    "hardware": "N/A",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Huawei -> Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659] (Android , Patch )",
+    "processed_at": "2026-11-17 15:01:17"
+  },
+  "fastboot_2026_11_17_02_33_34.log": {
+    "mtime": 1794864815.5890403,
+    "size": 451,
+    "brand": "HUAWEI",
+    "model": "RNE-L21",
+    "hardware": "N/A",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Huawei -> Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659] (Android , Patch )",
+    "processed_at": "2026-11-17 15:01:22"
+  },
+  "2026_11_17_03_00_16.log": {
+    "mtime": 1794866416.2830286,
+    "size": 645,
+    "brand": "HUAWEI",
+    "model": "RNE-L21",
+    "hardware": "HI6250",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Huawei -> Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659] (Android 8.0.0, Patch 2020-07-01)",
+    "processed_at": "2026-11-17 13:39:45"
+  },
+  "2026_11_17_03_02_34.log": {
+    "mtime": 1794866554.7636766,
+    "size": 647,
+    "brand": "HUAWEI",
+    "model": "RNE-L21",
+    "hardware": "HI6250",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Huawei -> Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659] (Android 8.0.0, Patch 2018-05-05)",
+    "processed_at": "2026-11-17 13:39:47"
+  },
+  "2026_11_17_05_07_03.log": {
+    "mtime": 1794874023.5653157,
+    "size": 620,
+    "brand": "OPPO",
+    "model": "CPH2321",
+    "hardware": "MT6833",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Oppo -> A53s 5G (CPH2321) (Android 12, Patch 2022-06-05)",
+    "processed_at": "2026-11-17 13:39:48"
+  },
+  "ADB_Report_CPH2321_20261117_054647.txt": {
+    "mtime": 1794876407.3042576,
+    "size": 1032,
+    "status": "SKIPPED_NO_TELEMETRY",
+    "processed_at": "2026-11-19 03:50:02"
+  },
+  "ADB_Report_CPH2321_20261117_064625.txt": {
+    "mtime": 1794879985.103019,
+    "size": 4021,
+    "status": "SKIPPED_NO_TELEMETRY",
+    "processed_at": "2026-11-19 03:50:02"
+  },
+  "ADB_Report_CPH2321_20261117_133544.txt": {
+    "mtime": 1794904544.6796854,
+    "size": 4043,
+    "status": "SKIPPED_NO_TELEMETRY",
+    "processed_at": "2026-11-19 03:50:02"
+  },
+  "ADB_Report_Pixel 4 XL_20261117_135112.txt": {
+    "mtime": 1794905472.6058197,
+    "size": 3976,
+    "status": "SKIPPED_NO_TELEMETRY",
+    "processed_at": "2026-11-19 03:50:02"
+  },
+  "ADB_Report_CPH2321_20261117_145507.txt": {
+    "mtime": 1794909307.5098577,
+    "size": 4043,
+    "status": "SKIPPED_NO_TELEMETRY",
+    "processed_at": "2026-11-19 03:50:02"
+  },
+  "ADB_Report_CPH2321_20261117_145608.txt": {
+    "mtime": 1794909368.7461011,
+    "size": 4043,
+    "status": "SKIPPED_NO_TELEMETRY",
+    "processed_at": "2026-11-19 03:50:02"
+  },
+  "COM_Session_2026_11_17_16_03_52.log": {
+    "mtime": 1794913432.6369047,
+    "size": 4845,
+    "brand": "Oppo",
+    "model": "A56 5G (CPH2321) [MANUAL TECHNICIAN LOCK]",
+    "hardware": "N/A",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Oppo -> A53s 5G (CPH2321) (Android , Patch )",
+    "processed_at": "2026-11-17 16:04:06"
+  },
+  "ADB_Report_Pixel 4 XL_20261118_022923.txt": {
+    "mtime": 1794950963.2041237,
+    "size": 3998,
+    "status": "SKIPPED_NO_TELEMETRY",
+    "processed_at": "2026-11-19 03:50:03"
+  },
+  "ADB_Report_Pixel 4 XL_20261118_023234.txt": {
+    "mtime": 1794951154.9374294,
+    "size": 3998,
+    "status": "SKIPPED_NO_TELEMETRY",
+    "processed_at": "2026-11-19 03:50:03"
+  },
+  "ADB_Report_Pixel 4 XL_20261118_024113.txt": {
+    "mtime": 1794951673.3276584,
+    "size": 4001,
+    "status": "SKIPPED_NO_TELEMETRY",
+    "processed_at": "2026-11-19 03:50:03"
+  },
+  "ADB_Report_Pixel 4 XL_20261118_055423.txt": {
+    "mtime": 1794963263.4755955,
+    "size": 3973,
+    "status": "SKIPPED_NO_TELEMETRY",
+    "processed_at": "2026-11-19 03:50:03"
+  },
+  "ADB_Report_oppo6833_20261118_224201.txt": {
+    "mtime": 1795023721.268737,
+    "size": 3995,
+    "status": "SKIPPED_NO_TELEMETRY",
+    "processed_at": "2026-11-19 03:50:03"
+  },
+  "ADB_Report_oppo6833_20261118_224349.txt": {
+    "mtime": 1795023829.8888829,
+    "size": 3995,
+    "status": "SKIPPED_NO_TELEMETRY",
+    "processed_at": "2026-11-19 03:50:03"
+  },
+  "COM_Session_2026_11_19_03_17_58.log": {
+    "mtime": 1795040278.767833,
+    "size": 5536,
+    "brand": "Oppo",
+    "model": "A56 5G (CPH2321) [MANUAL TECHNICIAN LOCK]",
+    "hardware": "N/A",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Oppo -> A53s 5G (CPH2321) (Android , Patch )",
+    "processed_at": "2026-11-19 03:18:03"
+  },
+  "ADB_Report_oppo6833_20261119_032425.txt": {
+    "mtime": 1795040665.6247292,
+    "size": 3995,
+    "status": "SKIPPED_NO_TELEMETRY",
+    "processed_at": "2026-11-19 03:50:03"
+  },
+  "COM_Session_2026_11_19_03_27_52.log": {
+    "mtime": 1795040872.0734758,
+    "size": 15135,
+    "brand": "Oppo",
+    "model": "A56 5G (CPH2321) [MANUAL TECHNICIAN LOCK]",
+    "hardware": "N/A",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Oppo -> A53s 5G (CPH2321) (Android , Patch )",
+    "processed_at": "2026-11-19 03:27:55"
+  },
+  "COM_Session_2026_11_19_03_28_01.log": {
+    "mtime": 1795040881.645363,
+    "size": 16689,
+    "brand": "Oppo",
+    "model": "A56 5G (CPH2321) [MANUAL TECHNICIAN LOCK]",
+    "hardware": "N/A",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Oppo -> A53s 5G (CPH2321) (Android , Patch )",
+    "processed_at": "2026-11-19 03:28:05"
+  },
+  "ADB_Report_oppo6833_20261119_032904.txt": {
+    "mtime": 1795040944.638076,
+    "size": 3995,
+    "status": "SKIPPED_NO_TELEMETRY",
+    "processed_at": "2026-11-19 03:50:03"
+  },
+  "COM_Session_2026_11_19_03_34_26.log": {
+    "mtime": 1795041266.2347155,
+    "size": 25002,
+    "brand": "Oppo",
+    "model": "A56 5G (CPH2321) [MANUAL TECHNICIAN LOCK]",
+    "hardware": "N/A",
+    "status": "LEARNED",
+    "action": "UPDATED TELEMETRY: Oppo -> A53s 5G (CPH2321) (Android , Patch )",
+    "processed_at": "2026-11-19 03:34:31"
+  },
+  "ADB_Report_oppo6833_20261119_033942.txt": {
+    "mtime": 1795041582.933668,
+    "size": 3995,
+    "status": "SKIPPED_NO_TELEMETRY",
+    "processed_at": "2026-11-19 03:50:03"
+  }
+}

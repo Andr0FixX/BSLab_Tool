@@ -1,0 +1,206 @@
+            <!-- ================================================================ -->
+            <!-- VIEW 7: UNIVERSAL MULTI-MODE SAFE VAULT & BACKUP DOCTOR          -->
+            <!-- ================================================================ -->
+            <Grid x:Name="ViewBackup" Visibility="Collapsed">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/> <!-- Top Hardware Radar & Status Strip -->
+                    <RowDefinition Height="*"/>    <!-- Main 3-Column Vault Workspace -->
+                    <RowDefinition Height="180"/>  <!-- Bottom Live Protocol Console -->
+                </Grid.RowDefinitions>
+
+                <!-- ROW 0: TOP STATUS & ACTIVE MODE RADAR -->
+                <Border Grid.Row="0" Background="#121622" BorderBrush="#1E293B" BorderThickness="1" CornerRadius="6" Padding="10,6" Margin="0,0,0,8">
+                    <DockPanel>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="🛡️ UNIVERSAL SAFE VAULT &amp; DISASTER RECOVERY DOCTOR" FontSize="11.5" FontWeight="ExtraBold" Foreground="#38BDF8"/>
+                            <Border Background="#065F46" CornerRadius="3" Padding="6,1" Margin="8,0,0,0">
+                                <TextBlock Text="ZERO-OTP SESSIONS ONLINE" FontSize="8.5" FontWeight="Bold" Foreground="#34D399"/>
+                            </Border>
+                            <Border Background="#1E3A8A" CornerRadius="3" Padding="6,1" Margin="6,0,0,0">
+                                <TextBlock Text="MULTI-MODE HARDWARE DUMP" FontSize="8.5" FontWeight="Bold" Foreground="#93C5FD"/>
+                            </Border>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <Button Content="📁 Open All Backups Folder" Height="24" Padding="8,0" Background="#1E293B" Foreground="#38BDF8" FontSize="9" FontWeight="Bold" BorderThickness="1" BorderBrush="#334155" Click="OnOpenBackupFolderClicked" Margin="0,0,8,0"/>
+                            <Border Background="#0B0F19" CornerRadius="3" Padding="8,2" BorderBrush="#1E293B" BorderThickness="1">
+                                <TextBlock x:Name="TxtBackupVaultStatus" Text="● HARDWARE RADAR: STANDBY &amp; LISTENING" FontSize="9" FontWeight="Bold" Foreground="#10B981"/>
+                            </Border>
+                        </StackPanel>
+                    </DockPanel>
+                </Border>
+
+                <!-- ROW 1: MAIN 3-COLUMN VAULT WORKSPACE -->
+                <Grid Grid.Row="1" Margin="0,0,0,8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="360"/> <!-- Col 0: WhatsApp Zero-OTP Vault -->
+                        <ColumnDefinition Width="380"/> <!-- Col 1: Hardware & NV Security Dump -->
+                        <ColumnDefinition Width="*"/>   <!-- Col 2: Customer UserData & Explorer Extractor -->
+                    </Grid.ColumnDefinitions>
+
+                    <!-- ======================================================== -->
+                    <!-- COLUMN 0: WHATSAPP ZERO-OTP SESSION VAULT                -->
+                    <!-- ======================================================== -->
+                    <Border Grid.Column="0" Background="#13131A" CornerRadius="6" BorderBrush="#232332" BorderThickness="1" Padding="10" Margin="0,0,6,0">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                            <StackPanel>
+                                <Border Background="#064E3B" BorderBrush="#059669" BorderThickness="1" CornerRadius="5" Padding="8,5" Margin="0,0,0,8">
+                                    <DockPanel>
+                                        <TextBlock Text="💬 WHATSAPP ZERO-OTP VAULT" FontSize="10" FontWeight="ExtraBold" Foreground="#34D399" VerticalAlignment="Center"/>
+                                        <TextBlock Text="● NO OTP NEEDED" FontSize="8" FontWeight="Bold" Foreground="#A7F3D0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                    </DockPanel>
+                                </Border>
+
+                                <TextBlock Text="Active login session, master encryption keys (files/key), and raw databases cloning without receiving SMS/Call OTP code." FontSize="8.5" Foreground="#94A3B8" TextWrapping="Wrap" Margin="0,0,0,8"/>
+
+                                <!-- WhatsApp Primary Action Buttons -->
+                                <Button Content="📥 1-Click Backup WhatsApp Session (No OTP)" Height="30" Background="#065F46" Foreground="#FFFFFF" FontWeight="Bold" FontSize="9.5" BorderThickness="0" Margin="0,0,0,5" Click="OnBackupWhatsAppSessionClicked"/>
+                                <Button Content="📤 1-Click Restore WhatsApp Session to Phone" Height="30" Background="#047857" Foreground="#FFFFFF" FontWeight="Bold" FontSize="9.5" BorderThickness="0" Margin="0,0,0,5" Click="OnRestoreWhatsAppSessionClicked"/>
+                                <Button Content="🔑 Extract Master Decryption Key &amp; Crypt DB" Height="26" Background="#1E293B" Foreground="#38BDF8" FontWeight="SemiBold" FontSize="9" BorderThickness="1" BorderBrush="#334155" Margin="0,0,0,5" Click="OnExtractWhatsAppKeyClicked"/>
+                                <Button Content="📱 Clone Session to Secondary Device" Height="26" Background="#1E293B" Foreground="#93C5FD" FontWeight="SemiBold" FontSize="9" BorderThickness="1" BorderBrush="#334155" Margin="0,0,0,5" Click="OnCloneWhatsAppSessionClicked"/>
+                                <Button Content="💬 Generate HTML / PDF Chat Report" Height="26" Background="#1E293B" Foreground="#FCD34D" FontWeight="SemiBold" FontSize="9" BorderThickness="1" BorderBrush="#334155" Margin="0,0,0,8" Click="OnGenerateChatReportClicked"/>
+                                <Button Content="📂 Browse WhatsApp Vault in Explorer" Height="28" Background="#0C4A6E" Foreground="#38BDF8" FontWeight="Bold" FontSize="9.5" BorderThickness="0" Margin="0,0,0,8" Click="OnOpenWhatsAppExplorerClicked"/>
+
+                                <!-- Options Checklist -->
+                                <Border Background="#161A26" CornerRadius="4" Padding="8,6" BorderBrush="#253248" BorderThickness="1">
+                                    <StackPanel>
+                                        <TextBlock Text="EXTRACTION CONFIGURATION:" FontSize="8" FontWeight="Bold" Foreground="#38BDF8" Margin="0,0,0,4"/>
+                                        <CheckBox x:Name="ChkWaMedia" Content="Include Public Media (Voice, Photos, Docs)" Foreground="#E2E8F0" FontSize="8.5" IsChecked="True" Margin="0,2"/>
+                                        <CheckBox x:Name="ChkWaBusiness" Content="Scan WhatsApp Business (com.whatsapp.w4b)" Foreground="#E2E8F0" FontSize="8.5" IsChecked="True" Margin="0,2"/>
+                                        <CheckBox x:Name="ChkWaScoped" Content="Bypass Android 11/12/13 Scoped Storage" Foreground="#E2E8F0" FontSize="8.5" IsChecked="True" Margin="0,2"/>
+                                        <CheckBox x:Name="ChkWaDecrypted" Content="Extract Decrypted Plaintext SQLite Databases" Foreground="#E2E8F0" FontSize="8.5" IsChecked="True" Margin="0,2"/>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Border>
+
+                    <!-- ======================================================== -->
+                    <!-- COLUMN 1: MULTI-MODE HARDWARE DUMP & CALIBRATION VAULT   -->
+                    <!-- ======================================================== -->
+                    <Border Grid.Column="1" Background="#13131A" CornerRadius="6" BorderBrush="#232332" BorderThickness="1" Padding="10" Margin="0,0,6,0">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                            <StackPanel>
+                                <Border Background="#78350F" BorderBrush="#B45309" BorderThickness="1" CornerRadius="5" Padding="8,5" Margin="0,0,0,8">
+                                    <DockPanel>
+                                        <TextBlock Text="⚡ MULTI-MODE HARDWARE &amp; NV DUMP" FontSize="10" FontWeight="ExtraBold" Foreground="#FBBF24" VerticalAlignment="Center"/>
+                                        <TextBlock Text="● ALL CHIPSETS" FontSize="8" FontWeight="Bold" Foreground="#FDE68A" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                    </DockPanel>
+                                </Border>
+
+                                <TextBlock Text="Full physical sector readout (MTK BROM, Qualcomm EDL 9008, Huawei PCUI, SPRD). Guarantees 0-brick &amp; fixes Null IMEI." FontSize="8.5" Foreground="#94A3B8" TextWrapping="Wrap" Margin="0,0,0,8"/>
+
+                                <!-- Hardware Primary Action Buttons -->
+                                <Button Content="⚡ 1-Click Backup Security / NVRAM (IMEI Protection)" Height="30" Background="#B45309" Foreground="#FFFFFF" FontWeight="Bold" FontSize="9.5" BorderThickness="0" Margin="0,0,0,5" Click="OnBackupSecurityNvClicked"/>
+                                <Button Content="🔄 1-Click Restore Security / NVRAM (Fix Null IMEI)" Height="30" Background="#92400E" Foreground="#FFFFFF" FontWeight="Bold" FontSize="9.5" BorderThickness="0" Margin="0,0,0,5" Click="OnRestoreSecurityNvClicked"/>
+                                <Button Content="💾 Dump Critical Partitions (Boot, Recovery, OEMInfo)" Height="26" Background="#1E293B" Foreground="#38BDF8" FontWeight="SemiBold" FontSize="9" BorderThickness="1" BorderBrush="#334155" Margin="0,0,0,5" Click="OnDumpSelectedPartitionsClicked"/>
+                                <Button Content="💽 Full eMMC / UFS Raw Sector Dump (Complete Unbrick)" Height="26" Background="#1E293B" Foreground="#F472B6" FontWeight="SemiBold" FontSize="9" BorderThickness="1" BorderBrush="#334155" Margin="0,0,0,5" Click="OnDumpFullEmmcClicked"/>
+                                <Button Content="🛡️ Create Anti-Accident Checkpoint (Unplug Safe Guard)" Height="26" Background="#1E293B" Foreground="#34D399" FontWeight="SemiBold" FontSize="9" BorderThickness="1" BorderBrush="#334155" Margin="0,0,0,8" Click="OnCreateCheckpointClicked"/>
+                                <Button Content="📂 Browse Security &amp; NV Vault in Explorer" Height="28" Background="#713F12" Foreground="#FDE047" FontWeight="Bold" FontSize="9.5" BorderThickness="0" Margin="0,0,0,8" Click="OnOpenSecurityExplorerClicked"/>
+
+                                <!-- Hardware Options Checklist -->
+                                <Border Background="#161A26" CornerRadius="4" Padding="8,6" BorderBrush="#253248" BorderThickness="1">
+                                    <StackPanel>
+                                        <TextBlock Text="HARDWARE DUMP PARAMETERS:" FontSize="8" FontWeight="Bold" Foreground="#38BDF8" Margin="0,0,0,4"/>
+                                        <CheckBox x:Name="ChkNvVerify" Content="Verify SHA-256 / MD5 Checksums Post-Read" Foreground="#E2E8F0" FontSize="8.5" IsChecked="True" Margin="0,2"/>
+                                        <CheckBox x:Name="ChkNvCompress" Content="Auto-Compress Raw Dumps to .zip Archive" Foreground="#E2E8F0" FontSize="8.5" IsChecked="True" Margin="0,2"/>
+                                        <CheckBox x:Name="ChkNvSkipEmpty" Content="Skip Sparse / Empty Null Sectors (High Speed)" Foreground="#E2E8F0" FontSize="8.5" IsChecked="True" Margin="0,2"/>
+                                        <CheckBox x:Name="ChkNvOeminfo" Content="Include HiSilicon / Huawei Live oeminfo.bin" Foreground="#E2E8F0" FontSize="8.5" IsChecked="True" Margin="0,2"/>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Border>
+
+                    <!-- ======================================================== -->
+                    <!-- COLUMN 2: CUSTOMER USERDATA & CONTACTS VAULT             -->
+                    <!-- ======================================================== -->
+                    <Border Grid.Column="2" Background="#13131A" CornerRadius="6" BorderBrush="#232332" BorderThickness="1" Padding="10">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                            <StackPanel>
+                                <Border Background="#1E1B4B" BorderBrush="#4338CA" BorderThickness="1" CornerRadius="5" Padding="8,5" Margin="0,0,0,8">
+                                    <DockPanel>
+                                        <TextBlock Text="👤 CUSTOMER USERDATA &amp; CONTACTS VAULT" FontSize="10" FontWeight="ExtraBold" Foreground="#A5B4FC" VerticalAlignment="Center"/>
+                                        <TextBlock Text="● ZERO CLOUD DEPENDENCY" FontSize="8" FontWeight="Bold" Foreground="#C7D2FE" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                    </DockPanel>
+                                </Border>
+
+                                <TextBlock Text="Extract contacts, call logs, SMS, and gallery without Google cloud account or screen lock hindrances." FontSize="8.5" Foreground="#94A3B8" TextWrapping="Wrap" Margin="0,0,0,8"/>
+
+                                <!-- UserData Action Buttons -->
+                                <Grid Margin="0,0,0,6">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="6"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Button Grid.Column="0" Content="📇 Export Contacts (.vcf)" Height="28" Background="#1E293B" Foreground="#38BDF8" FontWeight="Bold" FontSize="9" BorderThickness="1" BorderBrush="#334155" Click="OnBackupContactsClicked"/>
+                                    <Button Grid.Column="2" Content="💬 Export SMS Messages" Height="28" Background="#1E293B" Foreground="#38BDF8" FontWeight="Bold" FontSize="9" BorderThickness="1" BorderBrush="#334155" Click="OnBackupSmsClicked"/>
+                                </Grid>
+
+                                <Grid Margin="0,0,0,6">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="6"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Button Grid.Column="0" Content="📷 Export Camera &amp; Photos" Height="28" Background="#1E293B" Foreground="#34D399" FontWeight="Bold" FontSize="9" BorderThickness="1" BorderBrush="#334155" Click="OnBackupGalleryClicked"/>
+                                    <Button Grid.Column="2" Content="📞 Export Call History" Height="28" Background="#1E293B" Foreground="#FCD34D" FontWeight="Bold" FontSize="9" BorderThickness="1" BorderBrush="#334155" Click="OnBackupCallLogsClicked"/>
+                                </Grid>
+
+                                <Button Content="📥 1-Click Full UserData Package Backup" Height="30" Background="#312E81" Foreground="#FFFFFF" FontWeight="Bold" FontSize="9.5" BorderThickness="0" Margin="0,0,0,5" Click="OnBackupUserDataClicked"/>
+                                <Button Content="📤 1-Click Restore Full UserData to Fresh ROM" Height="30" Background="#1E1B4B" Foreground="#A5B4FC" FontWeight="Bold" FontSize="9.5" BorderThickness="1" BorderBrush="#4338CA" Margin="0,0,0,8" Click="OnRestoreUserDataClicked"/>
+                                <Button Content="📂 Browse Extracted Customer Files in Explorer" Height="28" Background="#1E3A8A" Foreground="#93C5FD" FontWeight="Bold" FontSize="9.5" BorderThickness="0" Margin="0,0,0,8" Click="OnOpenCustomerExplorerClicked"/>
+
+                                <!-- Extraction Summary Card -->
+                                <Border Background="#161A26" CornerRadius="4" Padding="8,6" BorderBrush="#253248" BorderThickness="1">
+                                    <StackPanel>
+                                        <TextBlock Text="STORAGE &amp; MEDIA GEOMETRY:" FontSize="8" FontWeight="Bold" Foreground="#38BDF8" Margin="0,0,0,4"/>
+                                        <TextBlock Text="Active Directory: C:\BSLab_Tool\backups\" FontSize="8" FontFamily="Consolas" Foreground="#94A3B8"/>
+                                        <TextBlock x:Name="TxtBackupDiskSpace" Text="Disk Space Available: 142.6 GB Free on Drive C:\" FontSize="8" FontFamily="Consolas" Foreground="#34D399" Margin="0,2,0,0"/>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Border>
+                </Grid>
+
+                <!-- ROW 2: LIVE PROTOCOL CONSOLE & PROGRESS BAR -->
+                <Border Grid.Row="2" Background="#101017" CornerRadius="6" BorderBrush="#232332" BorderThickness="1" Padding="10,8">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Console Header -->
+                        <DockPanel Grid.Row="0" Margin="0,0,0,4">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock Text="⚡ SAFE VAULT &amp; DISASTER RECOVERY PROTOCOL CONSOLE" FontSize="9.5" FontWeight="Bold" Foreground="#38BDF8"/>
+                                <Border Background="#1E293B" CornerRadius="3" Padding="5,1" Margin="6,0,0,0">
+                                    <TextBlock Text="REAL-TIME I/O MONITOR" FontSize="8" FontWeight="Bold" Foreground="#94A3B8"/>
+                                </Border>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Button Content="📋 Copy Log" Width="70" Height="20" Background="#1E293B" Foreground="#38BDF8" FontSize="8.5" FontWeight="Bold" BorderThickness="0" Click="OnCopyBackupLogClicked" Margin="0,0,6,0"/>
+                                <Button Content="🧹 Clear" Width="50" Height="20" Background="#1E293B" Foreground="#94A3B8" FontSize="8.5" FontWeight="Bold" BorderThickness="0" Click="OnClearBackupConsoleClicked"/>
+                            </StackPanel>
+                        </DockPanel>
+
+                        <!-- Progress Bar & Status -->
+                        <Grid Grid.Row="1" Margin="0,2,0,4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="40"/>
+                            </Grid.ColumnDefinitions>
+                            <ProgressBar x:Name="BackupProgressBar" Grid.Column="0" Height="6" Background="#1E293B" Foreground="#10B981" BorderThickness="0" Value="0" Maximum="100"/>
+                            <TextBlock x:Name="TxtBackupProgressPct" Grid.Column="1" Text="0%" FontSize="8.5" FontWeight="Bold" Foreground="#10B981" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <!-- Log Console -->
+                        <TextBox x:Name="TxtBackupConsole" Grid.Row="2" Background="#070709" Foreground="#34D399" FontFamily="Consolas" FontSize="10" IsReadOnly="True" VerticalScrollBarVisibility="Auto" BorderThickness="0" Padding="6" TextWrapping="Wrap"/>
+                    </Grid>
+                </Border>
+            </Grid>

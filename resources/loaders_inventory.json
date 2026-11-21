@@ -1,0 +1,1747 @@
+{
+  ".": {
+    "total_files": 1,
+    "extensions": {
+      ".txt": 1
+    },
+    "sample_files": [
+      "README.txt"
+    ]
+  },
+  "kirin\\KIRIN_65x": {
+    "total_files": 2,
+    "extensions": {
+      ".bin": 2
+    },
+    "sample_files": [
+      "fastboot.bin",
+      "xloader_1.bin"
+    ]
+  },
+  "kirin\\KIRIN_710A": {
+    "total_files": 4,
+    "extensions": {
+      ".bin": 4
+    },
+    "sample_files": [
+      "bl2.bin",
+      "fastboot.bin",
+      "xloader_1.bin",
+      "xloader_2.bin"
+    ]
+  },
+  "kirin\\KIRIN_810": {
+    "total_files": 3,
+    "extensions": {
+      ".bin": 3
+    },
+    "sample_files": [
+      "fastboot.bin",
+      "xloader_1.bin",
+      "xloader_2.bin"
+    ]
+  },
+  "kirin\\KIRIN_820": {
+    "total_files": 4,
+    "extensions": {
+      ".bin": 4
+    },
+    "sample_files": [
+      "bl2.bin",
+      "fastboot.bin",
+      "xloader_1.bin",
+      "xloader_2.bin"
+    ]
+  },
+  "kirin\\KIRIN_970": {
+    "total_files": 3,
+    "extensions": {
+      ".bin": 3
+    },
+    "sample_files": [
+      "fastboot.bin",
+      "xloader_1.bin",
+      "xloader_2.bin"
+    ]
+  },
+  "kirin\\KIRIN_980": {
+    "total_files": 3,
+    "extensions": {
+      ".bin": 3
+    },
+    "sample_files": [
+      "fastboot.bin",
+      "xloader_1.bin",
+      "xloader_2.bin"
+    ]
+  },
+  "kirin\\KIRIN_990": {
+    "total_files": 4,
+    "extensions": {
+      ".bin": 4
+    },
+    "sample_files": [
+      "bl2.bin",
+      "fastboot.bin",
+      "xloader_1.bin",
+      "xloader_2.bin"
+    ]
+  },
+  "mtk": {
+    "total_files": 9,
+    "extensions": {
+      ".txt": 1,
+      ".bin": 8
+    },
+    "sample_files": [
+      "info.txt",
+      "MTK_AllInOne_DA_2625.bin",
+      "MTK_AllInOne_DA_7687.bin",
+      "MTK_AllInOne_DA_iot.bin",
+      "MTK_AllInOne_DA_mt6590.bin",
+      "MTK_DA_V5.bin",
+      "MTK_DA_V6.bin",
+      "oppo_realme.mt6768_android15(01.08.2025).bin",
+      "Redmi_14c.13.13c.15c_android15.da(01.08.2025_.bin"
+    ]
+  },
+  "mtk\\brand_da": {
+    "total_files": 37,
+    "extensions": {
+      ".da": 22,
+      ".crp": 14,
+      ".bin": 1
+    },
+    "sample_files": [
+      "AGM.da",
+      "ASUS.da",
+      "BLACKVIEW.da",
+      "DA_v6.crp",
+      "DOOGEE.da",
+      "HUAWEI_HONOR.da",
+      "INFINIX_TECNO.da",
+      "ITEL.da",
+      "LENOVO.da",
+      "MOTOROLA.da"
+    ]
+  },
+  "mtk\\mddb": {
+    "total_files": 3,
+    "extensions": {
+      ".edb": 3
+    },
+    "sample_files": [
+      "MDDB.META_MT6739_S00_MOLY_LR12A_R2_MP_V79_11_P9_1_ulwctg_n.EDB",
+      "MDDB.META_MT6765_S00_MOLY_LR12A_R2_MP_V23_P134_1_ulwctg_n.EDB",
+      "MDDB.META_MT6765_S00_MOLY_LR12A_R3_MP_V107_5_P88.EDB"
+    ]
+  },
+  "mtk\\payloads": {
+    "total_files": 58,
+    "extensions": {
+      ".bin": 58
+    },
+    "sample_files": [
+      "da_x.bin",
+      "da_xml.bin",
+      "da_xml_64.bin",
+      "generic_dump_payload.bin",
+      "generic_loader_payload.bin",
+      "generic_patcher_payload.bin",
+      "generic_preloader_dump_payload.bin",
+      "generic_reboot_payload.bin",
+      "generic_sram_payload.bin",
+      "generic_stage1_payload.bin"
+    ]
+  },
+  "mtk\\preloader": {
+    "total_files": 853,
+    "extensions": {
+      ".bin": 847,
+      ".img": 3,
+      ".patched": 1,
+      ".ca78985116": 1,
+      ".af162da769": 1
+    },
+    "sample_files": [
+      "0699_preloader_c767_8111h_xxa1_39_o1_7D734924C1.bin",
+      "0699_preloader_dura_BFE22C5E88.bin",
+      "0717_preloader_k61v1_64_bsp_37D5FA1A49.bin",
+      "0766_preloader_cereus_3C2D76D046.bin",
+      "0766_preloader_k62v1_64_bsp_45762BFACF.bin",
+      "0766_preloader_k65v1_64_bsp_titan_rat_DD91307C1E.bin",
+      "0766_preloader_oppo6762_18540_98711A09AB.bin",
+      "0766_preloader_oppo6765_19451_94B0482E99.bin",
+      "0766_preloader_s96116ca1_B430EEA477.bin",
+      "0813_preloader_begonia_1547BE956A.bin"
+    ]
+  },
+  "qualcomm": {
+    "total_files": 1,
+    "extensions": {
+      ".txt": 1
+    },
+    "sample_files": [
+      "info.txt"
+    ]
+  },
+  "qualcomm\\amazon": {
+    "total_files": 1,
+    "extensions": {
+      ".bin": 1
+    },
+    "sample_files": [
+      "007b30e100000000_9ad772705cab4511_fhprg.bin"
+    ]
+  },
+  "qualcomm\\asus_wingtech": {
+    "total_files": 32,
+    "extensions": {
+      ".bin": 32
+    },
+    "sample_files": [
+      "0000000000290026_38c9de55ae9e87f4_fhprg.bin",
+      "000460e1143a8953_18000eb7c3a236d5_fhprg_peek.bin",
+      "000460e120161721_802156631e5e856b_fhprg_peek.bin",
+      "0004f0e100010001_ad38beb6615ba7fb_fhprg_peek.bin",
+      "0004f0e1143a8937_18000eb7c3a236d5_fhprg_peek.bin",
+      "0004f0e12016a239_ad38beb6615ba7fb_fhprg_peek.bin",
+      "000560e100000000_49d087ca08c6e2ca_fhprg_peek.bin",
+      "000560e100000000_4bc6a094d433f49f_fhprg_peek.bin",
+      "000560e1143a8937_18000eb7c3a236d5_fhprg_peek.bin",
+      "000560e12016a239_ad38beb6615ba7fb_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\blackberry": {
+    "total_files": 2,
+    "extensions": {
+      ".bin": 2
+    },
+    "sample_files": [
+      "009470e100000000_1e36d5637772a25e_fhprg.bin",
+      "009720e100000000_93f5fd0e3a74b5b5_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\blackphone": {
+    "total_files": 1,
+    "extensions": {
+      ".bin": 1
+    },
+    "sample_files": [
+      "0090b0e119780000_8407f85b50a915de_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\blackshark": {
+    "total_files": 1,
+    "extensions": {
+      ".bin": 1
+    },
+    "sample_files": [
+      "0008b0e100010000_acb465293769a1c7_fhprg.bin"
+    ]
+  },
+  "qualcomm\\cyanogen": {
+    "total_files": 7,
+    "extensions": {
+      ".bin": 7
+    },
+    "sample_files": [
+      "0004f0e100000000_8008b2cd7b7e36f1_fhprg_peek.bin",
+      "007050e100000000_4614048173062ae4_fhprg_peek.bin",
+      "007050e100000000_4e3eefa63a67eb7a_fhprg_peek.bin",
+      "007050e100000000_d36c6073c9c2cb1c_fhprg_peek.bin",
+      "0090b0e100000000_4b3fe2dc85eba518_fhprg_peek.bin",
+      "009400e100000000_b0d6c9fc8d2cf585_fhprg_peek.bin",
+      "009600e100000000_a0fc9aed8840640e_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\f10q": {
+    "total_files": 1,
+    "extensions": {
+      ".bin": 1
+    },
+    "sample_files": [
+      "000940e100900000_ac642ebfa99abb54_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\fancymaker": {
+    "total_files": 5,
+    "extensions": {
+      ".bin": 5
+    },
+    "sample_files": [
+      "000460e100000000_cab02552dc28f562_fhprg_peek.bin",
+      "0004f0e100000000_cab02552dc28f562_fhprg_peek.bin",
+      "0005f0e100000000_cab02552dc28f562_fhprg_peek.bin",
+      "007b40e100000000_cab02552dc28f562_fhprg_peek.bin",
+      "009470e100000000_cab02552dc28f562_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\gionee": {
+    "total_files": 7,
+    "extensions": {
+      ".bin": 7
+    },
+    "sample_files": [
+      "0004f0e100000000_1a4eb7a66e3be7f8_fhprg_peek.bin",
+      "0004f0e100000000_1a6ba5b80b9e7811_fhprg_peek.bin",
+      "000560e100000000_1a6ba5b80b9e7811_fhprg_peek.bin",
+      "0006b0e100000000_1a6ba5b80b9e7811_fhprg_peek.bin",
+      "000860e100000000_1a4eb7a66e3be7f8_fhprg_peek.bin",
+      "000860e100000000_1a6ba5b80b9e7811_fhprg_peek.bin",
+      "009900e100000000_1a6ba5b80b9e7811_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\GM": {
+    "total_files": 1,
+    "extensions": {
+      ".bin": 1
+    },
+    "sample_files": [
+      "009510e100310000_098b12634b3b8b17_fhprg.bin"
+    ]
+  },
+  "qualcomm\\haier": {
+    "total_files": 1,
+    "extensions": {
+      ".bin": 1
+    },
+    "sample_files": [
+      "009600e100300200_738126cc40b1c42e_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\hisense_agm": {
+    "total_files": 11,
+    "extensions": {
+      ".bin": 11
+    },
+    "sample_files": [
+      "000460e100000000_7c6dca9bf5674291_fhprg_peek.bin",
+      "000460e100000000_8cb593f251fb2bdd_fhprg_peek.bin",
+      "0004f0e100000000_7c6dca9bf5674291_fhprg_peek.bin",
+      "0004f0e100000000_ef11472d27ef4bc5_fhprg_peek.bin",
+      "000560e100000000_2eaa84eed250b21c_fhprg_peek.bin",
+      "0009a0e100430000_7c6dca9bf5674291_fhprg_peek.bin",
+      "000bf0e100000000_c85542d6fa31e4bf_fhprg_peek.bin",
+      "000bf0e100430000_7c6dca9bf5674291_fhprg_peek.bin",
+      "0016f0e100000000_d9357db88795b5a8_fhprg.bin",
+      "0016f0e100430000_4352b3bfeac440ca_fhprg.bin"
+    ]
+  },
+  "qualcomm\\HuaQin": {
+    "total_files": 3,
+    "extensions": {
+      ".bin": 3
+    },
+    "sample_files": [
+      "000460e115900001_85c752ebecd1b0e6_fhprg_peek.bin",
+      "0004f0e115200001_c385a51ceab568a1_fhprg_peek.bin",
+      "009900e100000001_7c24b3bec0b60439_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\huawei": {
+    "total_files": 15,
+    "extensions": {
+      ".bin": 15
+    },
+    "sample_files": [
+      "0000000001a40003_1816101f1302cf63_fhprg.bin",
+      "000460e100150021_6bc369511da9cadb_fhprg_peek.bin",
+      "0004f0e100150041_6bc369511da9cadb_fhprg_peek.bin",
+      "0004f0e100150042_6bc369511da9cadb_fhprg_peek.bin",
+      "000510e100150063_0c4261f370982e1f_fhprg_peek_leo_l09s.bin",
+      "000520e100150063_0c4261f370982e1f_fhprg_peek_huawei_watch2lite.bin",
+      "000560e10015003a_6bc369511da9cadb_fhprg_peek.bin",
+      "0006b0e100000000_cf3c7ca0ebbed9ed_fhprg_peek.bin",
+      "0006b0e100150040_6bc369511da9cadb_fhprg_peek.bin",
+      "000940e100000100_e59c064e19c13b2c_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\hydrogen": {
+    "total_files": 1,
+    "extensions": {
+      ".bin": 1
+    },
+    "sample_files": [
+      "0005e0e100010000_d6ab87bc95c89389_fhprg.bin"
+    ]
+  },
+  "qualcomm\\lenovo_motorola": {
+    "total_files": 98,
+    "extensions": {
+      ".bin": 98
+    },
+    "sample_files": [
+      "0000000000000000_041e79f9d25c0ec5_fhprg_peek.bin",
+      "0000000000000000_06e11f67f4480ee2_fhprg_peek.bin",
+      "0000000000000000_21067abdc7c08580_fhprg_peek.bin",
+      "0000000000000000_2719a1a37de69327_fhprg_peek.bin",
+      "0000000000000000_275f77357ba3c92b_fhprg_peek.bin",
+      "0000000000000000_29df255096615cc1_fhprg_peek.bin",
+      "0000000000000000_2ae3dd7d72a03948_fhprg_peek.bin",
+      "0000000000000000_482592921e4f1fab_fhprg_peek.bin",
+      "0000000000000000_4da62bd6efba7e9f_fhprg_peek.bin",
+      "0000000000000000_5166f02e662396c5_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\letv": {
+    "total_files": 2,
+    "extensions": {
+      ".bin": 2
+    },
+    "sample_files": [
+      "009470e100000000_b155b8bf19297f47_fhprg_LeEco_X722.bin",
+      "009470e100000000_ea490ebb7ab54005_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\LG": {
+    "total_files": 16,
+    "extensions": {
+      ".bin": 16
+    },
+    "sample_files": [
+      "0005f0e100310000_2cf7619a278d2607_fhprg_peek.bin",
+      "0006b0e100310000_2cf7619a278d2607_fhprg_peek.bin",
+      "0008b0e100310000_1030cd12ce708f29_fhprg.bin",
+      "000940e100000000_90a61085ae2a9e8a_fhprg_peek.bin",
+      "000a50e100310000_e746e34f737403f4_fhprg_lg_g8x.bin",
+      "000c30e100310000_1030cd12ce708f29_fhprg.bin",
+      "000c30e100310000_e746e34f737403f4_fhprg.bin",
+      "0011e0e100310000_1030cd12ce708f29_fhprg.bin",
+      "008050e100000000_cc3153a80293939b_fhprg.bin",
+      "009010e100310000_cc3153a80293939b_fhprg.bin"
+    ]
+  },
+  "qualcomm\\light": {
+    "total_files": 1,
+    "extensions": {
+      ".bin": 1
+    },
+    "sample_files": [
+      "0003e0e100000000_349ca0bcffe2bcc5_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\longcheer": {
+    "total_files": 8,
+    "extensions": {
+      ".bin": 8
+    },
+    "sample_files": [
+      "000460e100000000_986c77a37680ea98_fhprg_peek.bin",
+      "000460e100000000_ddb33f2a320b3536_fhprg_peek.bin",
+      "000550e100000000_ddb33f2a320b3536_fhprg_peek.bin",
+      "000560e100000000_ddb33f2a320b3536_fhprg_peek.bin",
+      "000660e100000000_986c77a37680ea98_fhprg_peek.bin",
+      "000660e100000000_ddb33f2a320b3536_fhprg_peek.bin",
+      "000be0e100000000_6c93b90a72c3db9e_fhprg_peek.bin",
+      "007050e100000000_3022817d373fd7f9_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\lyf": {
+    "total_files": 9,
+    "extensions": {
+      ".bin": 9
+    },
+    "sample_files": [
+      "000560e100460066_247c073c6f9e3f5a_fhprg_peek.bin",
+      "0008b0e100010000_dd7c5f2e53176bee_fhprg.bin",
+      "000940e100000100_e59c064e19c13b2c_FHPRG.bin",
+      "000940e101390000_911b8f01c36f8a87_fhprg_peek.bin",
+      "000940e101390001_911b8f01c36f8a87_fhprg_peek.bin",
+      "000940e101390002_911b8f01c36f8a87_fhprg_peek.bin",
+      "007050e100000000_394a2e47cf830150_fhprg_peek.bin",
+      "009600e100000000_bb6e112bb580004a_fhprg_peek.bin",
+      "009600e100007705_adcb7c0b68663755_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\megafone": {
+    "total_files": 1,
+    "extensions": {
+      ".bin": 1
+    },
+    "sample_files": [
+      "000940e100000000_1067e9ae286872c1_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\meitu": {
+    "total_files": 1,
+    "extensions": {
+      ".bin": 1
+    },
+    "sample_files": [
+      "0008c0e100010000_c0806e891f7d5537_fhprg.bin"
+    ]
+  },
+  "qualcomm\\meizu": {
+    "total_files": 8,
+    "extensions": {
+      ".bin": 8
+    },
+    "sample_files": [
+      "0000000000000000_bdaf51b59ba21d8a_fhprg_peek.bin",
+      "0000000000000000_c78c4fdd6e3fb35b_fhprg_peek.bin",
+      "000460e101380000_40e4aeba3491dade_fhprg_peek.bin",
+      "000460e120161721_802156631e5e856b_fhprg.bin",
+      "0008c0e100010000_fd27e15ff63fdd68_fhprg.bin",
+      "000ba0e100000000_c451a1168ef5c7c7_fhprg_peek.bin",
+      "000db0e100010000_cd55540dcb175cc8_fhprg.bin",
+      "3006000000010000_9e7f8ef2d5f16d8c_fhprg_e3_peek.bin"
+    ]
+  },
+  "qualcomm\\micromax": {
+    "total_files": 1,
+    "extensions": {
+      ".bin": 1
+    },
+    "sample_files": [
+      "0006b0e12a96e460_4ae342885d44662f_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\microsoft": {
+    "total_files": 1,
+    "extensions": {
+      ".bin": 1
+    },
+    "sample_files": [
+      "009600e100450000_fddd41b1ca4a7f9f_fhprg.bin"
+    ]
+  },
+  "qualcomm\\mmx": {
+    "total_files": 1,
+    "extensions": {
+      ".bin": 1
+    },
+    "sample_files": [
+      "0004f0e100007705_9091aa8251decb88_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\nokia_foxconn": {
+    "total_files": 41,
+    "extensions": {
+      ".bin": 41
+    },
+    "sample_files": [
+      "0004f0e100000000_f5f4192a33b28309_fhprg_peek.bin",
+      "000560e100000000_f5f4192a33b28309_fhprg_peek.bin",
+      "000940e100420050_1357fdaeabb7becb_fhprg.bin",
+      "000940e100420050_77101cea7db89585_fhprg.bin",
+      "000940e100420050_7fcdbae6d1b9526f_fhprg.bin",
+      "000be0e100000000_311c8a50f07f9722_fhprg_peek.bin",
+      "000be0e100359571_06917d466c907e9f_fhprg_peek.bin",
+      "000bf0e100359571_06917d466c907e9f_fhprg_peek.bin",
+      "001060e100160000_bdd02c92b4edb4e4_fhprg.bin",
+      "001060e100160000_d5f6c6ec4f4092dc_fhprg.bin"
+    ]
+  },
+  "qualcomm\\nothing": {
+    "total_files": 2,
+    "extensions": {
+      ".bin": 2
+    },
+    "sample_files": [
+      "000b80e100020000_467f3020c4cc788d_fhprg.bin",
+      "001920e101cf0000_fa2836525c2aad8a_fhprg.bin"
+    ]
+  },
+  "qualcomm\\oneplus": {
+    "total_files": 14,
+    "extensions": {
+      ".bin": 13,
+      ".mbn": 1
+    },
+    "sample_files": [
+      "0000000000020000_467f3020c4cc788d_fhprg_op10pro.bin",
+      "0000000000510000_22f415bec935e3cb_fhprg_op_n30.bin",
+      "0000000000515192_37cf317812121fed_fhprg_opn100.bin",
+      "0000000000515198_2354228eebcbc203_fhprg_op_n10tmo.bin",
+      "0005e0e12a7041db_de7a7d5af049e2a6_fhprg_peek_op5.bin",
+      "0005f0e12a703db9_c0c66e278fe81226_fhprg_peek_op3t.bin",
+      "0008b0e10051459b_dd7c5f2e53176bee_fhprg_op6t.bin",
+      "000a50e100514985_2acf3a85fde334e2_fhprg_op7t.bin",
+      "000c30e100514d6d_7c15a98db4e70963_fhprg_op8_op8tmo_op8t_op8ttmo.bin",
+      "0011e0e100515141_e5d0b832cebbf1c6_fhprg_opnord.bin"
+    ]
+  },
+  "qualcomm\\oneplus\\broken": {
+    "total_files": 2,
+    "extensions": {
+      ".bin": 2
+    },
+    "sample_files": [
+      "0000000000515152_07b00c8737956b3d_fhprg_dre8t.bin",
+      "0000000000515198_2354228eebcbc203_fhprg_op_nordce.bin"
+    ]
+  },
+  "qualcomm\\ontim": {
+    "total_files": 1,
+    "extensions": {
+      ".bin": 1
+    },
+    "sample_files": [
+      "000ba0e106360666_dba08d9ef72e9e6c_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\oppo": {
+    "total_files": 13,
+    "extensions": {
+      ".bin": 12,
+      ".elf": 1
+    },
+    "sample_files": [
+      "0000000000510000_22f415bec935e3cb_fhprg_rmx3471_695_SM6375.bin",
+      "0000000000510000_401e4aff39a09344_fhprg.bin",
+      "0000000000510000_adec891ca335ff17_fhprg.bin",
+      "0000000000514d6d_7c15a98db4e70963_fhprg.bin",
+      "000460e100000000_90864ecb91f86a1c_fhprg_peek.bin",
+      "000520e100510000_c8b4fe1cd7221f88_fhprg_peek.bin",
+      "0006b0e100000000_77a22b92a1bcd0c4_fhprg_peek.bin",
+      "0009a0e100000000_05f06ba44eeb2abd_fhprg_peek.bin",
+      "0009a0e100000000_2440693284962ae0_fhprg_peek.bin",
+      "0090b0e100000000_21c7e25a60effa6e_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\qmc": {
+    "total_files": 1,
+    "extensions": {
+      ".bin": 1
+    },
+    "sample_files": [
+      "0005f0e10029003d_7be49b72f9e43372_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\factory": {
+    "total_files": 3,
+    "extensions": {
+      ".bin": 2,
+      ".mbn": 1
+    },
+    "sample_files": [
+      "006b50e100310000_cc3153a80293939b_fhprg.bin",
+      "007150e100310000_cc3153a80293939b_fhprg.bin",
+      "prog_spinor_firehose_qca4020_lite_m4_threadx.mbn"
+    ]
+  },
+  "qualcomm\\qualcomm\\factory\\apq8017": {
+    "total_files": 1,
+    "extensions": {
+      ".bin": 1
+    },
+    "sample_files": [
+      "000550e100000000_92242cf8f6fad111_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\factory\\apq8064": {
+    "total_files": 2,
+    "extensions": {
+      ".bin": 2
+    },
+    "sample_files": [
+      "007190e100040000_cc3153a80293939b_fhprg.bin",
+      "007190e100310000_cc3153a80293939b_fhprg.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\factory\\mannar": {
+    "total_files": 2,
+    "extensions": {
+      ".bin": 1,
+      ".elf": 1
+    },
+    "sample_files": [
+      "0016F0E100000000_d9357db88795b5a8_fhprg.bin",
+      "prog_firehose_lite.elf"
+    ]
+  },
+  "qualcomm\\qualcomm\\factory\\mdm9x07": {
+    "total_files": 1,
+    "extensions": {
+      ".mbn": 1
+    },
+    "sample_files": [
+      "000480e100000000_cc3153a80293939b_fhprg_9x07.mbn"
+    ]
+  },
+  "qualcomm\\qualcomm\\factory\\msm8909": {
+    "total_files": 8,
+    "extensions": {
+      ".bin": 8
+    },
+    "sample_files": [
+      "009600e100000000_3767512bcb320b2b_fhprg_peek.bin",
+      "009600e100000000_769e63e6ec3a73e8_fhprg_peek.bin",
+      "009600e100000000_bb6e112bb580004a_fhprg_peek.bin",
+      "009600e100000000_ee38280ad6d904d5_fhprg_peek.bin",
+      "009600e100000001_16c98e7bb2d747f9_fhprg_peek.bin",
+      "009600e100007705_adcb7c0b68663755_fhprg_peek.bin",
+      "009600e100300200_738126cc40b1c42e_fhprg_peek.bin",
+      "009600e100420011_625801c51eee90d7_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\factory\\msm8912": {
+    "total_files": 1,
+    "extensions": {
+      ".bin": 1
+    },
+    "sample_files": [
+      "008140e100000001_5b49d99a5282e984_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\factory\\msm8916": {
+    "total_files": 6,
+    "extensions": {
+      ".bin": 6
+    },
+    "sample_files": [
+      "007050e100000000_394a2e47cf830150_fhprg_peek.bin",
+      "007050e100000000_8ecf3eaa03f772e2_fhprg_peek.bin",
+      "007050e100170003_612517313979e703_fhprg_peek.bin",
+      "007050e100420001_ec287e5aa0bf4e3e_fhprg_peek.bin",
+      "007050e100420011_625801c51eee90d7_fhprg_peek.bin",
+      "007060e100000000_cc3153a802939b90_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\factory\\msm8917": {
+    "total_files": 4,
+    "extensions": {
+      ".bin": 4
+    },
+    "sample_files": [
+      "000560e100000000_49d087ca08c6e2ca_fhprg_peek.bin",
+      "000560e100000000_92242cf8f6fad111_fhprg_peek.bin",
+      "000560e100007705_adcb7c0b68663755_fhprg_peek.bin",
+      "000560e112340001_fbd4de360136046b_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\factory\\msm8926": {
+    "total_files": 2,
+    "extensions": {
+      ".bin": 2
+    },
+    "sample_files": [
+      "008050e100310000_cc3153a80293939b_fhprg.bin",
+      "008050e1003102a2_cc3153a80293939b_fhprg.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\factory\\msm8929": {
+    "total_files": 1,
+    "extensions": {
+      ".bin": 1
+    },
+    "sample_files": [
+      "0091b0e100000000_b4d82bcacd882b72_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\factory\\msm8930": {
+    "total_files": 1,
+    "extensions": {
+      ".bin": 1
+    },
+    "sample_files": [
+      "007210e100310000_cc3153a80293939b_fhprg.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\factory\\msm8937": {
+    "total_files": 3,
+    "extensions": {
+      ".bin": 3
+    },
+    "sample_files": [
+      "0004f0e100000000_49d087ca08c6e2ca_fhprg_peek.bin",
+      "0004f0e100007705_adcb7c0b68663755_fhprg_peek.bin",
+      "0004f0e112340001_fbd4de360136046b_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\factory\\msm8939": {
+    "total_files": 2,
+    "extensions": {
+      ".bin": 2
+    },
+    "sample_files": [
+      "0090b0e100000000_33a5b123f8ee0a74_fhprg_peek.bin",
+      "0090b0e100420011_625801c51eee90d7_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\factory\\msm8940": {
+    "total_files": 1,
+    "extensions": {
+      ".bin": 1
+    },
+    "sample_files": [
+      "0006b0e100007705_adcb7c0b68663755_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\factory\\msm8952": {
+    "total_files": 3,
+    "extensions": {
+      ".bin": 3
+    },
+    "sample_files": [
+      "0006b0e100150062_6bc369511da9cadb_fhprg_peek.bin",
+      "009720e100000000_4fa60329e92f41aa_fhprg_peek.bin",
+      "009720e100150058_6bc369511da9cadb_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\factory\\msm8953": {
+    "total_files": 6,
+    "extensions": {
+      ".bin": 6
+    },
+    "sample_files": [
+      "000460e100000000_60be3e96593bd105_fhprg_peek.bin",
+      "000460e100000000_b77e94657e8ad917_fhprg_peek.bin",
+      "000460e100000000_cc3153a80293939b_fhprg_bqxpro_8953_peek.bin",
+      "000460e100007705_adcb7c0b68663755_fhprg_peek.bin",
+      "000460e100290021_cc3153a80293939b_fhprg_peek.bin",
+      "000660e100000000_60be3e96593bd105_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\factory\\msm8974": {
+    "total_files": 2,
+    "extensions": {
+      ".bin": 2
+    },
+    "sample_files": [
+      "007b00e100310000_cc3153a80293939b_fhprg.bin",
+      "007b00e100311000_cc3153a80293939b_fhprg.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\factory\\msm8974ab": {
+    "total_files": 4,
+    "extensions": {
+      ".bin": 4
+    },
+    "sample_files": [
+      "007b40e100000000_cc3153a80293939b_fhprg_oneplusx_peek.bin",
+      "007b40e100000000_cc3153a8293939b9_fhprg_oneplusx_8974_peek.bin",
+      "007b40e100310000_cc3153a80293939b_fhprg.bin",
+      "007b40e100310262_cc3153a80293939b_fhprg.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\factory\\msm8974abv3": {
+    "total_files": 1,
+    "extensions": {
+      ".bin": 1
+    },
+    "sample_files": [
+      "007bc0e100000000_cc3153a80293939b_fhprg_oneplusone_peek.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\factory\\msm8974AC": {
+    "total_files": 1,
+    "extensions": {
+      ".bin": 1
+    },
+    "sample_files": [
+      "006b10e100310000_cc3153a80293939b_fhprg.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\factory\\msm8976": {
+    "total_files": 4,
+    "extensions": {
+      ".bin": 4
+    },
+    "sample_files": [
+      "009900e100000000_cc3153a80293939b_fhprg_bqx5_peek.bin",
+      "009900e100000000_cc3153a8293939b9_fhprg_bqx5_8976_peek.bin",
+      "009900e100000001_7c24b3bec0b60439_fhprg_peek.bin",
+      "009900e100001607_be25350d434fdf0a_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\factory\\msm8994": {
+    "total_files": 2,
+    "extensions": {
+      ".bin": 2
+    },
+    "sample_files": [
+      "009400e100000000_dbbd98bdc71d24ce_fhprg_peek.bin",
+      "009400e100150020_6bc369511da9cadb_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\factory\\msm8996": {
+    "total_files": 2,
+    "extensions": {
+      ".bin": 2
+    },
+    "sample_files": [
+      "009470e100000021_c3251d67b89a7c3a_fhprg_peek.bin",
+      "009470e12a703db9_c0c66e278fe81226_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\factory\\msm8996Pro": {
+    "total_files": 2,
+    "extensions": {
+      ".bin": 2
+    },
+    "sample_files": [
+      "0005f0e100000000_b155b8bf19297f47_fhprg_peek.bin",
+      "0005f0e12a703db9_c0c66e278fe81226_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\factory\\qca4020": {
+    "total_files": 1,
+    "extensions": {
+      ".mbn": 1
+    },
+    "sample_files": [
+      "prog_spinor_firehose_qca4020_lite_m4_threadx.mbn"
+    ]
+  },
+  "qualcomm\\qualcomm\\factory\\sc8180x": {
+    "total_files": 1,
+    "extensions": {
+      ".bin": 1
+    },
+    "sample_files": [
+      "000b80e100000000_d40eee56f3194665_FHPRG.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\factory\\sd765": {
+    "total_files": 1,
+    "extensions": {
+      ".bin": 1
+    },
+    "sample_files": [
+      "0000000000720000_1bebe3863a6781db_fhprg.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\factory\\sdm630": {
+    "total_files": 1,
+    "extensions": {
+      ".bin": 1
+    },
+    "sample_files": [
+      "000ac0e100000000_7be49b72f9e43372_fhprg_asus_peek.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\factory\\sdm636": {
+    "total_files": 1,
+    "extensions": {
+      ".bin": 1
+    },
+    "sample_files": [
+      "000cc0e100000000_7be49b72f9e43372_fhprg_bqx2_peek.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\factory\\sdm660": {
+    "total_files": 4,
+    "extensions": {
+      ".bin": 4
+    },
+    "sample_files": [
+      "3006000000010000_54736aebeaaf4167_fhprg.bin",
+      "3006000000010000_7e425bcb25364725_fhprg_peek.bin",
+      "3006000000010000_b73514537ffc38a0_fhprg_peek.bin",
+      "3006000000010000_f8ab20526358c4fa_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\factory\\sdm662": {
+    "total_files": 1,
+    "extensions": {
+      ".bin": 1
+    },
+    "sample_files": [
+      "0014d0e100000000_d40eee56f3194665_FHPRG.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\factory\\sdm710": {
+    "total_files": 1,
+    "extensions": {
+      ".bin": 1
+    },
+    "sample_files": [
+      "6004000000010000_f8ab20526358c4fa_fhprg.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\factory\\sdm835": {
+    "total_files": 2,
+    "extensions": {
+      ".bin": 2
+    },
+    "sample_files": [
+      "3002000000010000_e1ee7e62029e7837_fhprg_peek.bin",
+      "3002000000010000_f8ab20526358c4fa_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\factory\\sdm845_sdm850_sda845": {
+    "total_files": 4,
+    "extensions": {
+      ".bin": 4
+    },
+    "sample_files": [
+      "0008e0e100000000_afca69d4235117e5_fhprg.bin",
+      "6000000000010000_06f1c3738c28eec0_fhprg.bin",
+      "6000000000010000_7e425bcb25364725_fhprg.bin",
+      "6000000000010000_f8ab20526358c4fa_fhprg.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\factory\\sdm855": {
+    "total_files": 1,
+    "extensions": {
+      ".bin": 1
+    },
+    "sample_files": [
+      "000a50e10029003c_ec70ff124179a138_fhprg.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\factory\\sdx55": {
+    "total_files": 1,
+    "extensions": {
+      ".bin": 1
+    },
+    "sample_files": [
+      "000CF0E100000000_d9357db88795b5a8_fhprg.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\factory\\sm8350": {
+    "total_files": 1,
+    "extensions": {
+      ".elf": 1
+    },
+    "sample_files": [
+      "firehoseRM6R.elf"
+    ]
+  },
+  "qualcomm\\qualcomm\\factory\\strait": {
+    "total_files": 2,
+    "extensions": {
+      ".bin": 1,
+      ".elf": 1
+    },
+    "sample_files": [
+      "001A90E100000000_d9357db88795b5a8_fhprg.bin",
+      "prog_firehose_lite.elf"
+    ]
+  },
+  "qualcomm\\qualcomm\\model_generic": {
+    "total_files": 2,
+    "extensions": {
+      ".bin": 2
+    },
+    "sample_files": [
+      "0000000000000000_514ccec73cf6469a_fhprg_peek.bin",
+      "0000000000000000_b435a01fc18a5c72_fhprg.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\model_generic\\apq8009": {
+    "total_files": 1,
+    "extensions": {
+      ".bin": 1
+    },
+    "sample_files": [
+      "0000000000000000_9fa110bffe90e4e9_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\model_generic\\apq8009w": {
+    "total_files": 2,
+    "extensions": {
+      ".bin": 2
+    },
+    "sample_files": [
+      "0000000000000000_3d988ce2e52b1213_fhprg_peek.bin",
+      "0000000000000000_9b337dea19243e5a_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\model_generic\\apq8016": {
+    "total_files": 1,
+    "extensions": {
+      ".bin": 1
+    },
+    "sample_files": [
+      "0000000000000000_d58522cd602a501c_fhprg.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\model_generic\\mdm9x05": {
+    "total_files": 1,
+    "extensions": {
+      ".elf": 1
+    },
+    "sample_files": [
+      "001070e100000000_d40eee56f3194665_prog_firehose_nand_mdm9x05.elf"
+    ]
+  },
+  "qualcomm\\qualcomm\\model_generic\\mdm9x07": {
+    "total_files": 1,
+    "extensions": {
+      ".bin": 1
+    },
+    "sample_files": [
+      "000480e100000000_cc3153a80293939b_9x07.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\model_generic\\mdm9x5x": {
+    "total_files": 1,
+    "extensions": {
+      ".elf": 1
+    },
+    "sample_files": [
+      "000320e100000000_cc3153a80293939b_fhprg_nand_sim7080.elf"
+    ]
+  },
+  "qualcomm\\qualcomm\\model_generic\\mdm9x6x": {
+    "total_files": 1,
+    "extensions": {
+      ".bin": 1
+    },
+    "sample_files": [
+      "0007f0e100000000_cc3153a80293939b_fhprg_9x65_sdx20_quectel_em12_peek.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\model_generic\\msm8909": {
+    "total_files": 27,
+    "extensions": {
+      ".bin": 27
+    },
+    "sample_files": [
+      "0000000000000000_01ab9892b3ea046e_fhprg_peek.bin",
+      "0000000000000000_1359854a448834ab_fhprg_peek.bin",
+      "0000000000000000_1eb247595b9b6110_fhprg_peek.bin",
+      "0000000000000000_1f93564871c1bca3_fhprg_peek.bin",
+      "0000000000000000_22a4aeec877eec4b_fhprg_peek.bin",
+      "0000000000000000_3595623a2bb41e61_fhprg_peek.bin",
+      "0000000000000000_36ab39f7ddad4369_fhprg_peek.bin",
+      "0000000000000000_3894e7963764f28f_fhprg_peek.bin",
+      "0000000000000000_3961b3f10b80a2a8_fhprg_peek.bin",
+      "0000000000000000_432393cdca13a11e_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\model_generic\\msm8909w": {
+    "total_files": 2,
+    "extensions": {
+      ".bin": 2
+    },
+    "sample_files": [
+      "0000000000000000_22cc998b813386f7_fhprg_peek.bin",
+      "0000000000000000_b01193679ab2eac7_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\model_generic\\msm8916": {
+    "total_files": 24,
+    "extensions": {
+      ".bin": 24
+    },
+    "sample_files": [
+      "0000000000000000_01cd23062a7ec6fa_fhprg_peek.bin",
+      "0000000000000000_068a7ed25e47574d_fhprg_peek.bin",
+      "0000000000000000_0d9cc673abd822f0_fhprg_peek.bin",
+      "0000000000000000_0ef055b63e6daafc_fhprg_peek.bin",
+      "0000000000000000_1532c1fa086364a5_fhprg_peek.bin",
+      "0000000000000000_2ec22142a340cdad_fhprg_peek.bin",
+      "0000000000000000_47ca875a3a0a9151_fhprg_peek.bin",
+      "0000000000000000_5b4d174f70511c01_fhprg_peek.bin",
+      "0000000000000000_73813896f819a064_fhprg_peek.bin",
+      "0000000000000000_7f6f2a51627d7062_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\model_generic\\msm8926": {
+    "total_files": 2,
+    "extensions": {
+      ".bin": 2
+    },
+    "sample_files": [
+      "0000000000000000_1638bbe3136140c4_fhprg_peek.bin",
+      "0000000000000000_1bc75bf29d0d104a_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\model_generic\\msm8928": {
+    "total_files": 1,
+    "extensions": {
+      ".bin": 1
+    },
+    "sample_files": [
+      "009180e100290041_cc3153a80293939b_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\model_generic\\msm8929": {
+    "total_files": 5,
+    "extensions": {
+      ".bin": 5
+    },
+    "sample_files": [
+      "0000000000000000_0247c39180b4d9c4_fhprg_peek.bin",
+      "0000000000000000_71ee7f2ae5936b28_fhprg_peek.bin",
+      "0000000000000000_7a56819cec0dd9b6_fhprg_peek.bin",
+      "0000000000000000_942e88f60daff431_fhprg_peek.bin",
+      "0000000000000000_fcc903b716070f40_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\model_generic\\msm8936_8939": {
+    "total_files": 25,
+    "extensions": {
+      ".bin": 25
+    },
+    "sample_files": [
+      "0000000000000000_0adf1fda0f90b53a_fhprg_peek.bin",
+      "0000000000000000_0f60bb327fdcbb97_fhprg_peek.bin",
+      "0000000000000000_1707d313228fa175_fhprg_peek.bin",
+      "0000000000000000_1b86c3580ea1ff69_fhprg_peek.bin",
+      "0000000000000000_1e84a6eb250bdb51_fhprg_peek.bin",
+      "0000000000000000_3bf0cdfb6887db1f_fhprg_peek.bin",
+      "0000000000000000_3e75fd6332dc3d46_fhprg_peek.bin",
+      "0000000000000000_3eda87c4c0c2ce2e_fhprg_peek.bin",
+      "0000000000000000_5389c31530d22870_fhprg_peek.bin",
+      "0000000000000000_5cb6223b2dcd6784_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\model_generic\\msm8937": {
+    "total_files": 8,
+    "extensions": {
+      ".bin": 8
+    },
+    "sample_files": [
+      "0000000000000000_0cacd16007a6d61d_fhprg_peek.bin",
+      "0000000000000000_11668aec3e671e96_fhprg_peek.bin",
+      "0000000000000000_1893478cc39eef5e_fhprg_peek.bin",
+      "0000000000000000_2d0d8d746be1e1b9_fhprg_peek.bin",
+      "0000000000000000_435ccf57b5e767ed_fhprg_peek.bin",
+      "0000000000000000_6a335000abc053c2_fhprg_peek.bin",
+      "0000000000000000_8a07b71e6f70fed9_fhprg_peek.bin",
+      "0000000000000000_93cbb0da06e694b1_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\model_generic\\msm8952": {
+    "total_files": 2,
+    "extensions": {
+      ".bin": 2
+    },
+    "sample_files": [
+      "0000000000000000_a8afb257c5af69c3_fhprg_peek.bin",
+      "0000000000000000_b0a2d6d32c361f43_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\model_generic\\msm8953": {
+    "total_files": 2,
+    "extensions": {
+      ".bin": 2
+    },
+    "sample_files": [
+      "0000000000000000_4f1ae492d394ddd9_fhprg_peek.bin",
+      "0000000000000000_4f93b12822aa9c05_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\model_generic\\msm8976": {
+    "total_files": 2,
+    "extensions": {
+      ".bin": 2
+    },
+    "sample_files": [
+      "0000000000000000_3ba937416312a18b_fhprg_peek.bin",
+      "0000000000000000_6b1e4824e9c4be53_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\model_generic\\msm8994-8992": {
+    "total_files": 4,
+    "extensions": {
+      ".bin": 4
+    },
+    "sample_files": [
+      "0000000000000000_3e5a2acab7af17d2_fhprg_peek.bin",
+      "0000000000000000_b222990c0bb2a747_fhprg_peek.bin",
+      "0000000000000000_c8b920da2f6a31ca_fhprg_peek.bin",
+      "0000000000000000_dfbd0802e0a39d2e_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\model_generic\\msm8996": {
+    "total_files": 1,
+    "extensions": {
+      ".bin": 1
+    },
+    "sample_files": [
+      "0000000000000000_b53fb23d1953decb_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\model_generic\\qcm2290": {
+    "total_files": 1,
+    "extensions": {
+      ".elf": 1
+    },
+    "sample_files": [
+      "001860e100000000_d9357db88795b5a8_Qcm2290_ddr_fhprg.elf"
+    ]
+  },
+  "qualcomm\\qualcomm\\model_generic\\QCM6125": {
+    "total_files": 1,
+    "extensions": {
+      ".bin": 1
+    },
+    "sample_files": [
+      "001750e100000000_d40eee56f3194665574109a39267724ae7944134cd53cb767e293d3c40497955bc8a4519ff992b031fadc6355015ac87.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\model_generic\\qm215": {
+    "total_files": 1,
+    "extensions": {
+      ".mbn": 1
+    },
+    "sample_files": [
+      "prog_emmc_firehose_QM215.mbn"
+    ]
+  },
+  "qualcomm\\qualcomm\\model_generic\\SDM855LA": {
+    "total_files": 1,
+    "extensions": {
+      ".bin": 1
+    },
+    "sample_files": [
+      "000a50e100000000_d40eee56f3194665_fhprg.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\model_generic\\sdx20m": {
+    "total_files": 1,
+    "extensions": {
+      ".bin": 1
+    },
+    "sample_files": [
+      "0007f0e100000000_d9357db88795b5a8_fhprg_sdx20_mdm9x65.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\model_generic\\sdx24m": {
+    "total_files": 2,
+    "extensions": {
+      ".bin": 2
+    },
+    "sample_files": [
+      "000970e100000000_3e84b8be95bb4d18_fhprg.bin",
+      "000970e100000000_959b8d0549ef41be_fhprg_sdx24m_peek.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\model_generic\\sdx55": {
+    "total_files": 5,
+    "extensions": {
+      ".bin": 4,
+      ".mbn": 1
+    },
+    "sample_files": [
+      "000cf0e100000000_d9357db88795b5a8_fhprg_quectel_em20_rg502.bin",
+      "prog_firehose_sdx55_fibucom.bin",
+      "prog_firehose_sdx55_pinsu_r200c_r200s.mbn",
+      "prog_firehose_sdx55_quectel_em20_rg502.bin",
+      "prog_firehose_sdx55_zte_mc801av.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\model_generic\\wear3100": {
+    "total_files": 1,
+    "extensions": {
+      ".bin": 1
+    },
+    "sample_files": [
+      "000520e100000000_cc3153a80293939b_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\patched\\mdm9x06": {
+    "total_files": 1,
+    "extensions": {
+      ".bin": 1
+    },
+    "sample_files": [
+      "ENPRG9x06p_bg96.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\patched\\mdm9x06\\org\\quectel": {
+    "total_files": 2,
+    "extensions": {
+      ".mbn": 2
+    },
+    "sample_files": [
+      "ENPRG9x06_bg96.mbn",
+      "NPRG9x06_bg96.mbn"
+    ]
+  },
+  "qualcomm\\qualcomm\\patched\\mdm9x07": {
+    "total_files": 2,
+    "extensions": {
+      ".bin": 2
+    },
+    "sample_files": [
+      "000480e100000000_cc3153a80293939b_enprg_peek.bin",
+      "nprg9x07p.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\patched\\mdm9x07\\org\\sim7600": {
+    "total_files": 2,
+    "extensions": {
+      ".mbn": 2
+    },
+    "sample_files": [
+      "ENPRG9x07.mbn",
+      "NPRG9x07.mbn"
+    ]
+  },
+  "qualcomm\\qualcomm\\patched\\mdm9x3x": {
+    "total_files": 2,
+    "extensions": {
+      ".bin": 2
+    },
+    "sample_files": [
+      "NPRG9x35p.bin",
+      "NPRG9x35p2.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\patched\\mdm9x5x": {
+    "total_files": 3,
+    "extensions": {
+      ".bin": 3
+    },
+    "sample_files": [
+      "000320e10000a069_cc3153a80293939b_enprg9x55p.bin",
+      "ENPRG9x55p_e5788.bin",
+      "nprg9x55p.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\patched\\mdm9x6x": {
+    "total_files": 4,
+    "extensions": {
+      ".bin": 4
+    },
+    "sample_files": [
+      "0007d0e100000000_36c886068d9a6634_enprg9x60p_tlt.bin",
+      "0007d0e100000000_cc3153a80293939b_enprg9x60p.bin",
+      "0007f0e100000000_959b8d0549ef41be__enprg9x65p_sdx20.bin",
+      "nprg9x65p.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\patched\\mdm9x6x\\org\\Foxconn_T77W968": {
+    "total_files": 2,
+    "extensions": {
+      ".mbn": 2
+    },
+    "sample_files": [
+      "enprg9x65.mbn",
+      "nprg9x65.mbn"
+    ]
+  },
+  "qualcomm\\qualcomm\\patched\\mdm9x6x\\org\\Novatel": {
+    "total_files": 2,
+    "extensions": {
+      ".bin": 2
+    },
+    "sample_files": [
+      "enprg9x65-28584-08006000.bin",
+      "nprg9x65-28583-80000000.bin"
+    ]
+  },
+  "qualcomm\\qualcomm\\patched\\mdm9x6x\\org\\Quectel": {
+    "total_files": 2,
+    "extensions": {
+      ".mbn": 2
+    },
+    "sample_files": [
+      "enprg9x65.mbn",
+      "nprg9x65.mbn"
+    ]
+  },
+  "qualcomm\\quectel": {
+    "total_files": 19,
+    "extensions": {
+      ".bin": 4,
+      ".elf": 9,
+      ".mbn": 6
+    },
+    "sample_files": [
+      "000970e100000000_4a490d2fd467ae3f_fhprg_sdx24_poorwills_em120r.bin",
+      "000970e100000000_d9357db88795b5a8_fhprg_quectel_em20_rg502.bin",
+      "000cf0e100000000_d9357db88795b5a8_fhprg_sdx55_prairie_rm510q_rg502.bin",
+      "001070e100000000_d40eee56f3194665_prog_firehose_nand_mdm9x05.elf",
+      "001990e100040000_d9357db88795b5a8_fhprg_sdx62_lemur_rm520n_gl.bin",
+      "prog_firehose_life_ddr_patched_Kamorta.elf",
+      "prog_firehose_lite_lemur_olympicle_rm530n_rm521fg.elf",
+      "prog_firehose_lite_olympicle_rg520n.elf",
+      "prog_firehose_lite_olympicle_rm520fg.elf",
+      "prog_firehose_lite_olympicle_rm520ng.elf"
+    ]
+  },
+  "qualcomm\\samsung": {
+    "total_files": 58,
+    "extensions": {
+      ".bin": 56,
+      ".elf": 2
+    },
+    "sample_files": [
+      "0000000000020000_467f3020c4cc788d_fhprg.bin",
+      "0000000000030000_467f3020c4cc788d_fhprg.bin",
+      "0000000000200000_18f91cb107db16e7_fhprg.bin",
+      "0000000000200000_27fe520d8259d21a_fhprg.bin",
+      "0000000000200000_320ecd66fba7f9b1_fhprg.bin",
+      "0000000000200000_371ab117a61d3a6b_fhprg.bin",
+      "0000000000200000_3dc5046245345178_fhprg.bin",
+      "0000000000200000_4c0bf2437898c38e_fhprg.bin",
+      "0000000000200000_57221a57066a14e0_fhprg.bin",
+      "0000000000200000_57d5a124fe695106_fhprg.bin"
+    ]
+  },
+  "qualcomm\\schok": {
+    "total_files": 3,
+    "extensions": {
+      ".mbn": 3
+    },
+    "sample_files": [
+      "prog_emmc_firehose_8937_generic.mbn",
+      "prog_emmc_firehose_8937_sv55.mbn",
+      "prog_emmc_firehose_QM215.mbn"
+    ]
+  },
+  "qualcomm\\sharp": {
+    "total_files": 1,
+    "extensions": {
+      ".bin": 1
+    },
+    "sample_files": [
+      "3006000000010000_07046415532823b0_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\smartisan": {
+    "total_files": 2,
+    "extensions": {
+      ".bin": 2
+    },
+    "sample_files": [
+      "000460e100110022_032a43cc8d3e2d3b_fhprg_peek.bin",
+      "000460e100110022_0a1fd0c71592505d_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\sonim": {
+    "total_files": 1,
+    "extensions": {
+      ".bin": 1
+    },
+    "sample_files": [
+      "0008c0e100010000_1b55c83cc1c00f4f_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\sony": {
+    "total_files": 1,
+    "extensions": {
+      ".bin": 1
+    },
+    "sample_files": [
+      "007530e100010001_25b44831ab8f8396_fhprg.bin"
+    ]
+  },
+  "qualcomm\\TCL": {
+    "total_files": 57,
+    "extensions": {
+      ".bin": 57
+    },
+    "sample_files": [
+      "0000000000000000_6ff5948be87d91dd_fhprg.bin",
+      "0000000000000000_c39a5b1d9f0cc90b_fhprg_peek.bin",
+      "0000000000000000_c64624a0fa3bb84d_fhprg_peek.bin",
+      "0000000000000000_fbdb288a39196a06_fhprg.bin",
+      "0004f0e100420020_3353db25b14df962_fhprg_peek.bin",
+      "000560e100420049_26f93e0bf4c11f91_fhprg_peek.bin",
+      "0006b0e100420041_073e81231dae45ba_fhprg_peek.bin",
+      "0006b0e100420046_5e3cd04abee1a2d0_fhprg_peek.bin",
+      "000940e100420050_7fcdbae6d1b9526f_fhprg.bin",
+      "0009a0e1013d0002_bf0bf8ad8467756b_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\tplink": {
+    "total_files": 1,
+    "extensions": {
+      ".bin": 1
+    },
+    "sample_files": [
+      "009600e100000000_b75ac87c5171462b_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\ublox": {
+    "total_files": 22,
+    "extensions": {
+      ".elf": 12,
+      ".mbn": 10
+    },
+    "sample_files": [
+      "alf_sbl_easyflash_SARA-R500E.elf",
+      "alf_sbl_easyflash_SARA-R500S.elf",
+      "alf_sbl_easyflash_SARA-R500S_01.elf",
+      "alf_sbl_easyflash_SARA-R510M8S-00B.elf",
+      "alf_sbl_easyflash_SARA-R510M8S-01B.elf",
+      "alf_sbl_easyflash_SARA-R510S-00B.elf",
+      "alf_sbl_easyflash_SARA-R510S-01B.elf",
+      "alf_sbl_easyflash_SARA-R520-02B.elf",
+      "alf_sbl_easyflash_SARA-R520M10-02B.elf",
+      "prog_firehose_nand_SARA-R422.elf"
+    ]
+  },
+  "qualcomm\\unknown": {
+    "total_files": 19,
+    "extensions": {
+      ".bin": 19
+    },
+    "sample_files": [
+      "0000000000000000_06513b56f7f06be9_fhprg.bin",
+      "0000000000000000_0cd8b438fed2e1c4_fhprg_peek.bin",
+      "0000000000000000_1b14cfdf47441d6e_fhprg_peek.bin",
+      "0000000000000000_206e9322385b0fd7_fhprg_peek.bin",
+      "0000000000000000_3ca3332e27061b23_fhprg_peek.bin",
+      "0000000000000000_4041e9db17c18262_fhprg.bin",
+      "0000000000000000_43476023ea1ac127_fhprg_peek.bin",
+      "0000000000000000_63471de518e5f773_fhprg_peek.bin",
+      "0000000000000000_6755ff6f60e7ba66_fhprg.bin",
+      "0000000000000000_7546c10752350562_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\vivo": {
+    "total_files": 17,
+    "extensions": {
+      ".bin": 17
+    },
+    "sample_files": [
+      "0000000000730003_a7df36ffd7ab557c_fhprg_vivo_pd2020.bin",
+      "000460e100000000_60ba997fef6da9f0_fhprg_peek.bin",
+      "000460e100000000_da758fd52632ba66_fhprg_peek.bin",
+      "0004f0e100000000_60ba997fef6da9f0_fhprg_peek.bin",
+      "000560e100000000_60ba997fef6da9f0_fhprg_peek.bin",
+      "000950e100730003_a7df36ffd7ab557c_fhprg.bin",
+      "0009a0e100000000_60ba997fef6da9f0_fhprg_peek.bin",
+      "000bf0e100000000_60ba997fef6da9f0_fhprg_peek.bin",
+      "0090b0e100000000_60ba997fef6da9f0_fhprg_peek.bin",
+      "009470e100000000_60ba997fef6da9f0_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\xiaomi": {
+    "total_files": 39,
+    "extensions": {
+      ".bin": 30,
+      ".mbn": 6,
+      ".elf": 3
+    },
+    "sample_files": [
+      "0000000000000000_06af511250e0b74b_fhprg_peek.bin",
+      "0000000000000000_ab0a9e785e143291_fhprg_peek.bin",
+      "0000000000000000_b435a01fc18a5c72_fhprg.bin",
+      "0000000000000000_fa452f8cc5060845_fhprg_peek_wt86047.bin",
+      "0000000000030000_467f3020c4cc788d_fhprg_8E_noauth.bin",
+      "000460e100000000_57158eaf1814d78f.bin",
+      "0004f0e100000000_57158eaf1814d78f_fhprg_peek.bin",
+      "000560e100000000_57158eaf1814d78f_fhprg_peek.bin",
+      "0005e0e100010000_a7b8b82545a98eca_fhprg_peek.bin",
+      "0005e0e100010000_a7b8b82545a98eca_fhprg_peek_mi_a2.bin"
+    ]
+  },
+  "qualcomm\\xiaomi\\EDLAuth": {
+    "total_files": 15,
+    "extensions": {
+      ".bin": 15
+    },
+    "sample_files": [
+      "0000000000720000_1bebe3863a6781db_fhprg_edlauth_peek.bin",
+      "000460e100000000_57158eaf1814d78f_fhprg_edlauth_peek.bin",
+      "0008b0e100010000_c924a35f39ce1cdd_fhprg_edlauth.bin",
+      "0008b0e100720000_c924a35f39ce1cdd_fhprg_edlauth_poco_f1.bin",
+      "0008c0e100010000_f8ab20526358c4fa_fhprg_edlauth_peek.bin",
+      "0008c0e100720000_a7b8b82545a98eca_fhprg_edlauth.bin",
+      "000910e100720000_c924a35f39ce1cdd_fhprg_edlauth.bin",
+      "000950e100720000_1bebe3863a6781db_fhprg_edlauth.bin",
+      "000a50e100720000_1bebe3863a6781db_fhprg_edlauth.bin",
+      "000a50e100720000_1bebe3863a6781db_fhprg_sdm855_edlauth_xiaomi.bin"
+    ]
+  },
+  "qualcomm\\yulong_coolpad": {
+    "total_files": 9,
+    "extensions": {
+      ".bin": 9
+    },
+    "sample_files": [
+      "000560e100480000_0dc319ba152db35e_fhprg_peek.bin",
+      "007050e100480000_0dc319ba152db35e_fhprg_peek.bin",
+      "0090b0e100000000_33a5b123f8ee0a74_fhprg_peek.bin",
+      "0090b0e100480000_0dc319ba152db35e_fhprg_peek.bin",
+      "0091b0e100000000_b4d82bcacd882b72_fhprg_peek.bin",
+      "009600e100480000_0dc319ba152db35e_fhprg_peek.bin",
+      "009720e100000000_4fa60329e92f41aa_fhprg_peek.bin",
+      "009900e100000001_7c24b3bec0b60439_fhprg_peek.bin",
+      "009900e100000001_7d8bd4a98b53f2f4_fhprg_peek.bin"
+    ]
+  },
+  "qualcomm\\zte": {
+    "total_files": 71,
+    "extensions": {
+      ".bin": 71
+    },
+    "sample_files": [
+      "0000000000030000_467f3020c4cc788d_fhprg.bin",
+      "0000000000040000_0c7b0b08967bf024_fhprg.bin",
+      "0000000000040000_37c0cdff175f238e_fhprg.bin",
+      "0000000000040000_4c5806ac3f959565_fhprg_peek.bin",
+      "0000000000040000_73fd3619a74ac619_fhprg.bin",
+      "0000000000040000_dff7dda29c8c49b1_fhprg.bin",
+      "000460e100040000_168d0bad52b5d5cb_fhprg_peek.bin",
+      "000460e100040000_3ab733d167600d9d_fhprg_peek.bin",
+      "000460e100040000_404d181e75af65a8_fhprg_peek.bin",
+      "000510e100040000_326ebefc44ff5adc_fhprg_peek.bin"
+    ]
+  },
+  "samsung\\odin\\Odin3_v3.14.4": {
+    "total_files": 7,
+    "extensions": {
+      ".dll": 2,
+      ".txt": 1,
+      ".url": 2,
+      ".ini": 1,
+      ".exe": 1
+    },
+    "sample_files": [
+      "cpprest141_2_10.dll",
+      "Credits.txt",
+      "How to Use.url",
+      "Odin3.ini",
+      "Odin3_v3.14.4.exe",
+      "Official Website.url",
+      "SS_DL.dll"
+    ]
+  },
+  "samsung\\pit": {
+    "total_files": 484,
+    "extensions": {
+      ".pit": 484
+    },
+    "sample_files": [
+      "A032FXXS2AVJ2_PIT_aaf2975a.pit",
+      "A032FXXU2AVH4_PIT_f59d4ccf.pit",
+      "A032FXXU2BWC3_PIT_4d4c6af4.pit",
+      "A035F.pit",
+      "A035FXXU1AVD3_PIT_0662e1af.pit",
+      "A035FXXU1AVD3_PIT_07c06218.pit",
+      "A035FXXU1AVD3_PIT_099ff983.org.pit",
+      "A035FXXU1AVD3_PIT_10719555.pit",
+      "A035FXXU1AVD3_PIT_113f74eb.pit",
+      "A035FXXU1AVD3_PIT_13548b53.org.pit"
+    ]
+  },
+  "unisoc": {
+    "total_files": 1,
+    "extensions": {
+      ".txt": 1
+    },
+    "sample_files": [
+      "info.txt"
+    ]
+  },
+  "unisoc\\samsung": {
+    "total_files": 31,
+    "extensions": {
+      ".mfd": 31
+    },
+    "sample_files": [
+      "splldr_078dc58d.mfd",
+      "splldr_07d8cbf1.mfd",
+      "splldr_1cc53f3c.mfd",
+      "splldr_246c276e.mfd",
+      "splldr_2ba697e0.mfd",
+      "splldr_4dc4a41d.mfd",
+      "splldr_54a58947.mfd",
+      "splldr_8310856f.mfd",
+      "splldr_89819fcc.mfd",
+      "splldr_9362afb1.mfd"
+    ]
+  },
+  "unisoc\\universal": {
+    "total_files": 2,
+    "extensions": {
+      "": 2
+    },
+    "sample_files": [
+      "FDL1",
+      "FDL2"
+    ]
+  }
+}

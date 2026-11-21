@@ -1,0 +1,37 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BSLabTool.UI", "src\ui\BSLabTool.UI\BSLabTool.UI.csproj", "{81389D91-E9D4-4903-8FE5-E1868351B838}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BSLabTool.Tests", "tests\BSLabTool.Tests\BSLabTool.Tests.csproj", "{9149AE02-FA5E-4B14-9FF6-F2979462C949}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{81389D91-E9D4-4903-8FE5-E1868351B838}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{81389D91-E9D4-4903-8FE5-E1868351B838}.Debug|Any CPU.Build.0 = Debug|x64
+		{81389D91-E9D4-4903-8FE5-E1868351B838}.Debug|x64.ActiveCfg = Debug|x64
+		{81389D91-E9D4-4903-8FE5-E1868351B838}.Debug|x64.Build.0 = Debug|x64
+		{81389D91-E9D4-4903-8FE5-E1868351B838}.Release|Any CPU.ActiveCfg = Release|x64
+		{81389D91-E9D4-4903-8FE5-E1868351B838}.Release|Any CPU.Build.0 = Release|x64
+		{81389D91-E9D4-4903-8FE5-E1868351B838}.Release|x64.ActiveCfg = Release|x64
+		{81389D91-E9D4-4903-8FE5-E1868351B838}.Release|x64.Build.0 = Release|x64
+		{9149AE02-FA5E-4B14-9FF6-F2979462C949}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{9149AE02-FA5E-4B14-9FF6-F2979462C949}.Debug|Any CPU.Build.0 = Debug|x64
+		{9149AE02-FA5E-4B14-9FF6-F2979462C949}.Debug|x64.ActiveCfg = Debug|x64
+		{9149AE02-FA5E-4B14-9FF6-F2979462C949}.Debug|x64.Build.0 = Debug|x64
+		{9149AE02-FA5E-4B14-9FF6-F2979462C949}.Release|Any CPU.ActiveCfg = Release|x64
+		{9149AE02-FA5E-4B14-9FF6-F2979462C949}.Release|Any CPU.Build.0 = Release|x64
+		{9149AE02-FA5E-4B14-9FF6-F2979462C949}.Release|x64.ActiveCfg = Release|x64
+		{9149AE02-FA5E-4B14-9FF6-F2979462C949}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

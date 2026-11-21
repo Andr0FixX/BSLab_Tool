@@ -1,0 +1,12 @@
+{
+  "PlatformTools": "C:\\BSLab_Tool\\tools\\platform-tools",
+  "Loaders": "C:\\BSLab_Tool\\resources\\loaders",
+  "PitDatabase": "C:\\BSLab_Tool\\resources\\pit_database",
+  "Backups": "C:\\BSLab_Tool\\backups",
+  "BaudRate": "115200 (Standard Diagnostic)",
+  "Timeout": "1500 ms (Optimal)",
+  "AntiBrickActive": true,
+  "PreflightBackup": true,
+  "BatteryGuard": true,
+  "SavedAt": "2026-11-11T03:38:08.4880985\u002B05:00"
+}

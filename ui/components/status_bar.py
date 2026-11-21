@@ -37,7 +37,7 @@ class StatusBar(ctk.CTkFrame):
 
         self.lbl_chipset_status = ctk.CTkLabel(
             caps_row,
-            text="SoC: MediaTek Helio G37 (MT6765)",
+            text="SoC: MediaTek Helio / Dimensity Universal Engine",
             font=Theme.font_ui(size=11),
             text_color=Theme.TEXT_SECONDARY
         )

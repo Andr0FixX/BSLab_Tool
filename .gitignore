@@ -4,27 +4,70 @@ __pycache__/
 *$py.class
 *.pyd
 
-# PyInstaller / Build outputs
+# Root build artifacts & standalone binaries
+*.dll
+*.deps.json
+*.runtimeconfig.json
+*.exe
+*.pdb
+bslab_tool.exe*
+bslabtool.exe*
+
+# PyInstaller / Build outputs / Distributions
 build/
 dist/
-*.spec.bak
+dist_clean/
+dist_new/
+dist_release/
+BSLab_Tool_v2.5_PRO_dist_new_*/
 installer_output/
 test_install_verify/
+
+# Large Archives & Binaries (Over 50MB, not tracked by Git)
 *.zip
-crash_log.txt
+*.7z
+*.rar
+*.tar
+*.gz
+*.iso
+*.msi
+*.cab
+*.img
+*.bin
+*.raw
+
+# Allow source files explicitly
+!src/**/*.cs
+!src/**/*.xaml
+!src/**/*.cpp
+!src/**/*.h
+!src/**/*.csproj
+!src/**/*.sln
+
+# .NET Build artifacts
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+
+# Compiler Tools & MinGW
+tools/w64devkit/
+tools/download_compiler.py
 
 # Backups and Dumps (keep repository lightweight and protect sensitive device user data)
 backups/
 dump/
 dumps/
-*.bin
-*.raw
-*.tar
-*.iso
+archives/
 
-# Logs
+# Logs & Diagnostics
 *.log
 logs/
+crash.log
+crash_log.txt
 
 # Environments
 .env
@@ -42,3 +85,4 @@ Desktop.ini
 .vscode/
 .idea/
 *.swp
+.agents/

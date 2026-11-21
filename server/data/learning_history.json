@@ -1,0 +1,731 @@
+[
+  {
+    "timestamp": "2026-11-16 12:41:19",
+    "brand": "Infinix",
+    "model": "Hot 60i (X6728B)",
+    "hardware": "MT6768",
+    "android_ver": "15",
+    "action": "UPDATED",
+    "total_models": 11922
+  },
+  {
+    "timestamp": "2026-11-16 12:42:37",
+    "brand": "Huawei",
+    "model": "Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659]",
+    "hardware": "HI6250",
+    "android_ver": "8.0.0",
+    "action": "UPDATED",
+    "total_models": 11922
+  },
+  {
+    "timestamp": "2026-11-16 12:42:39",
+    "brand": "Huawei",
+    "model": "Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659]",
+    "hardware": "HI6250",
+    "android_ver": "8.0.0",
+    "action": "UPDATED",
+    "total_models": 11922
+  },
+  {
+    "timestamp": "2026-11-16 12:42:41",
+    "brand": "Huawei",
+    "model": "Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659]",
+    "hardware": "HI6250",
+    "android_ver": "8.0.0",
+    "action": "UPDATED",
+    "total_models": 11922
+  },
+  {
+    "timestamp": "2026-11-16 12:42:48",
+    "brand": "Huawei",
+    "model": "Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659]",
+    "hardware": "HI6250",
+    "android_ver": "8.0.0",
+    "action": "UPDATED",
+    "total_models": 11922
+  },
+  {
+    "timestamp": "2026-11-16 12:42:52",
+    "brand": "Huawei",
+    "model": "Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659]",
+    "hardware": "HI6250",
+    "android_ver": "8.0.0",
+    "action": "UPDATED",
+    "total_models": 11922
+  },
+  {
+    "timestamp": "2026-11-16 12:42:54",
+    "brand": "Huawei",
+    "model": "Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659]",
+    "hardware": "HI6250",
+    "android_ver": "8.0.0",
+    "action": "UPDATED",
+    "total_models": 11922
+  },
+  {
+    "timestamp": "2026-11-16 12:42:56",
+    "brand": "Huawei",
+    "model": "Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659]",
+    "hardware": "HI6250",
+    "android_ver": "8.0.0",
+    "action": "UPDATED",
+    "total_models": 11922
+  },
+  {
+    "timestamp": "2026-11-16 12:43:04",
+    "brand": "Huawei",
+    "model": "Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659]",
+    "hardware": "HI6250",
+    "android_ver": "8.0.0",
+    "action": "UPDATED",
+    "total_models": 11922
+  },
+  {
+    "timestamp": "2026-11-16 12:43:09",
+    "brand": "Huawei",
+    "model": "Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659]",
+    "hardware": "HI6250",
+    "android_ver": "8.0.0",
+    "action": "UPDATED",
+    "total_models": 11922
+  },
+  {
+    "timestamp": "2026-11-16 12:43:12",
+    "brand": "Pixel",
+    "model": "4 XL",
+    "hardware": "CORAL",
+    "android_ver": "13",
+    "action": "ADDED",
+    "total_models": 11923
+  },
+  {
+    "timestamp": "2026-11-16 12:43:21",
+    "brand": "Pixel",
+    "model": "4 XL",
+    "hardware": "CORAL",
+    "android_ver": "13",
+    "action": "UPDATED",
+    "total_models": 11923
+  },
+  {
+    "timestamp": "2026-11-16 12:43:24",
+    "brand": "Pixel",
+    "model": "4 XL",
+    "hardware": "CORAL",
+    "android_ver": "13",
+    "action": "UPDATED",
+    "total_models": 11923
+  },
+  {
+    "timestamp": "2026-11-16 12:43:30",
+    "brand": "Pixel",
+    "model": "4 XL",
+    "hardware": "CORAL",
+    "android_ver": "13",
+    "action": "UPDATED",
+    "total_models": 11923
+  },
+  {
+    "timestamp": "2026-11-16 12:43:35",
+    "brand": "Pixel",
+    "model": "4 XL",
+    "hardware": "CORAL",
+    "android_ver": "13",
+    "action": "UPDATED",
+    "total_models": 11923
+  },
+  {
+    "timestamp": "2026-11-16 12:43:38",
+    "brand": "Pixel",
+    "model": "4 XL",
+    "hardware": "CORAL",
+    "android_ver": "13",
+    "action": "UPDATED",
+    "total_models": 11923
+  },
+  {
+    "timestamp": "2026-11-16 12:43:44",
+    "brand": "Pixel",
+    "model": "4 XL",
+    "hardware": "CORAL",
+    "android_ver": "13",
+    "action": "UPDATED",
+    "total_models": 11923
+  },
+  {
+    "timestamp": "2026-11-16 12:43:48",
+    "brand": "Pixel",
+    "model": "4 XL",
+    "hardware": "CORAL",
+    "android_ver": "13",
+    "action": "UPDATED",
+    "total_models": 11923
+  },
+  {
+    "timestamp": "2026-11-16 12:43:50",
+    "brand": "Pixel",
+    "model": "4 XL",
+    "hardware": "CORAL",
+    "android_ver": "13",
+    "action": "UPDATED",
+    "total_models": 11923
+  },
+  {
+    "timestamp": "2026-11-16 12:43:55",
+    "brand": "Pixel",
+    "model": "4 XL",
+    "hardware": "CORAL",
+    "android_ver": "13",
+    "action": "UPDATED",
+    "total_models": 11923
+  },
+  {
+    "timestamp": "2026-11-16 12:44:00",
+    "brand": "Pixel",
+    "model": "4 XL",
+    "hardware": "CORAL",
+    "android_ver": "13",
+    "action": "UPDATED",
+    "total_models": 11923
+  },
+  {
+    "timestamp": "2026-11-16 12:44:03",
+    "brand": "Pixel",
+    "model": "4 XL",
+    "hardware": "CORAL",
+    "android_ver": "13",
+    "action": "UPDATED",
+    "total_models": 11923
+  },
+  {
+    "timestamp": "2026-11-16 12:44:06",
+    "brand": "Pixel",
+    "model": "4 XL",
+    "hardware": "CORAL",
+    "android_ver": "13",
+    "action": "UPDATED",
+    "total_models": 11923
+  },
+  {
+    "timestamp": "2026-11-16 12:44:12",
+    "brand": "Pixel",
+    "model": "4 XL",
+    "hardware": "CORAL",
+    "android_ver": "13",
+    "action": "UPDATED",
+    "total_models": 11923
+  },
+  {
+    "timestamp": "2026-11-16 12:44:14",
+    "brand": "Pixel",
+    "model": "4 XL",
+    "hardware": "CORAL",
+    "android_ver": "13",
+    "action": "UPDATED",
+    "total_models": 11923
+  },
+  {
+    "timestamp": "2026-11-16 12:44:18",
+    "brand": "Pixel",
+    "model": "4 XL",
+    "hardware": "CORAL",
+    "android_ver": "13",
+    "action": "UPDATED",
+    "total_models": 11923
+  },
+  {
+    "timestamp": "2026-11-16 12:44:29",
+    "brand": "Pixel",
+    "model": "4 XL",
+    "hardware": "CORAL",
+    "android_ver": "13",
+    "action": "UPDATED",
+    "total_models": 11923
+  },
+  {
+    "timestamp": "2026-11-16 12:44:32",
+    "brand": "Pixel",
+    "model": "4 XL",
+    "hardware": "CORAL",
+    "android_ver": "13",
+    "action": "UPDATED",
+    "total_models": 11923
+  },
+  {
+    "timestamp": "2026-11-16 12:44:34",
+    "brand": "Pixel",
+    "model": "4 XL",
+    "hardware": "CORAL",
+    "android_ver": "13",
+    "action": "UPDATED",
+    "total_models": 11923
+  },
+  {
+    "timestamp": "2026-11-16 12:44:35",
+    "brand": "Pixel",
+    "model": "4 XL",
+    "hardware": "CORAL",
+    "android_ver": "13",
+    "action": "UPDATED",
+    "total_models": 11923
+  },
+  {
+    "timestamp": "2026-11-16 12:44:38",
+    "brand": "Pixel",
+    "model": "4 XL",
+    "hardware": "CORAL",
+    "android_ver": "13",
+    "action": "UPDATED",
+    "total_models": 11923
+  },
+  {
+    "timestamp": "2026-11-16 12:44:43",
+    "brand": "Pixel",
+    "model": "4 XL",
+    "hardware": "CORAL",
+    "android_ver": "13",
+    "action": "UPDATED",
+    "total_models": 11923
+  },
+  {
+    "timestamp": "2026-11-16 12:44:47",
+    "brand": "Pixel",
+    "model": "4 XL",
+    "hardware": "CORAL",
+    "android_ver": "13",
+    "action": "UPDATED",
+    "total_models": 11923
+  },
+  {
+    "timestamp": "2026-11-16 12:44:48",
+    "brand": "Pixel",
+    "model": "4 XL",
+    "hardware": "CORAL",
+    "android_ver": "13",
+    "action": "UPDATED",
+    "total_models": 11923
+  },
+  {
+    "timestamp": "2026-11-16 12:44:50",
+    "brand": "Realme",
+    "model": "Note 50 (RMX3834)",
+    "hardware": "UMS9230_HULK",
+    "android_ver": "15",
+    "action": "UPDATED",
+    "total_models": 11923
+  },
+  {
+    "timestamp": "2026-11-16 12:44:52",
+    "brand": "Realme",
+    "model": "Note 50 (RMX3834)",
+    "hardware": "UMS9230_HULK",
+    "android_ver": "15",
+    "action": "UPDATED",
+    "total_models": 11923
+  },
+  {
+    "timestamp": "2026-11-16 12:44:57",
+    "brand": "Realme",
+    "model": "Note 50 (RMX3834)",
+    "hardware": "UMS9230_HULK",
+    "android_ver": "15",
+    "action": "UPDATED",
+    "total_models": 11923
+  },
+  {
+    "timestamp": "2026-11-16 12:45:01",
+    "brand": "Realme",
+    "model": "Note 50 (RMX3834)",
+    "hardware": "UMS9230_HULK",
+    "android_ver": "15",
+    "action": "UPDATED",
+    "total_models": 11923
+  },
+  {
+    "timestamp": "2026-11-16 12:45:03",
+    "brand": "Realme",
+    "model": "Note 50 (RMX3834)",
+    "hardware": "UMS9230_HULK",
+    "android_ver": "15",
+    "action": "UPDATED",
+    "total_models": 11923
+  },
+  {
+    "timestamp": "2026-11-16 12:45:05",
+    "brand": "Infinix",
+    "model": "Hot 60i (X6728B)",
+    "hardware": "MT6768",
+    "android_ver": "15",
+    "action": "UPDATED",
+    "total_models": 11923
+  },
+  {
+    "timestamp": "2026-11-16 12:45:06",
+    "brand": "Infinix",
+    "model": "Hot 60i (X6728B)",
+    "hardware": "MT6768",
+    "android_ver": "15",
+    "action": "UPDATED",
+    "total_models": 11923
+  },
+  {
+    "timestamp": "2026-11-16 12:45:11",
+    "brand": "Infinix",
+    "model": "Hot 60i (X6728B)",
+    "hardware": "MT6768",
+    "android_ver": "15",
+    "action": "UPDATED",
+    "total_models": 11923
+  },
+  {
+    "timestamp": "2026-11-16 12:45:14",
+    "brand": "Infinix",
+    "model": "Hot 60i (X6728B)",
+    "hardware": "MT6768",
+    "android_ver": "15",
+    "action": "UPDATED",
+    "total_models": 11923
+  },
+  {
+    "timestamp": "2026-11-16 12:45:17",
+    "brand": "Infinix",
+    "model": "Hot 60i (X6728B)",
+    "hardware": "MT6768",
+    "android_ver": "15",
+    "action": "UPDATED",
+    "total_models": 11923
+  },
+  {
+    "timestamp": "2026-11-16 12:45:19",
+    "brand": "Infinix",
+    "model": "Hot 60i (X6728B)",
+    "hardware": "MT6768",
+    "android_ver": "15",
+    "action": "UPDATED",
+    "total_models": 11923
+  },
+  {
+    "timestamp": "2026-11-16 12:45:20",
+    "brand": "Infinix",
+    "model": "Hot 60i (X6728B)",
+    "hardware": "MT6768",
+    "android_ver": "15",
+    "action": "UPDATED",
+    "total_models": 11923
+  },
+  {
+    "timestamp": "2026-11-16 12:45:22",
+    "brand": "Infinix",
+    "model": "Hot 60i (X6728B)",
+    "hardware": "MT6768",
+    "android_ver": "15",
+    "action": "UPDATED",
+    "total_models": 11923
+  },
+  {
+    "timestamp": "2026-11-16 12:45:29",
+    "brand": "Infinix",
+    "model": "Hot 60i (X6728B)",
+    "hardware": "MT6768",
+    "android_ver": "15",
+    "action": "UPDATED",
+    "total_models": 11923
+  },
+  {
+    "timestamp": "2026-11-16 12:45:31",
+    "brand": "Infinix",
+    "model": "Hot 60i (X6728B)",
+    "hardware": "MT6768",
+    "android_ver": "15",
+    "action": "UPDATED",
+    "total_models": 11923
+  },
+  {
+    "timestamp": "2026-11-16 12:45:33",
+    "brand": "Infinix",
+    "model": "Hot 60i (X6728B)",
+    "hardware": "MT6768",
+    "android_ver": "15",
+    "action": "UPDATED",
+    "total_models": 11923
+  },
+  {
+    "timestamp": "2026-11-16 12:45:36",
+    "brand": "Infinix",
+    "model": "Hot 60i (X6728B)",
+    "hardware": "MT6768",
+    "android_ver": "15",
+    "action": "UPDATED",
+    "total_models": 11923
+  },
+  {
+    "timestamp": "2026-11-17 13:39:42",
+    "brand": "Oppo",
+    "model": "A53s 5G (CPH2321)",
+    "hardware": "MT6833",
+    "android_ver": "12",
+    "action": "UPDATED",
+    "total_models": 11924
+  },
+  {
+    "timestamp": "2026-11-17 13:39:43",
+    "brand": "Huawei",
+    "model": "Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659]",
+    "hardware": "HI6250",
+    "android_ver": "8.0.0",
+    "action": "UPDATED",
+    "total_models": 11924
+  },
+  {
+    "timestamp": "2026-11-17 13:39:45",
+    "brand": "Huawei",
+    "model": "Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659]",
+    "hardware": "HI6250",
+    "android_ver": "8.0.0",
+    "action": "UPDATED",
+    "total_models": 11924
+  },
+  {
+    "timestamp": "2026-11-17 13:39:47",
+    "brand": "Huawei",
+    "model": "Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659]",
+    "hardware": "HI6250",
+    "android_ver": "8.0.0",
+    "action": "UPDATED",
+    "total_models": 11924
+  },
+  {
+    "timestamp": "2026-11-17 13:39:48",
+    "brand": "Oppo",
+    "model": "A53s 5G (CPH2321)",
+    "hardware": "MT6833",
+    "android_ver": "12",
+    "action": "UPDATED",
+    "total_models": 11924
+  },
+  {
+    "timestamp": "2026-11-17 14:17:45",
+    "brand": "Huawei",
+    "model": "Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659]",
+    "hardware": "",
+    "android_ver": "",
+    "action": "UPDATED",
+    "total_models": 11924
+  },
+  {
+    "timestamp": "2026-11-17 14:17:49",
+    "brand": "Huawei",
+    "model": "Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659]",
+    "hardware": "",
+    "android_ver": "",
+    "action": "UPDATED",
+    "total_models": 11924
+  },
+  {
+    "timestamp": "2026-11-17 14:17:59",
+    "brand": "Huawei",
+    "model": "Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659]",
+    "hardware": "",
+    "android_ver": "",
+    "action": "UPDATED",
+    "total_models": 11924
+  },
+  {
+    "timestamp": "2026-11-17 14:18:07",
+    "brand": "Huawei",
+    "model": "Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659]",
+    "hardware": "",
+    "android_ver": "",
+    "action": "UPDATED",
+    "total_models": 11924
+  },
+  {
+    "timestamp": "2026-11-17 14:18:16",
+    "brand": "Huawei",
+    "model": "Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659]",
+    "hardware": "",
+    "android_ver": "",
+    "action": "UPDATED",
+    "total_models": 11924
+  },
+  {
+    "timestamp": "2026-11-17 14:18:22",
+    "brand": "Huawei",
+    "model": "Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659]",
+    "hardware": "",
+    "android_ver": "",
+    "action": "UPDATED",
+    "total_models": 11924
+  },
+  {
+    "timestamp": "2026-11-17 14:18:31",
+    "brand": "Huawei",
+    "model": "Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659]",
+    "hardware": "",
+    "android_ver": "",
+    "action": "UPDATED",
+    "total_models": 11924
+  },
+  {
+    "timestamp": "2026-11-17 14:18:43",
+    "brand": "Huawei",
+    "model": "Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659]",
+    "hardware": "",
+    "android_ver": "",
+    "action": "UPDATED",
+    "total_models": 11924
+  },
+  {
+    "timestamp": "2026-11-17 14:18:56",
+    "brand": "Huawei",
+    "model": "Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659]",
+    "hardware": "",
+    "android_ver": "",
+    "action": "UPDATED",
+    "total_models": 11924
+  },
+  {
+    "timestamp": "2026-11-17 14:19:08",
+    "brand": "Huawei",
+    "model": "Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659]",
+    "hardware": "",
+    "android_ver": "",
+    "action": "UPDATED",
+    "total_models": 11924
+  },
+  {
+    "timestamp": "2026-11-17 15:00:35",
+    "brand": "Huawei",
+    "model": "Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659]",
+    "hardware": "",
+    "android_ver": "",
+    "action": "UPDATED",
+    "total_models": 11924
+  },
+  {
+    "timestamp": "2026-11-17 15:00:38",
+    "brand": "Huawei",
+    "model": "Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659]",
+    "hardware": "",
+    "android_ver": "",
+    "action": "UPDATED",
+    "total_models": 11924
+  },
+  {
+    "timestamp": "2026-11-17 15:00:41",
+    "brand": "Huawei",
+    "model": "Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659]",
+    "hardware": "",
+    "android_ver": "",
+    "action": "UPDATED",
+    "total_models": 11924
+  },
+  {
+    "timestamp": "2026-11-17 15:00:47",
+    "brand": "Huawei",
+    "model": "Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659]",
+    "hardware": "",
+    "android_ver": "",
+    "action": "UPDATED",
+    "total_models": 11924
+  },
+  {
+    "timestamp": "2026-11-17 15:00:50",
+    "brand": "Huawei",
+    "model": "Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659]",
+    "hardware": "",
+    "android_ver": "",
+    "action": "UPDATED",
+    "total_models": 11924
+  },
+  {
+    "timestamp": "2026-11-17 15:00:53",
+    "brand": "Huawei",
+    "model": "Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659]",
+    "hardware": "",
+    "android_ver": "",
+    "action": "UPDATED",
+    "total_models": 11924
+  },
+  {
+    "timestamp": "2026-11-17 15:00:56",
+    "brand": "Huawei",
+    "model": "Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659]",
+    "hardware": "",
+    "android_ver": "",
+    "action": "UPDATED",
+    "total_models": 11924
+  },
+  {
+    "timestamp": "2026-11-17 15:01:06",
+    "brand": "Huawei",
+    "model": "Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659]",
+    "hardware": "",
+    "android_ver": "",
+    "action": "UPDATED",
+    "total_models": 11924
+  },
+  {
+    "timestamp": "2026-11-17 15:01:17",
+    "brand": "Huawei",
+    "model": "Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659]",
+    "hardware": "",
+    "android_ver": "",
+    "action": "UPDATED",
+    "total_models": 11924
+  },
+  {
+    "timestamp": "2026-11-17 15:01:22",
+    "brand": "Huawei",
+    "model": "Mate 10 Lite (RNE-L21) [HiSilicon Kirin 659]",
+    "hardware": "",
+    "android_ver": "",
+    "action": "UPDATED",
+    "total_models": 11924
+  },
+  {
+    "timestamp": "2026-11-17 16:04:06",
+    "brand": "Oppo",
+    "model": "A53s 5G (CPH2321)",
+    "hardware": "",
+    "android_ver": "",
+    "action": "UPDATED",
+    "total_models": 11924
+  },
+  {
+    "timestamp": "2026-11-19 03:18:02",
+    "brand": "Oppo",
+    "model": "A53s 5G (CPH2321)",
+    "hardware": "",
+    "android_ver": "",
+    "action": "UPDATED",
+    "total_models": 11924
+  },
+  {
+    "timestamp": "2026-11-19 03:27:55",
+    "brand": "Oppo",
+    "model": "A53s 5G (CPH2321)",
+    "hardware": "",
+    "android_ver": "",
+    "action": "UPDATED",
+    "total_models": 11924
+  },
+  {
+    "timestamp": "2026-11-19 03:28:05",
+    "brand": "Oppo",
+    "model": "A53s 5G (CPH2321)",
+    "hardware": "",
+    "android_ver": "",
+    "action": "UPDATED",
+    "total_models": 11924
+  },
+  {
+    "timestamp": "2026-11-19 03:34:31",
+    "brand": "Oppo",
+    "model": "A53s 5G (CPH2321)",
+    "hardware": "",
+    "android_ver": "",
+    "action": "UPDATED",
+    "total_models": 11924
+  }
+]

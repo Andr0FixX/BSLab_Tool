@@ -1,0 +1,542 @@
+[
+  {
+    "brand": "Infinix / Tecno / Transsion",
+    "model": "Infinix Hot 50i (X6531)",
+    "model_code": "X6531",
+    "kernel": "5.10.168",
+    "build": "XOS 14 (Android 14)",
+    "exploit": "GhostLock (UMS9230 / Helio)",
+    "loader": "ghostlock-x6531",
+    "status": "Tested"
+  },
+  {
+    "brand": "Infinix / Tecno / Transsion",
+    "model": "Infinix Hot 60i (X6728B)",
+    "model_code": "X6728B",
+    "kernel": "5.10 / 5.15 (MT6768 Helio G81 Ultimate)",
+    "build": "XOS 14 (Android 14)",
+    "exploit": "GhostLock / DirtyFrag (MTK Guard)",
+    "loader": "ghostlock-mt6768-g81",
+    "status": "Tested"
+  },
+  {
+    "brand": "OnePlus / OPPO / Realme",
+    "model": "Realme Note 50 (RMX3834)",
+    "model_code": "RMX3834",
+    "kernel": "5.10.168 / 5.10.198",
+    "build": "Realme UI T Edition / Android 13/14",
+    "exploit": "GhostLock (UMS9230)",
+    "loader": "ghostlock-rmx3834",
+    "status": "Tested"
+  },
+  {
+    "brand": "Samsung Galaxy",
+    "model": "Galaxy S25 / S25+ / S25 Ultra / Edge",
+    "model_code": "SM-S931x, SM-S936x, SM-S938x, SM-S937x",
+    "kernel": "6.6.98",
+    "build": "All S25 Global/China",
+    "exploit": "GhostLock (CVE-2026-43499)",
+    "loader": "Root My Galaxy",
+    "status": "Tested"
+  },
+  {
+    "brand": "Samsung Galaxy",
+    "model": "Galaxy S24 Ultra (US/Int/China)",
+    "model_code": "SM-S928U1, SM-S928B, SM-S9280",
+    "kernel": "6.1.145",
+    "build": "S928USQS6DZF2, S928BXXS6DZF2",
+    "exploit": "GhostLock / DirtyFrag",
+    "loader": "Root My Galaxy / RootMyS24",
+    "status": "Tested"
+  },
+  {
+    "brand": "Samsung Galaxy",
+    "model": "Galaxy S24 / S24+",
+    "model_code": "SM-S9210, SM-S926B, SM-S9260",
+    "kernel": "6.1.145 / 6.1.157",
+    "build": "S926BXXUEDZDR, S9210ZCS6DZI1",
+    "exploit": "GhostLock",
+    "loader": "RootMyS24",
+    "status": "Tested"
+  },
+  {
+    "brand": "Samsung Galaxy",
+    "model": "Galaxy S23 Ultra",
+    "model_code": "SM-S918B",
+    "kernel": "5.15.189",
+    "build": "S918BXXSAFZF5",
+    "exploit": "GhostLock (Shizuku mode)",
+    "loader": "Root My Galaxy",
+    "status": "Tested"
+  },
+  {
+    "brand": "Samsung Galaxy",
+    "model": "Galaxy S23+",
+    "model_code": "SM-S916B",
+    "kernel": "5.15.189",
+    "build": "S916BXXSAFZG1",
+    "exploit": "GhostLock (Shell profile)",
+    "loader": "Root My Galaxy",
+    "status": "Experimental"
+  },
+  {
+    "brand": "Samsung Galaxy",
+    "model": "Galaxy S26 / S26+ / S26 Ultra",
+    "model_code": "SM-S942x, SM-S947x, SM-S948x",
+    "kernel": "6.12",
+    "build": "S9420ZCS4AZG1, S942BXXS4AZG5",
+    "exploit": "GhostSam / DirtyFrag",
+    "loader": "GhostSam / ghostlock-s26",
+    "status": "Tested"
+  },
+  {
+    "brand": "Samsung Galaxy",
+    "model": "Galaxy Z Fold6 / Z Flip6",
+    "model_code": "SM-F9580, SM-F9560, SM-F741N",
+    "kernel": "6.1.145",
+    "build": "F741NKSS4DZE1, DZF2",
+    "exploit": "GhostLock",
+    "loader": "RootMyS24",
+    "status": "Tested"
+  },
+  {
+    "brand": "Samsung Galaxy",
+    "model": "Galaxy Z Fold4",
+    "model_code": "SM-F9360",
+    "kernel": "5.10.236",
+    "build": "F9360ZCSAIZF1",
+    "exploit": "GhostLock (CLI)",
+    "loader": "Root My Galaxy Payloads",
+    "status": "Tested"
+  },
+  {
+    "brand": "Samsung Galaxy",
+    "model": "Galaxy A56 5G",
+    "model_code": "SM-A566E/B/0/S/U1/W",
+    "kernel": "6.6.102",
+    "build": "A566EXXSCCZG6",
+    "exploit": "GhostLock",
+    "loader": "Root My Galaxy",
+    "status": "Tested"
+  },
+  {
+    "brand": "Samsung Galaxy",
+    "model": "Galaxy A36 5G",
+    "model_code": "SM-A366W",
+    "kernel": "6.6.46",
+    "build": "A366WVLS3AYG1",
+    "exploit": "GhostLock",
+    "loader": "Root My Galaxy",
+    "status": "Tested"
+  },
+  {
+    "brand": "Samsung Galaxy",
+    "model": "Galaxy A53 5G",
+    "model_code": "SM-A536E",
+    "kernel": "5.10.237",
+    "build": "A536EXXSNGZG3",
+    "exploit": "GhostLock",
+    "loader": "Root My Galaxy",
+    "status": "Tested"
+  },
+  {
+    "brand": "Samsung Galaxy",
+    "model": "Galaxy A17",
+    "model_code": "SM-A175F",
+    "kernel": "6.12.23 / 6.12.38",
+    "build": "A175FXXS3BZA5, A175FXXS6CZG1",
+    "exploit": "GhostLock (Shell)",
+    "loader": "ghostlock-a17",
+    "status": "Tested"
+  },
+  {
+    "brand": "Samsung Galaxy",
+    "model": "Galaxy A16 5G",
+    "model_code": "SM-A166W",
+    "kernel": "5.15.189",
+    "build": "A166WVLS8DZG1",
+    "exploit": "GhostLock",
+    "loader": "SM-A166W port",
+    "status": "Tested"
+  },
+  {
+    "brand": "Samsung Galaxy",
+    "model": "Galaxy Tab S9 (Wi-Fi)",
+    "model_code": "SM-X710",
+    "kernel": "5.15.189",
+    "build": "X710XXS6EZF1",
+    "exploit": "GhostLock",
+    "loader": "Root My Galaxy",
+    "status": "Tested"
+  },
+  {
+    "brand": "Google Pixel",
+    "model": "Pixel 11 / 11 Pro / 11 Pro XL / Fold",
+    "model_code": "Pixel 11 Series",
+    "kernel": "android16-6.12",
+    "build": "CD1A.260618.001.C2 / C3",
+    "exploit": "GhostLock GKI",
+    "loader": "Root My Pixel",
+    "status": "Tested"
+  },
+  {
+    "brand": "Google Pixel",
+    "model": "Pixel 10 / 10 Pro / 10 Pro XL / Fold",
+    "model_code": "Pixel 10 Series",
+    "kernel": "android15-6.6",
+    "build": "CP2A.260705.006, CP2A.260805.005",
+    "exploit": "GhostLock GKI",
+    "loader": "Root My Pixel",
+    "status": "Tested"
+  },
+  {
+    "brand": "Google Pixel",
+    "model": "Pixel 10a",
+    "model_code": "Pixel 10a",
+    "kernel": "android14-6.1",
+    "build": "CP2A.260705.006",
+    "exploit": "GhostLock GKI",
+    "loader": "Root My Pixel",
+    "status": "Tested"
+  },
+  {
+    "brand": "Google Pixel",
+    "model": "Pixel 9 / 9a / 9 Pro / XL / Fold",
+    "model_code": "Pixel 9 Series",
+    "kernel": "android14-6.1 / android15-6.1",
+    "build": "CP2A.260705.006, AD1A.240905.004",
+    "exploit": "GhostLock GKI",
+    "loader": "Root My Pixel",
+    "status": "Tested"
+  },
+  {
+    "brand": "Google Pixel",
+    "model": "Pixel 8 / 8 Pro / 8a",
+    "model_code": "Pixel 8 Series",
+    "kernel": "android14-6.1",
+    "build": "CP2A.260705.006, CP2A.260805.005",
+    "exploit": "GhostLock GKI",
+    "loader": "Root My Pixel",
+    "status": "Tested"
+  },
+  {
+    "brand": "Google Pixel",
+    "model": "Pixel 7 / 7 Pro / 7a",
+    "model_code": "Pixel 7 Series",
+    "kernel": "android14-6.1",
+    "build": "CP2A.260705.006, BP2A.250705.008",
+    "exploit": "GhostLock GKI",
+    "loader": "Root My Pixel",
+    "status": "Tested"
+  },
+  {
+    "brand": "Google Pixel",
+    "model": "Pixel 6 / 6 Pro / 6a",
+    "model_code": "Pixel 6 Series",
+    "kernel": "android14-6.1",
+    "build": "CP2A.260705.006, CP1A.260405.005",
+    "exploit": "GhostLock GKI",
+    "loader": "Root My Pixel",
+    "status": "Tested"
+  },
+  {
+    "brand": "Google Pixel",
+    "model": "Pixel Fold & Pixel Tablet",
+    "model_code": "felix, tangorpro",
+    "kernel": "android14-6.1",
+    "build": "BP1A.250405.007, CP2A.260705.006",
+    "exploit": "GhostLock GKI",
+    "loader": "Root My Pixel",
+    "status": "Tested"
+  },
+  {
+    "brand": "OnePlus / OPPO / Realme",
+    "model": "OnePlus Ace 6T",
+    "model_code": "PLR110",
+    "kernel": "6.12.38",
+    "build": "ColorOS 16.0.2.403, 16.0.8.301",
+    "exploit": "GhostLock",
+    "loader": "ghostlock-oneplus",
+    "status": "Tested"
+  },
+  {
+    "brand": "OnePlus / OPPO / Realme",
+    "model": "OnePlus 15",
+    "model_code": "CPH2745, CPH2747, PLK110",
+    "kernel": "6.12.23 / 6.12.58",
+    "build": "16.0.9.400, Android 17 Beta 3",
+    "exploit": "GhostLock",
+    "loader": "ghostlock-oneplus",
+    "status": "Tested"
+  },
+  {
+    "brand": "OnePlus / OPPO / Realme",
+    "model": "OnePlus 13",
+    "model_code": "IN2060",
+    "kernel": "6.6.30 / 6.6.89 / 6.6.118",
+    "build": "16.0.2.403",
+    "exploit": "GhostLock",
+    "loader": "Anchor / ghostlock-oneplus",
+    "status": "Tested"
+  },
+  {
+    "brand": "OnePlus / OPPO / Realme",
+    "model": "OnePlus Pad 3",
+    "model_code": "OPD2415",
+    "kernel": "6.6.118",
+    "build": "OPD2415_16.0.9.400(EX01)",
+    "exploit": "GhostLock",
+    "loader": "Root My Device (tqmane)",
+    "status": "Tested"
+  },
+  {
+    "brand": "OnePlus / OPPO / Realme",
+    "model": "OPPO K15 Pro+",
+    "model_code": "PMG110",
+    "kernel": "6.6.118",
+    "build": "PMG110_16.0.9.400(CN01)",
+    "exploit": "GhostLock",
+    "loader": "Root My Device (Witaqua)",
+    "status": "Experimental"
+  },
+  {
+    "brand": "OnePlus / OPPO / Realme",
+    "model": "OPPO Pad 4 Pro",
+    "model_code": "OPPO Pad 4 Pro",
+    "kernel": "6.6.89",
+    "build": "Official Build",
+    "exploit": "GhostLock",
+    "loader": "ghostlock-oneplus",
+    "status": "Tested"
+  },
+  {
+    "brand": "OnePlus / OPPO / Realme",
+    "model": "Realme GT 7T",
+    "model_code": "RMX5085",
+    "kernel": "6.6.118",
+    "build": "Android 15",
+    "exploit": "GhostLock",
+    "loader": "ghostlock-rmx5085",
+    "status": "Tested"
+  },
+  {
+    "brand": "vivo & iQOO",
+    "model": "iQOO Neo 11",
+    "model_code": "PD2520, PD2520A-E, V2520A",
+    "kernel": "6.6.89",
+    "build": "OriginOS 5",
+    "exploit": "GhostLock",
+    "loader": "RootMyVivo",
+    "status": "Tested"
+  },
+  {
+    "brand": "vivo & iQOO",
+    "model": "iQOO Z10 Turbo Pro",
+    "model_code": "PD2453, PD2453A, V2453A",
+    "kernel": "6.6.89",
+    "build": "OriginOS 5",
+    "exploit": "GhostLock",
+    "loader": "RootMyVivo",
+    "status": "Tested"
+  },
+  {
+    "brand": "vivo & iQOO",
+    "model": "iQOO Z9 5G / vivo T3 5G",
+    "model_code": "I2302, V2334",
+    "kernel": "5.15.178",
+    "build": "FuntouchOS / OriginOS",
+    "exploit": "GhostLock",
+    "loader": "iQOO Z9 / vivo T3 port",
+    "status": "Tested"
+  },
+  {
+    "brand": "vivo & iQOO",
+    "model": "vivo X200",
+    "model_code": "PD2415, V2415A",
+    "kernel": "6.6.89",
+    "build": "OriginOS 16.1.12.2.W10",
+    "exploit": "GhostLock-X200",
+    "loader": "RootMyVivo",
+    "status": "Tested"
+  },
+  {
+    "brand": "vivo & iQOO",
+    "model": "iQOO Neo8 (Snapdragon 8+ Gen 1)",
+    "model_code": "PD2301, V2301A",
+    "kernel": "5.10.198",
+    "build": "SM8475 GPU Driver",
+    "exploit": "Adreno GPU (CVE-2025-21479)",
+    "loader": "cve-2025-21479_iqooneo8",
+    "status": "Tested"
+  },
+  {
+    "brand": "vivo & iQOO",
+    "model": "vivo T3 Ultra (Dimensity 9200+)",
+    "model_code": "V2426",
+    "kernel": "5.15.197",
+    "build": "MT6989",
+    "exploit": "GhostLock",
+    "loader": "MT6989-ghostlock",
+    "status": "Tested"
+  },
+  {
+    "brand": "vivo & iQOO",
+    "model": "iQOO 13 (India) / Neo10 Pro",
+    "model_code": "I2401, PD2426",
+    "kernel": "6.6.89",
+    "build": "Targeted Offsets",
+    "exploit": "GhostLock",
+    "loader": "RootMyVivo",
+    "status": "Tested"
+  },
+  {
+    "brand": "Xiaomi / Redmi / POCO",
+    "model": "Xiaomi 17",
+    "model_code": "pudding",
+    "kernel": "6.12.23 / 6.12.69",
+    "build": "OS3.0.315.0.WPCCNXM",
+    "exploit": "GhostLock",
+    "loader": "ghostlock-oneplus",
+    "status": "Tested"
+  },
+  {
+    "brand": "Xiaomi / Redmi / POCO",
+    "model": "Xiaomi 17T Pro",
+    "model_code": "warhol",
+    "kernel": "6.12.38",
+    "build": "OS3.0.304.0.WPSJPXM",
+    "exploit": "GhostLock",
+    "loader": "Root My Device (Witaqua)",
+    "status": "Tested"
+  },
+  {
+    "brand": "Xiaomi / Redmi / POCO",
+    "model": "Xiaomi 14T (Japan)",
+    "model_code": "XIG07",
+    "kernel": "6.1.138",
+    "build": "OS3.0.7.0.WNEJPKD",
+    "exploit": "GhostLock",
+    "loader": "Root My Device (Witaqua)",
+    "status": "Tested"
+  },
+  {
+    "brand": "Xiaomi / Redmi / POCO",
+    "model": "Redmi Note 14 4G",
+    "model_code": "24117RN76L",
+    "kernel": "6.12.30",
+    "build": "BP2A.250605.031.A3",
+    "exploit": "GhostLock App v1.2",
+    "loader": "GhostLock App",
+    "status": "Tested"
+  },
+  {
+    "brand": "Xiaomi / Redmi / POCO",
+    "model": "Redmi K70 Pro",
+    "model_code": "manet",
+    "kernel": "6.6 / Android 16",
+    "build": "HyperOS 3",
+    "exploit": "MIUI Service Vector",
+    "loader": "Redmi K70 Pro temp root",
+    "status": "Tested"
+  },
+  {
+    "brand": "Xiaomi / Redmi / POCO",
+    "model": "POCO M6 Pro 4G",
+    "model_code": "emerald",
+    "kernel": "6.12.30",
+    "build": "HyperOS",
+    "exploit": "GhostLock",
+    "loader": "ghostlock-emerald",
+    "status": "Tested"
+  },
+  {
+    "brand": "Other Premium Brands",
+    "model": "Nothing Phone (3a)",
+    "model_code": "A059 / Asteroids",
+    "kernel": "6.1.157",
+    "build": "Nothing OS B4.1-260618-1048",
+    "exploit": "GhostLock",
+    "loader": "Root My Device (tqmane)",
+    "status": "Tested"
+  },
+  {
+    "brand": "Other Premium Brands",
+    "model": "ASUS Zenfone 9",
+    "model_code": "ASUS_AI2202",
+    "kernel": "5.10.205",
+    "build": "ZenUI",
+    "exploit": "GhostLock",
+    "loader": "zenfone9-ghostlock",
+    "status": "Tested"
+  },
+  {
+    "brand": "Other Premium Brands",
+    "model": "HONOR 80 Pro Flat",
+    "model_code": "ANB-AN00 / HNANB",
+    "kernel": "5.10.236",
+    "build": "MagicOS 9.0.0.230",
+    "exploit": "GhostLock",
+    "loader": "ANB Root",
+    "status": "Tested"
+  },
+  {
+    "brand": "Other Premium Brands",
+    "model": "HONOR 400 (Global)",
+    "model_code": "DNY-NX9",
+    "kernel": "5.15.180",
+    "build": "MagicOS 10.0.0.213",
+    "exploit": "GhostLock",
+    "loader": "MnemosyneLab",
+    "status": "Experimental"
+  },
+  {
+    "brand": "Other Premium Brands",
+    "model": "Meizu 21",
+    "model_code": "M461Q",
+    "kernel": "6.1",
+    "build": "Flyme OS",
+    "exploit": "GhostLock",
+    "loader": "Meizu 21 GhostLock",
+    "status": "Tested"
+  },
+  {
+    "brand": "Amazon / NVIDIA / Meta",
+    "model": "Amazon Fire Max 11",
+    "model_code": "sunstone",
+    "kernel": "5.10",
+    "build": "Fire OS 8.3.3.8",
+    "exploit": "GhostLock-5.10",
+    "loader": "GhostLock-5.10",
+    "status": "Tested"
+  },
+  {
+    "brand": "Amazon / NVIDIA / Meta",
+    "model": "Fire TV Stick 4K Max 2023",
+    "model_code": "karat",
+    "kernel": "5.10",
+    "build": "Fire OS 8.1.8.5",
+    "exploit": "GhostLock-5.10",
+    "loader": "GhostLock-5.10",
+    "status": "Tested"
+  },
+  {
+    "brand": "Amazon / NVIDIA / Meta",
+    "model": "NVIDIA Shield TV Pro 2019",
+    "model_code": "mdarcy",
+    "kernel": "4.9.141-tegra",
+    "build": "Shield Experience 9.2.4",
+    "exploit": "GhostLock NVIDIA",
+    "loader": "GhostLock NVIDIA Shield",
+    "status": "Tested"
+  },
+  {
+    "brand": "Amazon / NVIDIA / Meta",
+    "model": "Meta Quest 3",
+    "model_code": "eureka",
+    "kernel": "5.10.240",
+    "build": "v52345320035400520",
+    "exploit": "GhostLock / IonStack",
+    "loader": "Root My Device / IonStackQuest3",
+    "status": "Tested"
+  }
+]

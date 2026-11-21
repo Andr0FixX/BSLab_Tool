@@ -4,7 +4,7 @@ import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 import customtkinter as ctk
 
-from engines.unpackers import SamsungTarUnpacker, SuperSparseUnpacker, OfpOpsUnpacker, PayloadUnpacker, HuaweiAppUnpacker
+from engines.unpackers import SamsungTarUnpacker, SuperSparseUnpacker, OfpOpsUnpacker, PayloadUnpacker, HuaweiAppUnpacker, PacUnpacker
 from utils.file_utils import format_bytes
 from ui.theme import Theme
 
@@ -50,11 +50,12 @@ class FirmwareUnpackerView:
         self.format_menu = ctk.CTkOptionMenu(
             self.left_panel_unp,
             values=[
-                "Huawei Firmware (UPDATE.APP)",
                 "Android OTA (payload.bin)",
                 "Samsung (.tar.md5 + LZ4)",
+                "Unisoc / Spreadtrum (.pac)",
                 "Oppo / Realme (.ofp)",
                 "OnePlus (.ops)",
+                "Huawei Firmware (UPDATE.APP)",
                 "Android super.img (Dynamic)",
                 "Android Sparse (.img to Raw)"
             ],
@@ -213,6 +214,8 @@ class FirmwareUnpackerView:
             f = filedialog.askopenfilename(title="Select Android OTA Payload File", filetypes=[("Payload Binary", "payload.bin;*.bin"), ("All Files", "*.*")])
         elif "Samsung" in fmt:
             f = filedialog.askopenfilename(title="Select Samsung .tar.md5 Firmware", filetypes=[("Samsung TAR", "*.tar.md5;*.tar"), ("All Files", "*.*")])
+        elif "Unisoc" in fmt or ".pac" in fmt:
+            f = filedialog.askopenfilename(title="Select Unisoc / Spreadtrum .PAC Firmware", filetypes=[("Unisoc PAC", "*.pac"), ("All Files", "*.*")])
         elif "Oppo" in fmt:
             f = filedialog.askopenfilename(title="Select Oppo/Realme .ofp Firmware", filetypes=[("OFP Files", "*.ofp"), ("All Files", "*.*")])
         elif "OnePlus" in fmt:
@@ -297,6 +300,12 @@ class FirmwareUnpackerView:
                         decompress_lz4=self.chk_lz4_var.get(),
                         progress_cb=prog_cb,
                         log_cb=log_cb
+                    )
+                elif "Unisoc" in fmt or ".pac" in fmt:
+                    files = PacUnpacker.unpack_pac(
+                        pac_path=in_file,
+                        out_dir=out_dir,
+                        progress_cb=lambda p: prog_cb(p, "Extracting PAC Partitions...")
                     )
                 elif "Oppo" in fmt:
                     files = OfpOpsUnpacker.unpack_ofp(

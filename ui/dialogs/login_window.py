@@ -377,6 +377,7 @@ class LoginWindow(ctk.CTkToplevel):
 
     def _on_close(self):
         if not self.is_authenticated:
-            # If user closes without logging in, exit app
-            sys.exit(0)
+            # If user closes without logging in, exit app completely
+            import os
+            os._exit(0)
         self.destroy()

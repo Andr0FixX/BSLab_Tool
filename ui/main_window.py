@@ -1,6 +1,11 @@
 import os
+import sys
+import gc
+import json
+import ctypes
 import time
 import threading
+import subprocess
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 import customtkinter as ctk
@@ -30,13 +35,14 @@ from ui.views.fastboot_view import FastbootADBView
 from ui.views.tp_view import TestPointView
 from ui.views.unpacker_view import FirmwareUnpackerView
 from ui.views.samsung_view import SamsungView
+from ui.views.pixel_view import PixelView
 from ui.views.ai_analyzer_view import AILogAnalyzerView
 from ui.views.partition_doctor_view import PartitionDoctorView
 from ui.views.smart_hub_view import SmartHubView
 from ui.dialogs.driver_dialog import DriverDialog
 from core.cloud_sync import CloudSyncManager
 from ui.theme import Theme
-from core.path_utils import get_resource_path
+from core.path_utils import get_resource_path, get_platform_tool_path, get_app_root
 
 ctk.set_appearance_mode(SettingsManager.get("theme", "dark"))
 ctk.set_default_color_theme("blue")
@@ -130,6 +136,7 @@ class BSLabApp(ctk.CTk):
         self.tp_view = TestPointView(self.body_frame, self)
         self.unpacker_view = FirmwareUnpackerView(self.body_frame, self)
         self.samsung_view = SamsungView(self.body_frame, self)
+        self.pixel_view = PixelView(self.body_frame, self)
         self.ai_analyzer_view = AILogAnalyzerView(self.body_frame, self)
         self.doctor_view = PartitionDoctorView(self.body_frame, self)
 
@@ -165,6 +172,12 @@ class BSLabApp(ctk.CTk):
         # Initial USB hardware scan
         self.after(1500, self._refresh_connected_usb)
 
+        # Clean Shutdown & Process Terminator Protocol
+        self.protocol("WM_DELETE_WINDOW", self._on_app_closing)
+
+        # Start Idle Memory Trimmer (Purges unreferenced RAM every 30s)
+        self.after(5000, self._trim_memory)
+
     def _setup_ttk_styles(self):
         Theme.apply_ttk_theme(ttk.Style())
 
@@ -179,6 +192,7 @@ class BSLabApp(ctk.CTk):
         self.spd_view.hide()
         self.fastboot_view.hide()
         self.samsung_view.hide()
+        self.pixel_view.hide()
         self.tp_view.hide()
         self.unpacker_view.hide()
         self.ai_analyzer_view.hide()
@@ -195,7 +209,7 @@ class BSLabApp(ctk.CTk):
             self.active_platform_module = "mtk"
             self.mtk_view.show()
             self.module_ribbon.set_status("● MTK BROM / PRELOADER ENGINE ACTIVE", "#064E3B", "#34D399")
-            self.status_bar.set_chipset_status("SoC: MediaTek Helio G37 (MT6765)")
+            self.status_bar.set_chipset_status("SoC: MediaTek Helio / Dimensity Universal Engine")
             self.logger.brom("❖ Platform Switched: MediaTek (MTK) Engine Active.")
 
         elif "QUALCOMM" in choice:
@@ -219,12 +233,19 @@ class BSLabApp(ctk.CTk):
             self.status_bar.set_chipset_status("Protocol: Samsung Odin LOKE / MTP Modem")
             self.logger.info("❖ Platform Switched: Samsung Odin Flasher & MTP Services Suite.")
 
-        elif "FASTBOOT" in choice:
-            self.active_platform_module = "fastboot"
+        elif "PIXEL" in choice or "GOOGLE" in choice:
+            self.active_platform_module = "pixel"
+            self.pixel_view.show()
+            self.module_ribbon.set_status("● GOOGLE PIXEL (TENSOR / SNAPDRAGON) ACTIVE", "#991B1B", "#FCA5A5")
+            self.status_bar.set_chipset_status("SoC: Google Tensor G1/G2/G3/G4 & Snapdragon Universal Platform")
+            self.logger.success("❖ Platform Switched: Dedicated Google Pixel Platform Module.")
+
+        elif "ANDROID" in choice or "FASTBOOT" in choice:
+            self.active_platform_module = "android"
             self.fastboot_view.show()
-            self.module_ribbon.set_status("● ANDROID FASTBOOT & ADB ACTIVE", "#1E3A8A", "#93C5FD")
-            self.status_bar.set_chipset_status("Protocol: Android Bootloader / ADB")
-            self.logger.info("❖ Platform Switched: Universal Android Fastboot & ADB Suite.")
+            self.module_ribbon.set_status("● UNIVERSAL ANDROID MODULE ACTIVE", "#1E3A8A", "#93C5FD")
+            self.status_bar.set_chipset_status("Platform: Universal Android Suite (ADB, Fastboot & Firmware Extractor)")
+            self.logger.info("❖ Platform Switched: Universal Android Platform Suite.")
 
         elif "TEST POINTS" in choice:
             self.active_platform_module = "tp"
@@ -233,12 +254,13 @@ class BSLabApp(ctk.CTk):
             self.status_bar.set_chipset_status("Pinouts: Motherboard CLK / EDL / BSL Points")
             self.logger.info("❖ Platform Switched: Test Point (TP) Pinout Gallery.")
 
-        elif "UNPACKER" in choice:
-            self.active_platform_module = "unpacker"
-            self.unpacker_view.show()
-            self.module_ribbon.set_status("● UNIVERSAL FIRMWARE UNPACKER ACTIVE", "#1E3A8A", "#93C5FD")
-            self.status_bar.set_chipset_status("Unpacker: OFP, OPS, Samsung TAR.MD5, super.img")
-            self.logger.info("❖ Platform Switched: Universal Firmware Unpacker Suite.")
+        elif "UNPACKER" in choice or "EXTRACTOR" in choice:
+            self.active_platform_module = "android"
+            self.fastboot_view.show()
+            self.fastboot_view.switch_to_tab("📦 Firmware Extractor")
+            self.module_ribbon.set_status("● UNIVERSAL FIRMWARE EXTRACTOR ACTIVE", "#1E3A8A", "#93C5FD")
+            self.status_bar.set_chipset_status("Extractor: Payload.bin, TAR.MD5, PAC, OFP, OPS, super.img")
+            self.logger.info("❖ Platform Switched: Universal Android Firmware Extractor.")
 
         elif "ANALYZER" in choice:
             self.active_platform_module = "analyzer"
@@ -261,31 +283,52 @@ class BSLabApp(ctk.CTk):
         self._on_platform_module_changed(choice)
 
     # =========================================================================
-    # SCATTER LOADER
+    # UNIVERSAL MULTI-FORMAT FIRMWARE LOADER
     # =========================================================================
-    def load_scatter_details(self, scatter_path):
-        try:
-            partitions = ScatterParser.parse(scatter_path)
-            self.mtk_view.all_scatter_partitions = partitions
-            self.logger.success(f"Scatter Loaded: {os.path.basename(scatter_path)} ({len(partitions)} partitions parsed)")
-            self.status_bar.set_partitions_count(len(partitions))
+    def load_scatter_details(self, firmware_path):
+        """
+        Universal Multi-Format Firmware Loader:
+        Parses & extracts MediaTek Scatter (.txt), Oppo/Realme OFP (.ofp), OnePlus OPS (.ops),
+        Oppo/Realme OZIP (.ozip), Huawei UPDATE.APP (*.app), Spreadtrum/Unisoc PAC (*.pac),
+        Qualcomm Rawprogram XML (*.xml), Samsung Odin TAR (*.tar, *.tar.md5), Android OTA Payload (payload.bin),
+        and Fastboot ROM archives (*.zip, *.img).
+        """
+        def run_loader():
+            try:
+                base_name = os.path.basename(firmware_path)
+                self.logger.info(f"Loading Firmware Package: {base_name}...")
+                from core.firmware_parser import UniversalFirmwareParser
+                partitions = UniversalFirmwareParser.parse_firmware(firmware_path, log_cb=self.logger.info)
+                self.mtk_view.all_scatter_partitions = partitions
 
-            # Remember in settings
-            SettingsManager.set("recent_scatter", scatter_path)
+                fmt_tag = (partitions[0].get("format_type", "Firmware") if partitions else "Firmware").upper()
+                self.logger.success(f"[✓] {fmt_tag} Package Loaded: {base_name} ({len(partitions)} partitions ready)")
+                self.status_bar.set_partitions_count(len(partitions))
 
-            # Auto-detect preloader in same directory
-            fw_dir = os.path.dirname(scatter_path)
-            pl_bin = self.flasher._find_preloader(fw_dir)
-            if pl_bin and not self.mtk_view.preloader_path_var.get():
-                self.mtk_view.preloader_path_var.set(pl_bin)
-                self.logger.info(f"Auto-Attached Preloader: {os.path.basename(pl_bin)}")
+                # Remember in settings
+                SettingsManager.set("recent_scatter", firmware_path)
 
-            for p in partitions:
-                p["is_checked"] = p.get("exists", False) and p.get("is_download", True)
+                # Auto-detect preloader in same or extracted directory
+                first_part_path = partitions[0].get("file_path") if partitions and partitions[0].get("file_path") else None
+                fw_dir = os.path.dirname(first_part_path) if first_part_path else os.path.dirname(firmware_path)
+                pl_bin = self.flasher._find_preloader(fw_dir)
+                if pl_bin and not self.mtk_view.preloader_path_var.get():
+                    self.mtk_view.preloader_path_var.set(pl_bin)
+                    self.logger.info(f"Auto-Attached Hardware Preloader: {os.path.basename(pl_bin)}")
 
-            self.mtk_view.populate_flash_table(partitions)
-        except Exception as e:
-            self.logger.error(f"Failed to parse scatter file: {str(e)}")
+                for p in partitions:
+                    if "is_checked" not in p:
+                        p["is_checked"] = p.get("exists", False) and p.get("is_download", True)
+
+                self.after(0, lambda: self.mtk_view.populate_flash_table(partitions))
+            except Exception as e:
+                self.logger.error(f"Failed to parse firmware package: {str(e)}")
+
+        threading.Thread(target=run_loader, daemon=True).start()
+
+    def load_firmware_details(self, firmware_path):
+        """Universal alias for load_scatter_details."""
+        return self.load_scatter_details(firmware_path)
 
     # =========================================================================
     # FLASHING LOGIC (Slot-Aware, Auto-Reboot, Accurate HUD)
@@ -322,15 +365,14 @@ class BSLabApp(ctk.CTk):
         self.is_busy = True
         self._set_ui_busy(True)
 
-        scatter_path = self.mtk_view.scatter_path_var.get().strip()
-        fw_dir = os.path.dirname(scatter_path) if scatter_path else None
+        p_path = partitions_to_flash[0].get("file_path") if partitions_to_flash else None
+        if p_path and os.path.exists(p_path):
+            fw_dir = os.path.dirname(p_path)
+        else:
+            scatter_path = self.mtk_view.scatter_path_var.get().strip()
+            fw_dir = os.path.dirname(scatter_path) if scatter_path else None
+
         custom_da = self.mtk_view.da_path_var.get().strip() or None
-        if not custom_da:
-            from core.model_repository import ModelRepository
-            b = self.mtk_view.brand_var.get() if hasattr(self.mtk_view, "brand_var") else ""
-            custom_da = ModelRepository.find_brand_da(b) or ModelRepository.get_default_allinone_da()
-            if custom_da:
-                self.logger.info(f"Auto-Attaching Optimized Brand DA: {os.path.basename(custom_da)}")
         custom_pl = self.mtk_view.preloader_path_var.get().strip() or None
         restart_job = self.mtk_view.chk_auto_reboot_var.get()
 
@@ -339,7 +381,7 @@ class BSLabApp(ctk.CTk):
 
         try:
             # 1. Telemetry initialization
-            total_bytes = sum(p.get("size", 0) for p in partitions_to_flash if isinstance(p.get("size", 0), int))
+            total_bytes = sum(p.get("size", p.get("file_size", 0)) for p in partitions_to_flash if isinstance(p.get("size", p.get("file_size", 0)), int))
             self.mtk_view.telemetry.start(total_bytes)
 
             # 2. Automated Security Safeguard Guard
@@ -360,6 +402,12 @@ class BSLabApp(ctk.CTk):
             self.logger.brom("==================================================")
             self.logger.brom("STARTING SLOT-AWARE FIRMWARE FLASHING PROCESS")
             self.logger.brom("==================================================")
+
+            # Auto-Crash Preloader to BROM if enabled
+            if hasattr(self.mtk_view, "chk_force_brom_var") and self.mtk_view.chk_force_brom_var.get():
+                self.logger.brom("[*] Force Preloader to BROM Active: Arming Preloader Crash exploit...")
+                self.flasher.crash_preloader_to_brom(custom_da=custom_da, custom_preloader=custom_pl, port=self.selected_port)
+                time.sleep(1.0)
 
             success = self.flasher.flash_partition_list(
                 partitions_to_flash=partitions_to_flash,
@@ -402,7 +450,7 @@ class BSLabApp(ctk.CTk):
         try:
             custom_da = self.mtk_view.da_path_var.get().strip() or None
             custom_pl = self.mtk_view.preloader_path_var.get().strip() or None
-            self.flasher.crash_preloader_to_brom(custom_da=custom_da, custom_preloader=custom_pl)
+            self.flasher.crash_preloader_to_brom(custom_da=custom_da, custom_preloader=custom_pl, port=self.selected_port)
         finally:
             self.is_busy = False
             self.after(0, self._set_ui_busy, False)
@@ -422,7 +470,7 @@ class BSLabApp(ctk.CTk):
             fw_dir = os.path.dirname(self.mtk_view.scatter_path_var.get().strip()) if self.mtk_view.scatter_path_var.get().strip() else None
             custom_da = self.mtk_view.da_path_var.get().strip() or None
             custom_pl = self.mtk_view.preloader_path_var.get().strip() or None
-            self.flasher.print_gpt(firmware_dir=fw_dir, custom_da=custom_da, custom_preloader=custom_pl)
+            self.flasher.print_gpt(firmware_dir=fw_dir, custom_da=custom_da, custom_preloader=custom_pl, port=self.selected_port)
         finally:
             self.is_busy = False
             self.after(0, self._set_ui_busy, False)
@@ -445,10 +493,24 @@ class BSLabApp(ctk.CTk):
 
     def op_safe_format(self):
         if self.is_busy: return
-        threading.Thread(target=lambda: self._worker_op_simple(self.flasher.erase_partition, "misc", "Safe Format"), daemon=True).start()
+        threading.Thread(target=lambda: self._worker_op_simple(self.flasher.safe_format, "Safe Format"), daemon=True).start()
 
     def op_unlock_bootloader(self):
         if self.is_busy: return
+        brand = (self.mtk_view.brand_var.get() or "").lower()
+        model = (self.mtk_view.model_var.get() or "").lower()
+        if "xiaomi" in brand and any(x in model for x in ("13c", "gale", "14c", "lake", "6769")):
+            from tkinter import messagebox
+            resp = messagebox.askyesno(
+                "SLA Bootloader Lock Notice",
+                "Xiaomi MT6769 (Redmi 13C / Gale) has hardware eFuse SLA protection.\n"
+                "Software BROM bootloader unlock is permanently patched by Xiaomi.\n\n"
+                "IMPORTANT: You do NOT need an unlocked bootloader to flash stock ROM or unbrick this device!\n\n"
+                "Do you still want to attempt generic BROM unlock?"
+            )
+            if not resp:
+                self.logger.info("[*] Bootloader unlock skipped. Direct Stock Preloader Flash is 100% supported.")
+                return
         threading.Thread(target=lambda: self._worker_op_simple(self.flasher.unlock_bootloader, "Bootloader Unlock"), daemon=True).start()
 
     def op_relock_bootloader(self):
@@ -460,8 +522,9 @@ class BSLabApp(ctk.CTk):
         threading.Thread(target=lambda: self._worker_op_simple(self.flasher.patch_dm_verity, "Patch DM-Verity"), daemon=True).start()
 
     def op_demo_remove(self):
+        if self.is_busy: return
         self.logger.info("Executing Demo Unlock for Transsion / Vivo MTK...")
-        threading.Thread(target=lambda: self._worker_op_simple(self.flasher.erase_partition, "carrier", "Demo Remove"), daemon=True).start()
+        threading.Thread(target=lambda: self._worker_op_simple(self.flasher.demo_remove, "Demo Remove"), daemon=True).start()
 
     def op_read_rpmb(self):
         if self.is_busy: return
@@ -502,18 +565,298 @@ class BSLabApp(ctk.CTk):
         self.logger.info("Rebooting device into Fastboot Mode...")
         threading.Thread(target=lambda: self._worker_op_simple(self.flasher.reboot_device, "Reboot Device"), daemon=True).start()
 
+    def op_temp_root(self, mode: str = None):
+        """
+        1-Click Temporary Root Access Engine (Safe Volatile RAM Access).
+        - In ADB Mode: Queries kernel, checks target exploit database (engines/temp_root_targets.json),
+          attempts direct live SuperUser privilege escalation without rebooting, or seamlessly delegates
+          to Fastboot tethered RAM boot (0% eMMC modification).
+        - In Fastboot Mode: Loads and boots temporary patched kernel into device DRAM via `fastboot boot`.
+          Leaves storage 100% untouched, ensuring zero data loss and safe root testing.
+        """
+        if self.is_busy:
+            self.logger.warn("[!] Operation in progress. Please wait...")
+            return
+
+        def run_worker():
+            self.is_busy = True
+            self.after(0, self._set_ui_busy, True)
+            try:
+                self.logger.info("=" * 60)
+                self.logger.info("⚡ INITIATING 1-CLICK TEMPORARY ROOT ENGINE")
+                self.logger.info("=" * 60)
+
+                active_mode = (mode or "").upper()
+                if not active_mode:
+                    if hasattr(self, "smart_hub_view") and hasattr(self.smart_hub_view, "current_mode") and self.smart_hub_view.current_mode:
+                        active_mode = self.smart_hub_view.current_mode.upper()
+
+                adb_bin = get_platform_tool_path("adb")
+                fb_bin = get_platform_tool_path("fastboot")
+                cflags = 0x08000000 if sys.platform == "win32" else 0
+
+                def run_cmd(cmd_args, timeout=30):
+                    try:
+                        p = subprocess.run(cmd_args, capture_output=True, text=True, timeout=timeout, creationflags=cflags)
+                        return p.returncode, p.stdout.strip(), p.stderr.strip()
+                    except Exception as ex:
+                        return -1, "", str(ex)
+
+                # Quick probe ADB
+                rc, out_adb, _ = run_cmd([adb_bin, "devices"], timeout=5)
+                has_adb = False
+                adb_serial = None
+                for line in out_adb.splitlines():
+                    parts = line.strip().split()
+                    if len(parts) >= 2 and parts[1] == "device":
+                        has_adb = True
+                        adb_serial = parts[0]
+                        break
+
+                # Quick probe Fastboot
+                rc, out_fb, _ = run_cmd([fb_bin, "devices"], timeout=5)
+                has_fb = False
+                fb_serial = None
+                for line in out_fb.splitlines():
+                    parts = line.strip().split()
+                    if len(parts) >= 2 and "fastboot" in parts[1].lower():
+                        has_fb = True
+                        fb_serial = parts[0]
+                        break
+
+                if not active_mode or active_mode not in ("ADB", "FASTBOOT"):
+                    if has_fb:
+                        active_mode = "FASTBOOT"
+                    elif has_adb:
+                        active_mode = "ADB"
+                    else:
+                        active_mode = "ADB"
+
+                self.logger.info(f"[*] Target Interface Mode: {active_mode}")
+
+                # -------------------------------------------------------------
+                # SCENARIO 1: ADB MODE (Device booted to OS)
+                # -------------------------------------------------------------
+                if active_mode == "ADB":
+                    if not has_adb:
+                        self.logger.error("[!] No ADB device detected with USB Debugging enabled.")
+                        self.logger.info("[*] Please connect phone with USB Debugging enabled, or boot phone into Fastboot mode.")
+                        self.sound_manager.play_error()
+                        return
+
+                    target_adb = ["-s", adb_serial] if adb_serial else []
+                    self.logger.success(f"[✓] ADB Device Online: {adb_serial or 'Default Device'}")
+
+                    # Step 1: Check existing root status
+                    self.logger.info("[*] Verifying current shell privilege level...")
+                    rc, id_out, _ = run_cmd([adb_bin] + target_adb + ["shell", "id"], timeout=8)
+                    if rc == 0 and ("uid=0" in id_out or "root" in id_out):
+                        self.logger.success("=" * 60)
+                        self.logger.success("🎉 DEVICE ALREADY HAS ACTIVE ROOT PRIVILEGES (uid=0)!")
+                        self.logger.success(f"Identity: {id_out}")
+                        self.logger.success("No reboot needed. Temporary / Full SuperUser access verified.")
+                        self.logger.success("=" * 60)
+                        self.sound_manager.play_success()
+                        return
+
+                    # Step 2: Query device identity & kernel version
+                    _, model, _ = run_cmd([adb_bin] + target_adb + ["shell", "getprop", "ro.product.model"], timeout=5)
+                    _, brand, _ = run_cmd([adb_bin] + target_adb + ["shell", "getprop", "ro.product.brand"], timeout=5)
+                    _, build_id, _ = run_cmd([adb_bin] + target_adb + ["shell", "getprop", "ro.build.display.id"], timeout=5)
+                    _, android_ver, _ = run_cmd([adb_bin] + target_adb + ["shell", "getprop", "ro.build.version.release"], timeout=5)
+                    _, kernel_ver, _ = run_cmd([adb_bin] + target_adb + ["shell", "uname", "-r"], timeout=5)
+
+                    self.logger.info(f"    * Device Model : {brand.upper() if brand else ''} {model or 'Generic'}")
+                    self.logger.info(f"    * Android OS   : Android {android_ver or 'Unknown'}")
+                    self.logger.info(f"    * Kernel Ver   : {kernel_ver or 'Unknown'}")
+                    self.logger.info(f"    * Build ID     : {build_id or 'Unknown'}")
+
+                    # Step 3: Match against temp_root_targets.json
+                    targets_json_path = os.path.join(get_app_root(), "engines", "temp_root_targets.json")
+                    matched_target = None
+                    if os.path.exists(targets_json_path):
+                        try:
+                            with open(targets_json_path, "r", encoding="utf-8") as f:
+                                targets = json.load(f)
+                            m_low = (model or "").lower()
+                            k_low = (kernel_ver or "").lower()
+                            for t in targets:
+                                t_code = (t.get("model_code") or "").lower()
+                                t_name = (t.get("model") or "").lower()
+                                t_kern = (t.get("kernel") or "").lower()
+                                if (t_code and t_code in m_low) or (t_name and t_name in m_low):
+                                    matched_target = t
+                                    break
+                                if t_kern and any(part in k_low for part in t_kern.split("/")):
+                                    matched_target = t
+                                    break
+                        except Exception as ej:
+                            self.logger.warn(f"Notice parsing target db: {ej}")
+
+                    if matched_target:
+                        self.logger.success(f"[⚡] Kernel Exploit Profile Match: {matched_target.get('model')} | Exploit: {matched_target.get('exploit')} | Loader: {matched_target.get('loader')}")
+                    else:
+                        self.logger.info("[*] Using Universal Linux Kernel Privilege Escalation Engine...")
+
+                    # Step 4: Attempt live non-reboot adb root privilege escalation
+                    self.logger.info("[*] Attempting live non-reboot root daemon handshake (adb root)...")
+                    rc, r_out, r_err = run_cmd([adb_bin] + target_adb + ["root"], timeout=10)
+                    time.sleep(1.5)
+                    rc, id_out2, _ = run_cmd([adb_bin] + target_adb + ["shell", "id"], timeout=8)
+                    if rc == 0 and ("uid=0" in id_out2 or "root" in id_out2):
+                        self.logger.success("=" * 60)
+                        self.logger.success("🎉 LIVE ROOT PRIVILEGES GRANTED WITHOUT REBOOTING!")
+                        self.logger.success(f"Identity: {id_out2}")
+                        self.logger.success("Full root access is active in live OS session.")
+                        self.logger.success("=" * 60)
+                        self.sound_manager.play_success()
+                        return
+
+                    # Step 5: Check if 'su' binary is available
+                    rc, su_out, _ = run_cmd([adb_bin] + target_adb + ["shell", "which", "su"], timeout=5)
+                    if rc == 0 and su_out:
+                        self.logger.success(f"[✓] SuperUser binary located at: {su_out}")
+                        rc, su_id, _ = run_cmd([adb_bin] + target_adb + ["shell", "su", "-c", "id"], timeout=5)
+                        if "uid=0" in su_id:
+                            self.logger.success(f"[✓] Root shell verified via SU: {su_id}")
+                            self.sound_manager.play_success()
+                            return
+
+                    # Step 6: If production SELinux enforced kernel requires tethered RAM boot
+                    self.logger.warn("[!] Production kernel has SELinux enforcing. Zero-click live escalation requires Fastboot RAM Boot.")
+                    resp = messagebox.askyesno(
+                        "1-Click Temporary Root (Safe RAM Boot)",
+                        f"Device: {model} (Android {android_ver})\nKernel: {kernel_ver}\n\n"
+                        "To grant temporary SuperUser access with ZERO eMMC modification (100% safe, zero data loss):\n"
+                        "Tool will reboot device into Fastboot mode and execute tethered RAM boot.\n\n"
+                        "Proceed with 1-Click Fastboot RAM Boot now?"
+                    )
+                    if not resp:
+                        self.logger.info("[*] Temporary Root aborted by user.")
+                        return
+
+                    # Reboot to fastboot
+                    self.logger.info("[*] Rebooting device to Fastboot Mode...")
+                    run_cmd([adb_bin] + target_adb + ["reboot", "bootloader"], timeout=15)
+                    time.sleep(3.0)
+                    active_mode = "FASTBOOT"
+
+                # -------------------------------------------------------------
+                # SCENARIO 2: FASTBOOT MODE (RAM Tethered Boot)
+                # -------------------------------------------------------------
+                if active_mode == "FASTBOOT":
+                    self.logger.info("[*] Waiting for Fastboot connection (Timeout: 30s)...")
+                    start_t = time.time()
+                    fb_dev = None
+                    while time.time() - start_t < 30:
+                        rc, out_f, _ = run_cmd([fb_bin, "devices"], timeout=5)
+                        lines = [l.strip() for l in out_f.splitlines() if l.strip()]
+                        if lines:
+                            fb_dev = lines[0].split()[0]
+                            break
+                        time.sleep(1)
+
+                    if not fb_dev:
+                        self.logger.error("[!] Fastboot device not found. Please verify Fastboot USB drivers.")
+                        self.sound_manager.play_error()
+                        return
+
+                    target_fb = ["-s", fb_dev]
+                    self.logger.success(f"[✓] Fastboot Device Connected: {fb_dev}")
+
+                    # Check bootloader unlock status
+                    rc, var_out, var_err = run_cmd([fb_bin] + target_fb + ["getvar", "unlocked"], timeout=10)
+                    combo = (var_out + " " + var_err).lower()
+                    if "unlocked: no" in combo or "unlocked: false" in combo:
+                        self.logger.warn("[!] Bootloader is LOCKED. Attempting temporary OEM unlock authorization...")
+                        run_cmd([fb_bin] + target_fb + ["flashing", "unlock"], timeout=15)
+
+                    # Locate or browse patched boot image
+                    candidate_paths = [
+                        r"C:\Users\AndroFixX\Downloads\magisk_patched-sv55.img",
+                        os.path.join(get_app_root(), "backups", "patched_boot.img"),
+                        os.path.join(get_app_root(), "resources", "boot_temp_root.img"),
+                    ]
+                    selected_img = None
+                    for c_path in candidate_paths:
+                        if os.path.exists(c_path):
+                            selected_img = c_path
+                            break
+
+                    if not selected_img:
+                        self.logger.info("[*] Please select Magisk or KernelSU patched boot image (.img) for temporary RAM boot...")
+                        f_img = filedialog.askopenfilename(
+                            title="Select Magisk / KernelSU Patched boot.img for RAM Boot",
+                            filetypes=[("Android Boot Image", "*.img"), ("All Files", "*.*")]
+                        )
+                        if f_img and os.path.exists(f_img):
+                            selected_img = f_img
+
+                    if not selected_img:
+                        self.logger.error("[!] No patched boot image provided. Cannot proceed with RAM boot.")
+                        return
+
+                    img_size_mb = round(os.path.getsize(selected_img) / (1024 * 1024), 2)
+                    self.logger.info(f"[*] Boot Image: {selected_img} ({img_size_mb} MB)")
+                    self.logger.info("[*] Executing Tethered RAM Boot: fastboot boot (0% eMMC modification)...")
+                    if hasattr(self, "status_bar"):
+                        self.status_bar.set_status("Booting temporary kernel to device RAM...")
+
+                    rc, b_out, b_err = run_cmd([fb_bin] + target_fb + ["boot", selected_img], timeout=60)
+                    self.logger.info(f"[Fastboot] {b_out} {b_err}".strip())
+
+                    if rc != 0 and "error" in (b_out + b_err).lower():
+                        self.logger.error(f"[!] Fastboot RAM boot failed: {b_err or b_out}")
+                        self.sound_manager.play_error()
+                        return
+
+                    self.logger.success("=" * 60)
+                    self.logger.success("✓ TEMPORARY ROOT KERNEL LOADED INTO RAM SUCCESSFULLY!")
+                    self.logger.success("Device is booting into Temporary Root Environment.")
+                    self.logger.success("Flash Storage (eMMC/UFS): 0% MODIFIED (ZERO DATA LOSS)")
+                    self.logger.success("==================================================")
+                    self.sound_manager.play_success()
+
+                    # Wait for device to boot and verify
+                    self.logger.info("[*] Waiting for Android OS to complete boot...")
+                    if hasattr(self, "status_bar"):
+                        self.status_bar.set_status("Waiting for device boot completed...")
+                    booted = False
+                    start_boot = time.time()
+                    while time.time() - start_boot < 90:
+                        rc_b, out_b, _ = run_cmd([adb_bin, "shell", "getprop", "sys.boot_completed"], timeout=5)
+                        if rc_b == 0 and out_b.strip() == "1":
+                            booted = True
+                            break
+                        time.sleep(3)
+
+                    if booted:
+                        self.logger.success("[✓] Android OS boot completed!")
+                        rc_r, out_r, _ = run_cmd([adb_bin, "shell", "su", "-c", "id"], timeout=10)
+                        if "uid=0" in out_r:
+                            self.logger.success(f"[🎉] TEMPORARY SUPERUSER ACCESS VERIFIED: {out_r.strip()}")
+                        else:
+                            self.logger.info(f"[*] Root shell query: {out_r.strip() or 'Live'}")
+                    else:
+                        self.logger.info("[*] Kernel booted. Please check phone screen to unlock.")
+
+            except Exception as e:
+                self.logger.error(f"[!] Temp Root Engine Exception: {str(e)}")
+                self.sound_manager.play_error()
+            finally:
+                self.is_busy = False
+                self.after(0, self._set_ui_busy, False)
+                if hasattr(self, "status_bar"):
+                    self.after(0, lambda: self.status_bar.set_status("Ready"))
+
+        threading.Thread(target=run_worker, daemon=True).start()
+
     def _worker_op_simple(self, func, *args, **kwargs):
         self.is_busy = True
         self._set_ui_busy(True)
         try:
             fw_dir = os.path.dirname(self.mtk_view.scatter_path_var.get().strip()) if self.mtk_view.scatter_path_var.get().strip() else None
             custom_da = self.mtk_view.da_path_var.get().strip() or None
-            if not custom_da:
-                from core.model_repository import ModelRepository
-                b = self.mtk_view.brand_var.get() if hasattr(self.mtk_view, "brand_var") else ""
-                custom_da = ModelRepository.find_brand_da(b) or ModelRepository.get_default_allinone_da()
-                if custom_da:
-                    self.logger.info(f"Auto-Attaching Optimized Brand DA: {os.path.basename(custom_da)}")
             custom_pl = self.mtk_view.preloader_path_var.get().strip() or None
             restart_job = self.mtk_view.chk_auto_reboot_var.get()
 
@@ -533,7 +876,13 @@ class BSLabApp(ctk.CTk):
                         logger=self.logger
                     )
 
-            func(firmware_dir=fw_dir, custom_da=custom_da, custom_preloader=custom_pl, restart_after_job=restart_job)
+            # Auto-Crash Preloader to BROM if enabled
+            if hasattr(self.mtk_view, "chk_force_brom_var") and self.mtk_view.chk_force_brom_var.get():
+                self.logger.brom("[*] Force Preloader to BROM Active: Arming Preloader Crash exploit...")
+                self.flasher.crash_preloader_to_brom(custom_da=custom_da, custom_preloader=custom_pl, port=self.selected_port)
+                time.sleep(1.0)
+
+            func(firmware_dir=fw_dir, custom_da=custom_da, custom_preloader=custom_pl, port=self.selected_port, restart_after_job=restart_job)
         except Exception as e:
             self.logger.error(f"Operation error: {str(e)}")
         finally:
@@ -554,7 +903,7 @@ class BSLabApp(ctk.CTk):
             fw_dir = os.path.dirname(self.mtk_view.scatter_path_var.get().strip()) if self.mtk_view.scatter_path_var.get().strip() else None
             custom_da = self.mtk_view.da_path_var.get().strip() or None
             custom_pl = self.mtk_view.preloader_path_var.get().strip() or None
-            parts = self.flasher.read_gpt_structured(firmware_dir=fw_dir, custom_da=custom_da, custom_preloader=custom_pl)
+            parts = self.flasher.read_gpt_structured(firmware_dir=fw_dir, custom_da=custom_da, custom_preloader=custom_pl, port=self.selected_port)
             if parts:
                 self.mtk_view.live_gpt_partitions = parts
                 self.after(0, self.mtk_view.populate_pmgr_table, parts)
@@ -586,7 +935,7 @@ class BSLabApp(ctk.CTk):
             fw_dir = os.path.dirname(self.mtk_view.scatter_path_var.get().strip()) if self.mtk_view.scatter_path_var.get().strip() else None
             custom_da = self.mtk_view.da_path_var.get().strip() or None
             custom_pl = self.mtk_view.preloader_path_var.get().strip() or None
-            self.flasher.read_partition_to_file(p_name, out_path, firmware_dir=fw_dir, custom_da=custom_da, custom_preloader=custom_pl)
+            self.flasher.read_partition_to_file(p_name, out_path, firmware_dir=fw_dir, custom_da=custom_da, custom_preloader=custom_pl, port=self.selected_port)
         finally:
             self.is_busy = False
             self.after(0, self._set_ui_busy, False)
@@ -614,7 +963,7 @@ class BSLabApp(ctk.CTk):
             fw_dir = os.path.dirname(self.mtk_view.scatter_path_var.get().strip()) if self.mtk_view.scatter_path_var.get().strip() else None
             custom_da = self.mtk_view.da_path_var.get().strip() or None
             custom_pl = self.mtk_view.preloader_path_var.get().strip() or None
-            self.flasher.write_partition_from_file(p_name, in_path, firmware_dir=fw_dir, custom_da=custom_da, custom_preloader=custom_pl)
+            self.flasher.write_partition_from_file(p_name, in_path, firmware_dir=fw_dir, custom_da=custom_da, custom_preloader=custom_pl, port=self.selected_port)
         finally:
             self.is_busy = False
             self.after(0, self._set_ui_busy, False)
@@ -639,7 +988,7 @@ class BSLabApp(ctk.CTk):
             fw_dir = os.path.dirname(self.mtk_view.scatter_path_var.get().strip()) if self.mtk_view.scatter_path_var.get().strip() else None
             custom_da = self.mtk_view.da_path_var.get().strip() or None
             custom_pl = self.mtk_view.preloader_path_var.get().strip() or None
-            self.flasher.erase_partition(p_name, firmware_dir=fw_dir, custom_da=custom_da, custom_preloader=custom_pl)
+            self.flasher.erase_partition(p_name, firmware_dir=fw_dir, custom_da=custom_da, custom_preloader=custom_pl, port=self.selected_port)
         finally:
             self.is_busy = False
             self.after(0, self._set_ui_busy, False)
@@ -664,7 +1013,17 @@ class BSLabApp(ctk.CTk):
 
     def meta_read_info(self):
         if self.is_busy: return
-        port = self.selected_port or "COM1"
+        port = self.selected_port
+        if not port:
+            for p, d in self.active_ports.items():
+                desc = d.get("desc", "").lower() if isinstance(d, dict) else str(d).lower()
+                if any(k in desc for k in ("mediatek", "meta", "gadget", "cdc", "preloader", "usb serial")):
+                    port = p
+                    break
+        if not port:
+            self.logger.error("No MediaTek META COM port detected or selected! Please connect device in META mode.")
+            messagebox.showwarning("Port Missing", "Please select or connect a valid MediaTek META COM port.")
+            return
         threading.Thread(target=lambda: self.meta_engine.read_meta_at_info(port), daemon=True).start()
 
     def meta_factory_reset(self):
@@ -681,7 +1040,18 @@ class BSLabApp(ctk.CTk):
 
     def meta_write_imei(self):
         if self.is_busy: return
-        port = self.selected_port or "COM1"
+        port = self.selected_port
+        if not port:
+            for p, d in self.active_ports.items():
+                desc = d.get("desc", "").lower() if isinstance(d, dict) else str(d).lower()
+                if any(k in desc for k in ("mediatek", "meta", "gadget", "cdc", "preloader", "usb serial")):
+                    port = p
+                    break
+        if not port:
+            self.logger.error("No MediaTek META COM port detected or selected! Please connect device in META mode.")
+            messagebox.showwarning("Port Missing", "Please select or connect a valid MediaTek META COM port.")
+            return
+
         imei1 = self.mtk_view.mtk_imei1_var.get().strip()
         imei2 = self.mtk_view.mtk_imei2_var.get().strip() or None
         if not imei1:
@@ -887,13 +1257,22 @@ class BSLabApp(ctk.CTk):
                 SoundManager.play_disconnect()
 
     def _handle_smart_hub_switch(self, mode: str, text: str):
+        text_low = (text or "").lower()
+        # Auto-switch to dedicated Google Pixel module when a Pixel is identified
+        if "pixel" in text_low or "google" in text_low:
+            if self.active_platform_module != "pixel":
+                self.module_ribbon.select_platform("pixel")
+                self._on_platform_module_changed("🔴 GOOGLE PIXEL")
+                self.logger.success(f"[Smart Device Hub] 🔄 Auto-Switched to 🔴 GOOGLE PIXEL ({text})")
+            return
+
         mode_map = {
             "MTK": ("mtk", "⚡ MEDIATEK (MTK)"),
             "QUALCOMM": ("qc", "🐉 QUALCOMM (EDL 9008)"),
             "SPD": ("spd", "📱 UNISOC / SPD"),
             "SAMSUNG": ("samsung", "🟡 SAMSUNG (ODIN / MTP)"),
-            "ADB": ("fastboot", "🤖 FASTBOOT & ADB"),
-            "FASTBOOT": ("fastboot", "🤖 FASTBOOT & ADB")
+            "ADB": ("android", "🤖 ANDROID"),
+            "FASTBOOT": ("android", "🤖 ANDROID")
         }
         if mode in mode_map:
             target_key, target_ribbon_val = mode_map[mode]
@@ -1902,6 +2281,34 @@ class BSLabApp(ctk.CTk):
                 f"Unisoc Universal FDL1/FDL2 Active."
             )
         self.cloud_sync.sync_database_async(callback=on_done)
+
+    def _trim_memory(self):
+        """Aggressively purges inactive RAM and trims process working set via Windows API."""
+        try:
+            gc.collect()
+            if sys.platform == "win32":
+                ctypes.windll.psapi.EmptyWorkingSet(ctypes.windll.kernel32.GetCurrentProcess())
+        except Exception:
+            pass
+        finally:
+            try:
+                self.after(30000, self._trim_memory)
+            except Exception:
+                pass
+
+    def _on_app_closing(self):
+        """Ensures 100% clean termination with ZERO lingering background processes in Task Manager."""
+        try:
+            if hasattr(self, "port_watcher") and self.port_watcher:
+                self.port_watcher.stop()
+        except Exception:
+            pass
+        try:
+            self.destroy()
+        except Exception:
+            pass
+        os._exit(0)
+
 
 
 

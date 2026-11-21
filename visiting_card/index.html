@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basharat Ali — Virtual Business Visiting Card</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-body: #060911;
+            --card-front: linear-gradient(135deg, #0d1322 0%, #171f33 100%);
+            --card-back: linear-gradient(135deg, #111827 0%, #0b0f19 100%);
+            --accent-cyan: #00f2fe;
+            --accent-blue: #4facfe;
+            --accent-gold: #f59e0b;
+            --accent-green: #10b981;
+            --accent-purple: #8b5cf6;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --border-glow: rgba(0, 242, 254, 0.35);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: radial-gradient(circle at 50% 10%, #1e293b, var(--bg-body) 70%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 14px;
+        }
+
+        .scene {
+            width: 100%;
+            max-width: 440px;
+            height: 640px;
+            perspective: 1200px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(0, 242, 254, 0.15);
+        }
+
+        .card.is-flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            border-radius: 24px;
+            border: 1.5px solid var(--border-glow);
+            padding: 26px 22px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+        }
+
+        .card-face::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 4px;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-gold), var(--accent-purple));
+        }
+
+        /* FRONT SIDE */
+        .card-front {
+            background: var(--card-front);
+        }
+
+        .top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .chip-icon {
+            font-size: 1.2rem;
+            color: var(--accent-gold);
+        }
+
+        .repo-status-pill {
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            color: var(--accent-green);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .pulse-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--accent-green);
+            animation: pulse 1.6s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.8); }
+        }
+
+        .profile-section {
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .avatar-wrap {
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 12px;
+            border-radius: 50%;
+            padding: 3px;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.3);
+        }
+
+        .avatar-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: #0b0f19;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            color: var(--accent-cyan);
+            font-weight: 800;
+        }
+
+        .name {
+            font-size: 1.85rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            background: linear-gradient(90deg, #ffffff, #c7d2fe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 4px;
+        }
+
+        .title-badge {
+            color: var(--accent-cyan);
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .category-pills {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .pill {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-secondary);
+            font-size: 0.72rem;
+            padding: 3px 8px;
+            border-radius: 6px;
+        }
+
+        /* CONTACT ACTIONS */
+        .contact-list {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+            margin: 8px 0;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 9px 14px;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+        }
+
+        .contact-item:hover {
+            background: rgba(0, 242, 254, 0.08);
+            border-color: var(--accent-cyan);
+            transform: translateX(4px);
+        }
+
+        .contact-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .icon-wa { background: rgba(37, 211, 102, 0.15); color: #25d366; }
+        .icon-call { background: rgba(79, 172, 254, 0.15); color: var(--accent-blue); }
+        .icon-mail { background: rgba(245, 158, 11, 0.15); color: var(--accent-gold); }
+
+        .contact-text {
+            flex-grow: 1;
+            font-size: 0.88rem;
+            font-weight: 600;
+        }
+
+        .contact-label {
+            font-size: 0.68rem;
+            color: var(--text-secondary);
+            display: block;
+        }
+
+        .copy-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 4px;
+            font-size: 0.85rem;
+        }
+
+        .copy-btn:hover { color: var(--accent-cyan); }
+
+        /* FOOTER ACTIONS */
+        .card-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 6px;
+        }
+
+        .btn-act {
+            border: none;
+            border-radius: 12px;
+            padding: 10px 14px;
+            font-weight: 700;
+            font-size: 0.84rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-decoration: none;
+        }
+
+        .btn-save {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+            color: #000;
+            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.3);
+        }
+
+        .btn-flip {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: var(--text-primary);
+        }
+
+        .btn-act:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.15);
+        }
+
+        /* BACK SIDE */
+        .card-back {
+            background: var(--card-back);
+            transform: rotateY(180deg);
+        }
+
+        .back-header {
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .back-title {
+            font-size: 1.15rem;
+            color: var(--accent-gold);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        /* REPO SECURITY BOX */
+        .security-box {
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px dashed var(--accent-cyan);
+            border-radius: 14px;
+            padding: 14px;
+            margin: 10px 0;
+            font-size: 0.82rem;
+            line-height: 1.45;
+        }
+
+        .sec-item {
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .sec-item:last-child { margin-bottom: 0; }
+
+        .sec-icon {
+            color: var(--accent-cyan);
+            margin-top: 2px;
+        }
+
+        .qr-section {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 12px;
+            width: 140px;
+            height: 140px;
+            margin: 10px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+
+        .qr-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .address-box {
+            text-align: center;
+            font-size: 0.76rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+            margin: 6px 0;
+        }
+
+        /* TOAST NOTIFICATION */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            background: var(--accent-green);
+            color: #000;
+            font-weight: 700;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="scene">
+        <div class="card" id="visitingCard">
+            
+            <!-- FRONT SIDE -->
+            <div class="card-face card-front">
+                <div class="top-row">
+                    <div class="brand-badge">
+                        <i class="fa-solid fa-microchip chip-icon"></i>
+                        <span>BSLab Technologies</span>
+                    </div>
+                    <div class="repo-status-pill">
+                        <div class="pulse-dot"></div>
+                        <span>REPO: PRIVATE</span>
+                    </div>
+                </div>
+
+                <div class="profile-section">
+                    <div class="avatar-wrap">
+                        <div class="avatar-inner">BA</div>
+                    </div>
+                    <h1 class="name">Basharat Ali</h1>
+                    <div class="title-badge">Software Development & Sales</div>
+                    <div class="category-pills">
+                        <span class="pill">Lead GSM Developer</span>
+                        <span class="pill">Tech Sales & Deals</span>
+                        <span class="pill">Firmware Architecture</span>
+                    </div>
+                </div>
+
+                <div class="contact-list">
+                    <!-- WhatsApp 1 -->
+                    <a class="contact-item" href="https://wa.me/923048640338?text=Assalam-o-Alaikum%20Basharat%20Bhai,%20I%20have%20an%20inquiry%20regarding%20Software%20Development%20/%20Sales." target="_blank">
+                        <div class="contact-icon icon-wa">
+                            <i class="fa-brands fa-whatsapp"></i>
+                        </div>
+                        <div class="contact-text">
+                            <span class="contact-label">WhatsApp & Primary Contact</span>
+                            +92 304 8640338
+                        </div>
+                        <button class="copy-btn" onclick="copyText('+923048640338', event)" title="Copy Number">
+                            <i class="fa-regular fa-copy"></i>
+                        </button>
+                    </a>
+
+                    <!-- Direct Line 2 -->
+                    <a class="contact-item" href="tel:03261540338">
+                        <div class="contact-icon icon-call">
+                            <i class="fa-solid fa-phone"></i>
+                        </div>
+                        <div class="contact-text">
+                            <span class="contact-label">Secondary / Direct Line</span>
+                            0326 1540338
+                        </div>
+                        <button class="copy-btn" onclick="copyText('03261540338', event)" title="Copy Number">
+                            <i class="fa-regular fa-copy"></i>
+                        </button>
+                    </a>
+
+                    <!-- Email -->
+                    <a class="contact-item" href="mailto:m.bisharat99ali@gmail.com">
+                        <div class="contact-icon icon-mail">
+                            <i class="fa-solid fa-envelope"></i>
+                        </div>
+                        <div class="contact-text">
+                            <span class="contact-label">Protected Confirmation Email</span>
+                            m.bisharat99ali@gmail.com
+                        </div>
+                        <button class="copy-btn" onclick="copyText('m.bisharat99ali@gmail.com', event)" title="Copy Email">
+                            <i class="fa-regular fa-copy"></i>
+                        </button>
+                    </a>
+                </div>
+
+                <div class="card-actions">
+                    <button class="btn-act btn-save" onclick="downloadVCard()">
+                        <i class="fa-solid fa-address-card"></i> Save Contact
+                    </button>
+                    <button class="btn-act btn-flip" onclick="toggleCard()">
+                        <i class="fa-solid fa-shield-halved"></i> Repo & QR <i class="fa-solid fa-rotate"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- BACK SIDE -->
+            <div class="card-face card-back">
+                <div class="back-header">
+                    <div class="back-title">
+                        <i class="fa-solid fa-shield-cat"></i> SECURITY & PRIVACY SPECS
+                    </div>
+                </div>
+
+                <!-- Protected Repo Specs -->
+                <div class="security-box">
+                    <div class="sec-item">
+                        <i class="fa-solid fa-lock sec-icon"></i>
+                        <div>
+                            <strong>Private Repository Mode: ACTIVE</strong><br>
+                            All source codes, drivers, and flasher engines operate strictly under private enclave mode.
+                        </div>
+                    </div>
+                    <div class="sec-item">
+                        <i class="fa-solid fa-ban sec-icon" style="color: #ef4444;"></i>
+                        <div>
+                            <strong>Zero Unauthorized Access:</strong><br>
+                            No external Read or Write access permitted to proprietary codebases without two-party clearance.
+                        </div>
+                    </div>
+                    <div class="sec-item">
+                        <i class="fa-solid fa-certificate sec-icon" style="color: var(--accent-gold);"></i>
+                        <div>
+                            <strong>Confirmation Authority:</strong><br>
+                            Protected authentication via <code>m.bisharat99ali@gmail.com</code>.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- QR Code for Instant Scan -->
+                <div class="qr-section">
+                    <img class="qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https%3A%2F%2Fwa.me%2F923048640338" alt="Scan QR for WhatsApp">
+                </div>
+
+                <div class="address-box">
+                    📍 <strong>BS Lab & Mobile Traders</strong><br>
+                    Shop #5, 1st Floor, Hamza Block, Arif Center, Hall Road, Lahore<br>
+                    Official Development & Hardware Lab
+                </div>
+
+                <div class="card-actions" style="grid-template-columns: 1fr;">
+                    <button class="btn-act btn-flip" onclick="toggleCard()">
+                        <i class="fa-solid fa-arrow-left"></i> Back To Front Profile
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="toast" id="toastMsg">Copied to clipboard!</div>
+
+    <script>
+        function toggleCard() {
+            document.getElementById('visitingCard').classList.toggle('is-flipped');
+        }
+
+        function showToast(text) {
+            const toast = document.getElementById('toastMsg');
+            toast.textContent = text;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2200);
+        }
+
+        function copyText(val, event) {
+            event.stopPropagation();
+            event.preventDefault();
+            navigator.clipboard.writeText(val).then(() => {
+                showToast('Copied: ' + val);
+            }).catch(() => {
+                showToast('Copied to clipboard');
+            });
+        }
+
+        function downloadVCard() {
+            const vcfData = `BEGIN:VCARD
+VERSION:3.0
+N:Ali;Basharat;;;
+FN:Basharat Ali
+ORG:BSLab Technologies;Software Development & Sales
+TITLE:Lead Software Developer & Tech Sales
+TEL;TYPE=CELL,VOICE,PREF:+923048640338
+TEL;TYPE=WORK,VOICE:+923261540338
+EMAIL;TYPE=INTERNET,PREF:m.bisharat99ali@gmail.com
+ADR;TYPE=WORK:;;Shop #5, 1st Floor, Hamza Block, Arif Center, Hall Road;Lahore;Punjab;54000;Pakistan
+NOTE:Private Repository Protected. Developer & Enterprise Solutions. Verification: m.basharat99ali@gmail.com
+URL:https://wa.me/923048640338
+END:VCARD`;
+
+            const blob = new Blob([vcfData], { type: 'text/vcard;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Basharat_Ali.vcf';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('vCard Saved to Downloads!');
+        }
+    </script>
+</body>
+</html>

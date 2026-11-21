@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ur">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BS Lab, Mobiles & Traders — Hall Road Lahore</title>
+    <style>
+        :root {
+            --bg: #0a0e17;
+            --card-bg: #111827;
+            --accent-cyan: #00f2fe;
+            --accent-blue: #4facfe;
+            --accent-green: #10b981;
+            --accent-gold: #f59e0b;
+            --text-main: #f9fafb;
+            --text-sub: #9ca3af;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body {
+            background: radial-gradient(circle at top, #1e293b, var(--bg));
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            max-width: 900px;
+            width: 100%;
+        }
+        /* Top Banner */
+        .neon-banner {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95));
+            border: 2px solid var(--accent-cyan);
+            border-radius: 16px;
+            padding: 28px 24px;
+            text-align: center;
+            box-shadow: 0 0 25px rgba(0, 242, 254, 0.25);
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+        .neon-banner::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 4px;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-gold), var(--accent-green));
+        }
+        .shop-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, #00f2fe, #4facfe, #38ef7d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 6px;
+        }
+        .proprietor {
+            font-size: 1.15rem;
+            color: var(--accent-gold);
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        .location-badge {
+            display: inline-block;
+            background: rgba(0, 242, 254, 0.12);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(0, 242, 254, 0.35);
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        /* Action Buttons */
+        .cta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 14px;
+            margin: 20px 0 30px;
+        }
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 20px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+        }
+        .btn:hover { transform: translateY(-2px); filter: brightness(1.15); }
+        .btn-wa-1 { background: #25D366; color: #fff; }
+        .btn-wa-2 { background: #128C7E; color: #fff; }
+        .btn-call { background: linear-gradient(135deg, #00c6ff, #0072ff); color: #fff; }
+
+        /* Services Grid */
+        .section-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+        .service-card {
+            background: var(--card-bg);
+            border: 1px solid #1f2937;
+            border-radius: 14px;
+            padding: 18px;
+            transition: all 0.25s ease;
+        }
+        .service-card:hover {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 6px 18px rgba(0, 242, 254, 0.15);
+        }
+        .service-card h3 {
+            font-size: 1.05rem;
+            color: #fff;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .service-card p {
+            font-size: 0.88rem;
+            color: var(--text-sub);
+            line-height: 1.4;
+        }
+
+        /* Script Box */
+        .script-box {
+            background: #0f172a;
+            border: 1px dashed var(--accent-gold);
+            border-radius: 14px;
+            padding: 22px;
+            margin-bottom: 24px;
+        }
+        .script-box h4 {
+            color: var(--accent-gold);
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+        .script-line {
+            background: rgba(255,255,255,0.03);
+            padding: 10px 14px;
+            border-left: 3px solid var(--accent-cyan);
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        footer {
+            text-align: center;
+            color: var(--text-sub);
+            font-size: 0.85rem;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Main Neon Signboard -->
+        <div class="neon-banner">
+            <h1 class="shop-title">BS LAB, MOBILES & TRADERS</h1>
+            <div class="proprietor">Proprietor: Syed Bisharat Ali (Shah Ji)</div>
+            <div class="location-badge">
+                📍 Shop #5, 1st Floor, Hamza Block, Arif Center, Hall Road, Lahore
+            </div>
+        </div>
+
+        <!-- 1-Click Action Buttons -->
+        <div class="cta-grid">
+            <a class="btn btn-wa-1" href="https://wa.me/923048640338?text=Assalam-o-Alaikum%20Shah%20Ji,%20BS%20Lab%20se%20rabta%20kiya%20hai." target="_blank">
+                💬 WhatsApp 1: 0304-8640338
+            </a>
+            <a class="btn btn-wa-2" href="https://wa.me/923261540338?text=Assalam-o-Alaikum%20Shah%20Ji,%20BS%20Lab%20deal%20ke%20hawale%20se%20rabta%20kiya%20hai." target="_blank">
+                💬 WhatsApp 2: 0326-1540338
+            </a>
+            <a class="btn btn-call" href="tel:03048640338">
+                📞 Call Direct: 0304-8640338
+            </a>
+        </div>
+
+        <!-- Services -->
+        <div class="section-title">⚡ Our Core Specializations</div>
+        <div class="services-grid">
+            <div class="service-card">
+                <h3>🔥 Mobile Software & Flashing</h3>
+                <p>Complete dead boot repair, official firmware flashing, Kirin PCUI/Testpoint, Qualcomm EDL 9008 & MTK DA flashing.</p>
+            </div>
+            <div class="service-card">
+                <h3>🔓 FRP & Security Unlocking</h3>
+                <p>Instant Google Account (FRP) bypass, Mi Account, Samsung KG/MDM, and factory reset without data risk.</p>
+            </div>
+            <div class="service-card">
+                <h3>🛠️ Chip-Level Hardware Repair</h3>
+                <p>Motherboard trace fixing, CPU reballing, eMMC/UFS health check, short-circuit clearing, display & battery swap.</p>
+            </div>
+            <div class="service-card">
+                <h3>💼 Sale, Purchase & Big Deals</h3>
+                <p>Wholesale trading of smartphones, bulk sets buying & selling with authentic check warranty and verified IMEIs.</p>
+            </div>
+            <div class="service-card">
+                <h3>🤝 B2B Dealer Solutions</h3>
+                <p>Special wholesale software repair rates for local market retailers & shopkeepers with 15-minute turnaround.</p>
+            </div>
+            <div class="service-card">
+                <h3>Verified Digital Identity</h3>
+                <p>TikTok Verified &bull; Official Email: m.bisharat99ali@gmail.com &bull; Hall Road Pioneer GSM Hub.</p>
+            </div>
+        </div>
+
+        <!-- TikTok / Reel Video Script Preview -->
+        <div class="script-box">
+            <h4>🎬 30-Second Promotional Video Script (Ready for TikTok & Reels)</h4>
+            <div class="script-line">
+                <strong>[00:00 - 00:08] Hook & Location:</strong><br>
+                <em>"Assalam-o-Alaikum dosto! Hall Road, Arif Center, 1st Floor, Hamza Block, Shop Number 5 — <strong>BS Lab, Mobiles and Traders</strong> pe khush amdeed!"</em>
+            </div>
+            <div class="script-line">
+                <strong>[00:08 - 00:20] Meet The Expert & Services:</strong><br>
+                <em>"Inse miliye: <strong>Syed Bisharat Ali (Shah Ji)</strong>! Mobile ka koi bhi software masla ho — Dead Boot repair, Huawei Kirin Testpoint, Qualcomm EDL 9008, ya FRP unlock — ya phir hardware aur chip-level repair, sabse behtareen aur fast service yahan milegi!"</em>
+            </div>
+            <div class="script-line">
+                <strong>[00:20 - 00:30] Big Deals & Call To Action:</strong><br>
+                <em>"Mobiles ki sale-purchase aur big deals ke liye abhi visit karein ya WhatsApp karein: <strong>0304-8640338</strong> ya <strong>0326-1540338</strong>. Hall Road Arif Center Shop #5 — BS Lab!"</em>
+            </div>
+        </div>
+
+        <footer>
+            &copy; 2026 BS Lab, Mobiles & Traders &bull; Powered by BSLab Tool PRO Platform
+        </footer>
+    </div>
+</body>
+</html>

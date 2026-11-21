@@ -1,0 +1,99 @@
+; ==============================================================================
+; Universal Android ADB & Fastboot Interface Driver
+; High-Speed ADB, Fastboot & Recovery Subsystem for Windows 10 & 11 (64-bit / 32-bit)
+; Supported Brands: Google Pixel, Xiaomi, Oppo, Vivo, Infinix, Tecno, Samsung, OnePlus, Motorola
+; ==============================================================================
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=AndroidUsbDeviceClass
+ClassGuid={3F966BD9-FA04-4ec5-991C-D326973B5128}
+Provider=%ProviderName%
+DriverVer=05/20/2026,11.0.0.1
+CatalogFile=android_winusb.cat
+
+[ClassInstall32]
+Addreg=AndroidUsbClassReg
+
+[AndroidUsbClassReg]
+HKR,,,0,%ClassName%
+HKR,,Icon,,-1
+
+[Manufacturer]
+%ManufacturerName%=Google,NTx86,NTamd64
+
+[Google.NTx86]
+; Universal Google / AOSP
+%CompositeAdbInterface%     = USB_Install, USB\VID_18D1&PID_4EE7
+%CompositeAdbInterface%     = USB_Install, USB\VID_18D1&PID_4EE7&MI_01
+%SingleBootLoaderInterface% = USB_Install, USB\VID_18D1&PID_4EE0
+%SingleBootLoaderInterface% = USB_Install, USB\VID_18D1&PID_D00D
+; Xiaomi / Redmi
+%CompositeAdbInterface%     = USB_Install, USB\VID_2717&PID_FF40
+%CompositeAdbInterface%     = USB_Install, USB\VID_2717&PID_FF48&MI_01
+%SingleBootLoaderInterface% = USB_Install, USB\VID_2717&PID_FF08
+; Transsion (Infinix / Tecno / Itel)
+%CompositeAdbInterface%     = USB_Install, USB\VID_2A45&PID_0C02&MI_01
+%SingleBootLoaderInterface% = USB_Install, USB\VID_2A45&PID_0003
+%SingleBootLoaderInterface% = USB_Install, USB\VID_0E8D&PID_201C
+; MediaTek Preloader Fastboot
+%SingleBootLoaderInterface% = USB_Install, USB\VID_0E8D&PID_0003
+; Qualcomm Fastboot
+%SingleBootLoaderInterface% = USB_Install, USB\VID_05C6&PID_9008
+; Samsung ADB
+%CompositeAdbInterface%     = USB_Install, USB\VID_04E8&PID_6860&MI_01
+
+[Google.NTamd64]
+; Universal Google / AOSP
+%CompositeAdbInterface%     = USB_Install, USB\VID_18D1&PID_4EE7
+%CompositeAdbInterface%     = USB_Install, USB\VID_18D1&PID_4EE7&MI_01
+%CompositeAdbInterface%     = USB_Install, USB\VID_18D1&PID_4EE2&MI_01
+%SingleBootLoaderInterface% = USB_Install, USB\VID_18D1&PID_4EE0
+%SingleBootLoaderInterface% = USB_Install, USB\VID_18D1&PID_D00D
+; Xiaomi / Redmi
+%CompositeAdbInterface%     = USB_Install, USB\VID_2717&PID_FF40
+%CompositeAdbInterface%     = USB_Install, USB\VID_2717&PID_FF48&MI_01
+%SingleBootLoaderInterface% = USB_Install, USB\VID_2717&PID_FF08
+; Transsion (Infinix / Tecno / Itel)
+%CompositeAdbInterface%     = USB_Install, USB\VID_2A45&PID_0C02&MI_01
+%SingleBootLoaderInterface% = USB_Install, USB\VID_2A45&PID_0003
+%SingleBootLoaderInterface% = USB_Install, USB\VID_0E8D&PID_201C
+; MediaTek Fastboot
+%SingleBootLoaderInterface% = USB_Install, USB\VID_0E8D&PID_0003
+; Samsung ADB
+%CompositeAdbInterface%     = USB_Install, USB\VID_04E8&PID_6860&MI_01
+
+[USB_Install]
+Include = winusb.inf
+Needs   = WINUSB.NT
+
+[USB_Install.Services]
+Include    = winusb.inf
+AddService = WinUSB,0x00000002,WinUSB_ServiceInstall
+
+[WinUSB_ServiceInstall]
+DisplayName     = %WinUSB_SvcDesc%
+ServiceType     = 1
+StartType       = 3
+ErrorControl    = 1
+ServiceBinary   = %12%\WinUSB.sys
+
+[USB_Install.Wdf]
+KmdfService = WINUSB, WinUSB_Install
+
+[WinUSB_Install]
+KmdfLibraryVersion = 1.9
+
+[USB_Install.HW]
+AddReg = Dev_AddReg
+
+[Dev_AddReg]
+HKR,,DeviceInterfaceGUIDs,0x00010000,"{F72DEB4E-5756-480E-A79B-890F0C05CE49}"
+
+[Strings]
+ProviderName                = "Google, Inc."
+ManufacturerName            = "Google, Inc."
+ClassName                   = "Android Device"
+CompositeAdbInterface       = "Android Composite ADB Interface"
+SingleBootLoaderInterface   = "Android Bootloader Interface (Fastboot)"
+WinUSB_SvcDesc              = "Android WinUSB Driver"

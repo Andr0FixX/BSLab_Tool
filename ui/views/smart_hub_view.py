@@ -1076,6 +1076,16 @@ class SmartHubView:
                         "cmd": c.fastboot_view._fb_unlock_bootloader
                     },
                     {
+                        "icon": "⚡",
+                        "title": "1-Click Temporary Root (Rescue RAM Boot)",
+                        "desc": "Executes tethered RAM kernel boot in Rescue mode with zero eMMC changes.",
+                        "btn_text": "⚡ 1-Click Temp Root",
+                        "category": "unlock",
+                        "badge": "ZERO RISK RAM",
+                        "color": "#059669", "hover": "#047857",
+                        "cmd": lambda: c.op_temp_root("FASTBOOT") if hasattr(c, "op_temp_root") else None
+                    },
+                    {
                         "icon": "🔄",
                         "title": "Reboot Huawei to Normal Android OS",
                         "desc": "Exits Fastboot Rescue mode and reboots phone to normal system.",
@@ -1097,6 +1107,26 @@ class SmartHubView:
                     "badge": "HARDWARE VARS",
                     "color": "#0284C7", "hover": "#0369A1",
                     "cmd": c.fastboot_view._fb_check_device
+                },
+                {
+                    "icon": "📋",
+                    "title": "Read Bootloader Hardware IMEI",
+                    "desc": "Extracts factory hardware IMEI directly from Fastboot getvar variables.",
+                    "btn_text": "📋 Read Fastboot IMEI",
+                    "category": "repair",
+                    "badge": "IMEI DIAG",
+                    "color": "#4F46E5", "hover": "#4338CA",
+                    "cmd": lambda: self._switch_and_run("fastboot", getattr(c.fastboot_view, "_fb_read_imei", None))
+                },
+                {
+                    "icon": "⚡",
+                    "title": "1-Click Temporary Root (RAM Tethered Boot)",
+                    "desc": "Tethered RAM boot (fastboot boot patched_boot.img) with 0% eMMC modification & zero data loss.",
+                    "btn_text": "⚡ 1-Click Temp Root",
+                    "category": "unlock",
+                    "badge": "ZERO RISK RAM",
+                    "color": "#059669", "hover": "#047857",
+                    "cmd": lambda: c.op_temp_root("FASTBOOT") if hasattr(c, "op_temp_root") else None
                 },
                 {
                     "icon": "🔓",
@@ -1190,6 +1220,16 @@ class SmartHubView:
                     },
                     {
                         "icon": "⚡",
+                        "title": "1-Click Temporary Root Access",
+                        "desc": "Live root escalation without rebooting, or tethered RAM boot with zero storage changes.",
+                        "btn_text": "⚡ 1-Click Temp Root",
+                        "category": "unlock",
+                        "badge": "SAFE TEMP ROOT",
+                        "color": "#059669", "hover": "#047857",
+                        "cmd": lambda: c.op_temp_root("ADB") if hasattr(c, "op_temp_root") else None
+                    },
+                    {
+                        "icon": "⚡",
                         "title": "Reboot to Huawei Fastboot Rescue Mode",
                         "desc": "Reboots phone directly into Huawei Fastboot & Rescue Mode for 1-click servicing.",
                         "btn_text": "⚡ Jump to Fastboot Rescue",
@@ -1240,6 +1280,26 @@ class SmartHubView:
                     "badge": "1-CLICK WIZARD",
                     "color": "#059669", "hover": "#047857",
                     "cmd": c.fastboot_view._adb_reset_frp
+                },
+                {
+                    "icon": "⚡",
+                    "title": "1-Click Temporary Root Access (Safe RAM)",
+                    "desc": "Grants live root shell access without rebooting or via tethered RAM boot (0% storage modification).",
+                    "btn_text": "⚡ 1-Click Temp Root",
+                    "category": "unlock",
+                    "badge": "SAFE TEMP ROOT",
+                    "color": "#059669", "hover": "#047857",
+                    "cmd": lambda: c.op_temp_root("ADB") if hasattr(c, "op_temp_root") else None
+                },
+                {
+                    "icon": "📶",
+                    "title": "Read & Repair Hardware IMEI (ADB)",
+                    "desc": "Reads and restores IMEI 1 & IMEI 2 via live ADB subsystems with Auto-Luhn validation.",
+                    "btn_text": "📶 Read & Repair IMEI",
+                    "category": "repair",
+                    "badge": "IMEI REPAIR",
+                    "color": "#D97706", "hover": "#B45309",
+                    "cmd": lambda: self._switch_and_run("fastboot", getattr(c.fastboot_view, "_adb_read_imei", None))
                 },
                 {
                     "icon": "🔄",

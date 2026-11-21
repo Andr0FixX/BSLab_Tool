@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BS LAB TOOL v2.5 PRO ENTERPRISE — Interactive Client Demo & Architecture</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@400;500;600;700;800;900&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+    .custom-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
+    .custom-scroll::-webkit-scrollbar-track { background: #0B0B0E; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: #232332; border-radius: 3px; }
+    .custom-scroll::-webkit-scrollbar-thumb:hover { background: #00D2FF; }
+    .glow-cyan { text-shadow: 0 0 12px rgba(0, 210, 255, 0.4); }
+    .tab-active { background: #0284C7 !important; color: #FFFFFF !important; border-bottom: 2px solid #00D2FF !important; }
+  </style>
+</head>
+<body class="bg-[#070709] text-[#E2E8F0] min-h-screen antialiased flex flex-col selection:bg-[#0284C7] selection:text-white">
+
+  <!-- TOP HEADER / BRANDING STRIP -->
+  <header class="bg-[#101017] border-b border-[#1F1F2C] px-4 py-2 flex flex-wrap items-center justify-between gap-3 shadow-lg select-none">
+    <div class="flex items-center gap-3">
+      <div class="flex items-center gap-2">
+        <span class="text-xl font-black text-[#00D2FF] glow-cyan tracking-wider flex items-center gap-1.5">
+          <svg class="w-6 h-6 animate-pulse text-[#00D2FF]" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/>
+          </svg>
+          BS LAB TOOL
+        </span>
+        <span class="bg-[#064E3B] text-[#34D399] text-[11px] font-bold px-2 py-0.5 rounded border border-[#059669]/40 tracking-wider">
+          v2.5 PRO ENTERPRISE
+        </span>
+        <span class="bg-[#1E3A8A] text-[#93C5FD] text-[11px] font-bold px-2 py-0.5 rounded border border-[#2563EB]/40 tracking-wider hidden sm:inline">
+          NATIVE C++20 / C# CORE
+        </span>
+      </div>
+    </div>
+
+    <!-- CLIENT HIGHLIGHT BADGE & OWNER CREDIT -->
+    <div class="flex items-center gap-2 text-xs">
+      <div class="bg-[#181824] px-3 py-1 rounded border border-[#2B2B3D] text-[#94A3B8] flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+        <span><b>Syed Bisharat Ali (Shah Ji)</b> | Shop #5, Hamza Block, Arif Center, Hall Road, Lahore</span>
+      </div>
+      <button onclick="toggleTheme()" id="themeBtn" class="bg-[#1F1F2E] hover:bg-[#2A2A3E] text-sky-400 px-3 py-1 rounded border border-sky-500/30 font-semibold text-xs transition">
+        🌙 Toggle Mode
+      </button>
+    </div>
+  </header>
+
+  <!-- MODULE NAVIGATION TABS (ALL 12 MODULES - ZERO SCROLLBAR FIT) -->
+  <nav class="bg-[#0C0C12] border-b border-[#1A1A26] px-2 flex items-center gap-1 text-[11px] font-semibold overflow-x-auto select-none py-1">
+    <button onclick="switchTab('autohub')" id="tab-autohub" class="tab-btn px-2.5 py-1.5 rounded-t text-[#94A3B8] hover:text-[#00D2FF] hover:bg-[#161622] transition flex items-center gap-1 tab-active">
+      <span>⚡</span> USB AUTO-HUB
+    </button>
+    <button onclick="switchTab('ai')" id="tab-ai" class="tab-btn px-2.5 py-1.5 rounded-t text-[#94A3B8] hover:text-[#00D2FF] hover:bg-[#161622] transition flex items-center gap-1">
+      <span>🤖</span> AI ANALYSE
+    </button>
+    <button onclick="switchTab('unbrick')" id="tab-unbrick" class="tab-btn px-2.5 py-1.5 rounded-t text-[#94A3B8] hover:text-[#00D2FF] hover:bg-[#161622] transition flex items-center gap-1 text-emerald-400">
+      <span>🛠️</span> SILICON UNBRICK
+    </button>
+    <button onclick="switchTab('backup')" id="tab-backup" class="tab-btn px-2.5 py-1.5 rounded-t text-[#94A3B8] hover:text-[#00D2FF] hover:bg-[#161622] transition flex items-center gap-1 text-amber-300">
+      <span>🛡️</span> COUNTRY BACKUP VAULT
+    </button>
+    <button onclick="switchTab('mtk')" id="tab-mtk" class="tab-btn px-2.5 py-1.5 rounded-t text-[#94A3B8] hover:text-[#00D2FF] hover:bg-[#161622] transition flex items-center gap-1">
+      <span>📱</span> MEDIATEK
+    </button>
+    <button onclick="switchTab('qc')" id="tab-qc" class="tab-btn px-2.5 py-1.5 rounded-t text-[#94A3B8] hover:text-[#00D2FF] hover:bg-[#161622] transition flex items-center gap-1">
+      <span>🐉</span> QUALCOMM (EDL)
+    </button>
+    <button onclick="switchTab('fastboot')" id="tab-fastboot" class="tab-btn px-2.5 py-1.5 rounded-t text-[#94A3B8] hover:text-[#00D2FF] hover:bg-[#161622] transition flex items-center gap-1">
+      <span>🚀</span> FASTBOOT & ADB
+    </button>
+    <button onclick="switchTab('samsung')" id="tab-samsung" class="tab-btn px-2.5 py-1.5 rounded-t text-[#94A3B8] hover:text-[#00D2FF] hover:bg-[#161622] transition flex items-center gap-1">
+      <span>🏢</span> SAMSUNG
+    </button>
+    <button onclick="switchTab('unisoc')" id="tab-unisoc" class="tab-btn px-2.5 py-1.5 rounded-t text-[#94A3B8] hover:text-[#00D2FF] hover:bg-[#161622] transition flex items-center gap-1">
+      <span>⚡</span> UNISOC (SPD)
+    </button>
+    <button onclick="switchTab('huawei')" id="tab-huawei" class="tab-btn px-2.5 py-1.5 rounded-t text-[#94A3B8] hover:text-[#00D2FF] hover:bg-[#161622] transition flex items-center gap-1">
+      <span>🔴</span> HUAWEI (KIRIN)
+    </button>
+    <button onclick="switchTab('testpoints')" id="tab-testpoints" class="tab-btn px-2.5 py-1.5 rounded-t text-[#94A3B8] hover:text-[#00D2FF] hover:bg-[#161622] transition flex items-center gap-1">
+      <span>📍</span> TEST POINTS
+    </button>
+    <button onclick="switchTab('settings')" id="tab-settings" class="tab-btn px-2.5 py-1.5 rounded-t text-[#94A3B8] hover:text-[#00D2FF] hover:bg-[#161622] transition flex items-center gap-1">
+      <span>⚙️</span> SETTINGS
+    </button>
+  </nav>
+
+  <!-- MAIN DYNAMIC WORKSPACE (INTERACTIVE COCKPIT) -->
+  <main class="flex-1 p-3 grid grid-cols-1 lg:grid-cols-12 gap-3 max-w-[1920px] mx-auto w-full">
+
+    <!-- LEFT / CENTER COLUMN: INTERACTIVE VIEWPORTS (8 COLS) -->
+    <section class="lg:col-span-8 flex flex-col gap-3">
+
+      <!-- VIEW 1: USB AUTO-HUB (DEFAULT) -->
+      <div id="view-autohub" class="view-panel space-y-3">
+        <div class="bg-[#111119] border border-[#20202F] rounded-lg p-4 shadow">
+          <div class="flex items-center justify-between border-b border-[#20202F] pb-3 mb-3">
+            <div>
+              <h2 class="text-base font-bold text-sky-400 flex items-center gap-2">
+                <span>⚡</span> UNIVERSAL HARDWARE RADAR & AUTO-PILOT
+              </h2>
+              <p class="text-xs text-[#94A3B8]">Deep physical USB Bus sniffer listening for MTK, Qualcomm EDL, Kirin PCUI & ADB Handshakes</p>
+            </div>
+            <span class="bg-emerald-950 text-emerald-400 text-xs px-2.5 py-1 rounded border border-emerald-500/30 flex items-center gap-1.5 font-bold">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> AUTOPILOT ACTIVE
+            </span>
+          </div>
+
+          <!-- CONNECTED DEVICE CARD -->
+          <div class="bg-[#161824] border border-[#2A2D40] rounded-lg p-3 grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div class="space-y-1">
+              <span class="text-[11px] text-[#94A3B8] uppercase tracking-wider font-semibold">Active Port / Interface</span>
+              <div class="text-emerald-400 font-bold mono text-sm flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span> COM111 (HUAWEI PCUI / AT)
+              </div>
+              <span class="text-[10px] text-gray-400">Silicon VID_12D1&PID_1057 Active</span>
+            </div>
+            <div class="space-y-1">
+              <span class="text-[11px] text-[#94A3B8] uppercase tracking-wider font-semibold">Auto-Identified Hardware</span>
+              <div class="text-white font-bold text-sm">Huawei Y9 Prime 2019 (STK-LX1)</div>
+              <span class="text-[10px] text-sky-400">SoC: HiSilicon Kirin 710F [Platform 710A]</span>
+            </div>
+            <div class="space-y-1">
+              <span class="text-[11px] text-[#94A3B8] uppercase tracking-wider font-semibold">Anti-Brick Safety Guard</span>
+              <div class="text-cyan-400 font-bold text-sm flex items-center gap-1.5">
+                <span>🛡️</span> 100% Zero-Brick Active
+              </div>
+              <span class="text-[10px] text-gray-400">Pre-Flight NVRAM / EFS Guard Armed</span>
+            </div>
+          </div>
+
+          <!-- 1-CLICK QUICK FIX BUTTONS -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-3">
+            <button onclick="runSim('frp')" class="bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 hover:to-teal-600 text-white font-bold py-2 px-3 rounded text-xs transition shadow flex items-center justify-center gap-1.5">
+              <span>🔓</span> Reset FRP Lock
+            </button>
+            <button onclick="runSim('bootloop')" class="bg-gradient-to-r from-amber-600 to-orange-700 hover:from-amber-500 hover:to-orange-600 text-white font-bold py-2 px-3 rounded text-xs transition shadow flex items-center justify-center gap-1.5">
+              <span>🔄</span> Fix Bootloop / Logo
+            </button>
+            <button onclick="runSim('baseband')" class="bg-gradient-to-r from-sky-600 to-blue-700 hover:from-sky-500 hover:to-blue-600 text-white font-bold py-2 px-3 rounded text-xs transition shadow flex items-center justify-center gap-1.5">
+              <span>📶</span> Repair Baseband/NV
+            </button>
+            <button onclick="runSim('gpt')" class="bg-gradient-to-r from-indigo-600 to-purple-700 hover:from-indigo-500 hover:to-purple-600 text-white font-bold py-2 px-3 rounded text-xs transition shadow flex items-center justify-center gap-1.5">
+              <span>🛠️</span> Read Live GPT Table
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW 2: AI ANALYSE & SURGICAL WORKFLOW COMPILER -->
+      <div id="view-ai" class="view-panel hidden space-y-3">
+        <div class="bg-[#111119] border border-[#20202F] rounded-lg p-4 shadow">
+          <div class="flex items-center justify-between border-b border-[#20202F] pb-3 mb-3">
+            <div>
+              <h2 class="text-base font-bold text-indigo-400 flex items-center gap-2">
+                <span>🤖</span> AI HARDWARE CO-PILOT & NEURAL DIAGNOSTICS
+              </h2>
+              <p class="text-xs text-[#94A3B8]">Technician problem prompts in Roman Urdu or English translated into precise surgical repair plans</p>
+            </div>
+            <span class="bg-indigo-950 text-indigo-300 text-xs px-2.5 py-1 rounded border border-indigo-500/30 font-bold">
+              ● NEURAL HARVESTER ONLINE
+            </span>
+          </div>
+
+          <!-- PROMPT BOX -->
+          <div class="space-y-2">
+            <label class="text-xs font-bold text-amber-400 flex items-center gap-1">
+              <span>💬</span> TECHNICIAN PROBLEM PROMPT (ROMAN URDU / ENGLISH):
+            </label>
+            <div class="flex flex-wrap gap-1.5 mb-2">
+              <button onclick="setPrompt('Phone connect hai, baseband corrupted / unknown aa raha hai, isay repair karo.')" class="bg-[#1C1F2E] hover:bg-[#282C42] text-xs text-sky-300 px-2 py-1 rounded border border-sky-500/20">
+                📶 Baseband Unknown
+              </button>
+              <button onclick="setPrompt('Phone on off ho raha hai, logo pe restart ho raha hai bootloop theek karo.')" class="bg-[#1C1F2E] hover:bg-[#282C42] text-xs text-amber-300 px-2 py-1 rounded border border-amber-500/20">
+                🔄 Fix Bootloop
+              </button>
+              <button onclick="setPrompt('Customer Google FRP account bhool gaya hai, direct setup wizard bypass karo.')" class="bg-[#1C1F2E] hover:bg-[#282C42] text-xs text-emerald-300 px-2 py-1 rounded border border-emerald-500/20">
+                🔓 FRP Bypass
+              </button>
+              <button onclick="setPrompt('Screen lock laga hai lekin client ka photos aur WhatsApp data 100% mehfooz chahiye.')" class="bg-[#1C1F2E] hover:bg-[#282C42] text-xs text-purple-300 px-2 py-1 rounded border border-purple-500/20">
+                🔑 Safe Screen Unlock
+              </button>
+            </div>
+            <textarea id="aiInput" rows="2" class="w-full bg-[#0A0A0F] border border-[#292D3E] rounded p-2.5 text-xs text-white mono focus:border-indigo-500 focus:outline-none" placeholder="Enter device symptom or fault..."></textarea>
+            <button onclick="compileAiPlan()" class="w-full bg-gradient-to-r from-indigo-600 to-indigo-800 hover:from-indigo-500 hover:to-indigo-700 text-white font-bold py-2 rounded text-xs transition flex items-center justify-center gap-2">
+              <span>⚡</span> ASK AI & COMPILE SURGICAL REPAIR WORKFLOW
+            </button>
+          </div>
+
+          <!-- COMPILED WORKFLOW CARD -->
+          <div id="aiPlanBox" class="mt-3 bg-[#0B132B] border border-cyan-500/40 rounded-lg p-3 hidden">
+            <div class="flex items-center justify-between mb-2">
+              <h3 id="aiPlanTitle" class="text-xs font-bold text-cyan-300">⚡ COMPILED SURGICAL PLAN</h3>
+              <span class="bg-emerald-950 text-emerald-400 text-[10px] font-bold px-2 py-0.5 rounded border border-emerald-500/30">
+                🛡️ RISK: 0% ZERO-BRICK
+              </span>
+            </div>
+            <p id="aiPlanDesc" class="text-xs text-gray-300 mb-2 leading-relaxed"></p>
+            <div id="aiPlanSteps" class="text-xs text-sky-200 mono bg-[#070D1F] p-2.5 rounded border border-sky-900/50 mb-3 space-y-1"></div>
+            <button onclick="executeAiPlan()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 rounded text-xs transition flex items-center justify-center gap-2 shadow-lg">
+              <span>⚡</span> AUTHORIZE & EXECUTE SURGICAL WORKFLOW NOW
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW 3: COUNTRY-WISE & REGION-WISE BACKUP VAULT -->
+      <div id="view-backup" class="view-panel hidden space-y-3">
+        <div class="bg-[#111119] border border-[#20202F] rounded-lg p-4 shadow">
+          <div class="flex items-center justify-between border-b border-[#20202F] pb-3 mb-3">
+            <div>
+              <h2 class="text-base font-bold text-amber-400 flex items-center gap-2">
+                <span>🛡️</span> COUNTRY-WISE BACKUP VAULT & REGIONAL CALIBRATION
+              </h2>
+              <p class="text-xs text-[#94A3B8]">Surgical Radio, EFS, Modem, CSC & User Data Preservation tailored for Pakistan (PTA) & Global Markets</p>
+            </div>
+            <span class="bg-amber-950 text-amber-300 text-xs px-2.5 py-1 rounded border border-amber-500/30 font-bold">
+              REGIONAL VAULT v2.5
+            </span>
+          </div>
+
+          <!-- REGION SELECTION MATRIX -->
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-2 mb-3">
+            <div class="bg-[#181824] border border-[#2A2A3E] p-2.5 rounded cursor-pointer hover:border-amber-400 transition" onclick="selectRegion('pakistan')">
+              <div class="flex items-center justify-between text-xs font-bold text-emerald-400 mb-1">
+                <span>🇵🇰 Pakistan (PTA)</span>
+                <span class="text-[10px] bg-emerald-950 px-1.5 py-0.5 rounded">Specialized</span>
+              </div>
+              <p class="text-[11px] text-gray-400">PAK CSC, PTA NVRAM calibration, Dual SIM RIL backup & certified modem profiles.</p>
+            </div>
+
+            <div class="bg-[#181824] border border-[#2A2A3E] p-2.5 rounded cursor-pointer hover:border-sky-400 transition" onclick="selectRegion('middleeast')">
+              <div class="flex items-center justify-between text-xs font-bold text-sky-400 mb-1">
+                <span>🇦🇪 Middle East (MEA)</span>
+                <span class="text-[10px] bg-sky-950 px-1.5 py-0.5 rounded">Gulf / KSA</span>
+              </div>
+              <p class="text-[11px] text-gray-400">XSG / KSA CSC, VoLTE Middle East calibration, 5G Sub-6 Band locking backups.</p>
+            </div>
+
+            <div class="bg-[#181824] border border-[#2A2A3E] p-2.5 rounded cursor-pointer hover:border-blue-400 transition" onclick="selectRegion('europe')">
+              <div class="flex items-center justify-between text-xs font-bold text-blue-400 mb-1">
+                <span>🇪🇺 Europe (EU / Global)</span>
+                <span class="text-[10px] bg-blue-950 px-1.5 py-0.5 rounded">EUX / BTU</span>
+              </div>
+              <p class="text-[11px] text-gray-400">European multi-CSC, Knox compliance profiles, AVB 2.0 cryptographic hashes.</p>
+            </div>
+
+            <div class="bg-[#181824] border border-[#2A2A3E] p-2.5 rounded cursor-pointer hover:border-purple-400 transition" onclick="selectRegion('universal')">
+              <div class="flex items-center justify-between text-xs font-bold text-purple-400 mb-1">
+                <span>🌐 Raw Sector Dump</span>
+                <span class="text-[10px] bg-purple-950 px-1.5 py-0.5 rounded">Chipset Direct</span>
+              </div>
+              <p class="text-[11px] text-gray-400">Physical eMMC/UFS bit-by-bit raw partition dumps for disaster unbricking.</p>
+            </div>
+          </div>
+
+          <!-- BACKUP ACTIONS -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+            <button onclick="runSim('backup_nv')" class="bg-[#1E293B] hover:bg-[#2A3B52] text-white p-2.5 rounded text-xs font-bold border border-slate-700 flex flex-col items-center gap-1 transition">
+              <span class="text-base">📡</span>
+              <span>1-Click Regional NV Dump</span>
+              <span class="text-[10px] text-gray-400">Baseband & IMEI Vault</span>
+            </button>
+            <button onclick="runSim('backup_efs')" class="bg-[#1E293B] hover:bg-[#2A3B52] text-white p-2.5 rounded text-xs font-bold border border-slate-700 flex flex-col items-center gap-1 transition">
+              <span class="text-base">🔐</span>
+              <span>EFS / SEC_EFS Dump</span>
+              <span class="text-[10px] text-gray-400">Cryptographic Keys</span>
+            </button>
+            <button onclick="runSim('backup_user')" class="bg-[#1E293B] hover:bg-[#2A3B52] text-white p-2.5 rounded text-xs font-bold border border-slate-700 flex flex-col items-center gap-1 transition">
+              <span class="text-base">📁</span>
+              <span>Safe User Data Vault</span>
+              <span class="text-[10px] text-gray-400">Contacts, SMS, Media</span>
+            </button>
+            <button onclick="runSim('backup_full')" class="bg-[#1E293B] hover:bg-[#2A3B52] text-white p-2.5 rounded text-xs font-bold border border-slate-700 flex flex-col items-center gap-1 transition">
+              <span class="text-base">📦</span>
+              <span>Full Raw Storage Image</span>
+              <span class="text-[10px] text-gray-400">GPT Disk Clone (.img)</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW 4: SILICON UNBRICKING ENGINE -->
+      <div id="view-unbrick" class="view-panel hidden space-y-3">
+        <div class="bg-[#111119] border border-[#20202F] rounded-lg p-4 shadow">
+          <div class="flex items-center justify-between border-b border-[#20202F] pb-3 mb-3">
+            <div>
+              <h2 class="text-base font-bold text-emerald-400 flex items-center gap-2">
+                <span>🛠️</span> SILICON-LEVEL UNBRICKING & RESCUE ENGINE
+              </h2>
+              <p class="text-xs text-[#94A3B8]">Low-level direct register handshake for Dead Boot, Corrupt Partition Tables & Deep Silicon Recovery</p>
+            </div>
+            <span class="bg-emerald-950 text-emerald-300 text-xs px-2.5 py-1 rounded border border-emerald-500/30 font-bold">
+              BOOTROM ACTIVE
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
+            <div class="bg-[#181824] p-3 rounded border border-[#28283B]">
+              <span class="text-xs font-bold text-sky-400 flex items-center gap-1.5 mb-1">
+                <span>📱</span> MediaTek BROM / Preloader
+              </span>
+              <p class="text-[11px] text-gray-400 mb-2">Bypass SLA/DAA authorization, dump crash dump, unbrick MT67xx / Dimensity MT68xx chipsets.</p>
+              <button onclick="runSim('mtk_unbrick')" class="w-full bg-sky-700 hover:bg-sky-600 text-white text-xs font-bold py-1.5 rounded transition">
+                ⚡ 1-Click MTK BROM Unbrick
+              </button>
+            </div>
+
+            <div class="bg-[#181824] p-3 rounded border border-[#28283B]">
+              <span class="text-xs font-bold text-amber-400 flex items-center gap-1.5 mb-1">
+                <span>🐉</span> Qualcomm Emergency EDL 9008
+              </span>
+              <p class="text-[11px] text-gray-400 mb-2">Direct Sahara & Firehose programmer protocol, write xbl, abl, boot & recover hard-bricked devices.</p>
+              <button onclick="runSim('qc_unbrick')" class="w-full bg-amber-700 hover:bg-amber-600 text-white text-xs font-bold py-1.5 rounded transition">
+                ⚡ 1-Click EDL 9008 Flash
+              </button>
+            </div>
+
+            <div class="bg-[#181824] p-3 rounded border border-[#28283B]">
+              <span class="text-xs font-bold text-red-400 flex items-center gap-1.5 mb-1">
+                <span>🔴</span> Huawei Kirin USB COM 1.0
+              </span>
+              <p class="text-[11px] text-gray-400 mb-2">Testpoint bootrom loader injection (xloader_1.bin / uce.bin) to recover dead Kirin 710/810/980/990.</p>
+              <button onclick="runSim('kirin_unbrick')" class="w-full bg-red-700 hover:bg-red-600 text-white text-xs font-bold py-1.5 rounded transition">
+                ⚡ 1-Click Kirin COM 1.0 Boot
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW 5: FASTBOOT & ADB -->
+      <div id="view-fastboot" class="view-panel hidden space-y-3">
+        <div class="bg-[#111119] border border-[#20202F] rounded-lg p-4 shadow">
+          <h2 class="text-base font-bold text-sky-400 mb-2">🚀 FASTBOOT & ADB UNIVERSAL SUITE</h2>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+            <button onclick="runSim('adb_info')" class="bg-[#1A1A26] hover:bg-[#252538] text-white p-2 rounded text-xs border border-gray-700">ADB Read Info</button>
+            <button onclick="runSim('reboot_fastboot')" class="bg-[#1A1A26] hover:bg-[#252538] text-white p-2 rounded text-xs border border-gray-700">Reboot Fastboot</button>
+            <button onclick="runSim('reboot_recovery')" class="bg-[#1A1A26] hover:bg-[#252538] text-white p-2 rounded text-xs border border-gray-700">Reboot Recovery</button>
+            <button onclick="runSim('reboot_edl')" class="bg-[#1A1A26] hover:bg-[#252538] text-white p-2 rounded text-xs border border-gray-700">Reboot EDL 9008</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW 6: SAMSUNG -->
+      <div id="view-samsung" class="view-panel hidden space-y-3">
+        <div class="bg-[#111119] border border-[#20202F] rounded-lg p-4 shadow">
+          <h2 class="text-base font-bold text-blue-400 mb-2">🏢 SAMSUNG ODIN FLASHER & MTP DIAGNOSTICS</h2>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+            <button onclick="runSim('samsung_info')" class="bg-[#1A1A26] hover:bg-[#252538] text-white p-2 rounded text-xs border border-gray-700">Read Device Info (MTP)</button>
+            <button onclick="runSim('samsung_frp')" class="bg-[#1A1A26] hover:bg-[#252538] text-white p-2 rounded text-xs border border-gray-700">Samsung FRP (*#0*#)</button>
+            <button onclick="runSim('samsung_download')" class="bg-[#1A1A26] hover:bg-[#252538] text-white p-2 rounded text-xs border border-gray-700">Reboot Download Mode</button>
+            <button onclick="runSim('samsung_pit')" class="bg-[#1A1A26] hover:bg-[#252538] text-white p-2 rounded text-xs border border-gray-700">Extract 404 PIT Table</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW 7: UNISOC -->
+      <div id="view-unisoc" class="view-panel hidden space-y-3">
+        <div class="bg-[#111119] border border-[#20202F] rounded-lg p-4 shadow">
+          <h2 class="text-base font-bold text-amber-400 mb-2">⚡ UNISOC / SPREADTRUM (SPD) RESEARCHDOWNLOAD CORE</h2>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+            <button onclick="runSim('spd_handshake')" class="bg-[#1A1A26] hover:bg-[#252538] text-white p-2 rounded text-xs border border-gray-700">FDL1 / FDL2 Handshake</button>
+            <button onclick="runSim('spd_diag')" class="bg-[#1A1A26] hover:bg-[#252538] text-white p-2 rounded text-xs border border-gray-700">Enter DIAG Mode</button>
+            <button onclick="runSim('spd_frp')" class="bg-[#1A1A26] hover:bg-[#252538] text-white p-2 rounded text-xs border border-gray-700">Direct Persist FRP Wipe</button>
+            <button onclick="runSim('spd_imei')" class="bg-[#1A1A26] hover:bg-[#252538] text-white p-2 rounded text-xs border border-gray-700">Read Dual IMEI (Diag)</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW 8: HUAWEI -->
+      <div id="view-huawei" class="view-panel hidden space-y-3">
+        <div class="bg-[#111119] border border-[#20202F] rounded-lg p-4 shadow">
+          <h2 class="text-base font-bold text-red-400 mb-2">🔴 HUAWEI & HONOR HISILICON KIRIN MULTI-SUITE</h2>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+            <button onclick="runSim('huawei_deep')" class="bg-[#1A1A26] hover:bg-[#252538] text-white p-2 rounded text-xs border border-gray-700">Huawei Deep Read Info</button>
+            <button onclick="runSim('huawei_exit')" class="bg-[#1A1A26] hover:bg-[#252538] text-white p-2 rounded text-xs border border-gray-700">Manufacture Mode Exit</button>
+            <button onclick="runSim('huawei_battery')" class="bg-[#1A1A26] hover:bg-[#252538] text-white p-2 rounded text-xs border border-gray-700">Battery Voltage Read</button>
+            <button onclick="runSim('huawei_fastboot')" class="bg-[#1A1A26] hover:bg-[#252538] text-white p-2 rounded text-xs border border-gray-700">Soft Reset Fastboot</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW 9: TEST POINTS -->
+      <div id="view-testpoints" class="view-panel hidden space-y-3">
+        <div class="bg-[#111119] border border-[#20202F] rounded-lg p-4 shadow">
+          <h2 class="text-base font-bold text-amber-400 mb-2">📍 INTERACTIVE TEST POINT & ISP PINOUT VIEWER</h2>
+          <p class="text-xs text-gray-400 mb-3">10,000+ Hardware schematics, BROM & EDL 9008 test points with zoom & GND locator.</p>
+          <div class="bg-[#0A0A0F] border border-[#222233] p-4 rounded text-center">
+            <span class="text-3xl block mb-2">🔍</span>
+            <div class="text-sm font-bold text-white mb-1">Target: Huawei Y9 Prime 2019 (Kirin 710F)</div>
+            <p class="text-xs text-emerald-400 mono">Testpoint: Pin pad located near rear fingerprint flex to GND (1.8V Pull-Down)</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW 10: SETTINGS -->
+      <div id="view-settings" class="view-panel hidden space-y-3">
+        <div class="bg-[#111119] border border-[#20202F] rounded-lg p-4 shadow space-y-3">
+          <h2 class="text-base font-bold text-sky-400">⚙️ WORKSTATION SETTINGS & SYSTEM CONFIGURATION</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+            <div class="bg-[#161824] p-3 rounded border border-gray-800">
+              <span class="font-bold text-white block mb-1">👤 Proprietor License</span>
+              <p class="text-gray-400">Syed Bisharat Ali (Shah Ji)</p>
+              <p class="text-gray-400">Hamza Block, Arif Center, Hall Road, Lahore</p>
+              <p class="text-emerald-400 mono mt-1 font-bold">Status: Lifetime Enterprise Activated</p>
+            </div>
+            <div class="bg-[#161824] p-3 rounded border border-gray-800">
+              <span class="font-bold text-white block mb-1">🚀 Zero-Hassle Driver System</span>
+              <p class="text-gray-400">Universal PnP DriverStore automated silent injection for any new PC without manual EXE installation.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROTOCOL CONSOLE / TERMINAL (LIVE OUTPUT HUD) -->
+      <div class="bg-[#0B0B0E] border border-[#1E1E2C] rounded-lg p-3 shadow-inner flex flex-col flex-1">
+        <div class="flex items-center justify-between border-b border-[#1A1A26] pb-2 mb-2">
+          <div class="flex items-center gap-2 text-xs font-bold text-sky-400">
+            <span class="w-2 h-2 rounded-full bg-sky-400 animate-pulse"></span>
+            <span>NATIVE SURGICAL PROTOCOL CONSOLE</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="clearConsole()" class="text-[11px] bg-[#161622] hover:bg-[#202030] text-gray-300 px-2 py-0.5 rounded border border-gray-700">Clear</button>
+            <span class="text-[10px] text-gray-400 mono">BAUD: 115200</span>
+          </div>
+        </div>
+        <div id="consoleLog" class="mono text-[11px] text-sky-300 bg-[#060608] p-3 rounded border border-[#14141E] h-56 overflow-y-auto space-y-1 custom-scroll leading-relaxed">
+          <div class="text-gray-400">[00:00:01] ⚡ BS LAB TOOL v2.5 PRO ENTERPRISE ENGINE INITIALIZED.</div>
+          <div class="text-emerald-400">[00:00:01] 👤 Proprietary License: Syed Bisharat Ali | Arif Center, Hall Road, Lahore.</div>
+          <div class="text-cyan-400">[00:00:02] [+] Multi-Engine Protocol Transceivers Loaded: MTK, Qualcomm EDL, SPD, Kirin.</div>
+          <div class="text-emerald-400">[00:00:02] [+] Anti-Brick Pre-Flight Guard Active: 100% Zero-Brick Risk Protection.</div>
+          <div class="text-yellow-400">[00:00:03] [*] Hardware Radar: Active composite interface verified on COM111 (HUAWEI PCUI).</div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- RIGHT COLUMN: CLIENT SALES PITCH & ARCHITECTURAL ADVANTAGES (4 COLS) -->
+    <aside class="lg:col-span-4 flex flex-col gap-3">
+
+      <!-- PITCH CARD 1: "JUST FIX / SURGICAL UNBRICK" -->
+      <div class="bg-gradient-to-br from-[#0F172A] to-[#1E1B4B] border border-indigo-500/30 rounded-lg p-4 shadow-xl">
+        <div class="flex items-center gap-2 text-indigo-400 font-extrabold text-sm mb-1">
+          <span class="text-lg">🎯</span>
+          <span>NOT JUST A FLASHER — A SURGICAL FIX TOOL</span>
+        </div>
+        <p class="text-xs text-gray-300 leading-relaxed mb-3">
+          Market ke aam flashers phone ko format karke dead ya IMEI corrupt kar dete hain. <b>BS Lab Tool</b> aik <b>"Pure Surgical Fix & Unbrick Workstation"</b> hai jo customer ke data aur baseband ko chheray baghair masla hal karta hai.
+        </p>
+        <ul class="text-xs text-indigo-200 space-y-1.5 list-disc pl-4">
+          <li><b>0% Data Loss Screen Unlock</b>: Passcode/Pattern neutralize karta hai data wipe kiye baghair.</li>
+          <li><b>DM-Verity & Bootloop Cure</b>: Restart hotay phone ko 1-click vbmeta patch se foran on kare.</li>
+          <li><b>Pre-Flight Safe Guard</b>: Har write command se pehle NVRAM/EFS ka auto-backup computer mein save karta hai.</li>
+        </ul>
+      </div>
+
+      <!-- PITCH CARD 2: COUNTRY-WISE BACKUP SYSTEM -->
+      <div class="bg-gradient-to-br from-[#0B1E1A] to-[#0A261C] border border-emerald-500/30 rounded-lg p-4 shadow-xl">
+        <div class="flex items-center gap-2 text-emerald-400 font-extrabold text-sm mb-1">
+          <span class="text-lg">🇵🇰</span>
+          <span>COUNTRY-WISE BACKUP & PTA REPAIR VAULT</span>
+        </div>
+        <p class="text-xs text-gray-300 leading-relaxed mb-3">
+          Pakistan (PTA), Gulf (KSA/UAE), aur European models ke mukhtalif frequencies aur CSC parameters hotay hain.
+        </p>
+        <div class="space-y-2 text-xs">
+          <div class="bg-[#051812] p-2 rounded border border-emerald-900/40">
+            <span class="font-bold text-emerald-300 block">PTA & Dual-SIM Calibration:</span>
+            <span class="text-gray-300 text-[11px]">PTA approved certified baseband/NV dump save kare taake software ke baad SIM ya network band na ho.</span>
+          </div>
+          <div class="bg-[#051812] p-2 rounded border border-emerald-900/40">
+            <span class="font-bold text-emerald-300 block">Regional CSC Switcher:</span>
+            <span class="text-gray-300 text-[11px]">Bina root ke country CSC switch kare (PAK / XSG / EUX) Call Recording aur VoLTE enable karne ke liye.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- PITCH CARD 3: ZERO-HASSLE CLIENT PITCH -->
+      <div class="bg-[#111119] border border-[#242436] rounded-lg p-4 shadow">
+        <div class="text-xs font-bold text-sky-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+          <span>💼</span> CLIENT PRESENTATION CHEATSHEET
+        </div>
+        <div class="text-xs text-gray-300 space-y-2">
+          <p>Client ko demo dete waqt yeh 3 points batayein:</p>
+          <div class="border-l-2 border-sky-500 pl-2 py-0.5">
+            <b>1. "Har Phone Ka Dead Boot Ilaj":</b> Chahe MTK ho, Qualcomm EDL 9008 ho ya Kirin COM 1.0 — tool silicon register par direct connect hota hai.
+          </div>
+          <div class="border-l-2 border-amber-500 pl-2 py-0.5">
+            <b>2. "Accident-Proof Safety":</b> Agar flashing ke dauran light chali jaye ya wire nikal jaye, Pre-Flight Dump se phone foran wapis alive ho jata hai.
+          </div>
+          <div class="border-l-2 border-emerald-500 pl-2 py-0.5">
+            <b>3. "AI Problem Solver":</b> Technician ko command dhoondhne ki zaroorat nahi — bas problem likho aur AI step-by-step unbrick karega.
+          </div>
+        </div>
+      </div>
+
+    </aside>
+
+  </main>
+
+  <!-- JAVASCRIPT LOGIC FOR INTERACTIVE SIMULATION -->
+  <script>
+    function switchTab(tabId) {
+      document.querySelectorAll('.view-panel').forEach(p => p.classList.add('hidden'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('tab-active'));
+
+      const activeView = document.getElementById('view-' + tabId);
+      const activeBtn = document.getElementById('tab-' + tabId);
+      if (activeView) activeView.classList.remove('hidden');
+      if (activeBtn) activeBtn.classList.add('tab-active');
+
+      logConsole(`[*] Switched Active Module: ${tabId.toUpperCase()}`);
+    }
+
+    function logConsole(msg, color = 'text-sky-300') {
+      const consoleBox = document.getElementById('consoleLog');
+      const time = new Date().toTimeString().split(' ')[0];
+      const div = document.createElement('div');
+      div.className = `${color}`;
+      div.innerHTML = `<span class="text-gray-500">[${time}]</span> ${msg}`;
+      consoleBox.appendChild(div);
+      consoleBox.scrollTop = consoleBox.scrollHeight;
+    }
+
+    function clearConsole() {
+      document.getElementById('consoleLog').innerHTML = '';
+      logConsole('[*] Console buffer cleared.', 'text-gray-400');
+    }
+
+    function setPrompt(text) {
+      document.getElementById('aiInput').value = text;
+      compileAiPlan();
+    }
+
+    function compileAiPlan() {
+      const val = document.getElementById('aiInput').value.trim();
+      if (!val) return;
+
+      logConsole(`[*] AI Ingesting Query: "${val}"`, 'text-indigo-300');
+      logConsole(`[*] Synthesizing Live USB Telemetry & Chipset registers...`, 'text-yellow-300');
+
+      const planBox = document.getElementById('aiPlanBox');
+      const title = document.getElementById('aiPlanTitle');
+      const desc = document.getElementById('aiPlanDesc');
+      const steps = document.getElementById('aiPlanSteps');
+
+      setTimeout(() => {
+        planBox.classList.remove('hidden');
+        if (val.toLowerCase().includes('baseband') || val.toLowerCase().includes('imei')) {
+          title.innerText = '⚡ SURGICAL WORKFLOW: HUAWEI Y9 PRIME — BASEBAND & MODEM NV RESTORATION';
+          desc.innerText = 'Diagnosed Fault: Null radio baseband / missing EFS calibration. Risk Level: 0% Zero-Brick with automated pre-flight guard.';
+          steps.innerHTML = `
+            <div>1. Pre-Flight: Create automated cryptographic dump of NVRAM, EFS & SEC_EFS partitions to disk.</div>
+            <div>2. Flush scratch radio buffers and reset modem calibration registers.</div>
+            <div>3. Commit verified regional NON-HLOS.bin / modem calibration blocks.</div>
+            <div>4. Transmit AT+CFUN=1,1 modem soft-reset & force RIL radio re-handshake.</div>
+          `;
+        } else if (val.toLowerCase().includes('bootloop') || val.toLowerCase().includes('logo')) {
+          title.innerText = '⚡ SURGICAL WORKFLOW: SYSTEM BOOTLOOP & DM-VERITY UNBRICK';
+          desc.innerText = 'Diagnosed Fault: Boot verification signature mismatch / corrupted ART runtime cache. 100% Userdata preserved.';
+          steps.innerHTML = `
+            <div>1. Dump safety snapshot of boot, dtbo and vbmeta partitions.</div>
+            <div>2. Surgical patch of vbmeta with --disable-verity & --disable-verification.</div>
+            <div>3. Wipe corrupt Dalvik cache without touching client photos or personal data.</div>
+            <div>4. Watchdog soft-reboot into normal system mode.</div>
+          `;
+        } else if (val.toLowerCase().includes('frp') || val.toLowerCase().includes('google')) {
+          title.innerText = '⚡ SURGICAL WORKFLOW: UNIVERSAL FRP & SETUP WIZARD BYPASS';
+          desc.innerText = 'Diagnosed Fault: Persistent Factory Reset Protection active. Safe 1-click neutralization.';
+          steps.innerHTML = `
+            <div>1. Locate persistent lock block (frp / config) partition offset.</div>
+            <div>2. Surgical zeroing of persistent account credential header.</div>
+            <div>3. Broadcast user_setup_complete=1 intent to Android ActivityManager.</div>
+            <div>4. Soft-reboot directly to home screen launcher.</div>
+          `;
+        } else {
+          title.innerText = '⚡ SURGICAL WORKFLOW: DATA-SAFE SCREEN LOCK REMOVAL';
+          desc.innerText = 'Diagnosed Fault: Lockscreen pattern/PIN active. 100% Client photos, contacts and WhatsApp chats preserved.';
+          steps.innerHTML = `
+            <div>1. Check storage encryption descriptor (FBE/FDE status).</div>
+            <div>2. Neutralize locksettings.db, gesture.key, password.key & gatekeeper token.</div>
+            <div>3. Rebuild credential table with cleared PIN descriptor.</div>
+            <div>4. Reboot into unlocked home screen with all files intact.</div>
+          `;
+        }
+        logConsole(`[+] AI Compiled verified surgical repair workflow! Ready for execution.`, 'text-emerald-400');
+      }, 400);
+    }
+
+    function executeAiPlan() {
+      logConsole('══════════════════════════════════════════════════════════', 'text-gray-500');
+      logConsole('⚡ [EXECUTOR] Executing compiled AI surgical workflow...', 'text-yellow-400');
+      logConsole('[+] Step 1/4: Pre-Flight cryptographic backup saved to C:\\BSLab_Tool\\backups\\...', 'text-emerald-400');
+
+      setTimeout(() => {
+        logConsole('[+] Step 2/4: Target scratch sectors cleared.', 'text-sky-300');
+      }, 600);
+
+      setTimeout(() => {
+        logConsole('[+] Step 3/4: Verified surgical binary committed to flash storage.', 'text-sky-300');
+      }, 1200);
+
+      setTimeout(() => {
+        logConsole('[+] Step 4/4: Watchdog reboot command acknowledged by device.', 'text-emerald-400');
+        logConsole('🎉 [SUCCESS] Device successfully serviced with 0 errors! Normal state verified.', 'text-emerald-400 font-bold');
+        logConsole('══════════════════════════════════════════════════════════', 'text-gray-500');
+      }, 1800);
+    }
+
+    function runSim(type) {
+      logConsole(`[*] User initiated operation: [${type.toUpperCase()}]`, 'text-yellow-300');
+      setTimeout(() => {
+        if (type === 'frp') {
+          logConsole('[+] Sending SetupWizard bypass intent via ADB...', 'text-sky-300');
+          logConsole('[+] FRP Lock persistent block zeroed successfully. Rebooting device!', 'text-emerald-400');
+        } else if (type === 'bootloop') {
+          logConsole('[+] Patching vbmeta flags (--disable-verity)...', 'text-sky-300');
+          logConsole('[+] Dalvik cache purged. Device exiting bootloop!', 'text-emerald-400');
+        } else if (type === 'baseband') {
+          logConsole('[+] Pre-Flight NV backup saved to disk.', 'text-cyan-400');
+          logConsole('[+] Transmitting AT+CFUN=1,1 to COM111...', 'text-sky-300');
+          logConsole('[+] Modem state online: Baseband restored to official!', 'text-emerald-400');
+        } else if (type === 'gpt') {
+          logConsole('[+] Reading primary GPT header (LBA 1-33)...', 'text-cyan-400');
+          logConsole('[+] 48 Verified partitions mapped into Partition Doctor grid.', 'text-emerald-400');
+        } else if (type.includes('unbrick')) {
+          logConsole('[+] Establishing Low-Level Silicon Handshake on active COM port...', 'text-yellow-400');
+          logConsole('[+] DA / Firehose / xloader payload transferred successfully.', 'text-sky-300');
+          logConsole('[+] Bootloader restored! Device transitioning from Dead Boot to Fastboot.', 'text-emerald-400 font-bold');
+        } else if (type.includes('backup')) {
+          logConsole('[+] Regional Vault: Dumping encrypted partition stream...', 'text-cyan-400');
+          logConsole('[+] Backup saved securely to disk with SHA-256 integrity checksum.', 'text-emerald-400');
+        } else {
+          logConsole('[+] Protocol acknowledged by device interface. Operation executed with 0 errors.', 'text-emerald-400');
+        }
+      }, 500);
+    }
+
+    function selectRegion(region) {
+      logConsole(`[*] Active Backup Vault switched to: [${region.toUpperCase()}] Regional Calibration Matrix.`, 'text-amber-400');
+    }
+
+    let isDark = true;
+    function toggleTheme() {
+      isDark = !isDark;
+      if (!isDark) {
+        document.body.classList.remove('bg-[#070709]', 'text-[#E2E8F0]');
+        document.body.classList.add('bg-[#F1F5F9]', 'text-[#0F172A]');
+        document.getElementById('themeBtn').innerText = '☀️ Light Mode';
+      } else {
+        document.body.classList.remove('bg-[#F1F5F9]', 'text-[#0F172A]');
+        document.body.classList.add('bg-[#070709]', 'text-[#E2E8F0]');
+        document.getElementById('themeBtn').innerText = '🌙 Dark Mode';
+      }
+    }
+  </script>
+</body>
+</html>

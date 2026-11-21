@@ -8,9 +8,18 @@ from tkinter import ttk, filedialog, messagebox
 import customtkinter as ctk
 from core.path_utils import get_platform_tool_path
 from ui.theme import Theme
+from engines.unpackers import (
+    SamsungTarUnpacker,
+    SuperSparseUnpacker,
+    OfpOpsUnpacker,
+    PayloadUnpacker,
+    HuaweiAppUnpacker,
+    PacUnpacker
+)
+from utils.file_utils import format_bytes
 
 class FastbootADBView:
-    """Universal Android Fastboot Flasher & Live ADB Services View."""
+    """Universal Android Platform Suite (ADB, Fastboot, Sideload & Firmware Extractor)."""
 
     def __init__(self, master_body, controller):
         self.body_frame = master_body
@@ -29,6 +38,18 @@ class FastbootADBView:
         self.fb_rom_folder_var = tk.StringVar(value="")
         self.fb_disable_verity_var = tk.BooleanVar(value=True)
         self.fb_partitions = []
+
+        # ADB & Fastboot IMEI Variables
+        self.adb_imei1_var = tk.StringVar(value="")
+        self.adb_imei2_var = tk.StringVar(value="")
+
+        # Universal Firmware Extractor State
+        self.unp_format_var = tk.StringVar(value="Auto-Detect (Based on File)")
+        self.unp_input_file_var = tk.StringVar(value="")
+        self.unp_output_dir_var = tk.StringVar(value=os.path.join(os.getcwd(), "unpacked"))
+        self.unp_chk_lz4_var = tk.BooleanVar(value=True)
+        self.unp_is_unpacking = False
+        self.unp_extracted_files = []
 
         self._build_left_panel()
         self._build_center_panel()
@@ -86,7 +107,7 @@ class FastbootADBView:
         
         self.tab_fb_selector = ctk.CTkSegmentedButton(
             self.center_panel_fb,
-            values=["🤖 ADB Services & FRP", "⚡ Fastboot Flasher", "⚙️ Fastboot Ops", "📦 APK & Debloater", "🌐 MTP & Sideload"],
+            values=["🤖 ADB Services & FRP", "⚡ Fastboot Flasher", "⚙️ Fastboot Ops", "📦 APK & Debloater", "🌐 MTP & Sideload", "📦 Firmware Extractor"],
             command=self._on_tab_changed,
             font=ctk.CTkFont(size=11, weight="bold"),
             selected_color="#0284C7",
@@ -116,6 +137,19 @@ class FastbootADBView:
         ctk.CTkButton(r1, text="📱 Read Full Info (getprop)", font=ctk.CTkFont(size=11, weight="bold"), height=38, fg_color="#4F46E5", hover_color="#4338CA", command=self._adb_read_info).pack(side="left", fill="x", expand=True, padx=(0, 4))
         ctk.CTkButton(r1, text="🔓 Reset FRP (ADB One-Click)", font=ctk.CTkFont(size=11, weight="bold"), height=38, fg_color="#0284C7", hover_color="#0369A1", command=self._adb_reset_frp).pack(side="left", fill="x", expand=True, padx=(4, 0))
 
+        # Row 1b: 1-Click Temp Root
+        r_root = ctk.CTkFrame(self.frame_fb_adb, fg_color="transparent")
+        r_root.pack(fill="x", pady=4)
+        ctk.CTkButton(
+            r_root,
+            text="⚡ 1-Click Temporary Root Access (Safe RAM Boot / Zero Data Loss)",
+            font=ctk.CTkFont(size=11, weight="bold"),
+            height=38,
+            fg_color="#059669",
+            hover_color="#047857",
+            command=self._adb_temp_root
+        ).pack(fill="x", expand=True)
+
         # Row 2
         r2 = ctk.CTkFrame(self.frame_fb_adb, fg_color="transparent")
         r2.pack(fill="x", pady=4)
@@ -133,6 +167,44 @@ class FastbootADBView:
         r4.pack(fill="x", pady=4)
         ctk.CTkButton(r4, text="🔒 Remove Screen Lock (Rooted)", font=ctk.CTkFont(size=11, weight="bold"), height=36, fg_color="#334155", hover_color="#475569", command=self._adb_remove_screenlock).pack(side="left", fill="x", expand=True, padx=(0, 4))
         ctk.CTkButton(r4, text="🧹 Wipe Dalvik / User Cache", font=ctk.CTkFont(size=11, weight="bold"), height=36, fg_color="#334155", hover_color="#475569", command=self._adb_wipe_cache).pack(side="left", fill="x", expand=True, padx=(4, 0))
+
+        # ADB IMEI Diagnostics & Hardware Repair Card
+        imei_card = ctk.CTkFrame(self.frame_fb_adb, fg_color="#181822", corner_radius=8, border_width=1, border_color="#2D2D3A")
+        imei_card.pack(fill="x", pady=(8, 6))
+
+        i_hdr = ctk.CTkFrame(imei_card, fg_color="transparent")
+        i_hdr.pack(fill="x", padx=10, pady=(8, 2))
+        ctk.CTkLabel(
+            i_hdr,
+            text="📶 ADB Hardware IMEI Diagnostics & Repair Suite",
+            font=ctk.CTkFont(size=11, weight="bold"),
+            text_color="#F59E0B"
+        ).pack(side="left")
+        ctk.CTkLabel(
+            i_hdr,
+            text="Auto-Luhn Checksum (15 Digits)",
+            font=ctk.CTkFont(size=10),
+            text_color="#94A3B8"
+        ).pack(side="right")
+
+        # IMEI 1 row
+        i_r1 = ctk.CTkFrame(imei_card, fg_color="transparent")
+        i_r1.pack(fill="x", padx=10, pady=3)
+        ctk.CTkLabel(i_r1, text="IMEI 1:", width=60, font=ctk.CTkFont(size=10, weight="bold"), text_color="#A5B4FC").pack(side="left")
+        ctk.CTkEntry(i_r1, textvariable=self.adb_imei1_var, placeholder_text="e.g. 358941091234567 (14 or 15 digits)", font=ctk.CTkFont(size=10), height=28, fg_color="#0F0F12").pack(side="left", fill="x", expand=True)
+
+        # IMEI 2 row
+        i_r2 = ctk.CTkFrame(imei_card, fg_color="transparent")
+        i_r2.pack(fill="x", padx=10, pady=3)
+        ctk.CTkLabel(i_r2, text="IMEI 2:", width=60, font=ctk.CTkFont(size=10, weight="bold"), text_color="#A5B4FC").pack(side="left")
+        ctk.CTkEntry(i_r2, textvariable=self.adb_imei2_var, placeholder_text="e.g. 358941091234568 (Optional / Dual SIM)", font=ctk.CTkFont(size=10), height=28, fg_color="#0F0F12").pack(side="left", fill="x", expand=True)
+
+        # IMEI Action Buttons
+        i_btns = ctk.CTkFrame(imei_card, fg_color="transparent")
+        i_btns.pack(fill="x", padx=10, pady=(4, 8))
+        ctk.CTkButton(i_btns, text="📋 Read IMEI (ADB)", height=32, font=ctk.CTkFont(size=10, weight="bold"), fg_color="#4F46E5", hover_color="#4338CA", command=self._adb_read_imei).pack(side="left", fill="x", expand=True, padx=(0, 4))
+        ctk.CTkButton(i_btns, text="✍️ Repair / Write IMEI (ADB)", height=32, font=ctk.CTkFont(size=10, weight="bold"), fg_color="#059669", hover_color="#047857", command=self._adb_write_imei).pack(side="left", fill="x", expand=True, padx=4)
+        ctk.CTkButton(i_btns, text="📶 Switch Diag Port", height=32, font=ctk.CTkFont(size=10, weight="bold"), fg_color="#D97706", hover_color="#B45309", command=self._adb_enable_diag).pack(side="left", fill="x", expand=True, padx=(4, 0))
 
         # Row 5: ADB Shell Runner
         shell_card = ctk.CTkFrame(self.frame_fb_adb, fg_color="#181822", corner_radius=6)
@@ -371,10 +443,28 @@ class FastbootADBView:
         ctk.CTkButton(op_r1, text="🔓 OEM Unlock Bootloader (fastboot flashing unlock)", font=ctk.CTkFont(size=11, weight="bold"), height=38, fg_color="#D97706", hover_color="#B45309", command=self._fb_unlock_bootloader).pack(side="left", fill="x", expand=True, padx=(0, 4))
         ctk.CTkButton(op_r1, text="🔒 OEM Relock Bootloader (fastboot flashing lock)", font=ctk.CTkFont(size=11, weight="bold"), height=38, fg_color="#D97706", hover_color="#B45309", command=self._fb_lock_bootloader).pack(side="left", fill="x", expand=True, padx=(4, 0))
 
+        # 1-Click Temp Root in Fastboot Ops
+        op_r_root = ctk.CTkFrame(self.frame_fb_ops, fg_color="transparent")
+        op_r_root.pack(fill="x", pady=4)
+        ctk.CTkButton(
+            op_r_root,
+            text="⚡ 1-Click Fastboot Temporary Root (RAM Tethered Boot — 0% eMMC Modification)",
+            font=ctk.CTkFont(size=11, weight="bold"),
+            height=38,
+            fg_color="#059669",
+            hover_color="#047857",
+            command=self._fb_temp_root
+        ).pack(fill="x", expand=True)
+
         op_r2 = ctk.CTkFrame(self.frame_fb_ops, fg_color="transparent")
         op_r2.pack(fill="x", pady=4)
         ctk.CTkButton(op_r2, text="🧹 Wipe Userdata & Cache (fastboot -w)", font=ctk.CTkFont(size=11, weight="bold"), height=38, fg_color="#DC2626", hover_color="#B91C1C", command=self._fb_wipe_userdata).pack(side="left", fill="x", expand=True, padx=(0, 4))
         ctk.CTkButton(op_r2, text="🗑️ Erase FRP Partition (fastboot erase frp)", font=ctk.CTkFont(size=11, weight="bold"), height=38, fg_color="#DC2626", hover_color="#B91C1C", command=self._fb_erase_frp).pack(side="left", fill="x", expand=True, padx=(4, 0))
+
+        # Fastboot IMEI Reader Row
+        op_r_imei = ctk.CTkFrame(self.frame_fb_ops, fg_color="transparent")
+        op_r_imei.pack(fill="x", pady=4)
+        ctk.CTkButton(op_r_imei, text="📋 Read Hardware IMEI (fastboot getvar imei)", font=ctk.CTkFont(size=11, weight="bold"), height=36, fg_color="#4F46E5", hover_color="#4338CA", command=self._fb_read_imei).pack(fill="x", expand=True)
 
         op_r3 = ctk.CTkFrame(self.frame_fb_ops, fg_color="transparent")
         op_r3.pack(fill="x", pady=4)
@@ -480,7 +570,150 @@ class FastbootADBView:
         ctk.CTkButton(fbd_btn_row, text="📐 Resize", height=32, font=ctk.CTkFont(size=10, weight="bold"), fg_color="#2563EB", hover_color="#1D4ED8", command=self._fb_resize_logical_part).pack(side="left", fill="x", expand=True, padx=3)
         ctk.CTkButton(fbd_btn_row, text="🗑️ Delete", height=32, font=ctk.CTkFont(size=10, weight="bold"), fg_color="#DC2626", hover_color="#B91C1C", command=self._fb_delete_logical_part).pack(side="right", fill="x", expand=True, padx=(3, 0))
 
+        # TAB 6: UNIVERSAL FIRMWARE EXTRACTOR
+        self._build_unpacker_tab()
+
         self._show_tab("🤖 ADB Services & FRP")
+
+    def _build_unpacker_tab(self):
+        self.frame_fb_unpacker = ctk.CTkFrame(self.tab_container_fb, fg_color="transparent")
+
+        # Top Control Card
+        ctrl_card = ctk.CTkFrame(self.frame_fb_unpacker, fg_color="#181822", corner_radius=8, border_width=1, border_color="#2D2D3A")
+        ctrl_card.pack(fill="x", pady=(0, 6), padx=2)
+
+        # Header Title Row
+        hdr_row = ctk.CTkFrame(ctrl_card, fg_color="transparent")
+        hdr_row.pack(fill="x", padx=12, pady=(8, 4))
+        ctk.CTkLabel(
+            hdr_row,
+            text="📦 UNIVERSAL ANDROID FIRMWARE EXTRACTOR",
+            font=ctk.CTkFont(size=12, weight="bold"),
+            text_color="#00D2FF"
+        ).pack(side="left")
+        ctk.CTkLabel(
+            hdr_row,
+            text="Supports: OTA payload.bin, Samsung TAR/LZ4, Unisoc PAC, Oppo OFP, OnePlus OPS, Huawei APP, super.img",
+            font=ctk.CTkFont(size=10),
+            text_color="#94A3B8"
+        ).pack(side="right")
+
+        # Row 1: Format Selector & Options
+        r1 = ctk.CTkFrame(ctrl_card, fg_color="transparent")
+        r1.pack(fill="x", padx=12, pady=4)
+
+        ctk.CTkLabel(r1, text="Archive Format:", font=ctk.CTkFont(size=10, weight="bold"), text_color="#A5B4FC").pack(side="left", padx=(0, 6))
+        self.unp_format_menu = ctk.CTkOptionMenu(
+            r1,
+            values=[
+                "Auto-Detect (Based on File)",
+                "Android OTA (payload.bin)",
+                "Samsung (.tar.md5 + LZ4)",
+                "Unisoc / Spreadtrum (.pac)",
+                "Oppo / Realme (.ofp)",
+                "OnePlus (.ops)",
+                "Huawei Firmware (UPDATE.APP)",
+                "Android super.img (Dynamic)",
+                "Android Sparse (.img to Raw)"
+            ],
+            variable=self.unp_format_var,
+            width=220,
+            height=28,
+            fg_color="#0284C7",
+            button_hover_color="#0369A1"
+        )
+        self.unp_format_menu.pack(side="left", padx=(0, 14))
+
+        ctk.CTkCheckBox(
+            r1,
+            text="Decompress LZ4 (.img.lz4 -> .img)",
+            variable=self.unp_chk_lz4_var,
+            font=ctk.CTkFont(size=10),
+            height=24
+        ).pack(side="left")
+
+        # Row 2: Source Archive File
+        r2 = ctk.CTkFrame(ctrl_card, fg_color="transparent")
+        r2.pack(fill="x", padx=12, pady=4)
+        ctk.CTkLabel(r2, text="Source Archive:", font=ctk.CTkFont(size=10, weight="bold"), text_color="#FDE68A", width=95, anchor="w").pack(side="left")
+        ctk.CTkEntry(r2, textvariable=self.unp_input_file_var, placeholder_text="Select firmware file (.bin, .tar.md5, .pac, .ofp, .ops, .app, .img)...", font=ctk.CTkFont(size=10), height=28, fg_color="#0F0F12").pack(side="left", fill="x", expand=True, padx=(0, 6))
+        ctk.CTkButton(r2, text="📁 Browse File", width=90, height=28, font=ctk.CTkFont(size=10, weight="bold"), fg_color="#2563EB", hover_color="#1D4ED8", command=self._unp_browse_input).pack(side="right")
+
+        # Row 3: Output Directory & Action Buttons
+        r3 = ctk.CTkFrame(ctrl_card, fg_color="transparent")
+        r3.pack(fill="x", padx=12, pady=(4, 10))
+        ctk.CTkLabel(r3, text="Output Folder:", font=ctk.CTkFont(size=10, weight="bold"), text_color="#34D399", width=95, anchor="w").pack(side="left")
+        ctk.CTkEntry(r3, textvariable=self.unp_output_dir_var, font=ctk.CTkFont(size=10), height=28, fg_color="#0F0F12").pack(side="left", fill="x", expand=True, padx=(0, 6))
+        ctk.CTkButton(r3, text="📂 Browse", width=75, height=28, font=ctk.CTkFont(size=10, weight="bold"), fg_color="#334155", hover_color="#475569", command=self._unp_browse_output).pack(side="left", padx=(0, 6))
+        ctk.CTkButton(r3, text="⚡ START EXTRACTION", width=160, height=30, font=ctk.CTkFont(size=11, weight="bold"), fg_color="#059669", hover_color="#047857", command=self._unp_start_extraction).pack(side="right")
+
+        # Center: Extracted Partitions Treeview Card
+        tree_card = ctk.CTkFrame(self.frame_fb_unpacker, fg_color="#181822", corner_radius=8, border_width=1, border_color="#2D2D3A")
+        tree_card.pack(fill="both", expand=True, pady=2, padx=2)
+
+        # Treeview Action Header
+        tree_hdr = ctk.CTkFrame(tree_card, fg_color="transparent")
+        tree_hdr.pack(fill="x", padx=12, pady=(8, 4))
+        ctk.CTkLabel(tree_hdr, text="EXTRACTED PARTITION IMAGES", font=ctk.CTkFont(size=11, weight="bold"), text_color="#F59E0B").pack(side="left")
+
+        ctk.CTkButton(
+            tree_hdr,
+            text="📂 Open Output Folder",
+            height=26,
+            font=ctk.CTkFont(size=10, weight="bold"),
+            fg_color="#334155",
+            hover_color="#475569",
+            command=self._unp_open_output_folder
+        ).pack(side="right", padx=(6, 0))
+
+        ctk.CTkButton(
+            tree_hdr,
+            text="⚡ Send Selected to Fastboot Flasher",
+            height=26,
+            font=ctk.CTkFont(size=10, weight="bold"),
+            fg_color="#0284C7",
+            hover_color="#0369A1",
+            command=self._unp_send_selected_to_flasher
+        ).pack(side="right", padx=2)
+
+        # Treeview
+        tree_container = ctk.CTkFrame(tree_card, fg_color="transparent")
+        tree_container.pack(fill="both", expand=True, padx=10, pady=(2, 6))
+
+        cols = ("idx", "name", "size", "status")
+        self.tree_unp = ttk.Treeview(tree_container, columns=cols, show="headings", selectmode="browse")
+        self.tree_unp.heading("idx", text="#")
+        self.tree_unp.heading("name", text="Extracted Partition / File Name")
+        self.tree_unp.heading("size", text="File Size")
+        self.tree_unp.heading("status", text="Status")
+
+        self.tree_unp.column("idx", width=40, anchor="center")
+        self.tree_unp.column("name", width=380, anchor="w")
+        self.tree_unp.column("size", width=120, anchor="e")
+        self.tree_unp.column("status", width=140, anchor="center")
+
+        unp_scroll = ttk.Scrollbar(tree_container, orient="vertical", command=self.tree_unp.yview)
+        self.tree_unp.configure(yscrollcommand=unp_scroll.set)
+        self.tree_unp.pack(side="left", fill="both", expand=True)
+        unp_scroll.pack(side="right", fill="y")
+        self.tree_unp.tag_configure("even", background="#121216")
+        self.tree_unp.tag_configure("odd", background="#181820")
+
+        # Bottom Progress HUD
+        hud_frame = ctk.CTkFrame(self.frame_fb_unpacker, fg_color="#181822", corner_radius=6, border_width=1, border_color="#2D2D3A")
+        hud_frame.pack(fill="x", pady=(4, 0), padx=2)
+
+        self.lbl_unp_status = ctk.CTkLabel(
+            hud_frame,
+            text="Status: Ready to extract Android firmware archives",
+            font=ctk.CTkFont(size=10, weight="bold"),
+            text_color="#94A3B8"
+        )
+        self.lbl_unp_status.pack(anchor="w", padx=12, pady=(6, 2))
+
+        self.bar_unp = ctk.CTkProgressBar(hud_frame, height=8, fg_color="#27272A", progress_color="#059669")
+        self.bar_unp.pack(fill="x", padx=12, pady=(0, 8))
+        self.bar_unp.set(0.0)
 
     def _show_tab(self, tab_name):
         self.frame_fb_adb.pack_forget()
@@ -488,6 +721,7 @@ class FastbootADBView:
         self.frame_fb_ops.pack_forget()
         self.frame_fb_apk.pack_forget()
         self.frame_fb_mtp.pack_forget()
+        self.frame_fb_unpacker.pack_forget()
 
         if tab_name == "🤖 ADB Services & FRP":
             self.frame_fb_adb.pack(fill="both", expand=True)
@@ -499,9 +733,263 @@ class FastbootADBView:
             self.frame_fb_apk.pack(fill="both", expand=True)
         elif tab_name == "🌐 MTP & Sideload":
             self.frame_fb_mtp.pack(fill="both", expand=True)
+        elif tab_name == "📦 Firmware Extractor":
+            self.frame_fb_unpacker.pack(fill="both", expand=True)
 
     def _on_tab_changed(self, value):
         self._show_tab(value)
+
+    def switch_to_tab(self, tab_name: str):
+        self.tab_fb_selector.set(tab_name)
+        self._show_tab(tab_name)
+
+    # -------------------------------------------------------------------------
+    # UNIVERSAL FIRMWARE EXTRACTOR IMPLEMENTATIONS
+    # -------------------------------------------------------------------------
+    def _unp_browse_input(self):
+        f = filedialog.askopenfilename(
+            title="Select Android Firmware Archive",
+            filetypes=[
+                ("All Supported Firmware", "*.bin;*.zip;*.tar;*.tar.md5;*.pac;*.ofp;*.ops;*.app;*.img"),
+                ("Android OTA Payload", "payload.bin;*.bin;*.zip"),
+                ("Samsung TAR Firmware", "*.tar;*.tar.md5"),
+                ("Unisoc / SPD PAC", "*.pac"),
+                ("Oppo / Realme OFP", "*.ofp"),
+                ("OnePlus OPS", "*.ops"),
+                ("Huawei UPDATE.APP", "UPDATE.APP;*.app"),
+                ("Android Super / Sparse Image", "*.img"),
+                ("All Files", "*.*")
+            ]
+        )
+        if not f:
+            return
+
+        self.unp_input_file_var.set(f)
+        fn_lower = os.path.basename(f).lower()
+
+        # Smart Auto-Detect
+        if fn_lower == "payload.bin" or "payload" in fn_lower or (fn_lower.endswith(".zip") and not fn_lower.endswith(".ofp")):
+            self.unp_format_var.set("Android OTA (payload.bin)")
+        elif fn_lower.endswith(".tar.md5") or fn_lower.endswith(".tar"):
+            self.unp_format_var.set("Samsung (.tar.md5 + LZ4)")
+        elif fn_lower.endswith(".pac"):
+            self.unp_format_var.set("Unisoc / Spreadtrum (.pac)")
+        elif fn_lower.endswith(".ofp"):
+            self.unp_format_var.set("Oppo / Realme (.ofp)")
+        elif fn_lower.endswith(".ops"):
+            self.unp_format_var.set("OnePlus (.ops)")
+        elif "update.app" in fn_lower or fn_lower.endswith(".app"):
+            self.unp_format_var.set("Huawei Firmware (UPDATE.APP)")
+        elif "super" in fn_lower and fn_lower.endswith(".img"):
+            self.unp_format_var.set("Android super.img (Dynamic)")
+        elif fn_lower.endswith(".img"):
+            self.unp_format_var.set("Android Sparse (.img to Raw)")
+
+        self.logger.info(f"[Firmware Extractor] Selected: {os.path.basename(f)} (Format: {self.unp_format_var.get()})")
+
+    def _unp_browse_output(self):
+        d = filedialog.askdirectory(title="Select Extraction Output Folder")
+        if d:
+            self.unp_output_dir_var.set(d)
+
+    def _unp_open_output_folder(self):
+        d = self.unp_output_dir_var.get().strip()
+        if os.path.exists(d):
+            os.startfile(d)
+        else:
+            messagebox.showwarning("Notice", "Output folder does not exist yet.")
+
+    def _unp_send_selected_to_flasher(self):
+        sel = self.tree_unp.selection()
+        if not sel:
+            messagebox.showinfo("Select Image", "Please select an extracted partition image from the table first.")
+            return
+        item_vals = self.tree_unp.item(sel[0], "values")
+        if not item_vals or len(item_vals) < 2:
+            return
+        file_name = item_vals[1]
+        out_dir = self.unp_output_dir_var.get().strip()
+        full_path = os.path.join(out_dir, file_name)
+        if not os.path.exists(full_path):
+            matching = next((x["path"] for x in self.unp_extracted_files if x["name"] == file_name), None)
+            if matching and os.path.exists(matching):
+                full_path = matching
+
+        if os.path.exists(full_path):
+            self._send_file_to_flasher(full_path)
+        else:
+            messagebox.showerror("Error", f"File not found on disk: {file_name}")
+
+    def _send_file_to_flasher(self, file_path):
+        if not file_path or not os.path.exists(file_path):
+            return
+        base_fn = os.path.basename(file_path)
+        p_name = os.path.splitext(base_fn)[0].lower()
+        if p_name.endswith(".img"):
+            p_name = p_name[:-4]
+        f_size = os.path.getsize(file_path)
+        size_str = f"{f_size / (1024 * 1024):.1f} MB"
+        self.fb_partitions.append({
+            "check": True,
+            "partition": p_name,
+            "file": file_path,
+            "filename": base_fn,
+            "size": size_str,
+            "status": "Ready"
+        })
+        self._refresh_fb_tree()
+        self.switch_to_tab("⚡ Fastboot Flasher")
+        self.logger.success(f"[Fastboot Flasher] Added extracted '{base_fn}' to flashing queue.")
+
+    def _unp_start_extraction(self):
+        if self.unp_is_unpacking:
+            return
+
+        in_file = self.unp_input_file_var.get().strip()
+        out_dir = self.unp_output_dir_var.get().strip()
+        fmt = self.unp_format_var.get()
+
+        if not in_file or not os.path.exists(in_file):
+            messagebox.showerror("File Missing", "Please select a valid input firmware file first.")
+            return
+
+        # Handle Auto-Detect
+        if "Auto-Detect" in fmt:
+            fn_l = os.path.basename(in_file).lower()
+            if fn_l == "payload.bin" or "payload" in fn_l or fn_l.endswith(".zip"):
+                fmt = "Android OTA (payload.bin)"
+            elif fn_l.endswith(".tar.md5") or fn_l.endswith(".tar"):
+                fmt = "Samsung (.tar.md5 + LZ4)"
+            elif fn_l.endswith(".pac"):
+                fmt = "Unisoc / Spreadtrum (.pac)"
+            elif fn_l.endswith(".ofp"):
+                fmt = "Oppo / Realme (.ofp)"
+            elif fn_l.endswith(".ops"):
+                fmt = "OnePlus (.ops)"
+            elif "update.app" in fn_l or fn_l.endswith(".app"):
+                fmt = "Huawei Firmware (UPDATE.APP)"
+            elif "super" in fn_l and fn_l.endswith(".img"):
+                fmt = "Android super.img (Dynamic)"
+            elif fn_l.endswith(".img"):
+                fmt = "Android Sparse (.img to Raw)"
+            else:
+                fmt = "Android OTA (payload.bin)"
+
+        os.makedirs(out_dir, exist_ok=True)
+        for item in self.tree_unp.get_children():
+            self.tree_unp.delete(item)
+        self.unp_extracted_files.clear()
+
+        self.unp_is_unpacking = True
+        self.lbl_unp_status.configure(text=f"Status: Extracting {os.path.basename(in_file)}...", text_color="#34D399")
+        self.bar_unp.set(0.0)
+
+        def run():
+            try:
+                def prog_cb(pct, status_text="Unpacking..."):
+                    self.center_panel_fb.after(0, lambda: self.bar_unp.set(pct))
+                    self.center_panel_fb.after(0, lambda: self.lbl_unp_status.configure(text=f"Status: {status_text} ({int(pct*100)}%)"))
+
+                def log_cb(msg):
+                    self.logger.info(f"[EXTRACT] {msg}")
+
+                files = []
+                if "UPDATE.APP" in fmt or "Huawei" in fmt:
+                    files = HuaweiAppUnpacker.unpack_update_app(
+                        app_path=in_file,
+                        out_dir=out_dir,
+                        progress_cb=prog_cb,
+                        log_cb=log_cb
+                    )
+                elif "payload.bin" in fmt or "OTA" in fmt:
+                    unpacker = PayloadUnpacker(logger=self.logger)
+                    extracted_paths = unpacker.unpack(
+                        payload_path=in_file,
+                        output_dir=out_dir,
+                        progress_cb=lambda pct, msg: prog_cb(pct / 100.0, msg)
+                    )
+                    for ep in extracted_paths:
+                        sz = os.path.getsize(ep) if os.path.exists(ep) else 0
+                        files.append({
+                            "name": os.path.basename(ep),
+                            "path": ep,
+                            "size": sz,
+                            "size_human": format_bytes(sz)
+                        })
+                elif "Samsung" in fmt:
+                    files = SamsungTarUnpacker.unpack_samsung_tar(
+                        tar_path=in_file,
+                        out_dir=out_dir,
+                        decompress_lz4=self.unp_chk_lz4_var.get(),
+                        progress_cb=prog_cb,
+                        log_cb=log_cb
+                    )
+                elif "Unisoc" in fmt or ".pac" in fmt:
+                    files = PacUnpacker.unpack_pac(
+                        pac_path=in_file,
+                        out_dir=out_dir,
+                        progress_cb=lambda p: prog_cb(p, "Extracting PAC Partitions...")
+                    )
+                elif "Oppo" in fmt:
+                    files = OfpOpsUnpacker.unpack_ofp(
+                        ofp_path=in_file,
+                        out_dir=out_dir,
+                        progress_cb=prog_cb,
+                        log_cb=log_cb
+                    )
+                elif "OnePlus" in fmt:
+                    files = OfpOpsUnpacker.unpack_ops(
+                        ops_path=in_file,
+                        out_dir=out_dir,
+                        progress_cb=prog_cb,
+                        log_cb=log_cb
+                    )
+                elif "super.img" in fmt:
+                    files = SuperSparseUnpacker.unpack_super_image(
+                        super_path=in_file,
+                        out_dir=out_dir,
+                        progress_cb=prog_cb,
+                        log_cb=log_cb
+                    )
+                elif "Sparse" in fmt:
+                    raw_out = os.path.join(out_dir, "raw_image.img")
+                    ok = SuperSparseUnpacker.unsparse_image(
+                        sparse_path=in_file,
+                        out_raw_path=raw_out,
+                        progress_cb=prog_cb,
+                        log_cb=log_cb
+                    )
+                    if ok:
+                        files = [{"name": "raw_image.img", "path": raw_out, "size": os.path.getsize(raw_out), "size_human": format_bytes(os.path.getsize(raw_out))}]
+
+                self.unp_extracted_files = files
+                self.center_panel_fb.after(0, lambda: self._populate_unp_results(files))
+                self.logger.success(f"[Firmware Extractor] Completed! {len(files)} partition files extracted to: {out_dir}")
+
+            except Exception as e:
+                self.logger.error(f"[Firmware Extractor] Failed: {str(e)}")
+                messagebox.showerror("Extraction Error", f"Failed to extract firmware archive:\n{str(e)}")
+            finally:
+                self.unp_is_unpacking = False
+                self.center_panel_fb.after(0, lambda: self.lbl_unp_status.configure(text=f"Status: Finished. {len(self.unp_extracted_files)} files extracted successfully."))
+                self.center_panel_fb.after(0, lambda: self.bar_unp.set(1.0))
+
+        threading.Thread(target=run, daemon=True).start()
+
+    def _populate_unp_results(self, files: list):
+        for idx, f in enumerate(files, start=1):
+            tag = "even" if idx % 2 == 0 else "odd"
+            self.tree_unp.insert(
+                "",
+                "end",
+                values=(
+                    idx,
+                    f.get("name", "--"),
+                    f.get("size_human", "--"),
+                    "✓ Extracted (OK)"
+                ),
+                tags=(tag,)
+            )
 
     # -------------------------------------------------------------------------
     # ADB & FASTBOOT IMPLEMENTATIONS
@@ -855,6 +1343,247 @@ class FastbootADBView:
     def _fb_reboot_edl(self):
         self.logger.brom("Rebooting to Qualcomm EDL (fastboot oem edl / reboot-edl)...")
         threading.Thread(target=self._run_cmd_log, args=(["fastboot", "oem", "edl"], "Reboot EDL"), daemon=True).start()
+
+    def _adb_temp_root(self):
+        if hasattr(self.controller, "op_temp_root"):
+            self.controller.op_temp_root("ADB")
+        else:
+            self.logger.info("Executing 1-Click ADB Temporary Root Access...")
+
+    def _fb_temp_root(self):
+        if hasattr(self.controller, "op_temp_root"):
+            self.controller.op_temp_root("FASTBOOT")
+        else:
+            self.logger.info("Executing 1-Click Fastboot RAM Tethered Boot...")
+
+    def _adb_read_imei(self):
+        self.logger.info("Querying Android Device IMEI via ADB...")
+        target_s = self._get_target_adb_serial()
+        adb_p = ["adb", "-s", target_s] if target_s else ["adb"]
+
+        def run():
+            try:
+                imei1 = ""
+                imei2 = ""
+
+                # 1. Baseband system properties
+                p_res = self._run_tool(adb_p + ["shell", "getprop"], capture_output=True, text=True)
+                props = {}
+                if p_res.stdout:
+                    for line in p_res.stdout.splitlines():
+                        if "]: [" in line:
+                            parts = line.split("]: [", 1)
+                            k = parts[0].replace("[", "").strip()
+                            v = parts[1].rstrip("]").strip()
+                            props[k] = v
+
+                for prop_key in ["persist.radio.imei", "persist.radio.imei1", "gsm.baseband.imei", "ro.ril.oem.imei1", "ril.serialnumber"]:
+                    val = props.get(prop_key, "").strip()
+                    if val and val.isdigit() and len(val) in (14, 15):
+                        imei1 = val
+                        break
+
+                for prop_key in ["persist.radio.imei2", "ro.ril.oem.imei2", "gsm.baseband.imei2", "persist.radio.imei_slot2"]:
+                    val = props.get(prop_key, "").strip()
+                    if val and val.isdigit() and len(val) in (14, 15):
+                        imei2 = val
+                        break
+
+                # 2. Service call iphonesubinfo
+                if not imei1:
+                    for sub_call in [1, 2, 3]:
+                        sc = self._run_tool(adb_p + ["shell", "service", "call", "iphonesubinfo", str(sub_call)], capture_output=True, text=True)
+                        if sc.stdout:
+                            raw_chars = []
+                            for line in sc.stdout.splitlines():
+                                if "'" in line:
+                                    ascii_part = line.split("'")[1].replace(".", "").strip()
+                                    raw_chars.append(ascii_part)
+                            candidate = "".join(c for c in "".join(raw_chars) if c.isdigit())
+                            if len(candidate) in (14, 15):
+                                if not imei1:
+                                    imei1 = candidate
+                                elif not imei2 and candidate != imei1:
+                                    imei2 = candidate
+                                    break
+
+                # 3. Dumpsys iphonesubinfo
+                if not imei1 or not imei2:
+                    ds = self._run_tool(adb_p + ["shell", "dumpsys", "iphonesubinfo"], capture_output=True, text=True)
+                    if ds.stdout:
+                        import re
+                        found = re.findall(r"\b\d{14,15}\b", ds.stdout)
+                        for f in found:
+                            if not imei1:
+                                imei1 = f
+                            elif not imei2 and f != imei1:
+                                imei2 = f
+                                break
+
+                self.logger.success("==================================================")
+                self.logger.success("ANDROID LIVE ADB IMEI READ")
+                self.logger.success("==================================================")
+                if imei1:
+                    self.logger.success(f"[✓] IMEI 1 : {imei1}")
+                    self.adb_imei1_var.set(imei1)
+                else:
+                    self.logger.warn("[!] IMEI 1 : Null / Blank (Damaged Baseband or Missing Permissions)")
+
+                if imei2:
+                    self.logger.success(f"[✓] IMEI 2 : {imei2}")
+                    self.adb_imei2_var.set(imei2)
+                elif imei1:
+                    self.logger.info("[*] IMEI 2 : Single SIM Device / Not detected")
+
+                if hasattr(self.controller, "sound_manager"):
+                    self.controller.sound_manager.play_success()
+
+            except Exception as e:
+                self.logger.error(f"[ADB] Failed to read IMEI: {str(e)}")
+
+        threading.Thread(target=run, daemon=True).start()
+
+    def _adb_write_imei(self):
+        from utils.imei_utils import validate_imei
+
+        raw_i1 = self.adb_imei1_var.get().strip()
+        raw_i2 = self.adb_imei2_var.get().strip()
+
+        if not raw_i1:
+            self.logger.warn("Please enter at least IMEI 1 to repair.")
+            messagebox.showwarning("Missing IMEI", "Please enter valid 14 or 15 digit IMEI 1 to proceed.")
+            return
+
+        valid1, full_i1, msg1 = validate_imei(raw_i1)
+        if not valid1:
+            self.logger.error(f"IMEI 1 Error: {msg1}")
+            messagebox.showerror("Invalid IMEI 1", f"IMEI 1 is invalid: {msg1}")
+            return
+        self.adb_imei1_var.set(full_i1)
+
+        full_i2 = ""
+        if raw_i2:
+            valid2, full_i2, msg2 = validate_imei(raw_i2)
+            if not valid2:
+                self.logger.error(f"IMEI 2 Error: {msg2}")
+                messagebox.showerror("Invalid IMEI 2", f"IMEI 2 is invalid: {msg2}")
+                return
+            self.adb_imei2_var.set(full_i2)
+
+        target_s = self._get_target_adb_serial()
+        adb_p = ["adb", "-s", target_s] if target_s else ["adb"]
+
+        def run():
+            try:
+                self.logger.warn("=" * 60)
+                self.logger.warn("EXECUTING ADB HARDWARE IMEI RESTORATION & CALIBRATION")
+                self.logger.warn("=" * 60)
+                self.logger.info(f"Target Device   : {target_s or 'Default ADB'}")
+                self.logger.info(f"Writing IMEI 1  : {full_i1}")
+                if full_i2:
+                    self.logger.info(f"Writing IMEI 2  : {full_i2}")
+
+                # 1. Root handshake
+                self.logger.info("[*] Requesting ADB root daemon permissions...")
+                self._run_tool(adb_p + ["root"], capture_output=True)
+                time.sleep(1.0)
+
+                # 2. Inject via Radio AT Command Channels (Universal MTK / Spreadtrum / QC)
+                at_channels = [
+                    "/dev/radio/pttycmd1",
+                    "/dev/pttycmd1",
+                    "/dev/smd0",
+                    "/dev/smd11",
+                    "/dev/ttyUSB0",
+                    "/dev/ttyGS0",
+                    "/dev/ttyC0"
+                ]
+
+                self.logger.info("[*] Injecting AT+EGMR Radio Calibration Commands...")
+                for ch in at_channels:
+                    cmd_i1 = f'echo -e "AT+EGMR=1,7,\\"{full_i1}\\"\\r\\n" > {ch}'
+                    self._run_tool(adb_p + ["shell", cmd_i1], capture_output=True)
+                    if full_i2:
+                        cmd_i2 = f'echo -e "AT+EGMR=1,10,\\"{full_i2}\\"\\r\\n" > {ch}'
+                        self._run_tool(adb_p + ["shell", cmd_i2], capture_output=True)
+
+                # 3. Baseband persist properties
+                self.logger.info("[*] Restoring Persistent Radio Baseband Properties...")
+                props_to_set = [
+                    ("persist.radio.imei", full_i1),
+                    ("persist.radio.imei1", full_i1),
+                    ("gsm.baseband.imei", full_i1),
+                    ("ro.ril.oem.imei1", full_i1),
+                ]
+                if full_i2:
+                    props_to_set.extend([
+                        ("persist.radio.imei2", full_i2),
+                        ("persist.radio.imei_slot2", full_i2),
+                        ("ro.ril.oem.imei2", full_i2),
+                        ("gsm.baseband.imei2", full_i2),
+                    ])
+
+                for k, v in props_to_set:
+                    self._run_tool(adb_p + ["shell", "setprop", k, v], capture_output=True)
+
+                # 4. Refresh RIL Daemons
+                self.logger.info("[*] Refreshing RIL (Radio Interface Layer) Daemons...")
+                self._run_tool(adb_p + ["shell", "setprop", "ctl.restart", "ril-daemon"], capture_output=True)
+                self._run_tool(adb_p + ["shell", "setprop", "ctl.restart", "mtk-ril-daemon"], capture_output=True)
+
+                self.logger.success("=" * 60)
+                self.logger.success("✓ ADB IMEI RESTORATION & CALIBRATION APPLIED!")
+                self.logger.success(f"Configured IMEI 1: {full_i1}")
+                if full_i2:
+                    self.logger.success(f"Configured IMEI 2: {full_i2}")
+                self.logger.success("Please restart device or toggle Airplane Mode to reload NVRAM.")
+                self.logger.success("=" * 60)
+
+                if hasattr(self.controller, "sound_manager"):
+                    self.controller.sound_manager.play_success()
+
+            except Exception as e:
+                self.logger.error(f"[ADB] IMEI Repair failed: {str(e)}")
+                if hasattr(self.controller, "sound_manager"):
+                    self.controller.sound_manager.play_error()
+
+        threading.Thread(target=run, daemon=True).start()
+
+    def _fb_read_imei(self):
+        self.logger.info("Querying Hardware IMEI from Fastboot Bootloader...")
+        target_s = self._get_target_fastboot_serial()
+        fb_p = ["fastboot", "-s", target_s] if target_s else ["fastboot"]
+
+        def run():
+            try:
+                found_imeis = []
+                for v in ["imei", "imei1", "imei2", "oem-imei", "serialno"]:
+                    res = self._run_tool(fb_p + ["getvar", v], capture_output=True, text=True)
+                    combined = (res.stdout + " " + res.stderr).strip()
+                    for line in combined.splitlines():
+                        if ":" in line:
+                            val = line.split(":", 1)[1].strip()
+                            digits = "".join(c for c in val if c.isdigit())
+                            if len(digits) in (14, 15) and digits not in found_imeis:
+                                found_imeis.append(digits)
+
+                self.logger.success("==================================================")
+                self.logger.success("FASTBOOT BOOTLOADER IMEI DIAGNOSTICS")
+                self.logger.success("==================================================")
+                if found_imeis:
+                    for idx, im in enumerate(found_imeis, start=1):
+                        self.logger.success(f"[✓] Fastboot IMEI {idx}: {im}")
+                    if len(found_imeis) >= 1:
+                        self.adb_imei1_var.set(found_imeis[0])
+                    if len(found_imeis) >= 2:
+                        self.adb_imei2_var.set(found_imeis[1])
+                else:
+                    self.logger.warn("[!] Bootloader getvar returned no hardware IMEI variables.")
+                    self.logger.info("[*] Use ADB Live Mode or EDL / META mode for deep IMEI diagnostics.")
+            except Exception as e:
+                self.logger.error(f"[Fastboot] Failed to read IMEI: {str(e)}")
+
+        threading.Thread(target=run, daemon=True).start()
 
     def _run_tool(self, cmd_args, **kwargs):
         """Executes adb or fastboot using bundled binaries from resources/platform-tools/"""
@@ -1275,3 +2004,7 @@ class FastbootADBView:
     def hide(self):
         self.left_panel_fb.grid_forget()
         self.center_panel_fb.grid_forget()
+
+# Backwards compatible alias
+AndroidView = FastbootADBView
+

@@ -13,13 +13,21 @@ class MtkMetaEngine:
         self.current_process = None
         self.is_running = False
 
+    def _is_valid_mtkclient_loader(self, custom_da):
+        if not custom_da or not os.path.exists(custom_da):
+            return False
+        base = os.path.basename(custom_da).lower()
+        if base.endswith(".da") or "allinone" in base or "brand_da" in custom_da.replace("\\", "/").lower():
+            return False
+        return True
+
     def enter_meta(self, mode: str = "METAMETA", custom_da: str = None, custom_preloader: str = None, progress_callback=None):
         """Reboots MTK device into META mode (e.g. METAMETA, FASTBOOT, FACTORYM)."""
         self.logger.brom(f"Sending META Reboot Command ({mode})...")
         self.logger.info("Power OFF phone, hold Vol- or connect Test Point, and insert USB cable.")
 
         cmd = [sys.executable, "-m", "mtkclient.mtk", "meta", mode]
-        if custom_da and os.path.exists(custom_da):
+        if self._is_valid_mtkclient_loader(custom_da):
             cmd.extend(["--loader", custom_da])
         if custom_preloader and os.path.exists(custom_preloader):
             cmd.extend(["--preloader", custom_preloader])
@@ -30,7 +38,7 @@ class MtkMetaEngine:
         """Alternate META Mode entry via Watchdog reset (META2)."""
         self.logger.brom("Initiating Watchdog META Mode Entry (META2)...")
         cmd = [sys.executable, "-m", "mtkclient.mtk", "meta2"]
-        if custom_da and os.path.exists(custom_da):
+        if self._is_valid_mtkclient_loader(custom_da):
             cmd.extend(["--loader", custom_da])
         if custom_preloader and os.path.exists(custom_preloader):
             cmd.extend(["--preloader", custom_preloader])
@@ -41,7 +49,7 @@ class MtkMetaEngine:
         """Reboots device to standard Android system."""
         self.logger.info("Sending Reboot to System command...")
         cmd = [sys.executable, "-m", "mtkclient.mtk", "reset"]
-        if custom_da and os.path.exists(custom_da):
+        if self._is_valid_mtkclient_loader(custom_da):
             cmd.extend(["--loader", custom_da])
         if custom_preloader and os.path.exists(custom_preloader):
             cmd.extend(["--preloader", custom_preloader])
@@ -208,7 +216,7 @@ class MtkMetaEngine:
             if progress_callback: progress_callback(0.2)
             self.logger.brom("Reading 'nvram' partition from device...")
             cmd_read = [sys.executable, "-m", "mtkclient.mtk", "r", "nvram", dump_file]
-            if custom_da and os.path.exists(custom_da): cmd_read.extend(["--loader", custom_da])
+            if self._is_valid_mtkclient_loader(custom_da): cmd_read.extend(["--loader", custom_da])
             if custom_preloader and os.path.exists(custom_preloader): cmd_read.extend(["--preloader", custom_preloader])
 
             ok_r = self._run_command(cmd_read, "Read NVRAM", None)
@@ -223,8 +231,19 @@ class MtkMetaEngine:
 
             # Encode BCD (MediaTek uses BCD format with 0x08 length prefix or 8 bytes)
             imei1_b = encode_imei_spd_bcd(clean1)
-            # Find and patch in nvram buffer
-            offset1 = 0x200
+            
+            # Dynamic Offset Scanner: search buffer for existing BCD TAC signatures (e.g. 0x86, 0x35, 0x01)
+            found_offset = -1
+            common_tacs = [b'\x86', b'\x35', b'\x01', b'\x99']
+            for off in range(0, min(len(nv_bytes) - 8, 0x10000), 2):
+                if any(nv_bytes[off:off+1] == tac for tac in common_tacs):
+                    # Check if subsequent 7 bytes look like valid BCD digits
+                    if all((nv_bytes[off + i] & 0x0F) <= 9 and ((nv_bytes[off + i] >> 4) <= 9 or (nv_bytes[off + i] >> 4) == 0x0F) for i in range(7)):
+                        found_offset = off
+                        break
+
+            offset1 = found_offset if found_offset != -1 else 0x200
+            self.logger.info(f"Targeting NVRAM IMEI Record at offset: 0x{offset1:04X}...")
             if len(nv_bytes) > offset1 + 16:
                 nv_bytes[offset1 : offset1 + 8] = imei1_b
                 if clean2:
@@ -238,7 +257,7 @@ class MtkMetaEngine:
             if progress_callback: progress_callback(0.8)
             self.logger.brom("Writing patched NVRAM back to device storage...")
             cmd_write = [sys.executable, "-m", "mtkclient.mtk", "w", "nvram", dump_file]
-            if custom_da and os.path.exists(custom_da): cmd_write.extend(["--loader", custom_da])
+            if self._is_valid_mtkclient_loader(custom_da): cmd_write.extend(["--loader", custom_da])
             if custom_preloader and os.path.exists(custom_preloader): cmd_write.extend(["--preloader", custom_preloader])
 
             ok_w = self._run_command(cmd_write, "Write NVRAM", None)
@@ -277,7 +296,7 @@ class MtkMetaEngine:
             self.logger.brom(f"Dumping [{idx}/{total}] Partition: {part}...")
 
             cmd = [sys.executable, "-m", "mtkclient.mtk", "r", part, out_file]
-            if custom_da and os.path.exists(custom_da):
+            if self._is_valid_mtkclient_loader(custom_da):
                 cmd.extend(["--loader", custom_da])
             if custom_preloader and os.path.exists(custom_preloader):
                 cmd.extend(["--preloader", custom_preloader])
@@ -315,7 +334,7 @@ class MtkMetaEngine:
         for idx, (part, bin_path) in enumerate(to_write, start=1):
             self.logger.brom(f"Writing [{idx}/{total}] Partition: {part} from {os.path.basename(bin_path)}...")
             cmd = [sys.executable, "-m", "mtkclient.mtk", "w", part, bin_path]
-            if custom_da and os.path.exists(custom_da):
+            if self._is_valid_mtkclient_loader(custom_da):
                 cmd.extend(["--loader", custom_da])
             if custom_preloader and os.path.exists(custom_preloader):
                 cmd.extend(["--preloader", custom_preloader])
@@ -335,7 +354,7 @@ class MtkMetaEngine:
         for idx, part in enumerate(targets, start=1):
             self.logger.brom(f"Formatting {part}...")
             cmd = [sys.executable, "-m", "mtkclient.mtk", "e", part]
-            if custom_da and os.path.exists(custom_da):
+            if self._is_valid_mtkclient_loader(custom_da):
                 cmd.extend(["--loader", custom_da])
             if custom_preloader and os.path.exists(custom_preloader):
                 cmd.extend(["--preloader", custom_preloader])

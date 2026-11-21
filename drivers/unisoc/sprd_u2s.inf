@@ -1,0 +1,63 @@
+; ==============================================================================
+; UNISOC / Spreadtrum SCI USB-to-Serial Driver (BROM & Diag / Cali Port)
+; Hardware IDs: VID_1782&PID_4D00, PID_3D00, PID_5D00, PID_0001, PID_0003
+; Supported Platforms: Tiger T606, T610, T612, T616, T700, SC9863A, SC7731E
+; ==============================================================================
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=Ports
+ClassGuid={4D36E978-E325-11CE-BFC1-08002BE10318}
+Provider=%ProviderName%
+DriverVer=05/20/2026,2.4.2105.0
+CatalogFile=sprd_u2s.cat
+
+[Manufacturer]
+%ManufacturerName%=Unisoc,NTx86,NTamd64
+
+[Unisoc.NTx86]
+%USB\VID_1782&PID_4D00.DeviceDesc%=ComPort, USB\VID_1782&PID_4D00
+%USB\VID_1782&PID_4D00&MI_00.DeviceDesc%=ComPort, USB\VID_1782&PID_4D00&MI_00
+%USB\VID_1782&PID_3D00.DeviceDesc%=ComPort, USB\VID_1782&PID_3D00
+%USB\VID_1782&PID_5D00.DeviceDesc%=ComPort, USB\VID_1782&PID_5D00
+%USB\VID_1782&PID_0001.DeviceDesc%=ComPort, USB\VID_1782&PID_0001
+%USB\VID_1782&PID_0003.DeviceDesc%=ComPort, USB\VID_1782&PID_0003
+
+[Unisoc.NTamd64]
+%USB\VID_1782&PID_4D00.DeviceDesc%=ComPort, USB\VID_1782&PID_4D00
+%USB\VID_1782&PID_4D00&MI_00.DeviceDesc%=ComPort, USB\VID_1782&PID_4D00&MI_00
+%USB\VID_1782&PID_3D00.DeviceDesc%=ComPort, USB\VID_1782&PID_3D00
+%USB\VID_1782&PID_5D00.DeviceDesc%=ComPort, USB\VID_1782&PID_5D00
+%USB\VID_1782&PID_0001.DeviceDesc%=ComPort, USB\VID_1782&PID_0001
+%USB\VID_1782&PID_0003.DeviceDesc%=ComPort, USB\VID_1782&PID_0003
+
+[ComPort.NT]
+Include=mdmcpq.inf
+Needs=FakeModemCopyFileSection
+AddReg=ComPort.NT.AddReg
+
+[ComPort.NT.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,usbser.sys
+HKR,,EnumPropPages32,,"MsPorts.dll,PortsPageProvider"
+
+[ComPort.NT.Services]
+AddService = usbser, 0x00000002, Service_Inst
+
+[Service_Inst]
+DisplayName = %Serial.SvcDesc%
+ServiceType = 1
+StartType = 3
+ErrorControl = 1
+ServiceBinary = %12%\usbser.sys
+
+[Strings]
+ProviderName = "UNISOC Technologies Inc."
+ManufacturerName = "UNISOC Technologies Inc."
+Serial.SvcDesc = "SPRD U2S USB-to-Serial Driver"
+USB\VID_1782&PID_4D00.DeviceDesc = "SPRD U2S Diag (Calibration Port)"
+USB\VID_1782&PID_4D00&MI_00.DeviceDesc = "SPRD U2S Diag Port (Composite)"
+USB\VID_1782&PID_3D00.DeviceDesc = "Unisoc Tiger BootROM Port (3D00)"
+USB\VID_1782&PID_5D00.DeviceDesc = "Unisoc Tiger Download Port (5D00)"
+USB\VID_1782&PID_0001.DeviceDesc = "Spreadtrum Phone Modem Port"
+USB\VID_1782&PID_0003.DeviceDesc = "Spreadtrum AT Command Port"

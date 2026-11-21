@@ -9,6 +9,7 @@ from core.model_repository import ModelRepository
 from ui.theme import Theme
 from ui.model_selector import SearchableModelSelector
 from core.telemetry import FlashingTelemetry
+from core.path_utils import get_resource_path
 
 class MTKView:
     """MediaTek (MTK) Servicing, Flashing, GPT Partition Manager, and META Suite View."""
@@ -38,7 +39,7 @@ class MTKView:
         self.preloader_path_var = tk.StringVar()
         self.chk_force_brom_var = tk.BooleanVar(value=True)
         self.chk_server_auth_var = tk.BooleanVar(value=True)
-        self.chk_auto_backup_security_var = tk.BooleanVar(value=True)
+        self.chk_auto_backup_security_var = tk.BooleanVar(value=False)
         self.chk_auto_reboot_var = tk.BooleanVar(value=True)
         self.telemetry = FlashingTelemetry()
         self.search_flash_var = tk.StringVar()
@@ -143,12 +144,24 @@ class MTKView:
             text_color=Theme.TEXT_PRIMARY
         ).pack(anchor="w", padx=10, pady=(8, 4))
 
-        # Scatter File Picker
-        ctk.CTkLabel(cfg_card, text="Scatter File:", font=ctk.CTkFont(size=11)).pack(anchor="w", padx=10, pady=(2, 0))
+        # Firmware File Picker (Scatter / OFP / OPS / OZIP / UPDATE.APP / PAC / XML / TAR / Payload / ZIP)
+        ctk.CTkLabel(
+            cfg_card,
+            text="⚡ Firmware File (Scatter/OFP/OPS/OZIP/PAC/XML):",
+            font=ctk.CTkFont(size=11, weight="bold"),
+            text_color="#38BDF8"
+        ).pack(anchor="w", padx=10, pady=(2, 0))
         sct_row = ctk.CTkFrame(cfg_card, fg_color="transparent")
         sct_row.pack(fill="x", padx=10, pady=(0, 6))
-        ctk.CTkEntry(sct_row, textvariable=self.scatter_path_var, font=ctk.CTkFont(size=10), height=26, fg_color="#0F0F12").pack(side="left", fill="x", expand=True, padx=(0, 4))
-        ctk.CTkButton(sct_row, text="📁", width=28, height=26, fg_color="#0284C7", command=self._browse_scatter).pack(side="right")
+        ctk.CTkEntry(
+            sct_row,
+            textvariable=self.scatter_path_var,
+            placeholder_text="Scatter, OFP, OPS, OZIP, UPDATE.APP, PAC, XML, TAR...",
+            font=ctk.CTkFont(size=10),
+            height=26,
+            fg_color="#0F0F12"
+        ).pack(side="left", fill="x", expand=True, padx=(0, 4))
+        ctk.CTkButton(sct_row, text="Browse", width=55, height=26, font=ctk.CTkFont(size=10, weight="bold"), fg_color="#0284C7", hover_color="#0369A1", command=self._browse_scatter).pack(side="right")
 
         # Preloader Picker
         ctk.CTkLabel(cfg_card, text="Preloader File:", font=ctk.CTkFont(size=11)).pack(anchor="w", padx=10, pady=(2, 0))
@@ -237,35 +250,54 @@ class MTKView:
 
         ctk.CTkButton(
             quick_bar,
+            text="📁 Open Firmware",
+            width=115,
+            height=26,
+            font=Theme.font_bold(size=11),
+            fg_color="#0284C7",
+            hover_color="#0369A1",
+            command=self._browse_scatter
+        ).pack(side="left", padx=6, pady=5)
+
+        ctk.CTkButton(
+            quick_bar,
             text="✓ Select All",
-            width=80,
+            width=75,
             height=26,
             font=Theme.font_ui(size=11),
             fg_color="#334155",
             hover_color="#475569",
             command=self._select_all_partitions
-        ).pack(side="left", padx=6, pady=5)
+        ).pack(side="left", padx=4, pady=5)
 
         ctk.CTkButton(
             quick_bar,
-            text="⚡ Select Bootloader Only (Fast Unbrick 20s)",
+            text="⚡ Bootloader Only",
             height=26,
             font=Theme.font_bold(size=11),
             fg_color=Theme.ACCENT_GREEN,
             hover_color=Theme.ACCENT_GREEN_HOVER,
             command=self._select_bootloader_only
-        ).pack(side="left", padx=6, pady=5)
+        ).pack(side="left", padx=4, pady=5)
 
         ctk.CTkButton(
             quick_bar,
-            text="✗ Deselect All",
-            width=90,
+            text="✗ Clear All",
+            width=75,
             height=26,
             font=Theme.font_ui(size=11),
             fg_color="#334155",
             hover_color="#475569",
             command=self._deselect_all_partitions
-        ).pack(side="left", padx=6, pady=5)
+        ).pack(side="left", padx=4, pady=5)
+
+        self.lbl_loaded_format = ctk.CTkLabel(
+            quick_bar,
+            text="[No Firmware Loaded]",
+            font=Theme.font_bold(size=10),
+            text_color="#94A3B8"
+        )
+        self.lbl_loaded_format.pack(side="left", padx=8, pady=5)
 
         # Search Bar
         self.search_flash_var.trace_add("write", lambda *args: self._filter_flash_table())
@@ -566,7 +598,7 @@ class MTKView:
         ).pack(side="left", fill="x", expand=True, padx=(4, 0))
 
         c2_r2 = ctk.CTkFrame(card2, fg_color="transparent")
-        c2_r2.pack(fill="x", padx=10, pady=(3, 10))
+        c2_r2.pack(fill="x", padx=10, pady=(3, 4))
         ctk.CTkButton(
             c2_r2,
             text="🔄 Reboot Device (Normal Power Cycle)",
@@ -585,6 +617,18 @@ class MTKView:
             hover_color="#065F46",
             command=self.controller.op_reboot_fastboot
         ).pack(side="left", fill="x", expand=True, padx=(4, 0))
+
+        c2_r3 = ctk.CTkFrame(card2, fg_color="transparent")
+        c2_r3.pack(fill="x", padx=10, pady=(0, 10))
+        ctk.CTkButton(
+            c2_r3,
+            text="⚡ Crash Preloader to BROM (Xiaomi MT6769 / Gale Exploit)",
+            font=Theme.font_bold(size=11),
+            height=34,
+            fg_color="#9333EA",
+            hover_color="#7E22CE",
+            command=self.controller.start_crash_brom
+        ).pack(fill="x")
 
         # =========================================================================
         # CARD 3: RPMB & LOW-LEVEL HARDWARE (Advanced Operations)
@@ -807,13 +851,16 @@ class MTKView:
         self._show_tab(value)
 
     def _on_brand_changed(self, choice):
-        da_path = ModelRepository.find_brand_da(choice)
-        if da_path:
-            self.da_path_var.set(da_path)
-            self.logger.info(f"Auto-bound Brand DA: {os.path.basename(da_path)}")
+        # Clear legacy DA field and reset auth/preloader fields
+        self.da_path_var.set("")
+        self.auth_path_var.set("")
+        self.preloader_path_var.set("")
 
     def _on_model_changed(self, choice, details=None):
         brand = self.brand_var.get()
+        # Always clear previous model's auth and preloader to prevent stale payload leakage (e.g. mt6765)
+        self.auth_path_var.set("")
+        self.preloader_path_var.set("")
         if not details or not isinstance(details, dict):
             details = ModelRepository.get_model_details(brand, choice)
         if details:
@@ -826,15 +873,14 @@ class MTKView:
                     self.logger.info(f"Auto-bound Preloader: {os.path.basename(pl_path)}")
 
             # 2. Brand-Specific DA & Universal DA auto-binding
-            da_path = ModelRepository.find_brand_da(brand)
-            if not da_path:
-                loader_name = details.get("loader_file", "MTK_DA_V6.bin")
-                da_path = ModelRepository.find_loader_file("mtk", loader_name)
-            if not da_path:
-                da_path = ModelRepository.get_default_allinone_da()
-            if da_path:
-                self.da_path_var.set(da_path)
-                self.logger.info(f"Auto-bound Download Agent (DA): {os.path.basename(da_path)}")
+            # Modern MTK chipsets (MT6765/MT6768/MT6769/MT68xx) work natively with mtkclient built-in payloads.
+            custom_loader = details.get("loader_file")
+            if custom_loader and os.path.exists(custom_loader):
+                self.da_path_var.set(custom_loader)
+                self.logger.info(f"Auto-bound Loader: {os.path.basename(custom_loader)}")
+            else:
+                self.da_path_var.set("")
+                self.logger.info("[*] BROM Architecture: Native mtkclient stage2 payload active (Zero DA required).")
 
             # 3. SLA/DAA Auth Payload auto-binding
             chipset_str = details.get("chipset", "")
@@ -846,10 +892,41 @@ class MTKView:
                     self.auth_path_var.set(payload_path)
                     self.logger.info(f"Auto-bound Auth Payload: {os.path.basename(payload_path)}")
 
+            # 4. Modern Xiaomi MT6769 / Redmi 13C (Gale) specialized setup
+            model_low = (choice or "").lower()
+            if "13c" in model_low or "gale" in model_low or "6769" in str(details).lower():
+                self.chk_force_brom_var.set(False)  # Preloader direct flashing (BROM crash is patched on 13C)
+                self.chk_auto_backup_security_var.set(False)
+                self.auth_path_var.set("")  # Clear MT6765 auth; Gale is MT6769 and uses 2025 DA over Preloader
+                gale_da = get_resource_path("loaders", "mtk", "Redmi_14c.13.13c.15c_android15.da(01.08.2025_.bin")
+                if os.path.exists(gale_da):
+                    self.da_path_var.set(gale_da)
+                    self.logger.success(f"Auto-Bound 2025 MT6769 DA: {os.path.basename(gale_da)}")
+                self.logger.brom("[*] Xiaomi MT6769 Architecture: Preloader-Direct Flashing Active (Stale MT6765 Auth Cleared).")
+
+            if hasattr(self.controller, "status_bar") and hasattr(self.controller.status_bar, "set_chipset_status"):
+                if "13c" in model_low or "gale" in model_low:
+                    self.controller.status_bar.set_chipset_status("SoC: MediaTek Helio G85 (MT6769)")
+                elif chipset_str:
+                    self.controller.status_bar.set_chipset_status(f"SoC: {chipset_str}")
+
     def _browse_scatter(self):
         fpath = filedialog.askopenfilename(
-            title="Select MediaTek Scatter File",
-            filetypes=[("Scatter Files", "*scatter*.txt"), ("All Files", "*.*")]
+            title="Select Firmware Package (Scatter / OFP / OPS / OZIP / PAC / XML / TAR / APP / Payload)",
+            filetypes=[
+                ("All Supported Firmware Formats", "*.txt;*.ofp;*.ops;*.ozip;*.app;*.pac;*.xml;*.tar;*.md5;*.bin;*.img;*.zip"),
+                ("MediaTek Scatter (*.txt)", "*scatter*.txt;*.txt"),
+                ("Oppo / Realme OFP (*.ofp)", "*.ofp"),
+                ("OnePlus OPS (*.ops)", "*.ops"),
+                ("Oppo / Realme OZIP (*.ozip)", "*.ozip"),
+                ("Huawei Official Update (UPDATE.APP, *.app)", "UPDATE.APP;*.app"),
+                ("Unisoc / Spreadtrum PAC (*.pac)", "*.pac"),
+                ("Qualcomm Rawprogram XML (*.xml)", "rawprogram*.xml;*.xml"),
+                ("Samsung Odin TAR / MD5 (*.tar, *.tar.md5)", "*.tar;*.tar.md5;*.md5"),
+                ("Android OTA Payload (payload.bin)", "payload.bin;*.bin"),
+                ("Fastboot ROM & Disk Images (*.img, *.zip)", "*.img;*.zip"),
+                ("All Files (*.*)", "*.*")
+            ]
         )
         if fpath:
             self.scatter_path_var.set(fpath)
@@ -890,6 +967,12 @@ class MTKView:
         for item in self.tree_flash.get_children():
             self.tree_flash.delete(item)
 
+        if partitions and hasattr(self, "lbl_loaded_format"):
+            fmt_text = partitions[0].get("format_type", "FIRMWARE").upper()
+            self.lbl_loaded_format.configure(text=f"● Format: {fmt_text} ({len(partitions)} Parts)", text_color="#34D399")
+        elif hasattr(self, "lbl_loaded_format"):
+            self.lbl_loaded_format.configure(text="[No Firmware Loaded]", text_color="#94A3B8")
+
         for idx, p in enumerate(partitions):
             check_str = "✓" if p.get("is_checked", False) else " "
             status = "Ready" if p.get("exists", False) else "Missing"
@@ -927,7 +1010,7 @@ class MTKView:
         p_name = vals[1]
 
         for p in self.all_scatter_partitions:
-            if p.get("name") == p_name:
+            if p.get("tree_id") == item_id or p.get("name") == p_name:
                 p["is_checked"] = not p.get("is_checked", False)
                 vals[0] = "✓" if p["is_checked"] else " "
                 self.tree_flash.item(item_id, values=vals)

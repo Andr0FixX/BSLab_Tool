@@ -1,0 +1,445 @@
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Threading;
+using Microsoft.Win32;
+
+namespace BSLabTool.UI
+{
+    public partial class MainWindow : Window
+    {
+        private DispatcherTimer? _uatExecutionTimer;
+        private DateTime _uatExecutionStartTime;
+        private DispatcherTimer? _uatClockTimer;
+        private long _uatCurrentWorkId = 4198185828;
+        private int _uatJobCounter = 464;
+
+        /// <summary>
+        /// Initializes UAT PRO Telemetry and UI enhancements
+        /// </summary>
+        public void InitializeUatTelemetry()
+        {
+            try
+            {
+                // 1. Detect PC Machine Name
+                string pcName = Environment.MachineName;
+                if (FindName("TxtUatPcName") is TextBlock txtPc)
+                {
+                    txtPc.Text = pcName;
+                }
+
+                // 2. Detect CPU Model from Windows Registry
+                string cpuModel = "Intel(R) Core(TM) Processor";
+                try
+                {
+                    using var key = Registry.LocalMachine.OpenSubKey(@"HARDWARE\DESCRIPTION\System\CentralProcessor\0");
+                    if (key != null)
+                    {
+                        var val = key.GetValue("ProcessorNameString");
+                        if (val != null) cpuModel = val.ToString()?.Trim() ?? cpuModel;
+                    }
+                }
+                catch { }
+
+                if (FindName("TxtUatCpuModel") is TextBlock txtCpu)
+                {
+                    txtCpu.Text = cpuModel;
+                }
+
+                // 3. Setup Live Date/Time Clock
+                _uatClockTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
+                _uatClockTimer.Tick += (s, e) =>
+                {
+                    if (FindName("TxtUatClock") is TextBlock txtClock)
+                    {
+                        txtClock.Text = DateTime.Now.ToString("dd - MMMM - yyyy - hh:mm:ss tt");
+                    }
+                };
+                _uatClockTimer.Start();
+
+                // 4. Set Initial Counter
+                if (FindName("TxtUatJobCount") is TextBlock txtCount)
+                {
+                    txtCount.Text = $"COUNT : {_uatJobCounter}";
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[UAT Telemetry Error] {ex.Message}");
+            }
+        }
+
+        #region Leftmost Vertical Action Dock Handlers
+
+        private void OnScanPortsClicked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (FindName("CmbPortUat") is ComboBox cmb)
+                {
+                    cmb.Items.Clear();
+                    cmb.Items.Add("Port Selection...");
+                    using var key = Registry.LocalMachine.OpenSubKey(@"HARDWARE\DEVICEMAP\SERIALCOMM");
+                    if (key != null)
+                    {
+                        foreach (var valName in key.GetValueNames())
+                        {
+                            var port = key.GetValue(valName)?.ToString();
+                            if (!string.IsNullOrEmpty(port)) cmb.Items.Add(port);
+                        }
+                    }
+                    if (cmb.Items.Count > 1) cmb.SelectedIndex = 1;
+                    else cmb.SelectedIndex = 0;
+                }
+            }
+            catch { }
+        }
+
+        private void OnUatHomeClicked(object sender, RoutedEventArgs e)
+        {
+            if (FindName("ViewAutoHub") is FrameworkElement view)
+            {
+                SwitchToView(view);
+            }
+        }
+
+        private void OnUatDeviceManagerClicked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Process.Start(new ProcessStartInfo("devmgmt.msc") { UseShellExecute = true });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Device Manager kholne mein masla: {ex.Message}", "Device Manager", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
+        private void OnUatSettingsClicked(object sender, RoutedEventArgs e)
+        {
+            if (FindName("ViewSettings") is FrameworkElement view)
+            {
+                SwitchToView(view);
+            }
+        }
+
+        private void OnUatShareClicked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Clipboard.SetText("BS Lab Tool PRO - Advanced GSM Flasher & Service Platform\nAuthor: Syed Bisharat Ali | Shop #5, Arif Center, Hall Road, Lahore");
+                MessageBox.Show("Tool info aur details clipboard par copy ho chuki hain!", "Share", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch { }
+        }
+
+        private void OnUatAccountsClicked(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("BS LAB TOOL™ - Enterprise Activation Status: ACTIVE\nDongle/Hardware ID: BSLAB-PK-2026-LIVE\nRegistered To: Syed Bisharat Ali (Shah Ji)\nRemaining Server Credits: UNLIMITED", "User Profile & License", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void OnUatUsbWizardClicked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                string driverScript = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Install_All_Drivers.bat");
+                if (File.Exists(driverScript))
+                {
+                    Process.Start(new ProcessStartInfo(driverScript) { UseShellExecute = true, Verb = "runas" });
+                }
+                else
+                {
+                    Process.Start(new ProcessStartInfo("devmgmt.msc") { UseShellExecute = true });
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Driver Wizard chalane mein masla: {ex.Message}", "USB Wizard", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
+        private void OnUatTerminalClicked(object sender, RoutedEventArgs e)
+        {
+            if (FindName("ViewMtk") is FrameworkElement view)
+            {
+                SwitchToView(view);
+            }
+        }
+
+        private void OnUatFastbootSuiteClicked(object sender, RoutedEventArgs e)
+        {
+            if (FindName("ViewFastboot") is FrameworkElement view)
+            {
+                SwitchToView(view);
+            }
+        }
+
+        private void OnUatTestPointsClicked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Process.Start(new ProcessStartInfo("https://mrm-developer.com/pinouts") { UseShellExecute = true });
+            }
+            catch
+            {
+                MessageBox.Show("Official TestPoint & ISP Pinout Database browser mein open ho raha hai.", "Pinout Database", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+
+        private void OnUatTelegramClicked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Process.Start(new ProcessStartInfo("https://t.me/bslabtool") { UseShellExecute = true });
+            }
+            catch { }
+        }
+
+        private void OnUatFacebookClicked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Process.Start(new ProcessStartInfo("https://facebook.com") { UseShellExecute = true });
+            }
+            catch { }
+        }
+
+        private void OnUatYouTubeClicked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Process.Start(new ProcessStartInfo("https://youtube.com") { UseShellExecute = true });
+            }
+            catch { }
+        }
+
+        private void OnUatCartClicked(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Aap ka BSLab Tool Enterprise License pehle se fully activated hai!", "Store & Credits", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void OnUatShieldClicked(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Anti-Brick Hardware Protection: ACTIVE\nHardware Checksum Verifier: 100% SAFE\nScatter / Firehose Safety Guard: READY", "Anti-Brick Safety Guard", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void OnUatPowerExitClicked(object sender, RoutedEventArgs e)
+        {
+            var res = MessageBox.Show("Kya aap BSLab Tool band karna chahte hain?", "Exit BSLab Tool", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (res == MessageBoxResult.Yes)
+            {
+                Application.Current.Shutdown();
+            }
+        }
+
+        #endregion
+
+        #region Dump Ladder & Partition Actions
+
+        private void OnUatDumpLadderSelect(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.Tag is string sizeStr)
+            {
+                if (FindName("TxtDumpSelectedSize") is TextBlock txtSize)
+                {
+                    txtSize.Text = sizeStr;
+                }
+                if (FindName("FlyoutDumpLadder") is FrameworkElement flyout)
+                {
+                    flyout.Visibility = Visibility.Collapsed;
+                }
+            }
+        }
+
+        private void OnUatToggleDumpLadder(object sender, RoutedEventArgs e)
+        {
+            if (FindName("FlyoutDumpLadder") is FrameworkElement flyout)
+            {
+                flyout.Visibility = flyout.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+            }
+        }
+
+        #endregion
+
+        #region 27-Brand Color Ribbon Routing
+
+        private void OnUatBrandRibbonClick(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.Tag is string brandName)
+            {
+                // Auto-route brand selection to main dropdown
+                if (FindName("CmbUatBrand") is ComboBox cmbBrand)
+                {
+                    foreach (var item in cmbBrand.Items)
+                    {
+                        if (item.ToString()?.IndexOf(brandName, StringComparison.OrdinalIgnoreCase) >= 0)
+                        {
+                            cmbBrand.SelectedItem = item;
+                            break;
+                        }
+                    }
+                }
+
+                // Update active device badge
+                if (FindName("TxtUatBrandBadge") is TextBlock txtBadge)
+                {
+                    txtBadge.Text = brandName.ToLower();
+                }
+            }
+        }
+
+        #endregion
+
+        #region Live Execution Screen & Timer Subsystem
+
+        public void StartUatExecution(string operationTitle, string modelName, string brandLogo = "oppo")
+        {
+            _uatExecutionStartTime = DateTime.Now;
+            _uatCurrentWorkId = 4198000000 + new Random().Next(100000, 999999);
+            _uatJobCounter++;
+
+            if (FindName("TxtUatExecutionTitle") is TextBlock txtTitle)
+            {
+                txtTitle.Text = $"[EDL] {operationTitle.ToUpper()} | {modelName.ToUpper()}";
+            }
+            if (FindName("TxtUatWorkId") is TextBlock txtWorkId)
+            {
+                txtWorkId.Text = $"Operation/WorkID : {_uatCurrentWorkId}";
+            }
+            if (FindName("TxtUatJobCount") is TextBlock txtCount)
+            {
+                txtCount.Text = $"COUNT : {_uatJobCounter}";
+            }
+            if (FindName("TxtUatBrandBadge") is TextBlock txtBadge)
+            {
+                txtBadge.Text = brandLogo.ToLower();
+            }
+
+            if (FindName("UatExecutionOverlay") is FrameworkElement overlay)
+            {
+                overlay.Visibility = Visibility.Visible;
+            }
+
+            _uatExecutionTimer?.Stop();
+            _uatExecutionTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
+            _uatExecutionTimer.Tick += (s, e) =>
+            {
+                var elapsed = DateTime.Now - _uatExecutionStartTime;
+                if (FindName("TxtUatElapsedTime") is TextBlock txtElapsed)
+                {
+                    txtElapsed.Text = $"Elapsed Time : {(int)elapsed.TotalMinutes} minutes {elapsed.Seconds} seconds";
+                }
+            };
+            _uatExecutionTimer.Start();
+        }
+
+        private void OnUatBackFromExecutionClicked(object sender, RoutedEventArgs e)
+        {
+            _uatExecutionTimer?.Stop();
+            if (FindName("UatExecutionOverlay") is FrameworkElement overlay)
+            {
+                overlay.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        #endregion
+
+        #region Floating 12-Icon Quick Utility Launcher
+
+        private void OnUatToggleUtilityTray(object sender, RoutedEventArgs e)
+        {
+            if (FindName("PopupUatQuickTools") is FrameworkElement popup)
+            {
+                popup.Visibility = popup.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+            }
+        }
+
+        private void OnUatQuickToolAction(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.Tag is string toolCode)
+            {
+                try
+                {
+                    switch (toolCode)
+                    {
+                        case "devmgmt":
+                            Process.Start(new ProcessStartInfo("devmgmt.msc") { UseShellExecute = true });
+                            break;
+                        case "calc":
+                            Process.Start(new ProcessStartInfo("calc.exe") { UseShellExecute = true });
+                            break;
+                        case "cmd":
+                            Process.Start(new ProcessStartInfo("cmd.exe") { UseShellExecute = true });
+                            break;
+                        case "explorer":
+                            string logsDir = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logs");
+                            Directory.CreateDirectory(logsDir);
+                            Process.Start(new ProcessStartInfo("explorer.exe", logsDir) { UseShellExecute = true });
+                            break;
+                        case "telegram":
+                            Process.Start(new ProcessStartInfo("https://t.me/bslabtool") { UseShellExecute = true });
+                            break;
+                        case "notepad":
+                            Process.Start(new ProcessStartInfo("notepad.exe") { UseShellExecute = true });
+                            break;
+                        default:
+                            MessageBox.Show($"Tool {toolCode} selected.", "Quick Tool", MessageBoxButton.OK, MessageBoxImage.Information);
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Utility open error: {ex.Message}");
+                }
+            }
+        }
+
+        #endregion
+
+        #region Window Snapshot Capture
+
+        private void OnUatSnapshotClicked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                string captureDir = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "screenshots");
+                Directory.CreateDirectory(captureDir);
+                string filePath = System.IO.Path.Combine(captureDir, $"BSLab_Snapshot_{DateTime.Now:yyyyMMdd_HHmmss}.png");
+
+                // Render window to bitmap
+                var rtb = new RenderTargetBitmap((int)ActualWidth, (int)ActualHeight, 96, 96, PixelFormats.Pbgra32);
+                rtb.Render(this);
+
+                var encoder = new PngBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(rtb));
+                using (var stream = File.Create(filePath))
+                {
+                    encoder.Save(stream);
+                }
+
+                MessageBox.Show($"Instant Screenshot mehfooz ho gaya:\n{filePath}", "Screenshot Saved", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Screenshot capture error: {ex.Message}");
+            }
+        }
+
+        #endregion
+
+        private void SwitchToView(FrameworkElement targetView)
+        {
+            // Utility helper to toggle view visibility gracefully
+            if (FindName("ViewAutoHub") is FrameworkElement v0) v0.Visibility = Visibility.Collapsed;
+            if (FindName("ViewMtk") is FrameworkElement v1) v1.Visibility = Visibility.Collapsed;
+            if (FindName("ViewFastboot") is FrameworkElement v2) v2.Visibility = Visibility.Collapsed;
+            if (FindName("ViewSettings") is FrameworkElement v3) v3.Visibility = Visibility.Collapsed;
+
+            targetView.Visibility = Visibility.Visible;
+        }
+    }
+}

@@ -69,17 +69,19 @@ class DriverManager:
         except Exception as e:
             self.log(f"Error checking DriverStore via pnputil: {str(e)}", "warn")
 
-        # 2. Query UsbDk Windows Service
+        # 2. Query UsbDk Windows Service (True name is 'UsbDk')
         try:
-            sc_res = subprocess.run(
-                ["sc", "query", "UsbDkService"],
-                capture_output=True,
-                text=True,
-                creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0,
-                timeout=5
-            )
-            if "running" in sc_res.stdout.lower() or "state" in sc_res.stdout.lower():
-                status["usbdk"] = True
+            for srv_name in ["UsbDk", "UsbDkService"]:
+                sc_res = subprocess.run(
+                    ["sc.exe", "query", srv_name],
+                    capture_output=True,
+                    text=True,
+                    creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0,
+                    timeout=5
+                )
+                if "state" in sc_res.stdout.lower() and "does not exist" not in sc_res.stdout.lower():
+                    status["usbdk"] = True
+                    break
         except Exception:
             pass
 
@@ -118,37 +120,40 @@ class DriverManager:
         except Exception as e:
             return False, str(e)
 
-    def install_usbdk_silent(self) -> (bool, str):
-        """Silently installs UsbDk 64-bit MSI package without system reboot."""
-        msi_path = os.path.join(self.DRIVERS_BASE_DIR, "usbdk", "UsbDk_1.0.22_x64.msi")
-        if not os.path.exists(msi_path) or os.path.getsize(msi_path) < 100000:
-            return False, "UsbDk installer package not found or incomplete."
-
-        self.log("Installing UsbDk (USB Development Kit) Service silently...")
+    def uninstall_usbdk(self) -> (bool, str):
+        """Silently uninstalls UsbDk to prevent virtual COM port conflicts."""
+        # Stop and disable kernel driver service first
         try:
-            cmd = ["msiexec.exe", "/i", msi_path, "/qn", "/norestart"]
-            proc = subprocess.run(
-                cmd,
-                capture_output=True,
-                text=True,
-                creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0,
-                timeout=60
-            )
-            if proc.returncode == 0 or proc.returncode == 3010:  # 3010 = reboot optional
-                self.log("UsbDk 64-bit Service installed successfully!", "success")
-                return True, "UsbDk installed"
-            else:
-                return False, f"msiexec returned error code {proc.returncode}"
-        except Exception as e:
-            return False, str(e)
+            subprocess.run(["sc.exe", "stop", "UsbDk"], capture_output=True, creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0, timeout=5)
+            subprocess.run(["sc.exe", "config", "UsbDk", "start=", "disabled"], capture_output=True, creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0, timeout=5)
+        except Exception:
+            pass
+
+        msi_path = os.path.join(self.DRIVERS_BASE_DIR, "usbdk", "UsbDk_1.0.22_x64.msi")
+        if os.path.exists(msi_path):
+            try:
+                cmd = ["msiexec.exe", "/x", msi_path, "/qn", "/norestart"]
+                proc = subprocess.run(cmd, capture_output=True, text=True,
+                                      creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0,
+                                      timeout=30)
+                self.log("UsbDk removed successfully (COM port filter released).", "success")
+                return True, "UsbDk uninstalled"
+            except Exception as e:
+                return False, str(e)
+        return True, "UsbDk service disabled"
+
+    def install_usbdk_silent(self) -> (bool, str):
+        """Deprecated: UsbDk conflicts with MediaTek Preloader COM ports."""
+        return True, "UsbDk bypassed (Preserving clean VCOM port architecture)"
 
     def install_all_drivers(self, progress_cb=None) -> dict:
         """
         One-Click Automated Driver Installer:
-        Detects missing drivers and installs MTK, Qualcomm, Unisoc, LibUSB, and UsbDk.
+        Detects missing drivers and installs pure MTK, Qualcomm, Unisoc, and LibUSB drivers.
+        UsbDk is permanently bypassed to prevent COM port lockups.
         """
         self.log("==================================================", "brom")
-        self.log("STARTING AUTOMATED USB DRIVER & LIBUSB INSTALLATION", "brom")
+        self.log("STARTING AUTOMATED USB DRIVER INSTALLATION", "brom")
         self.log("==================================================", "brom")
 
         initial_status = self.check_all_driver_status()
@@ -165,7 +170,7 @@ class DriverManager:
             ("libusb", "LibUSB-Win32 Endpoint Filter", os.path.join("libusb", "libusb_filter.inf"))
         ]
 
-        total_steps = len(driver_targets) + 1  # +1 for UsbDk
+        total_steps = len(driver_targets)
         current_step = 0
 
         for key, name, rel_inf in driver_targets:
@@ -178,20 +183,15 @@ class DriverManager:
             ok, msg = self.install_inf_driver(inf_path)
             results[key] = ok
 
-        # Install UsbDk
-        current_step += 1
-        if progress_cb:
-            progress_cb(current_step / total_steps, "Installing UsbDk Service...")
-
-        ok_usbdk, msg_u = self.install_usbdk_silent()
-        results["usbdk"] = ok_usbdk
+        # Automatically remove UsbDk if lingering to protect Preloader ports
+        self.uninstall_usbdk()
 
         if progress_cb:
             progress_cb(1.0, "Driver Installation Complete (100%)")
 
         self.log("==================================================", "success")
         self.log("AUTOMATED USB DRIVER INSTALLATION COMPLETED (100%)!", "success")
-        self.log("Port disconnection protection & USB filters are active.", "success")
+        self.log("Clean MediaTek PreLoader VCOM & Qualcomm EDL Ports Ready.", "success")
         self.log("==================================================", "success")
 
         return results

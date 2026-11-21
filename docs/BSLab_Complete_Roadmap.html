@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ur">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BS Lab & Traders — Master Execution Roadmap</title>
+    <style>
+        :root {
+            --bg-dark: #090d16;
+            --panel-bg: #111827;
+            --card-bg: #1f2937;
+            --cyan: #00f2fe;
+            --green: #10b981;
+            --gold: #f59e0b;
+            --red: #ef4444;
+            --text-main: #f9fafb;
+            --text-sub: #9ca3af;
+            --border: #374151;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            padding: 24px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            max-width: 1000px;
+            width: 100%;
+        }
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1e1b4b, #0f172a);
+            border: 1px solid var(--cyan);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 0 30px rgba(0, 242, 254, 0.2);
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 2.2rem;
+            color: var(--cyan);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .header p {
+            color: var(--gold);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        .header .address {
+            margin-top: 8px;
+            color: var(--text-sub);
+            font-size: 0.95rem;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+        .stat-card {
+            background: var(--panel-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            border-top: 3px solid var(--cyan);
+        }
+        .stat-val {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #fff;
+            margin-top: 4px;
+        }
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-sub);
+            text-transform: uppercase;
+        }
+
+        /* Roadmap Phases */
+        .phase {
+            background: var(--panel-bg);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 22px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .phase-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 12px;
+            margin-bottom: 16px;
+        }
+        .phase-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+        .badge-ready { background: rgba(16, 185, 129, 0.2); color: var(--green); border: 1px solid var(--green); }
+        .badge-pending { background: rgba(245, 158, 11, 0.2); color: var(--gold); border: 1px solid var(--gold); }
+
+        /* Step Items */
+        .step-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .step-item {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 14px 16px;
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+        }
+        .step-num {
+            background: var(--cyan);
+            color: #000;
+            font-weight: 800;
+            border-radius: 50%;
+            width: 26px;
+            height: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 0.85rem;
+        }
+        .step-content h4 {
+            font-size: 1rem;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+        .step-content p {
+            font-size: 0.9rem;
+            color: var(--text-sub);
+            line-height: 1.4;
+        }
+
+        /* Flow Diagram */
+        .flow-box {
+            background: #0f172a;
+            border: 1px dashed var(--cyan);
+            border-radius: 12px;
+            padding: 18px;
+            margin: 16px 0;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 12px;
+            text-align: center;
+        }
+        .flow-node {
+            background: var(--card-bg);
+            border: 1px solid var(--cyan);
+            border-radius: 8px;
+            padding: 10px 16px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        .flow-arrow {
+            color: var(--cyan);
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        /* CTA bar */
+        .cta-bar {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            background: #1e293b;
+            border-radius: 12px;
+        }
+        .cta-link {
+            display: inline-block;
+            background: var(--cyan);
+            color: #000;
+            font-weight: 700;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            margin: 6px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>BS LAB, MOBILES & TRADERS</h1>
+            <p>Master Execution Roadmap — Syed Bisharat Ali (Shah Ji)</p>
+            <div class="address">📍 Shop #5, 1st Floor, Hamza Block, Arif Center, Hall Road, Lahore | 📞 0304-8640338 / 0326-1540338</div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Current Disk</div>
+                <div class="stat-val" style="color: var(--gold);">Lexar 128G</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Target Disk</div>
+                <div class="stat-val" style="color: var(--green);">256GB SSD</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Google Setup</div>
+                <div class="stat-val" style="color: var(--cyan);">100% Ready</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">DA & Files Safety</div>
+                <div class="stat-val" style="color: #a78bfa;">100% Intact</div>
+            </div>
+        </div>
+
+        <!-- Phase 1: SSD Upgrade & System Migration -->
+        <div class="phase">
+            <div class="phase-header">
+                <div class="phase-title">🚀 Phase 1: SSD Cloning (128GB Lexar &rarr; 256GB SSD)</div>
+                <span class="badge badge-ready">TOOLS READY IN DOWNLOADS</span>
+            </div>
+            <div class="flow-box">
+                <div class="flow-node">Lexar 128GB (C: OS + Drivers + DA)</div>
+                <div class="flow-arrow">&rarr;</div>
+                <div class="flow-node" style="border-color: var(--gold);">1-Click Clone Tool / Clonezilla</div>
+                <div class="flow-arrow">&rarr;</div>
+                <div class="flow-node" style="border-color: var(--green);">Nayi 256GB SSD (Zero Data Loss)</div>
+                <div class="flow-arrow">&rarr;</div>
+                <div class="flow-node">SATA 1 Swap & Instant Boot</div>
+            </div>
+            <ul class="step-list">
+                <li class="step-item">
+                    <div class="step-num">1</div>
+                    <div class="step-content">
+                        <h4>Files & DA Backup Safety</h4>
+                        <p>Aapki tamam DA files, Infinix/Tecno files, UART diagnostic tools aur flashing firmware safe hain. Cloning in files ko exact directory structure ke sath new SSD par mirror karegi.</p>
+                    </div>
+                </li>
+                <li class="step-item">
+                    <div class="step-num">2</div>
+                    <div class="step-content">
+                        <h4>Run 1-Click Setup Tool</h4>
+                        <p>Downloads folder mein mojood <code>Clone_SSD_Setup.bat</code> chalayein. Live Windows ke liye DiskGenius System Migration use karein ya Rufus se bootable Clonezilla USB banayein.</p>
+                    </div>
+                </li>
+                <li class="step-item">
+                    <div class="step-num">3</div>
+                    <div class="step-content">
+                        <h4>Direct Hardware Swap</h4>
+                        <p>Cloning complete hone ke baad purana Lexar 128GB nikal kar new 256GB SSD ko internal SATA 1 port par lagayein. Windows direct boot hogi, koi key dabane ki zaroorat nahi.</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Phase 2: Google Maps & Local Landing Setup -->
+        <div class="phase">
+            <div class="phase-header">
+                <div class="phase-title">📍 Phase 2: Google Maps & Google Business Launch</div>
+                <span class="badge badge-ready">DOSSIER READY</span>
+            </div>
+            <ul class="step-list">
+                <li class="step-item">
+                    <div class="step-num">1</div>
+                    <div class="step-content">
+                        <h4>Business Profile Registration</h4>
+                        <p>Naam: <strong>BS Lab, Mobiles and Traders</strong> | Address: <strong>Shop #5, 1st Floor, Hamza Block, Arif Center, Hall Road, Lahore</strong>. Google Business Profile registration link aur complete dossier <code>Google_Business_Setup.txt</code> mein ready hai.</p>
+                    </div>
+                </li>
+                <li class="step-item">
+                    <div class="step-num">2</div>
+                    <div class="step-content">
+                        <h4>Official Contact & WhatsApp Integration</h4>
+                        <p>Primary: <code>0304-8640338</code> | Secondary: <code>0326-1540338</code> | Email: <code>m.bisharat99ali@gmail.com</code> | TikTok Verified account integration.</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Phase 3: Physical Branding & Customer Acquisition -->
+        <div class="phase">
+            <div class="phase-header">
+                <div class="phase-title">💼 Phase 3: Shop Board, Videos & B2B Expansion</div>
+                <span class="badge badge-pending">NEXT STEP</span>
+            </div>
+            <ul class="step-list">
+                <li class="step-item">
+                    <div class="step-num">1</div>
+                    <div class="step-content">
+                        <h4>Shop Front Acrylic / Flex Board</h4>
+                        <p>Board par wazeh likhein: <strong>BS LAB, MOBILES & TRADERS — Chip-Level Hardware & GSM Software Solutions</strong> sath mein Qualcomm, Kirin, MTK aur Apple ke badges.</p>
+                    </div>
+                </li>
+                <li class="step-item">
+                    <div class="step-num">2</div>
+                    <div class="step-content">
+                        <h4>TikTok & Reel Promotional Videos</h4>
+                        <p>Script tayar hai: <em>"Hall Road, Arif Center, 1st Floor, Hamza Block, Shop #5 BS Lab, Mobiles & Traders pe khush amdeed! Inse miliye Syed Bisharat Ali..."</em></p>
+                    </div>
+                </li>
+                <li class="step-item">
+                    <div class="step-num">3</div>
+                    <div class="step-content">
+                        <h4>B2B Retailer Dealer Network</h4>
+                        <p>Hall Road aur local markets ke shopkeepers ko connect karein taake wo FRP, dead-boot aur complex flashing direct aapki shop par send karein.</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="cta-bar">
+            <a class="cta-link" href="file:///C:/BSLab_Tool/landing_page/index.html">🌐 View Interactive Landing Page</a>
+            <a class="cta-link" href="file:///C:/Users/AndroFixX/Downloads/Google_Business_Setup.txt" style="background: var(--gold);">📄 View Google Profile Dossier</a>
+        </div>
+    </div>
+</body>
+</html>

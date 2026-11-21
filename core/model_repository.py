@@ -269,15 +269,36 @@ class ModelRepository:
         for item in cached:
             if item["name"].lower() == raw_name or item["label"].lower() == full_name_lower or item.get("display_label", "").lower() == full_name_lower:
                 platform = item.get("platform", "qualcomm")
-                cpu = item.get("cpu") or "Snapdragon / Helio Universal"
-                code_name = item.get("code_name", "")
+                cpu = item.get("cpu") or ""
+                code_name = (item.get("code_name") or "").strip().lower()
                 actual_brand = item.get("brand", brand)
+                loader_file = "Auto-Select (Optimized)"
+
+                # Accurate SoC & Loader Resolution for Modern MTK Devices
+                gale_loader = cls.find_da_loader("Redmi_14c.13.13c.15c_android15.da(01.08.2025_.bin") or "Auto-Select (Optimized)"
+                if code_name in ("gale", "gust") or "13c" in raw_name:
+                    cpu = "MediaTek Helio G85 (MT6769)"
+                    platform = "mtk"
+                    loader_file = gale_loader
+                elif code_name in ("lake",) or "14c" in raw_name:
+                    cpu = "MediaTek Helio G81-Ultra (MT6769)"
+                    platform = "mtk"
+                    loader_file = gale_loader
+                elif code_name in ("earth",) or "12c" in raw_name:
+                    cpu = "MediaTek Helio G85 (MT6769)"
+                    platform = "mtk"
+                elif code_name in ("fire",) or "redmi 12" in raw_name:
+                    cpu = "MediaTek Helio G88 (MT6769)"
+                    platform = "mtk"
+                elif not cpu:
+                    cpu = "Snapdragon / Helio Universal"
+
                 return {
                     "brand": actual_brand,
-                    "chipset": f"{cpu} ({code_name})" if code_name else cpu,
+                    "chipset": f"{cpu} ({code_name.upper()})" if code_name else cpu,
                     "platform": platform,
                     "cpu_family": cpu,
-                    "loader_file": "Auto-Select (Optimized)",
+                    "loader_file": loader_file,
                     "testpoint": "Standard EDL / BROM Testpoint or Hardware Volume Key",
                     "features": ["Flash", "FRP Reset", "Factory Reset", "Read Info", "Partition Manager"]
                 }
@@ -487,6 +508,22 @@ class ModelRepository:
         if not os.path.exists(BRAND_DA_DIR):
             return []
         return [f for f in os.listdir(BRAND_DA_DIR) if f.lower().endswith((".da", ".bin", ".crp"))]
+
+    @classmethod
+    def find_da_loader(cls, loader_filename_or_keyword: str) -> Optional[str]:
+        """Looks up an MTK DA loader in resources/loaders/mtk/ or brand_da/"""
+        mtk_dir = os.path.join(LOADERS_DIR, "mtk")
+        if not os.path.exists(mtk_dir):
+            return None
+        target = os.path.join(mtk_dir, loader_filename_or_keyword)
+        if os.path.exists(target):
+            return target
+        clean = loader_filename_or_keyword.lower().strip()
+        for root, _, files in os.walk(mtk_dir):
+            for f in files:
+                if clean in f.lower() and (f.lower().endswith(".bin") or f.lower().endswith(".da")):
+                    return os.path.join(root, f)
+        return None
 
     @classmethod
     def find_brand_da(cls, brand_or_soc: str) -> Optional[str]:
