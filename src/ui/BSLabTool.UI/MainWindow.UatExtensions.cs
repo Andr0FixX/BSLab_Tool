@@ -762,6 +762,10 @@ namespace BSLabTool.UI
 
                 _currentSelectedBrand = brandDisplay;
 
+                // Highlight active button on the brand ribbon & active brand card
+                HighlightBrandRibbonButton(bTag);
+                HighlightBrandCard(bTag);
+
                 // Explicitly switch to 'By Model' manual mode to prevent auto-radar from overriding selection
                 if (FindName("RbByModel") is RadioButton rbByModel)
                 {

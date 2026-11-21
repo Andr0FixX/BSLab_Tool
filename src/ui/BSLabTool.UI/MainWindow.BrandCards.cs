@@ -28,10 +28,7 @@ namespace BSLabTool.UI
 
         private void OnXiaomiSubTabFastbootClicked(object sender, RoutedEventArgs e)
         {
-            if (BtnXiaomiSubTabFastboot != null) BtnXiaomiSubTabFastboot.Style = (Style)FindResource("SubTabButtonActive");
-            if (BtnXiaomiSubTabSideload != null) BtnXiaomiSubTabSideload.Style = (Style)FindResource("SubTabButtonInactive");
-            if (BtnXiaomiSubTabMiFlash != null) BtnXiaomiSubTabMiFlash.Style = (Style)FindResource("SubTabButtonInactive");
-
+            HighlightSubTab(BtnXiaomiSubTabFastboot, BtnXiaomiSubTabFastboot, BtnXiaomiSubTabSideload, BtnXiaomiSubTabMiFlash);
             if (PanelXiaomiFastboot != null) PanelXiaomiFastboot.Visibility = Visibility.Visible;
             if (PanelXiaomiSideload != null) PanelXiaomiSideload.Visibility = Visibility.Collapsed;
             if (PanelXiaomiMiFlash != null) PanelXiaomiMiFlash.Visibility = Visibility.Collapsed;
@@ -39,10 +36,7 @@ namespace BSLabTool.UI
 
         private void OnXiaomiSubTabSideloadClicked(object sender, RoutedEventArgs e)
         {
-            if (BtnXiaomiSubTabFastboot != null) BtnXiaomiSubTabFastboot.Style = (Style)FindResource("SubTabButtonInactive");
-            if (BtnXiaomiSubTabSideload != null) BtnXiaomiSubTabSideload.Style = (Style)FindResource("SubTabButtonActive");
-            if (BtnXiaomiSubTabMiFlash != null) BtnXiaomiSubTabMiFlash.Style = (Style)FindResource("SubTabButtonInactive");
-
+            HighlightSubTab(BtnXiaomiSubTabSideload, BtnXiaomiSubTabFastboot, BtnXiaomiSubTabSideload, BtnXiaomiSubTabMiFlash);
             if (PanelXiaomiFastboot != null) PanelXiaomiFastboot.Visibility = Visibility.Collapsed;
             if (PanelXiaomiSideload != null) PanelXiaomiSideload.Visibility = Visibility.Visible;
             if (PanelXiaomiMiFlash != null) PanelXiaomiMiFlash.Visibility = Visibility.Collapsed;
@@ -50,10 +44,7 @@ namespace BSLabTool.UI
 
         private void OnXiaomiSubTabMiFlashClicked(object sender, RoutedEventArgs e)
         {
-            if (BtnXiaomiSubTabFastboot != null) BtnXiaomiSubTabFastboot.Style = (Style)FindResource("SubTabButtonInactive");
-            if (BtnXiaomiSubTabSideload != null) BtnXiaomiSubTabSideload.Style = (Style)FindResource("SubTabButtonInactive");
-            if (BtnXiaomiSubTabMiFlash != null) BtnXiaomiSubTabMiFlash.Style = (Style)FindResource("SubTabButtonActive");
-
+            HighlightSubTab(BtnXiaomiSubTabMiFlash, BtnXiaomiSubTabFastboot, BtnXiaomiSubTabSideload, BtnXiaomiSubTabMiFlash);
             if (PanelXiaomiFastboot != null) PanelXiaomiFastboot.Visibility = Visibility.Collapsed;
             if (PanelXiaomiSideload != null) PanelXiaomiSideload.Visibility = Visibility.Collapsed;
             if (PanelXiaomiMiFlash != null) PanelXiaomiMiFlash.Visibility = Visibility.Visible;
@@ -206,10 +197,7 @@ namespace BSLabTool.UI
 
         private void OnOppoSubTabServiceClicked(object sender, RoutedEventArgs e)
         {
-            if (BtnOppoSubTabService != null) BtnOppoSubTabService.Style = (Style)FindResource("SubTabButtonActive");
-            if (BtnOppoSubTabOfp != null) BtnOppoSubTabOfp.Style = (Style)FindResource("SubTabButtonInactive");
-            if (BtnOppoSubTabSecOps != null) BtnOppoSubTabSecOps.Style = (Style)FindResource("SubTabButtonInactive");
-
+            HighlightSubTab(BtnOppoSubTabService, BtnOppoSubTabService, BtnOppoSubTabOfp, BtnOppoSubTabSecOps);
             if (PanelOppoService != null) PanelOppoService.Visibility = Visibility.Visible;
             if (PanelOppoOfp != null) PanelOppoOfp.Visibility = Visibility.Collapsed;
             if (PanelOppoSecOps != null) PanelOppoSecOps.Visibility = Visibility.Collapsed;
@@ -217,10 +205,7 @@ namespace BSLabTool.UI
 
         private void OnOppoSubTabOfpClicked(object sender, RoutedEventArgs e)
         {
-            if (BtnOppoSubTabService != null) BtnOppoSubTabService.Style = (Style)FindResource("SubTabButtonInactive");
-            if (BtnOppoSubTabOfp != null) BtnOppoSubTabOfp.Style = (Style)FindResource("SubTabButtonActive");
-            if (BtnOppoSubTabSecOps != null) BtnOppoSubTabSecOps.Style = (Style)FindResource("SubTabButtonInactive");
-
+            HighlightSubTab(BtnOppoSubTabOfp, BtnOppoSubTabService, BtnOppoSubTabOfp, BtnOppoSubTabSecOps);
             if (PanelOppoService != null) PanelOppoService.Visibility = Visibility.Collapsed;
             if (PanelOppoOfp != null) PanelOppoOfp.Visibility = Visibility.Visible;
             if (PanelOppoSecOps != null) PanelOppoSecOps.Visibility = Visibility.Collapsed;
@@ -228,10 +213,7 @@ namespace BSLabTool.UI
 
         private void OnOppoSubTabSecOpsClicked(object sender, RoutedEventArgs e)
         {
-            if (BtnOppoSubTabService != null) BtnOppoSubTabService.Style = (Style)FindResource("SubTabButtonInactive");
-            if (BtnOppoSubTabOfp != null) BtnOppoSubTabOfp.Style = (Style)FindResource("SubTabButtonInactive");
-            if (BtnOppoSubTabSecOps != null) BtnOppoSubTabSecOps.Style = (Style)FindResource("SubTabButtonActive");
-
+            HighlightSubTab(BtnOppoSubTabSecOps, BtnOppoSubTabService, BtnOppoSubTabOfp, BtnOppoSubTabSecOps);
             if (PanelOppoService != null) PanelOppoService.Visibility = Visibility.Collapsed;
             if (PanelOppoOfp != null) PanelOppoOfp.Visibility = Visibility.Collapsed;
             if (PanelOppoSecOps != null) PanelOppoSecOps.Visibility = Visibility.Visible;
@@ -356,10 +338,7 @@ namespace BSLabTool.UI
 
         private void OnVivoSubTabServiceClicked(object sender, RoutedEventArgs e)
         {
-            if (BtnVivoSubTabService != null) BtnVivoSubTabService.Style = (Style)FindResource("SubTabButtonActive");
-            if (BtnVivoSubTabFastboot != null) BtnVivoSubTabFastboot.Style = (Style)FindResource("SubTabButtonInactive");
-            if (BtnVivoSubTabFlasher != null) BtnVivoSubTabFlasher.Style = (Style)FindResource("SubTabButtonInactive");
-
+            HighlightSubTab(BtnVivoSubTabService, BtnVivoSubTabService, BtnVivoSubTabFastboot, BtnVivoSubTabFlasher);
             if (PanelVivoService != null) PanelVivoService.Visibility = Visibility.Visible;
             if (PanelVivoFastboot != null) PanelVivoFastboot.Visibility = Visibility.Collapsed;
             if (PanelVivoFlasher != null) PanelVivoFlasher.Visibility = Visibility.Collapsed;
@@ -367,10 +346,7 @@ namespace BSLabTool.UI
 
         private void OnVivoSubTabFastbootClicked(object sender, RoutedEventArgs e)
         {
-            if (BtnVivoSubTabService != null) BtnVivoSubTabService.Style = (Style)FindResource("SubTabButtonInactive");
-            if (BtnVivoSubTabFastboot != null) BtnVivoSubTabFastboot.Style = (Style)FindResource("SubTabButtonActive");
-            if (BtnVivoSubTabFlasher != null) BtnVivoSubTabFlasher.Style = (Style)FindResource("SubTabButtonInactive");
-
+            HighlightSubTab(BtnVivoSubTabFastboot, BtnVivoSubTabService, BtnVivoSubTabFastboot, BtnVivoSubTabFlasher);
             if (PanelVivoService != null) PanelVivoService.Visibility = Visibility.Collapsed;
             if (PanelVivoFastboot != null) PanelVivoFastboot.Visibility = Visibility.Visible;
             if (PanelVivoFlasher != null) PanelVivoFlasher.Visibility = Visibility.Collapsed;
@@ -378,10 +354,7 @@ namespace BSLabTool.UI
 
         private void OnVivoSubTabFlasherClicked(object sender, RoutedEventArgs e)
         {
-            if (BtnVivoSubTabService != null) BtnVivoSubTabService.Style = (Style)FindResource("SubTabButtonInactive");
-            if (BtnVivoSubTabFastboot != null) BtnVivoSubTabFastboot.Style = (Style)FindResource("SubTabButtonInactive");
-            if (BtnVivoSubTabFlasher != null) BtnVivoSubTabFlasher.Style = (Style)FindResource("SubTabButtonActive");
-
+            HighlightSubTab(BtnVivoSubTabFlasher, BtnVivoSubTabService, BtnVivoSubTabFastboot, BtnVivoSubTabFlasher);
             if (PanelVivoService != null) PanelVivoService.Visibility = Visibility.Collapsed;
             if (PanelVivoFastboot != null) PanelVivoFastboot.Visibility = Visibility.Collapsed;
             if (PanelVivoFlasher != null) PanelVivoFlasher.Visibility = Visibility.Visible;
@@ -501,10 +474,7 @@ namespace BSLabTool.UI
 
         private void OnItAdminSubTabFinTechClicked(object sender, RoutedEventArgs e)
         {
-            if (BtnItAdminSubTabFinTech != null) BtnItAdminSubTabFinTech.Style = (Style)FindResource("SubTabButtonActive");
-            if (BtnItAdminSubTabTestMode != null) BtnItAdminSubTabTestMode.Style = (Style)FindResource("SubTabButtonInactive");
-            if (BtnItAdminSubTabPartitions != null) BtnItAdminSubTabPartitions.Style = (Style)FindResource("SubTabButtonInactive");
-
+            HighlightSubTab(BtnItAdminSubTabFinTech, BtnItAdminSubTabFinTech, BtnItAdminSubTabTestMode, BtnItAdminSubTabPartitions);
             if (PanelItAdminFinTech != null) PanelItAdminFinTech.Visibility = Visibility.Visible;
             if (PanelItAdminTestMode != null) PanelItAdminTestMode.Visibility = Visibility.Collapsed;
             if (PanelItAdminPartitions != null) PanelItAdminPartitions.Visibility = Visibility.Collapsed;
@@ -512,10 +482,7 @@ namespace BSLabTool.UI
 
         private void OnItAdminSubTabTestModeClicked(object sender, RoutedEventArgs e)
         {
-            if (BtnItAdminSubTabFinTech != null) BtnItAdminSubTabFinTech.Style = (Style)FindResource("SubTabButtonInactive");
-            if (BtnItAdminSubTabTestMode != null) BtnItAdminSubTabTestMode.Style = (Style)FindResource("SubTabButtonActive");
-            if (BtnItAdminSubTabPartitions != null) BtnItAdminSubTabPartitions.Style = (Style)FindResource("SubTabButtonInactive");
-
+            HighlightSubTab(BtnItAdminSubTabTestMode, BtnItAdminSubTabFinTech, BtnItAdminSubTabTestMode, BtnItAdminSubTabPartitions);
             if (PanelItAdminFinTech != null) PanelItAdminFinTech.Visibility = Visibility.Collapsed;
             if (PanelItAdminTestMode != null) PanelItAdminTestMode.Visibility = Visibility.Visible;
             if (PanelItAdminPartitions != null) PanelItAdminPartitions.Visibility = Visibility.Collapsed;
@@ -523,10 +490,7 @@ namespace BSLabTool.UI
 
         private void OnItAdminSubTabPartitionsClicked(object sender, RoutedEventArgs e)
         {
-            if (BtnItAdminSubTabFinTech != null) BtnItAdminSubTabFinTech.Style = (Style)FindResource("SubTabButtonInactive");
-            if (BtnItAdminSubTabTestMode != null) BtnItAdminSubTabTestMode.Style = (Style)FindResource("SubTabButtonInactive");
-            if (BtnItAdminSubTabPartitions != null) BtnItAdminSubTabPartitions.Style = (Style)FindResource("SubTabButtonActive");
-
+            HighlightSubTab(BtnItAdminSubTabPartitions, BtnItAdminSubTabFinTech, BtnItAdminSubTabTestMode, BtnItAdminSubTabPartitions);
             if (PanelItAdminFinTech != null) PanelItAdminFinTech.Visibility = Visibility.Collapsed;
             if (PanelItAdminTestMode != null) PanelItAdminTestMode.Visibility = Visibility.Collapsed;
             if (PanelItAdminPartitions != null) PanelItAdminPartitions.Visibility = Visibility.Visible;
@@ -643,6 +607,9 @@ namespace BSLabTool.UI
 
             // Highlight the active card border with glowing accent
             HighlightBrandCard(bTag);
+
+            // Synchronize and highlight the brand button on the vertical ribbon
+            HighlightBrandRibbonButton(bTag);
 
             // Update badge in the card deck
             if (TxtActiveBrandBadge != null)

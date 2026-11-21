@@ -44,12 +44,18 @@ manifest_path = r"C:\BSLab_Tool\resources\ota\update_manifest.json"
 with open(manifest_path, 'r', encoding='utf-8') as f:
     manifest = json.load(f)
 
-manifest["app_version"] = "2.5.3"
-manifest["version"] = "2.5.3"
-manifest["binary_update_url"] = "https://github.com/Andr0FixX/BSLab_Tool/releases/download/v2.5.3/BSLab_Update.zip"
+manifest["app_version"] = "2.5.4"
+manifest["version"] = "2.5.4"
+manifest["binary_update_url"] = "https://github.com/Andr0FixX/BSLab_Tool/releases/download/v2.5.4/BSLab_Update.zip"
 manifest["binary_sha256"] = zip_hash
+manifest["change_log"] = (
+    "• Dynamic Sub-Tab Button Highlight Engine (Electric Blue & Cyber Glow)\n"
+    "• Active Brand Ribbon Highlighting & Real-Time Synchronization\n"
+    "• Modern Interactive Brand Cards Integration & Fast Latching\n"
+    "• High-Contrast Visual State for Samsung, Xiaomi, Oppo, Vivo, Unisoc, Huawei & Fastboot"
+)
 
 with open(manifest_path, 'w', encoding='utf-8') as f:
     json.dump(manifest, f, indent=4)
 
-print(f"\nUpdated {manifest_path} with v2.5.3 and SHA256.")
+print(f"\nUpdated {manifest_path} with v2.5.4 and SHA256.")

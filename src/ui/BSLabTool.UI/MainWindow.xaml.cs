@@ -182,9 +182,20 @@ namespace BSLabTool.UI
             {
                 await Task.Delay(2000);
                 await Dispatcher.InvokeAsync(async () => await CheckForOtaUpdatesAsync(silent: true));
-            }
-);
+            });
 
+            Loaded += (s, e) =>
+            {
+                HighlightSubTab(BtnSamsungSubTabMtp, BtnSamsungSubTabMtp, BtnSamsungSubTabOdin, BtnSamsungSubTabPit);
+                HighlightSubTab(BtnSubTabAdb, BtnSubTabAdb, BtnSubTabFastboot);
+                HighlightSubTab(BtnUnisocSubTabBrom, BtnUnisocSubTabBrom, BtnUnisocSubTabPac, BtnUnisocSubTabDiag, BtnUnisocSubTabFastboot);
+                HighlightSubTab(BtnHuaweiSubTabCom1, BtnHuaweiSubTabCom1, BtnHuaweiSubTabFastboot, BtnHuaweiSubTabManufacture, BtnHuaweiSubTabDload);
+                if (BtnXiaomiSubTabFastboot != null) HighlightSubTab(BtnXiaomiSubTabFastboot, BtnXiaomiSubTabFastboot, BtnXiaomiSubTabSideload, BtnXiaomiSubTabMiFlash);
+                if (BtnOppoSubTabService != null) HighlightSubTab(BtnOppoSubTabService, BtnOppoSubTabService, BtnOppoSubTabOfp, BtnOppoSubTabSecOps);
+                if (BtnVivoSubTabService != null) HighlightSubTab(BtnVivoSubTabService, BtnVivoSubTabService, BtnVivoSubTabFastboot, BtnVivoSubTabFlasher);
+                if (BtnItAdminSubTabFinTech != null) HighlightSubTab(BtnItAdminSubTabFinTech, BtnItAdminSubTabFinTech, BtnItAdminSubTabTestMode, BtnItAdminSubTabPartitions);
+                HighlightBrandRibbonButton("samsung");
+            };
         }
 
 
@@ -1981,6 +1992,86 @@ namespace BSLabTool.UI
             SetActiveNavTab(null);
         }
 
+        public void HighlightSubTab(Button? activeBtn, params Button?[] allBtns)
+        {
+            if (activeBtn == null) return;
+
+            var activeStyle = (Style)FindResource("SubTabButtonActive");
+            var inactiveStyle = (Style)FindResource("SubTabButtonInactive");
+
+            var activeBg = new SolidColorBrush(Color.FromRgb(2, 132, 199));     // #0284C7
+            var activeBorder = new SolidColorBrush(Color.FromRgb(56, 189, 248)); // #38BDF8
+            var activeFg = Brushes.White;
+
+            var inactiveBg = new SolidColorBrush(Color.FromRgb(30, 41, 59));     // #1E293B
+            var inactiveBorder = new SolidColorBrush(Color.FromRgb(51, 65, 85)); // #334155
+            var inactiveFg = new SolidColorBrush(Color.FromRgb(148, 163, 184));  // #94A3B8
+
+            foreach (var btn in allBtns)
+            {
+                if (btn == null) continue;
+
+                if (btn == activeBtn)
+                {
+                    btn.Style = activeStyle;
+                    btn.Background = activeBg;
+                    btn.Foreground = activeFg;
+                    btn.BorderBrush = activeBorder;
+                    btn.BorderThickness = new Thickness(1.5);
+                    btn.FontWeight = FontWeights.ExtraBold;
+                    btn.Effect = new System.Windows.Media.Effects.DropShadowEffect
+                    {
+                        BlurRadius = 10,
+                        ShadowDepth = 0,
+                        Opacity = 0.65,
+                        Color = Color.FromRgb(56, 189, 248)
+                    };
+                }
+                else
+                {
+                    btn.Style = inactiveStyle;
+                    btn.Background = inactiveBg;
+                    btn.Foreground = inactiveFg;
+                    btn.BorderBrush = inactiveBorder;
+                    btn.BorderThickness = new Thickness(1);
+                    btn.FontWeight = FontWeights.Bold;
+                    btn.Effect = null;
+                }
+            }
+        }
+
+        public void HighlightBrandRibbonButton(string brandTag)
+        {
+            if (StackBrandRibbon == null) return;
+            string bTag = brandTag.ToLower().Trim();
+
+            foreach (var child in StackBrandRibbon.Children)
+            {
+                if (child is Button b)
+                {
+                    string childTag = (b.Tag as string ?? "").ToLower().Trim();
+                    if (childTag == bTag)
+                    {
+                        b.BorderThickness = new Thickness(2);
+                        b.BorderBrush = new SolidColorBrush(Color.FromRgb(0, 229, 255)); // Neon Cyan
+                        b.Effect = new System.Windows.Media.Effects.DropShadowEffect
+                        {
+                            BlurRadius = 12,
+                            ShadowDepth = 0,
+                            Opacity = 0.9,
+                            Color = Color.FromRgb(0, 229, 255)
+                        };
+                    }
+                    else
+                    {
+                        b.BorderThickness = new Thickness(0);
+                        b.BorderBrush = Brushes.Transparent;
+                        b.Effect = null;
+                    }
+                }
+            }
+        }
+
 
         private void HideAllViews()
         {
@@ -2115,46 +2206,54 @@ namespace BSLabTool.UI
 
 
             else if (btn == TabBtnFastboot)
-
             {
-
                 ViewFastboot.Visibility = Visibility.Visible;
+                if (PanelFastbootActions?.Visibility == Visibility.Visible)
+                    HighlightSubTab(BtnSubTabFastboot, BtnSubTabAdb, BtnSubTabFastboot);
+                else
+                    HighlightSubTab(BtnSubTabAdb, BtnSubTabAdb, BtnSubTabFastboot);
 
                 AppendAdbLog("[*] Switched Active Workspace: FASTBOOT & ADB Universal Service Suite");
-
             }
-
-
             else if (btn == TabBtnSamsung)
-
             {
-
                 ViewSamsung.Visibility = Visibility.Visible;
+                if (PanelSamsungOdin?.Visibility == Visibility.Visible)
+                    HighlightSubTab(BtnSamsungSubTabOdin, BtnSamsungSubTabMtp, BtnSamsungSubTabOdin, BtnSamsungSubTabPit);
+                else if (PanelSamsungPit?.Visibility == Visibility.Visible)
+                    HighlightSubTab(BtnSamsungSubTabPit, BtnSamsungSubTabMtp, BtnSamsungSubTabOdin, BtnSamsungSubTabPit);
+                else
+                    HighlightSubTab(BtnSamsungSubTabMtp, BtnSamsungSubTabMtp, BtnSamsungSubTabOdin, BtnSamsungSubTabPit);
 
                 AppendSamsungLog("[*] Switched Active Workspace: SAMSUNG Odin Flasher & MTP Services");
-
             }
-
-
             else if (btn == TabBtnUnisoc)
-
             {
-
                 ViewUnisoc.Visibility = Visibility.Visible;
+                if (PanelUnisocPac?.Visibility == Visibility.Visible)
+                    HighlightSubTab(BtnUnisocSubTabPac, BtnUnisocSubTabBrom, BtnUnisocSubTabPac, BtnUnisocSubTabDiag, BtnUnisocSubTabFastboot);
+                else if (PanelUnisocDiag?.Visibility == Visibility.Visible)
+                    HighlightSubTab(BtnUnisocSubTabDiag, BtnUnisocSubTabBrom, BtnUnisocSubTabPac, BtnUnisocSubTabDiag, BtnUnisocSubTabFastboot);
+                else if (PanelUnisocFastboot?.Visibility == Visibility.Visible)
+                    HighlightSubTab(BtnUnisocSubTabFastboot, BtnUnisocSubTabBrom, BtnUnisocSubTabPac, BtnUnisocSubTabDiag, BtnUnisocSubTabFastboot);
+                else
+                    HighlightSubTab(BtnUnisocSubTabBrom, BtnUnisocSubTabBrom, BtnUnisocSubTabPac, BtnUnisocSubTabDiag, BtnUnisocSubTabFastboot);
 
                 AppendUnisocLog("[*] Switched Active Workspace: UNISOC / SPREADTRUM (SPD) Multi-Engine Suite");
-
             }
-
-
             else if (btn == TabBtnHuawei)
-
             {
-
                 ViewHuawei.Visibility = Visibility.Visible;
+                if (PanelHuaweiFastboot?.Visibility == Visibility.Visible)
+                    HighlightSubTab(BtnHuaweiSubTabFastboot, BtnHuaweiSubTabCom1, BtnHuaweiSubTabFastboot, BtnHuaweiSubTabManufacture, BtnHuaweiSubTabDload);
+                else if (PanelHuaweiManufacture?.Visibility == Visibility.Visible)
+                    HighlightSubTab(BtnHuaweiSubTabManufacture, BtnHuaweiSubTabCom1, BtnHuaweiSubTabFastboot, BtnHuaweiSubTabManufacture, BtnHuaweiSubTabDload);
+                else if (PanelHuaweiDload?.Visibility == Visibility.Visible)
+                    HighlightSubTab(BtnHuaweiSubTabDload, BtnHuaweiSubTabCom1, BtnHuaweiSubTabFastboot, BtnHuaweiSubTabManufacture, BtnHuaweiSubTabDload);
+                else
+                    HighlightSubTab(BtnHuaweiSubTabCom1, BtnHuaweiSubTabCom1, BtnHuaweiSubTabFastboot, BtnHuaweiSubTabManufacture, BtnHuaweiSubTabDload);
 
                 AppendHuaweiLog("[*] Switched Active Workspace: HUAWEI & HONOR (HiSilicon Kirin Multi-Engine Suite)");
-
             }
 
 
@@ -8588,38 +8687,19 @@ namespace BSLabTool.UI
 
 
         private void OnSubTabAdbClicked(object sender, RoutedEventArgs e)
-
         {
-
-            BtnSubTabAdb.Style = (Style)FindResource("SubTabButtonActive");
-
-            BtnSubTabFastboot.Style = (Style)FindResource("SubTabButtonInactive");
-
-            PanelAdbActions.Visibility = Visibility.Visible;
-
-            PanelFastbootActions.Visibility = Visibility.Collapsed;
-
+            HighlightSubTab(BtnSubTabAdb, BtnSubTabAdb, BtnSubTabFastboot);
+            if (PanelAdbActions != null) PanelAdbActions.Visibility = Visibility.Visible;
+            if (PanelFastbootActions != null) PanelFastbootActions.Visibility = Visibility.Collapsed;
             AppendAdbLog("[*] Switched to ADB Universal Suite.");
-
         }
 
-
-
-
         private void OnSubTabFastbootClicked(object sender, RoutedEventArgs e)
-
         {
-
-            BtnSubTabAdb.Style = (Style)FindResource("SubTabButtonInactive");
-
-            BtnSubTabFastboot.Style = (Style)FindResource("SubTabButtonActive");
-
-            PanelAdbActions.Visibility = Visibility.Collapsed;
-
-            PanelFastbootActions.Visibility = Visibility.Visible;
-
+            HighlightSubTab(BtnSubTabFastboot, BtnSubTabAdb, BtnSubTabFastboot);
+            if (PanelAdbActions != null) PanelAdbActions.Visibility = Visibility.Collapsed;
+            if (PanelFastbootActions != null) PanelFastbootActions.Visibility = Visibility.Visible;
             AppendAdbLog("[*] Switched to FASTBOOT Universal Suite.");
-
         }
 
 
@@ -10131,69 +10211,30 @@ namespace BSLabTool.UI
 
 
         private void OnSamsungSubTabMtpClicked(object sender, RoutedEventArgs e)
-
         {
-
-            BtnSamsungSubTabMtp.Style = (Style)FindResource("SubTabButtonActive");
-
-            BtnSamsungSubTabOdin.Style = (Style)FindResource("SubTabButtonInactive");
-
-            BtnSamsungSubTabPit.Style = (Style)FindResource("SubTabButtonInactive");
-
-            PanelSamsungMtp.Visibility = Visibility.Visible;
-
-            PanelSamsungOdin.Visibility = Visibility.Collapsed;
-
-            PanelSamsungPit.Visibility = Visibility.Collapsed;
-
+            HighlightSubTab(BtnSamsungSubTabMtp, BtnSamsungSubTabMtp, BtnSamsungSubTabOdin, BtnSamsungSubTabPit);
+            if (PanelSamsungMtp != null) PanelSamsungMtp.Visibility = Visibility.Visible;
+            if (PanelSamsungOdin != null) PanelSamsungOdin.Visibility = Visibility.Collapsed;
+            if (PanelSamsungPit != null) PanelSamsungPit.Visibility = Visibility.Collapsed;
             AppendSamsungLog("[*] Switched to SAMSUNG MTP Service Engine.");
-
         }
-
-
-
 
         private void OnSamsungSubTabOdinClicked(object sender, RoutedEventArgs e)
-
         {
-
-            BtnSamsungSubTabMtp.Style = (Style)FindResource("SubTabButtonInactive");
-
-            BtnSamsungSubTabOdin.Style = (Style)FindResource("SubTabButtonActive");
-
-            BtnSamsungSubTabPit.Style = (Style)FindResource("SubTabButtonInactive");
-
-            PanelSamsungMtp.Visibility = Visibility.Collapsed;
-
-            PanelSamsungOdin.Visibility = Visibility.Visible;
-
-            PanelSamsungPit.Visibility = Visibility.Collapsed;
-
+            HighlightSubTab(BtnSamsungSubTabOdin, BtnSamsungSubTabMtp, BtnSamsungSubTabOdin, BtnSamsungSubTabPit);
+            if (PanelSamsungMtp != null) PanelSamsungMtp.Visibility = Visibility.Collapsed;
+            if (PanelSamsungOdin != null) PanelSamsungOdin.Visibility = Visibility.Visible;
+            if (PanelSamsungPit != null) PanelSamsungPit.Visibility = Visibility.Collapsed;
             AppendSamsungLog("[*] Switched to SAMSUNG Odin Multi-Downloader.");
-
         }
 
-
-
-
         private void OnSamsungSubTabPitClicked(object sender, RoutedEventArgs e)
-
         {
-
-            BtnSamsungSubTabMtp.Style = (Style)FindResource("SubTabButtonInactive");
-
-            BtnSamsungSubTabOdin.Style = (Style)FindResource("SubTabButtonInactive");
-
-            BtnSamsungSubTabPit.Style = (Style)FindResource("SubTabButtonActive");
-
-            PanelSamsungMtp.Visibility = Visibility.Collapsed;
-
-            PanelSamsungOdin.Visibility = Visibility.Collapsed;
-
-            PanelSamsungPit.Visibility = Visibility.Visible;
-
+            HighlightSubTab(BtnSamsungSubTabPit, BtnSamsungSubTabMtp, BtnSamsungSubTabOdin, BtnSamsungSubTabPit);
+            if (PanelSamsungMtp != null) PanelSamsungMtp.Visibility = Visibility.Collapsed;
+            if (PanelSamsungOdin != null) PanelSamsungOdin.Visibility = Visibility.Collapsed;
+            if (PanelSamsungPit != null) PanelSamsungPit.Visibility = Visibility.Visible;
             AppendSamsungLog("[*] Switched to SAMSUNG PIT Doctor & Partition Studio (484+ Models DB).");
-
         }
 
 
@@ -11720,56 +11761,26 @@ namespace BSLabTool.UI
 
 
         private void ResetUnisocSubTabs()
-
         {
-
-            var inactive = (Style)FindResource("SubTabButtonInactive");
-
-            BtnUnisocSubTabBrom.Style = inactive;
-
-            BtnUnisocSubTabPac.Style = inactive;
-
-            BtnUnisocSubTabDiag.Style = inactive;
-
-            BtnUnisocSubTabFastboot.Style = inactive;
-
-
-
-            PanelUnisocBrom.Visibility = Visibility.Collapsed;
-
-            PanelUnisocPac.Visibility = Visibility.Collapsed;
-
-            PanelUnisocDiag.Visibility = Visibility.Collapsed;
-
-            PanelUnisocFastboot.Visibility = Visibility.Collapsed;
-
+            if (PanelUnisocBrom != null) PanelUnisocBrom.Visibility = Visibility.Collapsed;
+            if (PanelUnisocPac != null) PanelUnisocPac.Visibility = Visibility.Collapsed;
+            if (PanelUnisocDiag != null) PanelUnisocDiag.Visibility = Visibility.Collapsed;
+            if (PanelUnisocFastboot != null) PanelUnisocFastboot.Visibility = Visibility.Collapsed;
         }
-
-
-
 
         private void OnUnisocSubTabBromClicked(object sender, RoutedEventArgs e)
-
         {
-
             ResetUnisocSubTabs();
-
-            BtnUnisocSubTabBrom.Style = (Style)FindResource("SubTabButtonActive");
-
-            PanelUnisocBrom.Visibility = Visibility.Visible;
-
+            HighlightSubTab(BtnUnisocSubTabBrom, BtnUnisocSubTabBrom, BtnUnisocSubTabPac, BtnUnisocSubTabDiag, BtnUnisocSubTabFastboot);
+            if (PanelUnisocBrom != null) PanelUnisocBrom.Visibility = Visibility.Visible;
             AppendUnisocLog("[*] Switched to UNISOC BROM / FDL BootROM Engine.");
-
         }
-
-
-
 
         private void OnUnisocSubTabPacClicked(object sender, RoutedEventArgs e)
         {
             ResetUnisocSubTabs();
-            BtnUnisocSubTabPac.Style = (Style)FindResource("SubTabButtonActive");
-            PanelUnisocPac.Visibility = Visibility.Visible;
+            HighlightSubTab(BtnUnisocSubTabPac, BtnUnisocSubTabBrom, BtnUnisocSubTabPac, BtnUnisocSubTabDiag, BtnUnisocSubTabFastboot);
+            if (PanelUnisocPac != null) PanelUnisocPac.Visibility = Visibility.Visible;
             if (PacPartitions.Count == 0)
             {
                 InitUnisocPacStudio();
@@ -11778,14 +11789,11 @@ namespace BSLabTool.UI
             AppendUnisocLog("[*] Switched to UNISOC PAC Stock Firmware Flasher & Partition Studio.");
         }
 
-
-
-
         private void OnUnisocSubTabDiagClicked(object sender, RoutedEventArgs e)
         {
             ResetUnisocSubTabs();
-            BtnUnisocSubTabDiag.Style = (Style)FindResource("SubTabButtonActive");
-            PanelUnisocDiag.Visibility = Visibility.Visible;
+            HighlightSubTab(BtnUnisocSubTabDiag, BtnUnisocSubTabBrom, BtnUnisocSubTabPac, BtnUnisocSubTabDiag, BtnUnisocSubTabFastboot);
+            if (PanelUnisocDiag != null) PanelUnisocDiag.Visibility = Visibility.Visible;
             if (TxtUnisocComBox != null && string.IsNullOrWhiteSpace(TxtUnisocComBox.Text))
             {
                 if (!string.IsNullOrEmpty(_lastHardwareRadarResult?.ComPort) && _lastHardwareRadarResult.ComPort != "NONE")
@@ -14648,97 +14656,43 @@ namespace BSLabTool.UI
 
 
         private void ResetHuaweiSubTabs()
-
         {
-
-            var inactive = (Style)FindResource("SubTabButtonInactive");
-
-            BtnHuaweiSubTabCom1.Style = inactive;
-
-            BtnHuaweiSubTabFastboot.Style = inactive;
-
-            BtnHuaweiSubTabManufacture.Style = inactive;
-
-            BtnHuaweiSubTabDload.Style = inactive;
-
-
-
-            PanelHuaweiCom1.Visibility = Visibility.Collapsed;
-
-            PanelHuaweiFastboot.Visibility = Visibility.Collapsed;
-
-            PanelHuaweiManufacture.Visibility = Visibility.Collapsed;
-
-            PanelHuaweiDload.Visibility = Visibility.Collapsed;
-
+            if (PanelHuaweiCom1 != null) PanelHuaweiCom1.Visibility = Visibility.Collapsed;
+            if (PanelHuaweiFastboot != null) PanelHuaweiFastboot.Visibility = Visibility.Collapsed;
+            if (PanelHuaweiManufacture != null) PanelHuaweiManufacture.Visibility = Visibility.Collapsed;
+            if (PanelHuaweiDload != null) PanelHuaweiDload.Visibility = Visibility.Collapsed;
         }
-
-
-
 
         private void OnHuaweiSubTabCom1Clicked(object sender, RoutedEventArgs e)
-
         {
-
             ResetHuaweiSubTabs();
-
-            BtnHuaweiSubTabCom1.Style = (Style)FindResource("SubTabButtonActive");
-
-            PanelHuaweiCom1.Visibility = Visibility.Visible;
-
+            HighlightSubTab(BtnHuaweiSubTabCom1, BtnHuaweiSubTabCom1, BtnHuaweiSubTabFastboot, BtnHuaweiSubTabManufacture, BtnHuaweiSubTabDload);
+            if (PanelHuaweiCom1 != null) PanelHuaweiCom1.Visibility = Visibility.Visible;
             AppendHuaweiLog("[*] Mode Activated: HUAWEI USB COM 1.0 (Testpoint BootROM Engine)");
-
         }
-
-
-
 
         private void OnHuaweiSubTabFastbootClicked(object sender, RoutedEventArgs e)
-
         {
-
             ResetHuaweiSubTabs();
-
-            BtnHuaweiSubTabFastboot.Style = (Style)FindResource("SubTabButtonActive");
-
-            PanelHuaweiFastboot.Visibility = Visibility.Visible;
-
+            HighlightSubTab(BtnHuaweiSubTabFastboot, BtnHuaweiSubTabCom1, BtnHuaweiSubTabFastboot, BtnHuaweiSubTabManufacture, BtnHuaweiSubTabDload);
+            if (PanelHuaweiFastboot != null) PanelHuaweiFastboot.Visibility = Visibility.Visible;
             AppendHuaweiLog("[*] Mode Activated: FASTBOOT & RESCUE MODE (Deep Diagnostics & BL)");
-
         }
-
-
-
 
         private void OnHuaweiSubTabManufactureClicked(object sender, RoutedEventArgs e)
-
         {
-
             ResetHuaweiSubTabs();
-
-            BtnHuaweiSubTabManufacture.Style = (Style)FindResource("SubTabButtonActive");
-
-            PanelHuaweiManufacture.Visibility = Visibility.Visible;
-
+            HighlightSubTab(BtnHuaweiSubTabManufacture, BtnHuaweiSubTabCom1, BtnHuaweiSubTabFastboot, BtnHuaweiSubTabManufacture, BtnHuaweiSubTabDload);
+            if (PanelHuaweiManufacture != null) PanelHuaweiManufacture.Visibility = Visibility.Visible;
             AppendHuaweiLog("[*] Mode Activated: MANUFACTURE MODE (PCUI / DBAdapter Diag Suite)");
-
         }
 
-
-
-
         private void OnHuaweiSubTabDloadClicked(object sender, RoutedEventArgs e)
-
         {
-
             ResetHuaweiSubTabs();
-
-            BtnHuaweiSubTabDload.Style = (Style)FindResource("SubTabButtonActive");
-
-            PanelHuaweiDload.Visibility = Visibility.Visible;
-
+            HighlightSubTab(BtnHuaweiSubTabDload, BtnHuaweiSubTabCom1, BtnHuaweiSubTabFastboot, BtnHuaweiSubTabManufacture, BtnHuaweiSubTabDload);
+            if (PanelHuaweiDload != null) PanelHuaweiDload.Visibility = Visibility.Visible;
             AppendHuaweiLog("[*] Mode Activated: UPGRADE / DLOAD FLASHER (Stock UPDATE.APP Engine)");
-
         }
 
 

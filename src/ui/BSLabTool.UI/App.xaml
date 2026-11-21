@@ -35,12 +35,12 @@
             <SolidColorBrush x:Key="StatusBarBackground" Color="#192229"/>
             <SolidColorBrush x:Key="StatusBarBorder" Color="#2A3945"/>
 
-            <SolidColorBrush x:Key="SubTabInactiveBackground" Color="#24333E"/>
-            <SolidColorBrush x:Key="SubTabInactiveForeground" Color="#90A4AE"/>
-            <SolidColorBrush x:Key="SubTabInactiveBorder" Color="#324452"/>
-            <SolidColorBrush x:Key="SubTabActiveBackground" Color="#37474F"/>
-            <SolidColorBrush x:Key="SubTabActiveForeground" Color="#4DD0E1"/>
-            <SolidColorBrush x:Key="SubTabActiveBorder" Color="#4DD0E1"/>
+            <SolidColorBrush x:Key="SubTabInactiveBackground" Color="#1E293B"/>
+            <SolidColorBrush x:Key="SubTabInactiveForeground" Color="#94A3B8"/>
+            <SolidColorBrush x:Key="SubTabInactiveBorder" Color="#334155"/>
+            <SolidColorBrush x:Key="SubTabActiveBackground" Color="#0284C7"/>
+            <SolidColorBrush x:Key="SubTabActiveForeground" Color="#FFFFFF"/>
+            <SolidColorBrush x:Key="SubTabActiveBorder" Color="#38BDF8"/>
 
             <!-- Syntax Highlighting Tokens -->
             <SolidColorBrush x:Key="SyntaxGreen" Color="#00E676"/>
