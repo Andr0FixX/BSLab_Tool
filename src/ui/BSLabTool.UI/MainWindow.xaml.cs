@@ -53,6 +53,8 @@ namespace BSLabTool.UI
 
         private readonly List<string> _samsungPitFiles = new();
 
+        private readonly List<SamsungPitItem> _samsungPitItems = new();
+
         private readonly List<SamsungPitEntry> _currentPitEntries = new();
 
         private DispatcherTimer? _clockTimer;
@@ -772,7 +774,7 @@ namespace BSLabTool.UI
                 // Samsung Dual Box COM
                 if (LedSamsungCom != null) LedSamsungCom.Fill = greenBrush;
                 if (GlowSamsungCom != null) GlowSamsungCom.Color = greenGlow;
-                if (TxtSamsungComBox != null) { TxtSamsungComBox.Text = $"{res.ComPort} ({res.ComDesc})"; TxtSamsungComBox.Foreground = greenBrush; }
+                if (TxtSamsungComBox != null) { TxtSamsungComBox.Text = $"{res.ComPort} (Modem)"; TxtSamsungComBox.ToolTip = $"{res.ComPort} - {res.ComDesc}"; TxtSamsungComBox.Foreground = greenBrush; }
                 if (BadgeSamsungCom != null) BadgeSamsungCom.Background = greenBadgeBg;
                 if (TxtSamsungComState != null) { TxtSamsungComState.Text = "ONLINE"; TxtSamsungComState.Foreground = greenBadgeFg; }
 
@@ -939,7 +941,7 @@ namespace BSLabTool.UI
                 // Samsung Dual Box COM Offline
                 if (LedSamsungCom != null) LedSamsungCom.Fill = redBrush;
                 if (GlowSamsungCom != null) GlowSamsungCom.Color = redGlow;
-                if (TxtSamsungComBox != null) { TxtSamsungComBox.Text = "NO COM PORT DETECTED"; TxtSamsungComBox.Foreground = redText; }
+                if (TxtSamsungComBox != null) { TxtSamsungComBox.Text = "NO PORT"; TxtSamsungComBox.ToolTip = "No Samsung COM / Modem port detected"; TxtSamsungComBox.Foreground = redText; }
                 if (BadgeSamsungCom != null) BadgeSamsungCom.Background = darkBadgeBg;
                 if (TxtSamsungComState != null) { TxtSamsungComState.Text = "OFFLINE"; TxtSamsungComState.Foreground = grayBadgeFg; }
 
@@ -1096,9 +1098,9 @@ namespace BSLabTool.UI
                 // Samsung Dual Box USB
                 if (LedSamsungUsb != null) LedSamsungUsb.Fill = cyanBrush;
                 if (GlowSamsungUsb != null) GlowSamsungUsb.Color = cyanGlow;
-                if (TxtSamsungUsbBox != null) { TxtSamsungUsbBox.Text = res.UsbName; TxtSamsungUsbBox.Foreground = cyanBrush; }
+                if (TxtSamsungUsbBox != null) { TxtSamsungUsbBox.Text = string.IsNullOrEmpty(res.UsbName) ? "Samsung USB" : res.UsbName; TxtSamsungUsbBox.ToolTip = res.UsbName; TxtSamsungUsbBox.Foreground = cyanBrush; }
                 if (BadgeSamsungUsb != null) BadgeSamsungUsb.Background = cyanBadgeBg;
-                if (TxtSamsungUsbState != null) { TxtSamsungUsbState.Text = res.UsbMode; TxtSamsungUsbState.Foreground = cyanBadgeFg; }
+                if (TxtSamsungUsbState != null) { TxtSamsungUsbState.Text = (res.UsbMode == "SAMSUNG USB") ? "ONLINE" : (res.UsbMode.Length > 8 ? res.UsbMode.Substring(0, 8) : res.UsbMode); TxtSamsungUsbState.Foreground = cyanBadgeFg; }
 
                 // Huawei Dual Box USB
                 if (LedHuaweiUsb != null) LedHuaweiUsb.Fill = cyanBrush;
@@ -1243,7 +1245,7 @@ namespace BSLabTool.UI
                 // Samsung Dual Box USB Offline
                 if (LedSamsungUsb != null) LedSamsungUsb.Fill = redBrush;
                 if (GlowSamsungUsb != null) GlowSamsungUsb.Color = redGlow;
-                if (TxtSamsungUsbBox != null) { TxtSamsungUsbBox.Text = "WAITING FOR USB CONNECTION..."; TxtSamsungUsbBox.Foreground = grayBrush; }
+                if (TxtSamsungUsbBox != null) { TxtSamsungUsbBox.Text = "DISCONNECTED"; TxtSamsungUsbBox.ToolTip = "Waiting for Samsung USB connection..."; TxtSamsungUsbBox.Foreground = grayBrush; }
                 if (BadgeSamsungUsb != null) BadgeSamsungUsb.Background = darkBadgeBg;
                 if (TxtSamsungUsbState != null) { TxtSamsungUsbState.Text = "OFFLINE"; TxtSamsungUsbState.Foreground = grayBadgeFg; }
 
@@ -10240,272 +10242,311 @@ namespace BSLabTool.UI
 
 
 
-        private void InitSamsungPitDatabase()
-
+        public class SamsungPitItem
         {
+            public string FileName { get; set; } = "";
+            public string ModelCode { get; set; } = "";
+            public string ModelName { get; set; } = "";
+            public string VendorCode { get; set; } = "";
+            public string VendorRegion { get; set; } = "";
+            public string BinaryRev { get; set; } = "";
+            public string BuildNumber { get; set; } = "";
 
-            try
+            public string DisplayText => $"[{ModelCode}] {ModelName} • Vendor: {VendorCode} ({VendorRegion}) • Rev: {BinaryRev} • Build: {BuildNumber}";
 
+            public override string ToString() => DisplayText;
+        }
+
+        private static readonly Dictionary<string, string> _samsungModelNames = new(StringComparer.OrdinalIgnoreCase)
+        {
+            ["A013"] = "Galaxy A01 Core", ["A015"] = "Galaxy A01",
+            ["A022"] = "Galaxy A02", ["A025"] = "Galaxy A02s",
+            ["A032"] = "Galaxy A03 Core", ["A035"] = "Galaxy A03", ["A037"] = "Galaxy A03s",
+            ["A042"] = "Galaxy A04e", ["A045"] = "Galaxy A04", ["A047"] = "Galaxy A04s",
+            ["A055"] = "Galaxy A05", ["A057"] = "Galaxy A05s",
+            ["A105"] = "Galaxy A10", ["A107"] = "Galaxy A10s",
+            ["A115"] = "Galaxy A11", ["A125"] = "Galaxy A12", ["A127"] = "Galaxy A12 Nacho",
+            ["A135"] = "Galaxy A13 4G", ["A136"] = "Galaxy A13 5G",
+            ["A145"] = "Galaxy A14 4G", ["A146"] = "Galaxy A14 5G",
+            ["A155"] = "Galaxy A15 4G", ["A156"] = "Galaxy A15 5G",
+            ["A205"] = "Galaxy A20", ["A207"] = "Galaxy A20s",
+            ["A217"] = "Galaxy A21s", ["A225"] = "Galaxy A22 4G", ["A226"] = "Galaxy A22 5G",
+            ["A235"] = "Galaxy A23 4G", ["A236"] = "Galaxy A23 5G",
+            ["A245"] = "Galaxy A24", ["A256"] = "Galaxy A25 5G",
+            ["A305"] = "Galaxy A30", ["A307"] = "Galaxy A30s",
+            ["A315"] = "Galaxy A31", ["A325"] = "Galaxy A32 4G", ["A326"] = "Galaxy A32 5G",
+            ["A336"] = "Galaxy A33 5G", ["A346"] = "Galaxy A34 5G", ["A356"] = "Galaxy A35 5G",
+            ["A505"] = "Galaxy A50", ["A515"] = "Galaxy A51 4G", ["A516"] = "Galaxy A51 5G",
+            ["A525"] = "Galaxy A52 4G", ["A526"] = "Galaxy A52 5G", ["A528"] = "Galaxy A52s 5G",
+            ["A536"] = "Galaxy A53 5G", ["A546"] = "Galaxy A54 5G", ["A556"] = "Galaxy A55 5G",
+            ["A705"] = "Galaxy A70", ["A715"] = "Galaxy A71 4G", ["A716"] = "Galaxy A71 5G",
+            ["A725"] = "Galaxy A72", ["A736"] = "Galaxy A73 5G",
+            ["G610"] = "Galaxy J7 Prime", ["G998"] = "Galaxy S21 Ultra",
+            ["J701"] = "Galaxy J7 Nxt", ["M127"] = "Galaxy M12", ["M315"] = "Galaxy M31",
+            ["N975"] = "Galaxy Note 10+", ["N976"] = "Galaxy Note 10+ 5G", ["N986"] = "Galaxy Note 20 Ultra",
+            ["P615"] = "Galaxy Tab S6 Lite", ["S908"] = "Galaxy S22 Ultra", ["S918"] = "Galaxy S23 Ultra",
+            ["T290"] = "Galaxy Tab A 8.0", ["T505"] = "Galaxy Tab A7",
+            ["X200"] = "Galaxy Tab A8 10.5", ["X205"] = "Galaxy Tab A8 LTE", ["X216"] = "Galaxy Tab A9+"
+        };
+
+        private static readonly Dictionary<string, string> _samsungVendors = new(StringComparer.OrdinalIgnoreCase)
+        {
+            ["XX"] = "Global / Europe",
+            ["DX"] = "SE Asia / Malaysia",
+            ["JV"] = "Middle East / UAE",
+            ["UB"] = "Latin America / Brazil",
+            ["ZC"] = "China (Open)",
+            ["ZH"] = "Hong Kong / Taiwan",
+            ["DD"] = "India / South Asia (INS)",
+            ["NK"] = "Korea (KT/SKT/LGT)",
+            ["AU"] = "Australia",
+            ["TU"] = "USA (AT&T/Cricket)",
+            ["U"] = "USA Carrier",
+            ["U1"] = "USA Factory Unlocked",
+            ["V"] = "USA Verizon",
+            ["S"] = "Sprint / Boost"
+        };
+
+        private SamsungPitItem ParseSamsungPitFileName(string fn)
+        {
+            var item = new SamsungPitItem { FileName = fn };
+
+            var match = System.Text.RegularExpressions.Regex.Match(
+                fn,
+                @"^([A-Z]\d{3}[A-Z0-9]?)(XX|DX|JV|UB|ZC|ZH|ZN|ZM|ZW|ZS|JP|DD|NK|AU|TU|O|U|S|V)?([A-Z0-9]{1,2})?([A-Z0-9]{4})?",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+
+            if (match.Success && match.Groups[1].Length >= 4)
             {
+                string rawModel = match.Groups[1].Value.ToUpperInvariant();
+                item.ModelCode = $"SM-{rawModel}";
+                string prefix = rawModel.Length >= 4 ? rawModel.Substring(0, 4) : rawModel;
+                item.ModelName = _samsungModelNames.TryGetValue(prefix, out var mn) ? mn : $"Galaxy {rawModel}";
 
+                string vendor = match.Groups[2].Success ? match.Groups[2].Value.ToUpperInvariant() : "XX";
+                item.VendorCode = string.IsNullOrEmpty(vendor) ? "XX" : vendor;
+                item.VendorRegion = _samsungVendors.TryGetValue(item.VendorCode, out var vr) ? vr : "Multi-CSC";
+
+                string rev = match.Groups[3].Success ? match.Groups[3].Value.ToUpperInvariant() : "1";
+                item.BinaryRev = string.IsNullOrEmpty(rev) ? "1" : (rev.Length > 1 && char.IsLetter(rev[0]) ? rev.Substring(1) : rev);
+
+                string build = match.Groups[4].Success ? match.Groups[4].Value.ToUpperInvariant() : "AUTO";
+                item.BuildNumber = string.IsNullOrEmpty(build) ? "AUTO" : build;
+            }
+            else
+            {
+                string baseName = System.IO.Path.GetFileNameWithoutExtension(fn);
+                string firstPart = baseName.Split('_')[0];
+                item.ModelCode = firstPart.Length > 0 ? $"SM-{firstPart}" : "SM-GENERIC";
+                item.ModelName = "Samsung Galaxy Device";
+                item.VendorCode = "Global";
+                item.VendorRegion = "Universal";
+                item.BinaryRev = "All";
+                item.BuildNumber = "Stock";
+            }
+
+            return item;
+        }
+
+        private void InitSamsungPitDatabase()
+        {
+            try
+            {
                 string pitDir = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "resources", "loaders", "samsung", "pit");
-
                 if (!Directory.Exists(pitDir))
-
                 {
-
                     pitDir = @"C:\BSLab_Tool\resources\loaders\samsung\pit";
-
                 }
-
-
-
 
                 if (Directory.Exists(pitDir))
-
                 {
-
                     _samsungPitFiles.Clear();
+                    _samsungPitItems.Clear();
 
                     var files = Directory.GetFiles(pitDir, "*.pit", SearchOption.TopDirectoryOnly);
-
                     foreach (var f in files)
-
                     {
-
                         string fn = System.IO.Path.GetFileName(f);
-
                         _samsungPitFiles.Add(fn);
-
+                        _samsungPitItems.Add(ParseSamsungPitFileName(fn));
                     }
-
-
-
 
                     _samsungPitFiles.Sort(StringComparer.OrdinalIgnoreCase);
+                    _samsungPitItems.Sort((a, b) => string.Compare(a.DisplayText, b.DisplayText, StringComparison.OrdinalIgnoreCase));
 
-
-
-                    CmbSamsungPitModel.Items.Clear();
-
-                    CmbOdinModelPit.Items.Clear();
-
-
-
-                    foreach (var fn in _samsungPitFiles)
-
-                    {
-
-                        CmbSamsungPitModel.Items.Add(fn);
-
-                        CmbOdinModelPit.Items.Add(fn);
-
-                    }
-
-
-
-
-                    if (CmbSamsungPitModel.Items.Count > 0)
-
-                    {
-
-                        CmbSamsungPitModel.SelectedIndex = 0;
-
-                    }
-
-
-                    if (CmbOdinModelPit.Items.Count > 0)
-
-                    {
-
-                        CmbOdinModelPit.SelectedIndex = 0;
-
-                    }
-
-
-
+                    FilterSamsungPitFiles("");
 
                     TxtPitModelCount.Text = $"{_samsungPitFiles.Count} Files Ready";
-
-                    AppendSamsungLog($"[+] Samsung PIT Database indexed: {_samsungPitFiles.Count} verified PIT files loaded.");
-
+                    AppendSamsungLog($"[+] Samsung PIT Database indexed: {_samsungPitFiles.Count} verified PIT files loaded with Model & Vendor metadata.");
                 }
-
-
             }
-
-
             catch (Exception ex)
-
             {
-
                 AppendSamsungLog($"[!] PIT DB Notice: {ex.Message}");
-
             }
-
-
         }
 
-
-
-
-        private void OnPitSearchFilterChanged(object sender, TextChangedEventArgs e)
-
+        public void FilterSamsungPitFiles(string query = "")
         {
-
             if (CmbSamsungPitModel == null) return;
 
-            string filter = TxtPitSearchFilter.Text.Trim();
+            string filter = query.Trim();
+            List<SamsungPitItem> matches;
 
-
-
-            CmbSamsungPitModel.Items.Clear();
-
-            var matches = string.IsNullOrEmpty(filter)
-
-                ? _samsungPitFiles
-
-                : _samsungPitFiles.FindAll(f => f.Contains(filter, StringComparison.OrdinalIgnoreCase));
-
-
-
-            foreach (var m in matches)
-
+            if (string.IsNullOrEmpty(filter))
             {
+                matches = _samsungPitItems;
+            }
+            else
+            {
+                string cleanFilter = filter;
+                var smMatch = System.Text.RegularExpressions.Regex.Match(filter, @"SM-([A-Z0-9]+)", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                if (smMatch.Success) cleanFilter = smMatch.Groups[1].Value;
 
-                CmbSamsungPitModel.Items.Add(m);
+                matches = _samsungPitItems.FindAll(p =>
+                    p.ModelCode.Contains(cleanFilter, StringComparison.OrdinalIgnoreCase) ||
+                    p.ModelName.Contains(cleanFilter, StringComparison.OrdinalIgnoreCase) ||
+                    p.VendorCode.Contains(cleanFilter, StringComparison.OrdinalIgnoreCase) ||
+                    p.VendorRegion.Contains(cleanFilter, StringComparison.OrdinalIgnoreCase) ||
+                    p.BuildNumber.Contains(cleanFilter, StringComparison.OrdinalIgnoreCase) ||
+                    p.FileName.Contains(cleanFilter, StringComparison.OrdinalIgnoreCase));
 
+                if (matches.Count == 0 && cleanFilter.Length >= 4)
+                {
+                    string basePrefix = cleanFilter.Substring(0, 4);
+                    matches = _samsungPitItems.FindAll(p =>
+                        p.ModelCode.Contains(basePrefix, StringComparison.OrdinalIgnoreCase) ||
+                        p.ModelName.Contains(basePrefix, StringComparison.OrdinalIgnoreCase));
+                }
             }
 
+            CmbSamsungPitModel.SelectionChanged -= OnSamsungPitModelSelected;
+            CmbSamsungPitModel.Items.Clear();
+            if (CmbOdinModelPit != null)
+            {
+                CmbOdinModelPit.SelectionChanged -= OnOdinModelPitSelected;
+                CmbOdinModelPit.Items.Clear();
+            }
 
+            var targetList = matches.Count > 0 ? matches : _samsungPitItems;
 
+            foreach (var item in targetList)
+            {
+                CmbSamsungPitModel.Items.Add(item);
+                if (CmbOdinModelPit != null) CmbOdinModelPit.Items.Add(item);
+            }
 
             if (CmbSamsungPitModel.Items.Count > 0)
-
             {
-
                 CmbSamsungPitModel.SelectedIndex = 0;
-
+            }
+            if (CmbOdinModelPit != null && CmbOdinModelPit.Items.Count > 0)
+            {
+                CmbOdinModelPit.SelectedIndex = 0;
             }
 
+            CmbSamsungPitModel.SelectionChanged += OnSamsungPitModelSelected;
+            if (CmbOdinModelPit != null) CmbOdinModelPit.SelectionChanged += OnOdinModelPitSelected;
 
+            if (CmbSamsungPitModel.SelectedItem != null)
+            {
+                LoadAndDisplayPit(GetPitFileName(CmbSamsungPitModel.SelectedItem));
+            }
 
-
-            TxtPitModelCount.Text = $"{matches.Count} / {_samsungPitFiles.Count} Found";
-
+            if (TxtPitModelCount != null)
+            {
+                TxtPitModelCount.Text = $"{targetList.Count} / {_samsungPitItems.Count} Ready";
+            }
         }
 
-
-
+        private void OnPitSearchFilterChanged(object sender, TextChangedEventArgs e)
+        {
+            if (TxtPitSearchFilter == null) return;
+            FilterSamsungPitFiles(TxtPitSearchFilter.Text);
+        }
 
         private void OnSamsungPitModelSelected(object sender, SelectionChangedEventArgs e)
-
         {
-
             if (CmbSamsungPitModel?.SelectedItem == null) return;
-
-            string selected = CmbSamsungPitModel.SelectedItem.ToString() ?? "";
-
-            LoadAndDisplayPit(selected);
-
+            string fn = GetPitFileName(CmbSamsungPitModel.SelectedItem);
+            LoadAndDisplayPit(fn);
         }
-
-
-
 
         private void OnOdinModelPitSelected(object sender, SelectionChangedEventArgs e)
-
         {
-
             if (CmbOdinModelPit?.SelectedItem == null) return;
-
-            string selected = CmbOdinModelPit.SelectedItem.ToString() ?? "";
-
-            string pitPath = GetPitFilePath(selected);
-
-
+            string fn = GetPitFileName(CmbOdinModelPit.SelectedItem);
+            string pitPath = GetPitFilePath(fn);
 
             if (TxtOdinPit != null && !string.IsNullOrEmpty(pitPath))
-
             {
-
                 TxtOdinPit.Text = pitPath;
-
                 ChkOdinPit.IsChecked = true;
-
                 ChkOdinRePartition.IsChecked = true;
-
-                AppendSamsungLog($"[*] Odin Model PIT Auto-Selected: {selected} (Re-Partition Armed)");
-
+                AppendSamsungLog($"[*] Odin Model PIT Auto-Selected: {fn} (Re-Partition Armed)");
             }
-
-
         }
 
 
 
 
-        private void OnOdinInspectPitClicked(object sender, RoutedEventArgs e)
-
+        private string GetPitFileName(object? item)
         {
+            if (item == null) return string.Empty;
+            if (item is SamsungPitItem pitItem) return pitItem.FileName;
+            return item.ToString() ?? string.Empty;
+        }
 
-            if (CmbOdinModelPit.SelectedItem != null)
-
+        private void OnOdinInspectPitClicked(object sender, RoutedEventArgs e)
+        {
+            if (CmbOdinModelPit?.SelectedItem != null)
             {
-
-                string selected = CmbOdinModelPit.SelectedItem.ToString() ?? "";
-
-                CmbSamsungPitModel.SelectedItem = selected;
-
+                string fn = GetPitFileName(CmbOdinModelPit.SelectedItem);
+                if (CmbSamsungPitModel != null)
+                {
+                    for (int i = 0; i < CmbSamsungPitModel.Items.Count; i++)
+                    {
+                        if (GetPitFileName(CmbSamsungPitModel.Items[i]).Equals(fn, StringComparison.OrdinalIgnoreCase))
+                        {
+                            CmbSamsungPitModel.SelectedIndex = i;
+                            break;
+                        }
+                    }
+                }
             }
 
-
             OnSamsungSubTabPitClicked(sender, e);
-
         }
 
 
 
 
         private void OnPitAutoBindOdinClicked(object sender, RoutedEventArgs e)
-
         {
-
             if (CmbSamsungPitModel?.SelectedItem == null) return;
-
-            string selected = CmbSamsungPitModel.SelectedItem.ToString() ?? "";
-
-            string pitPath = GetPitFilePath(selected);
-
-
+            string fn = GetPitFileName(CmbSamsungPitModel.SelectedItem);
+            string pitPath = GetPitFilePath(fn);
 
             TxtOdinPit.Text = pitPath;
-
             ChkOdinPit.IsChecked = true;
-
             ChkOdinRePartition.IsChecked = true;
 
-
-
             // Sync with Odin quick selector
-
-            if (CmbOdinModelPit.Items.Contains(selected))
-
+            if (CmbOdinModelPit != null)
             {
-
-                CmbOdinModelPit.SelectedItem = selected;
-
+                for (int i = 0; i < CmbOdinModelPit.Items.Count; i++)
+                {
+                    if (GetPitFileName(CmbOdinModelPit.Items[i]).Equals(fn, StringComparison.OrdinalIgnoreCase))
+                    {
+                        CmbOdinModelPit.SelectedIndex = i;
+                        break;
+                    }
+                }
             }
 
-
-
-
             OnSamsungSubTabOdinClicked(sender, e);
-
             AppendSamsungLog($"[+] ⚡ Auto-Loaded PIT into Odin Flasher: {System.IO.Path.GetFileName(pitPath)}");
-
             AppendSamsungLog("[+] Armed 'Re-Partition' flag for safe physical sector alignment.");
-
         }
 
 
@@ -10517,7 +10558,8 @@ namespace BSLabTool.UI
 
             if (CmbSamsungPitModel?.SelectedItem == null) return;
 
-            string selected = CmbSamsungPitModel.SelectedItem.ToString() ?? "";
+            string fn = GetPitFileName(CmbSamsungPitModel.SelectedItem);
+            string targetDisplay = CmbSamsungPitModel.SelectedItem is SamsungPitItem pitItem ? pitItem.DisplayText : fn;
 
 
 
@@ -10525,7 +10567,7 @@ namespace BSLabTool.UI
 
             AppendSamsungLog("[*] ⚡ SURGICAL SAMSUNG PIT WRITE (UNBRICK ROUTINE)");
 
-            AppendSamsungLog($"[*] Target Model PIT : {selected}");
+            AppendSamsungLog($"[*] Target Model PIT : {targetDisplay}");
 
             AppendSamsungLog($"[*] Target Port      : {TxtSamsungPort.Text}");
 
@@ -10538,7 +10580,7 @@ namespace BSLabTool.UI
 
 
 
-            AppendSamsungLog($"[2] Transmitting PIT file binary: {selected}...");
+            AppendSamsungLog($"[2] Transmitting PIT file binary: {fn}...");
 
 
 
@@ -10569,9 +10611,9 @@ namespace BSLabTool.UI
 
             if (CmbSamsungPitModel?.SelectedItem == null) return;
 
-            string selected = CmbSamsungPitModel.SelectedItem.ToString() ?? "";
+            string fn = GetPitFileName(CmbSamsungPitModel.SelectedItem);
 
-            string srcPath = GetPitFilePath(selected);
+            string srcPath = GetPitFilePath(fn);
 
 
 
@@ -10583,7 +10625,7 @@ namespace BSLabTool.UI
 
             {
 
-                FileName = selected,
+                FileName = fn,
 
                 Filter = "Samsung PIT File (*.pit)|*.pit|All Files (*.*)|*.*",
 
@@ -10651,7 +10693,15 @@ namespace BSLabTool.UI
 
             TxtPitPartCount.Text = $"{entries.Count} Partitions";
 
-            TxtPitSelectedInfo.Text = $"File: {fileName} | Size: {new FileInfo(fullPath).Length} Bytes";
+                        var pitInfo = _samsungPitItems.Find(p => string.Equals(p.FileName, fileName, StringComparison.OrdinalIgnoreCase));
+            if (pitInfo != null)
+            {
+                TxtPitSelectedInfo.Text = $"[{pitInfo.ModelCode}] {pitInfo.ModelName} | Vendor: {pitInfo.VendorCode} ({pitInfo.VendorRegion}) | Rev: {pitInfo.BinaryRev} | Build: {pitInfo.BuildNumber} | Size: {new FileInfo(fullPath).Length} Bytes";
+            }
+            else
+            {
+                TxtPitSelectedInfo.Text = $"File: {fileName} | Size: {new FileInfo(fullPath).Length} Bytes";
+            }
 
             AppendSamsungLog($"[+] PIT Doctor: Loaded {entries.Count} partition map blocks from {fileName}");
 

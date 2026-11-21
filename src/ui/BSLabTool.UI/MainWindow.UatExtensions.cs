@@ -641,6 +641,11 @@ namespace BSLabTool.UI
             {
                 TxtUatLoaderPath.Text = ResolveAppropriateLoaderPath(_currentSelectedBrand, _currentSelectedModel);
             }
+
+            if (_currentSelectedBrand.Equals("Samsung", StringComparison.OrdinalIgnoreCase))
+            {
+                FilterSamsungPitFiles(_currentSelectedModel);
+            }
         }
 
         private void OnUatModelSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -655,6 +660,11 @@ namespace BSLabTool.UI
             if (TxtUatLoaderPath != null)
             {
                 TxtUatLoaderPath.Text = ResolveAppropriateLoaderPath(_currentSelectedBrand, _currentSelectedModel);
+            }
+
+            if (_currentSelectedBrand.Equals("Samsung", StringComparison.OrdinalIgnoreCase))
+            {
+                FilterSamsungPitFiles(_currentSelectedModel);
             }
 
             if (_lastHardwareRadarResult != null && (_lastHardwareRadarResult.HasCom || _lastHardwareRadarResult.HasUsb))

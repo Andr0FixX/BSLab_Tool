@@ -1,14 +1,14 @@
 {
-    "version": "2.5.4",
-    "app_version": "2.5.4",
+    "version": "2.5.5",
+    "app_version": "2.5.5",
     "release_date": "2026-11-21 23:30:00",
     "file_name": "brands_models.json",
     "file_size": 5978192,
     "sha256": "aca0945a1bb30a6c3a34a82dd6541a64294fe36a186cc2163a8e57ed8ec414f1",
     "total_models": 11923,
-    "binary_update_url": "https://github.com/Andr0FixX/BSLab_Tool/releases/download/v2.5.4/BSLab_Update.zip",
-    "binary_sha256": "50473ca4e45f5713f1bb30945662ff5545e7b973461937768c8597336bcc48ce",
+    "binary_update_url": "https://github.com/Andr0FixX/BSLab_Tool/releases/download/v2.5.5/BSLab_Update.zip",
+    "binary_sha256": "4c7a07d4e9c5bda6b8d65b8909c0fc2b8802c4aff6c688c938348c5485f022e3",
     "mandatory": false,
-    "change_log": "\u2022 Dynamic Sub-Tab Button Highlight Engine (Electric Blue & Cyber Glow)\n\u2022 Active Brand Ribbon Highlighting & Real-Time Synchronization\n\u2022 Modern Interactive Brand Cards Integration & Fast Latching\n\u2022 High-Contrast Visual State for Samsung, Xiaomi, Oppo, Vivo, Unisoc, Huawei & Fastboot",
+    "change_log": "\u2022 Smart Samsung PIT Model & Vendor Identification Engine (Vendor, Region, Binary Bit, Build PDA)\n\u2022 Hardware Port Status Box Fix (3-Column Grid Layout with Auto-Ellipsis & Detailed Tooltips)\n\u2022 Dedicated Two-Row PIT Model Search & Full-Width Selector (Live Multi-Keyword Filter)\n\u2022 Seamless PIT Auto-Latching on Right-Panel Samsung Model Selection\n\u2022 Verified Physical Partition Information Tables for Galaxy A01 Series (SM-A015A, SM-A015F, etc.)",
     "status": "STABLE_RELEASE"
 }
