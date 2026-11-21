@@ -1,13 +1,13 @@
 {
-    "version": "2.5.2",
-    "app_version": "2.5.2",
+    "version": "2.5.3",
+    "app_version": "2.5.3",
     "release_date": "2026-11-21 23:30:00",
     "file_name": "brands_models.json",
     "file_size": 5978192,
     "sha256": "aca0945a1bb30a6c3a34a82dd6541a64294fe36a186cc2163a8e57ed8ec414f1",
     "total_models": 11923,
-    "binary_update_url": "https://github.com/Andr0FixX/BSLab_Tool/releases/download/v2.5.2/BSLab_Update.zip",
-    "binary_sha256": "3ffc0b97f0abee2154bb6b7f196c491173b64e5bb938cdf865086c585726f615",
+    "binary_update_url": "https://github.com/Andr0FixX/BSLab_Tool/releases/download/v2.5.3/BSLab_Update.zip",
+    "binary_sha256": "cbcf54f4f354a956dfd72eb79aa226024e4eb8f8b2d0cdd2da9f4782867fd7c2",
     "mandatory": false,
     "change_log": "\u2022 Connected to GitHub Releases (Andr0FixX/BSLab_Tool)\n\u2022 Thread-Safe UI Dispatcher & Auto-Hub Chipset Guard\n\u2022 Standalone BSLabUpdater.exe file-lock safe engine",
     "status": "STABLE_RELEASE"

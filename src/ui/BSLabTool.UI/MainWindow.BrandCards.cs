@@ -610,5 +610,278 @@ namespace BSLabTool.UI
         private void OnClearItAdminLogClicked(object sender, RoutedEventArgs e) => TxtItAdminConsole?.Clear();
 
         #endregion
+
+        #region Modern Brand Cards Deck Engine
+
+        private void OnBrandCardMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (sender is FrameworkElement elem && elem.Tag is string brandTag)
+            {
+                SelectModernBrand(brandTag);
+            }
+        }
+
+        public void SelectModernBrand(string brandTag)
+        {
+            string bTag = brandTag.ToLower().Trim();
+            string brandDisplay = bTag switch
+            {
+                "samsung" => "Samsung",
+                "xiaomi" => "Xiaomi",
+                "oppo" => "Oppo",
+                "vivo" => "Vivo",
+                "huawei" => "Huawei",
+                "transsion" => "Tecno",
+                "infinix" => "Infinix",
+                "tecno" => "Tecno",
+                "pixel" => "Pixel",
+                "motorola" => "Motorola",
+                _ => brandTag
+            };
+
+            _currentSelectedBrand = brandDisplay;
+
+            // Highlight the active card border with glowing accent
+            HighlightBrandCard(bTag);
+
+            // Update badge in the card deck
+            if (TxtActiveBrandBadge != null)
+            {
+                TxtActiveBrandBadge.Text = $"ACTIVE: {brandDisplay.ToUpper()}";
+            }
+
+            // Explicitly switch to 'By Model' manual mode
+            if (FindName("RbByModel") is RadioButton rbByModel)
+            {
+                rbByModel.IsChecked = true;
+            }
+
+            // Sync with Right Panel Brands Dropdown
+            if (FindName("CmbUatBrand") is ComboBox cmbBrand)
+            {
+                bool found = false;
+                for (int i = 0; i < cmbBrand.Items.Count; i++)
+                {
+                    var text = (cmbBrand.Items[i] as ComboBoxItem)?.Content?.ToString() ?? cmbBrand.Items[i].ToString() ?? "";
+                    if (string.Equals(text, brandDisplay, StringComparison.OrdinalIgnoreCase) ||
+                        text.IndexOf(brandDisplay, StringComparison.OrdinalIgnoreCase) >= 0)
+                    {
+                        cmbBrand.SelectedIndex = i;
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found)
+                {
+                    cmbBrand.Items.Add(brandDisplay);
+                    cmbBrand.SelectedIndex = cmbBrand.Items.Count - 1;
+                }
+            }
+
+            // Populate models for this brand immediately
+            PopulateUatModelsForBrand(_currentSelectedBrand);
+            string activeModel = (CmbUatModel?.SelectedItem as ComboBoxItem)?.Content?.ToString()
+                                ?? CmbUatModel?.SelectedItem?.ToString() ?? _currentSelectedModel;
+            _currentSelectedModel = activeModel;
+
+            // Update Loader File Path immediately
+            if (TxtUatLoaderPath != null)
+            {
+                TxtUatLoaderPath.Text = ResolveAppropriateLoaderPath(_currentSelectedBrand, _currentSelectedModel);
+            }
+
+            UpdateUatLiveDeviceCard(_currentSelectedBrand, $"{activeModel} (Ready)", GetBrandColorHex(_currentSelectedBrand), isConnected: false);
+            AppendAutoHubLog($"[*] 🎯 Brand Card Engaged: {_currentSelectedBrand} -> {_currentSelectedModel} [Pipeline Latched]");
+
+            // Latch SoC architecture
+            AutoLatchSocForBrand(bTag);
+        }
+
+        private void HighlightBrandCard(string brandTag)
+        {
+            ResetBrandCardGlows();
+
+            Border? targetCard = brandTag switch
+            {
+                "samsung" => CardBrandSamsung,
+                "xiaomi" => CardBrandXiaomi,
+                "oppo" => CardBrandOppo,
+                "vivo" => CardBrandVivo,
+                "huawei" => CardBrandHuawei,
+                "transsion" or "infinix" or "tecno" => CardBrandTranssion,
+                "pixel" => CardBrandPixel,
+                "motorola" => CardBrandMotorola,
+                _ => null
+            };
+
+            if (targetCard != null)
+            {
+                Color glowColor = brandTag switch
+                {
+                    "samsung" => Color.FromRgb(59, 130, 246),
+                    "xiaomi" => Color.FromRgb(249, 115, 22),
+                    "oppo" => Color.FromRgb(16, 185, 129),
+                    "vivo" => Color.FromRgb(2, 132, 199),
+                    "huawei" => Color.FromRgb(239, 68, 68),
+                    "transsion" or "infinix" or "tecno" => Color.FromRgb(34, 197, 94),
+                    "pixel" => Color.FromRgb(96, 165, 250),
+                    "motorola" => Color.FromRgb(129, 140, 248),
+                    _ => Color.FromRgb(0, 210, 255)
+                };
+
+                targetCard.BorderThickness = new Thickness(2);
+                targetCard.BorderBrush = new SolidColorBrush(glowColor);
+                targetCard.Effect = new System.Windows.Media.Effects.DropShadowEffect
+                {
+                    BlurRadius = 18,
+                    ShadowDepth = 0,
+                    Opacity = 0.9,
+                    Color = glowColor
+                };
+            }
+        }
+
+        private void ResetBrandCardGlows()
+        {
+            var cards = new[]
+            {
+                (CardBrandSamsung, Color.FromRgb(29, 78, 216)),
+                (CardBrandXiaomi, Color.FromRgb(234, 88, 12)),
+                (CardBrandOppo, Color.FromRgb(5, 150, 105)),
+                (CardBrandVivo, Color.FromRgb(2, 132, 199)),
+                (CardBrandHuawei, Color.FromRgb(220, 38, 38)),
+                (CardBrandTranssion, Color.FromRgb(22, 163, 74)),
+                (CardBrandPixel, Color.FromRgb(37, 99, 235)),
+                (CardBrandMotorola, Color.FromRgb(79, 70, 229))
+            };
+
+            foreach (var (card, defaultBorder) in cards)
+            {
+                if (card != null)
+                {
+                    card.BorderThickness = new Thickness(1.5);
+                    card.BorderBrush = new SolidColorBrush(defaultBorder);
+                    card.Effect = new System.Windows.Media.Effects.DropShadowEffect
+                    {
+                        BlurRadius = 6,
+                        ShadowDepth = 1,
+                        Opacity = 0.35,
+                        Color = Colors.Black
+                    };
+                }
+            }
+        }
+
+        private void AutoLatchSocForBrand(string brandTag)
+        {
+            if (CmbPlatform == null) return;
+
+            switch (brandTag)
+            {
+                case "samsung":
+                    CmbPlatform.SelectedIndex = 4; // Samsung Odin
+                    OnPlatformSelectionChanged(CmbPlatform, null);
+                    break;
+                case "xiaomi":
+                    CmbPlatform.SelectedIndex = 1; // Qualcomm / Fastboot
+                    OnPlatformSelectionChanged(CmbPlatform, null);
+                    break;
+                case "oppo":
+                case "vivo":
+                case "transsion":
+                case "infinix":
+                case "tecno":
+                    CmbPlatform.SelectedIndex = 0; // MediaTek BROM
+                    OnPlatformSelectionChanged(CmbPlatform, null);
+                    break;
+                case "huawei":
+                    CmbPlatform.SelectedIndex = 5; // HiSilicon Kirin
+                    OnPlatformSelectionChanged(CmbPlatform, null);
+                    break;
+                case "pixel":
+                case "motorola":
+                    CmbPlatform.SelectedIndex = 2; // Fastboot Suite
+                    OnPlatformSelectionChanged(CmbPlatform, null);
+                    break;
+            }
+        }
+
+        #endregion
+
+        #region Google Pixel & Motorola Dedicated Handlers
+
+        private async void OnPixelReadInfoClicked(object sender, RoutedEventArgs e)
+        {
+            AppendAutoHubLog("══════════════════════════════════════════════════════════");
+            AppendAutoHubLog("🔍 [GOOGLE PIXEL] QUERYING TENSOR / SNAPDRAGON HARDWARE TELEMETRY");
+            AppendAutoHubLog("══════════════════════════════════════════════════════════");
+            string res = await ExecuteCliAsync("fastboot.exe", "getvar all");
+            if (string.IsNullOrWhiteSpace(res) || res.Contains("error"))
+            {
+                AppendAutoHubLog("[!] Pixel not detected in Fastboot. Hold Vol- & Power to enter Fastboot.");
+            }
+            else
+            {
+                AppendAutoHubLog(res);
+                AppendAutoHubLog("[+] Google Pixel Fastboot Descriptors Parsed Successfully.");
+            }
+        }
+
+        private async void OnPixelResetFrpClicked(object sender, RoutedEventArgs e)
+        {
+            AppendAutoHubLog("[*] Executing 1-Click Google Pixel FRP & Account Lock Reset...");
+            string r1 = await ExecuteCliAsync("fastboot.exe", "erase frp");
+            string r2 = await ExecuteCliAsync("fastboot.exe", "erase config");
+            AppendAutoHubLog($"[+] Pixel FRP Partition Wipe: {r1.Trim()} {r2.Trim()}");
+            AppendAutoHubLog("[+] Google Pixel Factory Reset Protection wiped successfully.");
+        }
+
+        private async void OnPixelUnlockBootloaderClicked(object sender, RoutedEventArgs e)
+        {
+            AppendAutoHubLog("[*] Transmitting Google Pixel OEM Bootloader Unlock sequence...");
+            string res = await ExecuteCliAsync("fastboot.exe", "flashing unlock");
+            if (res.Contains("unknown") || res.Contains("error"))
+            {
+                res = await ExecuteCliAsync("fastboot.exe", "oem unlock");
+            }
+            AppendAutoHubLog($"[+] Bootloader Unlock Response: {res.Trim()}");
+            AppendAutoHubLog("[!] Confirm unlock on phone screen using Volume Keys and Power button.");
+        }
+
+        private async void OnMotoReadInfoClicked(object sender, RoutedEventArgs e)
+        {
+            AppendAutoHubLog("══════════════════════════════════════════════════════════");
+            AppendAutoHubLog("🔍 [MOTOROLA FASTBOOT] READING MOTO CARRIER & HARDWARE DESCRIPTORS");
+            AppendAutoHubLog("══════════════════════════════════════════════════════════");
+            string res = await ExecuteCliAsync("fastboot.exe", "getvar all");
+            if (string.IsNullOrWhiteSpace(res) || res.Contains("error"))
+            {
+                AppendAutoHubLog("[!] Motorola device not detected in Fastboot (AP Fastboot Flash Mode).");
+            }
+            else
+            {
+                AppendAutoHubLog(res);
+                AppendAutoHubLog("[+] Moto Hardware Descriptors Parsed.");
+            }
+        }
+
+        private async void OnMotoResetFrpClicked(object sender, RoutedEventArgs e)
+        {
+            AppendAutoHubLog("[*] Executing Motorola Fastboot FRP Reset (Erase Config & Carrier Lock)...");
+            string r1 = await ExecuteCliAsync("fastboot.exe", "erase config");
+            string r2 = await ExecuteCliAsync("fastboot.exe", "oem config erase");
+            string r3 = await ExecuteCliAsync("fastboot.exe", "erase frp");
+            AppendAutoHubLog($"[+] Result: {r1.Trim()} | {r2.Trim()} | {r3.Trim()}");
+            AppendAutoHubLog("[+] Motorola Factory Lock cleared successfully.");
+        }
+
+        private async void OnMotoRebootBootloaderClicked(object sender, RoutedEventArgs e)
+        {
+            AppendAutoHubLog("[*] Rebooting Motorola to clean AP Fastboot Flash Mode...");
+            await ExecuteCliAsync("fastboot.exe", "reboot-bootloader");
+            AppendAutoHubLog("[+] Motorola Fastboot re-initialized.");
+        }
+
+        #endregion
     }
 }

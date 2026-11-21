@@ -100,6 +100,49 @@
             </Style.Triggers>
         </Style>
 
+        <!-- Modern Brand Card Container Style -->
+        <Style x:Key="ModernBrandCardBorder" TargetType="Border">
+            <Setter Property="Background" Value="#1F2B35"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Padding" Value="6,5"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#2A3B49"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Mini Quick Action Button on Brand Card -->
+        <Style x:Key="BrandCardQuickBtn" TargetType="Button">
+            <Setter Property="Height" Value="20"/>
+            <Setter Property="FontSize" Value="8"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#FFFFFF"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Margin" Value="1,1"/>
+            <Setter Property="Padding" Value="3,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="btnBorder" Background="{TemplateBinding Background}" CornerRadius="2" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="btnBorder" Property="Opacity" Value="0.85"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="btnBorder" Property="Opacity" Value="0.6"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <!-- Cyber Bullet Action Button (Checklist-style from screenshot) -->
         <Style x:Key="CyberBulletButton" TargetType="Button">
             <Setter Property="Height" Value="25"/>
@@ -533,12 +576,183 @@
             <!-- ================================================================ -->
             <Grid x:Name="ViewAutoHub" Visibility="Visible">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/> <!-- Row 0: 4-Card Operations Grid -->
-                    <RowDefinition Height="*"/>    <!-- Row 1: Live Full-Width Protocol Console -->
+                    <RowDefinition Height="Auto"/> <!-- Row 0: 8-Brand Interactive Deck -->
+                    <RowDefinition Height="Auto"/> <!-- Row 1: 4-Card Operations Grid -->
+                    <RowDefinition Height="*"/>    <!-- Row 2: Live Full-Width Protocol Console -->
                 </Grid.RowDefinitions>
 
-                <!-- ROW 0: CLEAN 4-CARD OPERATIONS MATRIX (NO SQUEEZED BUTTONS) -->
-                <Grid Grid.Row="0" Margin="0,0,0,6">
+                <!-- ROW 0: MODERN 8-BRAND INTERACTIVE DECK (AUTO-LATCH & QUICK ACTIONS) -->
+                <Border Grid.Row="0" Background="#1A242D" BorderBrush="#2D3B46" BorderThickness="1" CornerRadius="4" Padding="6,5" Margin="0,0,0,6">
+                    <StackPanel>
+                        <!-- Deck Header Bar -->
+                        <DockPanel Margin="2,0,2,4">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock Text="🔥 BRAND ECOSYSTEM MATRIX" FontSize="9" FontWeight="Bold" Foreground="#4DD0E1"/>
+                                <TextBlock Text=" — Click any brand to auto-latch SoC engine &amp; filter models" FontSize="8" Foreground="#78909C" Margin="6,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <Border Background="#10171D" BorderBrush="#0284C7" BorderThickness="1" CornerRadius="3" Padding="6,1" HorizontalAlignment="Right">
+                                <TextBlock x:Name="TxtActiveBrandBadge" Text="ACTIVE: UNIVERSAL AUTOPILOT" FontSize="7.5" FontWeight="Bold" Foreground="#38BDF8"/>
+                            </Border>
+                        </DockPanel>
+
+                        <!-- 4x2 Brand Cards Grid -->
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="4"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="4"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="4"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="4"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- CARD 1: SAMSUNG GALAXY -->
+                            <Border x:Name="CardBrandSamsung" Grid.Row="0" Grid.Column="0" Tag="samsung" Style="{StaticResource ModernBrandCardBorder}" BorderBrush="#1D4ED8" MouseDown="OnBrandCardMouseDown">
+                                <StackPanel>
+                                    <DockPanel Margin="0,0,0,3">
+                                        <TextBlock Text="📱 SAMSUNG" FontSize="8.5" FontWeight="ExtraBold" Foreground="#60A5FA"/>
+                                        <Border Background="#1E3A8A" CornerRadius="2" Padding="3,0" HorizontalAlignment="Right">
+                                            <TextBlock Text="ODIN/MTP" FontSize="7" FontWeight="Bold" Foreground="#BFDBFE"/>
+                                        </Border>
+                                    </DockPanel>
+                                    <UniformGrid Columns="3">
+                                        <Button Style="{StaticResource BrandCardQuickBtn}" Background="#1D4ED8" Content="MTP FRP" ToolTip="Samsung 1-Click MTP FRP Reset" Click="OnSamsungMtpFrpClicked"/>
+                                        <Button Style="{StaticResource BrandCardQuickBtn}" Background="#2563EB" Content="Read Info" ToolTip="Read Samsung Device Info via MTP" Click="OnSamsungMtpReadInfoClicked"/>
+                                        <Button Style="{StaticResource BrandCardQuickBtn}" Background="#1E40AF" Content="Download" ToolTip="Reboot Samsung to Download Mode" Click="OnSamsungRebootDownloadClicked"/>
+                                    </UniformGrid>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- CARD 2: XIAOMI / REDMI / POCO -->
+                            <Border x:Name="CardBrandXiaomi" Grid.Row="0" Grid.Column="2" Tag="xiaomi" Style="{StaticResource ModernBrandCardBorder}" BorderBrush="#EA580C" MouseDown="OnBrandCardMouseDown">
+                                <StackPanel>
+                                    <DockPanel Margin="0,0,0,3">
+                                        <TextBlock Text="⚡ XIAOMI / POCO" FontSize="8.5" FontWeight="ExtraBold" Foreground="#FB923C"/>
+                                        <Border Background="#7C2D12" CornerRadius="2" Padding="3,0" HorizontalAlignment="Right">
+                                            <TextBlock Text="FASTBOOT" FontSize="7" FontWeight="Bold" Foreground="#FED7AA"/>
+                                        </Border>
+                                    </DockPanel>
+                                    <UniformGrid Columns="3">
+                                        <Button Style="{StaticResource BrandCardQuickBtn}" Background="#EA580C" Content="FB FRP" ToolTip="Xiaomi Fastboot FRP Reset" Click="OnXiaomiResetFrpClicked"/>
+                                        <Button Style="{StaticResource BrandCardQuickBtn}" Background="#C2410C" Content="Mi Cloud" ToolTip="Bypass Mi Cloud Account" Click="OnXiaomiBypassMiAccountClicked"/>
+                                        <Button Style="{StaticResource BrandCardQuickBtn}" Background="#9A3412" Content="GetVar" ToolTip="Fastboot Getvar Info &amp; Anti-Rollback" Click="OnXiaomiFastbootReadInfoClicked"/>
+                                    </UniformGrid>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- CARD 3: OPPO / REALME / ONEPLUS -->
+                            <Border x:Name="CardBrandOppo" Grid.Row="0" Grid.Column="4" Tag="oppo" Style="{StaticResource ModernBrandCardBorder}" BorderBrush="#059669" MouseDown="OnBrandCardMouseDown">
+                                <StackPanel>
+                                    <DockPanel Margin="0,0,0,3">
+                                        <TextBlock Text="🟢 OPPO / REALME" FontSize="8.5" FontWeight="ExtraBold" Foreground="#34D399"/>
+                                        <Border Background="#064E3B" CornerRadius="2" Padding="3,0" HorizontalAlignment="Right">
+                                            <TextBlock Text="OFP/BROM" FontSize="7" FontWeight="Bold" Foreground="#A7F3D0"/>
+                                        </Border>
+                                    </DockPanel>
+                                    <UniformGrid Columns="3">
+                                        <Button Style="{StaticResource BrandCardQuickBtn}" Background="#059669" Content="Reset FRP" ToolTip="Oppo / Realme BROM FRP Reset" Click="OnOppoResetFrpClicked"/>
+                                        <Button Style="{StaticResource BrandCardQuickBtn}" Background="#047857" Content="Safe Wipe" ToolTip="Safe Factory Format Without Data Loss" Click="OnOppoSafeFormatClicked"/>
+                                        <Button Style="{StaticResource BrandCardQuickBtn}" Background="#065F46" Content="Read Info" ToolTip="Read Oppo Device Descriptors" Click="OnOppoReadInfoClicked"/>
+                                    </UniformGrid>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- CARD 4: VIVO / iQOO -->
+                            <Border x:Name="CardBrandVivo" Grid.Row="0" Grid.Column="6" Tag="vivo" Style="{StaticResource ModernBrandCardBorder}" BorderBrush="#0284C7" MouseDown="OnBrandCardMouseDown">
+                                <StackPanel>
+                                    <DockPanel Margin="0,0,0,3">
+                                        <TextBlock Text="🔷 VIVO / iQOO" FontSize="8.5" FontWeight="ExtraBold" Foreground="#38BDF8"/>
+                                        <Border Background="#0C4A6E" CornerRadius="2" Padding="3,0" HorizontalAlignment="Right">
+                                            <TextBlock Text="MTK/EDL" FontSize="7" FontWeight="Bold" Foreground="#BAE6FD"/>
+                                        </Border>
+                                    </DockPanel>
+                                    <UniformGrid Columns="3">
+                                        <Button Style="{StaticResource BrandCardQuickBtn}" Background="#0284C7" Content="Reset FRP" ToolTip="Vivo BROM / Fastboot FRP Reset" Click="OnVivoResetFrpClicked"/>
+                                        <Button Style="{StaticResource BrandCardQuickBtn}" Background="#0369A1" Content="Safe Wipe" ToolTip="Vivo Safe Format Userdata" Click="OnVivoSafeFormatClicked"/>
+                                        <Button Style="{StaticResource BrandCardQuickBtn}" Background="#075985" Content="Read Info" ToolTip="Read Vivo Hardware &amp; Security State" Click="OnVivoReadInfoClicked"/>
+                                    </UniformGrid>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- CARD 5: HUAWEI / HONOR -->
+                            <Border x:Name="CardBrandHuawei" Grid.Row="2" Grid.Column="0" Tag="huawei" Style="{StaticResource ModernBrandCardBorder}" BorderBrush="#DC2626" MouseDown="OnBrandCardMouseDown">
+                                <StackPanel>
+                                    <DockPanel Margin="0,0,0,3">
+                                        <TextBlock Text="🔴 HUAWEI / HONOR" FontSize="8.5" FontWeight="ExtraBold" Foreground="#F87171"/>
+                                        <Border Background="#7F1D1D" CornerRadius="2" Padding="3,0" HorizontalAlignment="Right">
+                                            <TextBlock Text="KIRIN/COM1" FontSize="7" FontWeight="Bold" Foreground="#FECACA"/>
+                                        </Border>
+                                    </DockPanel>
+                                    <UniformGrid Columns="3">
+                                        <Button Style="{StaticResource BrandCardQuickBtn}" Background="#DC2626" Content="Erase FRP" ToolTip="Huawei Fastboot FRP Erase" Click="OnHuaweiFastbootEraseFrpClicked"/>
+                                        <Button Style="{StaticResource BrandCardQuickBtn}" Background="#B91C1C" Content="Deep Info" ToolTip="Read Huawei Fastboot Deep Info &amp; Country Vendor" Click="OnHuaweiFastbootDeepInfoClicked"/>
+                                        <Button Style="{StaticResource BrandCardQuickBtn}" Background="#991B1B" Content="Unlock BL" ToolTip="Huawei Bootloader Key Unlock" Click="OnHuaweiFastbootUnlockBlClicked"/>
+                                    </UniformGrid>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- CARD 6: INFINIX / TECNO -->
+                            <Border x:Name="CardBrandTranssion" Grid.Row="2" Grid.Column="2" Tag="transsion" Style="{StaticResource ModernBrandCardBorder}" BorderBrush="#16A34A" MouseDown="OnBrandCardMouseDown">
+                                <StackPanel>
+                                    <DockPanel Margin="0,0,0,3">
+                                        <TextBlock Text="🚀 TECNO / INFINIX" FontSize="8.5" FontWeight="ExtraBold" Foreground="#4ADE80"/>
+                                        <Border Background="#14532D" CornerRadius="2" Padding="3,0" HorizontalAlignment="Right">
+                                            <TextBlock Text="TRANSSION" FontSize="7" FontWeight="Bold" Foreground="#BBF7D0"/>
+                                        </Border>
+                                    </DockPanel>
+                                    <UniformGrid Columns="3">
+                                        <Button Style="{StaticResource BrandCardQuickBtn}" Background="#16A34A" Content="Reset FRP" ToolTip="Transsion MTK 1-Click FRP Reset" Click="OnAutoHubResetFrpClicked"/>
+                                        <Button Style="{StaticResource BrandCardQuickBtn}" Background="#15803D" Content="Safe Wipe" ToolTip="Safe Factory Format Userdata" Click="OnAutoHubFactoryResetClicked"/>
+                                        <Button Style="{StaticResource BrandCardQuickBtn}" Background="#166534" Content="Telemetry" ToolTip="Read Transsion Hardware &amp; Build Prop" Click="OnAutoHubReadInfoClicked"/>
+                                    </UniformGrid>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- CARD 7: GOOGLE PIXEL -->
+                            <Border x:Name="CardBrandPixel" Grid.Row="2" Grid.Column="4" Tag="pixel" Style="{StaticResource ModernBrandCardBorder}" BorderBrush="#2563EB" MouseDown="OnBrandCardMouseDown">
+                                <StackPanel>
+                                    <DockPanel Margin="0,0,0,3">
+                                        <TextBlock Text="🔵 GOOGLE PIXEL" FontSize="8.5" FontWeight="ExtraBold" Foreground="#93C5FD"/>
+                                        <Border Background="#1E3A8A" CornerRadius="2" Padding="3,0" HorizontalAlignment="Right">
+                                            <TextBlock Text="TENSOR/QC" FontSize="7" FontWeight="Bold" Foreground="#DBEAFE"/>
+                                        </Border>
+                                    </DockPanel>
+                                    <UniformGrid Columns="3">
+                                        <Button Style="{StaticResource BrandCardQuickBtn}" Background="#2563EB" Content="Read Info" ToolTip="Query Pixel Tensor / Snapdragon Telemetry" Click="OnPixelReadInfoClicked"/>
+                                        <Button Style="{StaticResource BrandCardQuickBtn}" Background="#1D4ED8" Content="Wipe FRP" ToolTip="Wipe Google Pixel FRP &amp; Config" Click="OnPixelResetFrpClicked"/>
+                                        <Button Style="{StaticResource BrandCardQuickBtn}" Background="#1E40AF" Content="Unlock BL" ToolTip="Flashing OEM Unlock Sequence" Click="OnPixelUnlockBootloaderClicked"/>
+                                    </UniformGrid>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- CARD 8: MOTOROLA -->
+                            <Border x:Name="CardBrandMotorola" Grid.Row="2" Grid.Column="6" Tag="motorola" Style="{StaticResource ModernBrandCardBorder}" BorderBrush="#4F46E5" MouseDown="OnBrandCardMouseDown">
+                                <StackPanel>
+                                    <DockPanel Margin="0,0,0,3">
+                                        <TextBlock Text="🟣 MOTOROLA" FontSize="8.5" FontWeight="ExtraBold" Foreground="#A5B4FC"/>
+                                        <Border Background="#312E81" CornerRadius="2" Padding="3,0" HorizontalAlignment="Right">
+                                            <TextBlock Text="AP FASTBOOT" FontSize="7" FontWeight="Bold" Foreground="#E0E7FF"/>
+                                        </Border>
+                                    </DockPanel>
+                                    <UniformGrid Columns="3">
+                                        <Button Style="{StaticResource BrandCardQuickBtn}" Background="#4F46E5" Content="Read Info" ToolTip="Read Motorola AP Fastboot Descriptors" Click="OnMotoReadInfoClicked"/>
+                                        <Button Style="{StaticResource BrandCardQuickBtn}" Background="#4338CA" Content="Erase FRP" ToolTip="Motorola Erase Config &amp; FRP" Click="OnMotoResetFrpClicked"/>
+                                        <Button Style="{StaticResource BrandCardQuickBtn}" Background="#3730A3" Content="Reboot BL" ToolTip="Reboot to Clean AP Fastboot Mode" Click="OnMotoRebootBootloaderClicked"/>
+                                    </UniformGrid>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- ROW 1: CLEAN 4-CARD OPERATIONS MATRIX (NO SQUEEZED BUTTONS) -->
+                <Grid Grid.Row="1" Margin="0,0,0,6">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="6"/>
@@ -611,8 +825,8 @@
                     </Border>
                 </Grid>
 
-                <!-- ROW 1: MASTER AUTOPILOT PROTOCOL & EXECUTION TERMINAL (FULL WIDTH) -->
-                <Border Grid.Row="1" Background="#24333E" CornerRadius="4" BorderBrush="#324452" BorderThickness="1" Padding="8">
+                <!-- ROW 2: MASTER AUTOPILOT PROTOCOL & EXECUTION TERMINAL (FULL WIDTH) -->
+                <Border Grid.Row="2" Background="#24333E" CornerRadius="4" BorderBrush="#324452" BorderThickness="1" Padding="8">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
