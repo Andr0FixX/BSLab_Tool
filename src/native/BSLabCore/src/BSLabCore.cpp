@@ -14,6 +14,9 @@
 #include "SpdPacParser.h"
 #include "SpdFdlEngine.h"
 #include "UnisocEngine.h"
+#include "KirinRescueEngine.h"
+#include "HuaweiPcuiEngine.h"
+#include "HuaweiFastboot.h"
 #include <memory>
 #include <string>
 #include <vector>
@@ -33,6 +36,9 @@ static std::unique_ptr<BSLab::QcEngine> g_qc_engine = nullptr;
 static std::unique_ptr<BSLab::SamsungModemEngine> g_samsung_modem = nullptr;
 static std::unique_ptr<BSLab::SamsungOdinEngine> g_samsung_odin = nullptr;
 static std::unique_ptr<BSLab::UnisocEngine> g_unisoc_engine = nullptr;
+static std::unique_ptr<BSLab::KirinRescueEngine> g_kirin_engine = nullptr;
+static std::unique_ptr<BSLab::HuaweiPcuiEngine> g_huawei_pcui = nullptr;
+static std::unique_ptr<BSLab::HuaweiFastboot> g_huawei_fastboot = nullptr;
 static std::vector<BSLab::GptPartition> g_cached_gpt_partitions;
 static uint16_t g_last_hw_code = 0x6768;
 
@@ -55,11 +61,20 @@ BSLAB_API bool BSLab_Initialize(BSLab_LogCallback log_cb) {
     g_unisoc_engine = std::make_unique<BSLab::UnisocEngine>([log_cb](int lvl, const std::string& msg) {
         if (log_cb) log_cb(lvl, msg.c_str());
     });
+    g_kirin_engine = std::make_unique<BSLab::KirinRescueEngine>([log_cb](int lvl, const std::string& msg) {
+        if (log_cb) log_cb(lvl, msg.c_str());
+    });
+    g_huawei_pcui = std::make_unique<BSLab::HuaweiPcuiEngine>([log_cb](int lvl, const std::string& msg) {
+        if (log_cb) log_cb(lvl, msg.c_str());
+    });
+    g_huawei_fastboot = std::make_unique<BSLab::HuaweiFastboot>([log_cb](int lvl, const std::string& msg) {
+        if (log_cb) log_cb(lvl, msg.c_str());
+    });
 
     if (g_log_cb) {
         g_log_cb(BSLAB_LOG_SUCCESS, "[+] BSLabCore.dll Enterprise Engine Initialized Successfully.");
         g_log_cb(BSLAB_LOG_INFO, "[*] Zero-Copy Memory Mapped Win32 Overlapped Driver Ready.");
-        g_log_cb(BSLAB_LOG_INFO, "[*] MediaTek, Qualcomm Snapdragon, Samsung Odin & Unisoc SPD Engines Online.");
+        g_log_cb(BSLAB_LOG_INFO, "[*] MediaTek, Qualcomm, Samsung, Unisoc & Huawei Kirin Engines Online.");
     }
     return true;
 }
@@ -81,6 +96,16 @@ BSLAB_API void BSLab_Shutdown(void) {
     if (g_unisoc_engine) {
         g_unisoc_engine->Abort();
         g_unisoc_engine.reset();
+    }
+    if (g_kirin_engine) {
+        g_kirin_engine->Abort();
+        g_kirin_engine.reset();
+    }
+    if (g_huawei_pcui) {
+        g_huawei_pcui.reset();
+    }
+    if (g_huawei_fastboot) {
+        g_huawei_fastboot.reset();
     }
     g_da_parser.reset();
     g_flasher.reset();
@@ -1047,5 +1072,177 @@ BSLAB_API bool BSLab_Unisoc_Reboot(
 BSLAB_API void BSLab_Unisoc_Abort(void) {
     if (g_unisoc_engine) {
         g_unisoc_engine->Abort();
+    }
+}
+
+// ============================================================================
+// PHASE 5: HUAWEI / HISILICON KIRIN RESCUE & MANUFACTURE MODE C-ABI
+// ============================================================================
+
+BSLAB_API bool BSLab_Huawei_ScanPorts(
+    char* out_json_buffer,
+    int buffer_size,
+    int* out_count
+) {
+    auto ports = BSLab::KirinRescueEngine::ScanHuaweiPorts();
+    if (out_count) {
+        *out_count = static_cast<int>(ports.size());
+    }
+
+    std::ostringstream ss;
+    ss << "[";
+    for (size_t i = 0; i < ports.size(); ++i) {
+        if (i > 0) ss << ",";
+        ss << "{"
+           << "\"port\":\"" << ports[i].port << "\","
+           << "\"description\":\"" << ports[i].description << "\","
+           << "\"hwid\":\"" << ports[i].hwid << "\","
+           << "\"type\":\"" << ports[i].type << "\""
+           << "}";
+    }
+    ss << "]";
+
+    std::string jsonStr = ss.str();
+    if (out_json_buffer && buffer_size > 0) {
+        strncpy(out_json_buffer, jsonStr.c_str(), buffer_size - 1);
+        out_json_buffer[buffer_size - 1] = '\0';
+    }
+    return true;
+}
+
+BSLAB_API bool BSLab_Huawei_Kirin_BootRescue(
+    const char* port_name,
+    const char* chipset_hint,
+    BSLab_ProgressCallback progress_cb
+) {
+    if (!g_kirin_engine) {
+        g_kirin_engine = std::make_unique<BSLab::KirinRescueEngine>([log_cb = g_log_cb](int lvl, const std::string& msg) {
+            if (log_cb) log_cb(lvl, msg.c_str());
+        });
+    }
+
+    auto cb = [progress_cb](int overall, int file_pct, const std::string& stage, const std::string& status) {
+        if (progress_cb) {
+            progress_cb(overall, file_pct, stage.c_str(), status.c_str());
+        }
+    };
+
+    return g_kirin_engine->BootRescueMode(
+        port_name ? port_name : "",
+        chipset_hint ? chipset_hint : "KIRIN_65x",
+        cb
+    );
+}
+
+BSLAB_API bool BSLab_Huawei_PCUI_ReadInfo(
+    const char* port_name,
+    char* out_json_buffer,
+    int buffer_size
+) {
+    if (!g_huawei_pcui) {
+        g_huawei_pcui = std::make_unique<BSLab::HuaweiPcuiEngine>([log_cb = g_log_cb](int lvl, const std::string& msg) {
+            if (log_cb) log_cb(lvl, msg.c_str());
+        });
+    }
+
+    BSLab::HuaweiDeviceInfo info;
+    bool ok = g_huawei_pcui->ReadDeviceInfo(port_name ? port_name : "", info);
+    if (!ok) return false;
+
+    std::ostringstream ss;
+    ss << "{"
+       << "\"model\":\"" << info.model << "\","
+       << "\"imei\":\"" << info.imei << "\","
+       << "\"build\":\"" << info.build_version << "\","
+       << "\"battery\":\"" << info.battery_level << "\","
+       << "\"raw\":\"" << info.raw_responses << "\""
+       << "}";
+
+    std::string jsonStr = ss.str();
+    if (out_json_buffer && buffer_size > 0) {
+        strncpy(out_json_buffer, jsonStr.c_str(), buffer_size - 1);
+        out_json_buffer[buffer_size - 1] = '\0';
+    }
+    return true;
+}
+
+BSLAB_API bool BSLab_Huawei_PCUI_SendAt(
+    const char* port_name,
+    const char* at_command,
+    char* out_response_buffer,
+    int buffer_size
+) {
+    if (!at_command || !*at_command) return false;
+    if (!g_huawei_pcui) {
+        g_huawei_pcui = std::make_unique<BSLab::HuaweiPcuiEngine>([log_cb = g_log_cb](int lvl, const std::string& msg) {
+            if (log_cb) log_cb(lvl, msg.c_str());
+        });
+    }
+
+    std::string resp = g_huawei_pcui->SendAtCommand(port_name ? port_name : "", at_command);
+    if (out_response_buffer && buffer_size > 0) {
+        strncpy(out_response_buffer, resp.c_str(), buffer_size - 1);
+        out_response_buffer[buffer_size - 1] = '\0';
+    }
+    return true;
+}
+
+BSLAB_API bool BSLab_Huawei_PCUI_RebootFastboot(
+    const char* port_name
+) {
+    if (!g_huawei_pcui) {
+        g_huawei_pcui = std::make_unique<BSLab::HuaweiPcuiEngine>([log_cb = g_log_cb](int lvl, const std::string& msg) {
+            if (log_cb) log_cb(lvl, msg.c_str());
+        });
+    }
+    return g_huawei_pcui->RebootToFastboot(port_name ? port_name : "");
+}
+
+BSLAB_API bool BSLab_Huawei_Fastboot_ResetFRP(
+    const char* target_serial
+) {
+    if (!g_huawei_fastboot) {
+        g_huawei_fastboot = std::make_unique<BSLab::HuaweiFastboot>([log_cb = g_log_cb](int lvl, const std::string& msg) {
+            if (log_cb) log_cb(lvl, msg.c_str());
+        });
+    }
+    return g_huawei_fastboot->ResetFRP(target_serial ? target_serial : "");
+}
+
+BSLAB_API bool BSLab_Huawei_Fastboot_GetVar(
+    const char* var_name,
+    const char* target_serial,
+    char* out_response_buffer,
+    int buffer_size
+) {
+    if (!var_name || !*var_name) return false;
+    if (!g_huawei_fastboot) {
+        g_huawei_fastboot = std::make_unique<BSLab::HuaweiFastboot>([log_cb = g_log_cb](int lvl, const std::string& msg) {
+            if (log_cb) log_cb(lvl, msg.c_str());
+        });
+    }
+
+    std::string resp = g_huawei_fastboot->GetVar(var_name, target_serial ? target_serial : "");
+    if (out_response_buffer && buffer_size > 0) {
+        strncpy(out_response_buffer, resp.c_str(), buffer_size - 1);
+        out_response_buffer[buffer_size - 1] = '\0';
+    }
+    return true;
+}
+
+BSLAB_API bool BSLab_Huawei_Fastboot_Reboot(
+    const char* target_serial
+) {
+    if (!g_huawei_fastboot) {
+        g_huawei_fastboot = std::make_unique<BSLab::HuaweiFastboot>([log_cb = g_log_cb](int lvl, const std::string& msg) {
+            if (log_cb) log_cb(lvl, msg.c_str());
+        });
+    }
+    return g_huawei_fastboot->Reboot(target_serial ? target_serial : "");
+}
+
+BSLAB_API void BSLab_Huawei_Abort(void) {
+    if (g_kirin_engine) {
+        g_kirin_engine->Abort();
     }
 }

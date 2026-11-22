@@ -456,6 +456,86 @@ BSLAB_API bool BSLab_Unisoc_Reboot(
  */
 BSLAB_API void BSLab_Unisoc_Abort(void);
 
+// ============================================================================
+// PHASE 5: HUAWEI / HISILICON KIRIN RESCUE & MANUFACTURE MODE ENGINE
+// ============================================================================
+
+/**
+ * Scans connected Huawei ports (USB COM 1.0, PCUI, Modem).
+ * Returns JSON array of port objects.
+ */
+BSLAB_API bool BSLab_Huawei_ScanPorts(
+    char* out_json_buffer,
+    int buffer_size,
+    int* out_count
+);
+
+/**
+ * Injects multi-stage Kirin Bootloader into HUAWEI USB COM 1.0 device.
+ * Wakes up CPU and reboots device into Fastboot Rescue Mode.
+ */
+BSLAB_API bool BSLab_Huawei_Kirin_BootRescue(
+    const char* port_name,
+    const char* chipset_hint,
+    BSLab_ProgressCallback progress_cb
+);
+
+/**
+ * Queries Huawei Manufacture Mode (*#*#2846579#*#*) device telemetry.
+ * Returns JSON object with model, IMEI, build, battery level.
+ */
+BSLAB_API bool BSLab_Huawei_PCUI_ReadInfo(
+    const char* port_name,
+    char* out_json_buffer,
+    int buffer_size
+);
+
+/**
+ * Sends a raw AT command over Huawei PCUI COM port.
+ */
+BSLAB_API bool BSLab_Huawei_PCUI_SendAt(
+    const char* port_name,
+    const char* at_command,
+    char* out_response_buffer,
+    int buffer_size
+);
+
+/**
+ * Reboots Huawei phone from PCUI Manufacture Mode to Fastboot Rescue Mode.
+ */
+BSLAB_API bool BSLab_Huawei_PCUI_RebootFastboot(
+    const char* port_name
+);
+
+/**
+ * Executes 1-Click Huawei FRP Reset in Fastboot Rescue Mode.
+ */
+BSLAB_API bool BSLab_Huawei_Fastboot_ResetFRP(
+    const char* target_serial
+);
+
+/**
+ * Queries Fastboot variable (e.g. "product", "all").
+ */
+BSLAB_API bool BSLab_Huawei_Fastboot_GetVar(
+    const char* var_name,
+    const char* target_serial,
+    char* out_response_buffer,
+    int buffer_size
+);
+
+/**
+ * Reboots Huawei device from Fastboot to normal OS.
+ */
+BSLAB_API bool BSLab_Huawei_Fastboot_Reboot(
+    const char* target_serial
+);
+
+/**
+ * Aborts any ongoing Huawei operation.
+ */
+BSLAB_API void BSLab_Huawei_Abort(void);
+
 #ifdef __cplusplus
 }
 #endif

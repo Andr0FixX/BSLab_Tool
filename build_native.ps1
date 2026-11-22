@@ -47,7 +47,10 @@ $Sources = @(
     (Join-Path $NativeSrcDir "SpdBslProtocol.cpp"),
     (Join-Path $NativeSrcDir "SpdPacParser.cpp"),
     (Join-Path $NativeSrcDir "SpdFdlEngine.cpp"),
-    (Join-Path $NativeSrcDir "UnisocEngine.cpp")
+    (Join-Path $NativeSrcDir "UnisocEngine.cpp"),
+    (Join-Path $NativeSrcDir "KirinRescueEngine.cpp"),
+    (Join-Path $NativeSrcDir "HuaweiPcuiEngine.cpp"),
+    (Join-Path $NativeSrcDir "HuaweiFastboot.cpp")
 )
 
 foreach ($src in $Sources) {
@@ -159,6 +162,7 @@ if ($compilerInfo.Type -in @("GCC", "Clang")) {
     $compileArgs += "-lkernel32"
     $compileArgs += "-luser32"
     $compileArgs += "-ladvapi32"
+    $compileArgs += "-lsetupapi"
 
     Write-Host "[*] Executing: $compilerExe $($compileArgs -join ' ')"
     & $compilerExe @compileArgs
@@ -183,6 +187,7 @@ elseif ($compilerInfo.Type -eq "MSVC") {
     $compileArgs += "kernel32.lib"
     $compileArgs += "user32.lib"
     $compileArgs += "advapi32.lib"
+    $compileArgs += "setupapi.lib"
 
     $process = Start-Process -FilePath $compilerInfo.Path -ArgumentList $compileArgs -WorkingDirectory $BuildOutputDir -NoNewWindow -PassThru -Wait
     if ($process.ExitCode -ne 0) {
@@ -192,7 +197,7 @@ elseif ($compilerInfo.Type -eq "MSVC") {
 elseif ($compilerInfo.Type -eq "MSVC_VCVARS") {
     $vcvarsBat = $compilerInfo.Path
     $srcList = ($Sources | ForEach-Object { "`"$_`"" }) -join " "
-    $cmdString = "call `"$vcvarsBat`" && cl.exe /std:c++20 /O2 /MD /LD /DBSLABCORE_EXPORTS /I`"$NativeIncludeDir`" /I`"$NativeSrcDir`" /Fe:`"$OutputDll`" $srcList kernel32.lib user32.lib advapi32.lib"
+    $cmdString = "call `"$vcvarsBat`" && cl.exe /std:c++20 /O2 /MD /LD /DBSLABCORE_EXPORTS /I`"$NativeIncludeDir`" /I`"$NativeSrcDir`" /Fe:`"$OutputDll`" $srcList kernel32.lib user32.lib advapi32.lib setupapi.lib"
     
     $process = Start-Process -FilePath "cmd.exe" -ArgumentList "/c $cmdString" -WorkingDirectory $BuildOutputDir -NoNewWindow -PassThru -Wait
     if ($process.ExitCode -ne 0) {

@@ -31,11 +31,14 @@ set(SOURCES
     src/SpdPacParser.cpp
     src/SpdFdlEngine.cpp
     src/UnisocEngine.cpp
+    src/KirinRescueEngine.cpp
+    src/HuaweiPcuiEngine.cpp
+    src/HuaweiFastboot.cpp
 )
 
 add_library(BSLabCore SHARED ${SOURCES})
 
-target_link_libraries(BSLabCore PRIVATE kernel32 user32 advapi32)
+target_link_libraries(BSLabCore PRIVATE kernel32 user32 advapi32 setupapi)
 
 # Post-build copy targets
 set(UI_TARGET_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../ui/BSLabTool.UI")

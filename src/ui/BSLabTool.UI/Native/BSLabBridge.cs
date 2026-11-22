@@ -436,5 +436,72 @@ namespace BSLabTool.UI.Native
 
         [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void BSLab_Unisoc_Abort();
+
+        // ====================================================================
+        // PHASE 5: HUAWEI / HISILICON KIRIN RESCUE & MANUFACTURE MODE ENGINE
+        // ====================================================================
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_Huawei_ScanPorts(
+            [Out] StringBuilder outJsonBuffer,
+            int maxBufferLen,
+            out int outPortCount
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_Huawei_Kirin_BootRescue(
+            [MarshalAs(UnmanagedType.LPStr)] string portName,
+            [MarshalAs(UnmanagedType.LPStr)] string chipsetHint,
+            BSLabProgressCallback progressCb
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_Huawei_PCUI_ReadInfo(
+            [MarshalAs(UnmanagedType.LPStr)] string portName,
+            [Out] StringBuilder outJsonBuffer,
+            int maxBufferLen
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_Huawei_PCUI_SendAt(
+            [MarshalAs(UnmanagedType.LPStr)] string portName,
+            [MarshalAs(UnmanagedType.LPStr)] string atCommand,
+            [Out] StringBuilder outResponseBuffer,
+            int maxBufferLen
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_Huawei_PCUI_RebootFastboot(
+            [MarshalAs(UnmanagedType.LPStr)] string portName
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_Huawei_Fastboot_ResetFRP(
+            [MarshalAs(UnmanagedType.LPStr)] string targetSerial
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_Huawei_Fastboot_GetVar(
+            [MarshalAs(UnmanagedType.LPStr)] string varName,
+            [MarshalAs(UnmanagedType.LPStr)] string targetSerial,
+            [Out] StringBuilder outResponseBuffer,
+            int maxBufferLen
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_Huawei_Fastboot_Reboot(
+            [MarshalAs(UnmanagedType.LPStr)] string targetSerial
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void BSLab_Huawei_Abort();
     }
 }
