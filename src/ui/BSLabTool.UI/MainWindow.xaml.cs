@@ -29,6 +29,7 @@ using System.Windows.Threading;
 using Microsoft.Win32;
 
 using BSLabTool.UI.Native;
+using BSLabTool.UI.Services;
 
 
 
@@ -10284,112 +10285,6 @@ namespace BSLabTool.UI
 
 
 
-        public class SamsungPitItem
-        {
-            public string FileName { get; set; } = "";
-            public string ModelCode { get; set; } = "";
-            public string ModelName { get; set; } = "";
-            public string VendorCode { get; set; } = "";
-            public string VendorRegion { get; set; } = "";
-            public string BinaryRev { get; set; } = "";
-            public string BuildNumber { get; set; } = "";
-
-            public string DisplayText => $"[{ModelCode}] {ModelName} • Vendor: {VendorCode} ({VendorRegion}) • Rev: {BinaryRev} • Build: {BuildNumber}";
-
-            public override string ToString() => DisplayText;
-        }
-
-        private static readonly Dictionary<string, string> _samsungModelNames = new(StringComparer.OrdinalIgnoreCase)
-        {
-            ["A013"] = "Galaxy A01 Core", ["A015"] = "Galaxy A01",
-            ["A022"] = "Galaxy A02", ["A025"] = "Galaxy A02s",
-            ["A032"] = "Galaxy A03 Core", ["A035"] = "Galaxy A03", ["A037"] = "Galaxy A03s",
-            ["A042"] = "Galaxy A04e", ["A045"] = "Galaxy A04", ["A047"] = "Galaxy A04s",
-            ["A055"] = "Galaxy A05", ["A057"] = "Galaxy A05s",
-            ["A105"] = "Galaxy A10", ["A107"] = "Galaxy A10s",
-            ["A115"] = "Galaxy A11", ["A125"] = "Galaxy A12", ["A127"] = "Galaxy A12 Nacho",
-            ["A135"] = "Galaxy A13 4G", ["A136"] = "Galaxy A13 5G",
-            ["A145"] = "Galaxy A14 4G", ["A146"] = "Galaxy A14 5G",
-            ["A155"] = "Galaxy A15 4G", ["A156"] = "Galaxy A15 5G",
-            ["A205"] = "Galaxy A20", ["A207"] = "Galaxy A20s",
-            ["A217"] = "Galaxy A21s", ["A225"] = "Galaxy A22 4G", ["A226"] = "Galaxy A22 5G",
-            ["A235"] = "Galaxy A23 4G", ["A236"] = "Galaxy A23 5G",
-            ["A245"] = "Galaxy A24", ["A256"] = "Galaxy A25 5G",
-            ["A305"] = "Galaxy A30", ["A307"] = "Galaxy A30s",
-            ["A315"] = "Galaxy A31", ["A325"] = "Galaxy A32 4G", ["A326"] = "Galaxy A32 5G",
-            ["A336"] = "Galaxy A33 5G", ["A346"] = "Galaxy A34 5G", ["A356"] = "Galaxy A35 5G",
-            ["A505"] = "Galaxy A50", ["A515"] = "Galaxy A51 4G", ["A516"] = "Galaxy A51 5G",
-            ["A525"] = "Galaxy A52 4G", ["A526"] = "Galaxy A52 5G", ["A528"] = "Galaxy A52s 5G",
-            ["A536"] = "Galaxy A53 5G", ["A546"] = "Galaxy A54 5G", ["A556"] = "Galaxy A55 5G",
-            ["A705"] = "Galaxy A70", ["A715"] = "Galaxy A71 4G", ["A716"] = "Galaxy A71 5G",
-            ["A725"] = "Galaxy A72", ["A736"] = "Galaxy A73 5G",
-            ["G610"] = "Galaxy J7 Prime", ["G998"] = "Galaxy S21 Ultra",
-            ["J701"] = "Galaxy J7 Nxt", ["M127"] = "Galaxy M12", ["M315"] = "Galaxy M31",
-            ["N975"] = "Galaxy Note 10+", ["N976"] = "Galaxy Note 10+ 5G", ["N986"] = "Galaxy Note 20 Ultra",
-            ["P615"] = "Galaxy Tab S6 Lite", ["S908"] = "Galaxy S22 Ultra", ["S918"] = "Galaxy S23 Ultra",
-            ["T290"] = "Galaxy Tab A 8.0", ["T505"] = "Galaxy Tab A7",
-            ["X200"] = "Galaxy Tab A8 10.5", ["X205"] = "Galaxy Tab A8 LTE", ["X216"] = "Galaxy Tab A9+"
-        };
-
-        private static readonly Dictionary<string, string> _samsungVendors = new(StringComparer.OrdinalIgnoreCase)
-        {
-            ["XX"] = "Global / Europe",
-            ["DX"] = "SE Asia / Malaysia",
-            ["JV"] = "Middle East / UAE",
-            ["UB"] = "Latin America / Brazil",
-            ["ZC"] = "China (Open)",
-            ["ZH"] = "Hong Kong / Taiwan",
-            ["DD"] = "India / South Asia (INS)",
-            ["NK"] = "Korea (KT/SKT/LGT)",
-            ["AU"] = "Australia",
-            ["TU"] = "USA (AT&T/Cricket)",
-            ["U"] = "USA Carrier",
-            ["U1"] = "USA Factory Unlocked",
-            ["V"] = "USA Verizon",
-            ["S"] = "Sprint / Boost"
-        };
-
-        private SamsungPitItem ParseSamsungPitFileName(string fn)
-        {
-            var item = new SamsungPitItem { FileName = fn };
-
-            var match = System.Text.RegularExpressions.Regex.Match(
-                fn,
-                @"^([A-Z]\d{3}[A-Z0-9]?)(XX|DX|JV|UB|ZC|ZH|ZN|ZM|ZW|ZS|JP|DD|NK|AU|TU|O|U|S|V)?([A-Z0-9]{1,2})?([A-Z0-9]{4})?",
-                System.Text.RegularExpressions.RegexOptions.IgnoreCase);
-
-            if (match.Success && match.Groups[1].Length >= 4)
-            {
-                string rawModel = match.Groups[1].Value.ToUpperInvariant();
-                item.ModelCode = $"SM-{rawModel}";
-                string prefix = rawModel.Length >= 4 ? rawModel.Substring(0, 4) : rawModel;
-                item.ModelName = _samsungModelNames.TryGetValue(prefix, out var mn) ? mn : $"Galaxy {rawModel}";
-
-                string vendor = match.Groups[2].Success ? match.Groups[2].Value.ToUpperInvariant() : "XX";
-                item.VendorCode = string.IsNullOrEmpty(vendor) ? "XX" : vendor;
-                item.VendorRegion = _samsungVendors.TryGetValue(item.VendorCode, out var vr) ? vr : "Multi-CSC";
-
-                string rev = match.Groups[3].Success ? match.Groups[3].Value.ToUpperInvariant() : "1";
-                item.BinaryRev = string.IsNullOrEmpty(rev) ? "1" : (rev.Length > 1 && char.IsLetter(rev[0]) ? rev.Substring(1) : rev);
-
-                string build = match.Groups[4].Success ? match.Groups[4].Value.ToUpperInvariant() : "AUTO";
-                item.BuildNumber = string.IsNullOrEmpty(build) ? "AUTO" : build;
-            }
-            else
-            {
-                string baseName = System.IO.Path.GetFileNameWithoutExtension(fn);
-                string firstPart = baseName.Split('_')[0];
-                item.ModelCode = firstPart.Length > 0 ? $"SM-{firstPart}" : "SM-GENERIC";
-                item.ModelName = "Samsung Galaxy Device";
-                item.VendorCode = "Global";
-                item.VendorRegion = "Universal";
-                item.BinaryRev = "All";
-                item.BuildNumber = "Stock";
-            }
-
-            return item;
-        }
-
         private void InitSamsungPitDatabase()
         {
             try
@@ -10406,11 +10301,25 @@ namespace BSLabTool.UI
                     _samsungPitItems.Clear();
 
                     var files = Directory.GetFiles(pitDir, "*.pit", SearchOption.TopDirectoryOnly);
+                    var seenConfigs = new Dictionary<string, SamsungPitItem>(StringComparer.OrdinalIgnoreCase);
+
                     foreach (var f in files)
                     {
                         string fn = System.IO.Path.GetFileName(f);
                         _samsungPitFiles.Add(fn);
-                        _samsungPitItems.Add(ParseSamsungPitFileName(fn));
+
+                        var parsedItem = SamsungPitParser.Parse(fn);
+                        // Group deduplication key: Model + Vendor + BinaryRev + BuildNumber
+                        string configKey = $"{parsedItem.ModelCode}_{parsedItem.VendorCode}_{parsedItem.BinaryRev}_{parsedItem.BuildNumber}";
+                        if (!seenConfigs.TryGetValue(configKey, out var existingItem))
+                        {
+                            seenConfigs[configKey] = parsedItem;
+                            _samsungPitItems.Add(parsedItem);
+                        }
+                        else
+                        {
+                            existingItem.MatchingFileNames.Add(fn);
+                        }
                     }
 
                     _samsungPitFiles.Sort(StringComparer.OrdinalIgnoreCase);
@@ -10418,8 +10327,8 @@ namespace BSLabTool.UI
 
                     FilterSamsungPitFiles("");
 
-                    TxtPitModelCount.Text = $"{_samsungPitFiles.Count} Files Ready";
-                    AppendSamsungLog($"[+] Samsung PIT Database indexed: {_samsungPitFiles.Count} verified PIT files loaded with Model & Vendor metadata.");
+                    TxtPitModelCount.Text = $"{_samsungPitItems.Count} Models Ready";
+                    AppendSamsungLog($"[+] Samsung PIT Database indexed: {_samsungPitFiles.Count} verified PIT files loaded ({_samsungPitItems.Count} unique model profiles active).");
                 }
             }
             catch (Exception ex)
@@ -10450,8 +10359,11 @@ namespace BSLabTool.UI
                     p.ModelName.Contains(cleanFilter, StringComparison.OrdinalIgnoreCase) ||
                     p.VendorCode.Contains(cleanFilter, StringComparison.OrdinalIgnoreCase) ||
                     p.VendorRegion.Contains(cleanFilter, StringComparison.OrdinalIgnoreCase) ||
+                    p.BinaryRev.Contains(cleanFilter, StringComparison.OrdinalIgnoreCase) ||
                     p.BuildNumber.Contains(cleanFilter, StringComparison.OrdinalIgnoreCase) ||
-                    p.FileName.Contains(cleanFilter, StringComparison.OrdinalIgnoreCase));
+                    p.PitHash.Contains(cleanFilter, StringComparison.OrdinalIgnoreCase) ||
+                    p.FileName.Contains(cleanFilter, StringComparison.OrdinalIgnoreCase) ||
+                    p.MatchingFileNames.Exists(m => m.Contains(cleanFilter, StringComparison.OrdinalIgnoreCase)));
 
                 if (matches.Count == 0 && cleanFilter.Length >= 4)
                 {
@@ -10735,7 +10647,7 @@ namespace BSLabTool.UI
 
             TxtPitPartCount.Text = $"{entries.Count} Partitions";
 
-                        var pitInfo = _samsungPitItems.Find(p => string.Equals(p.FileName, fileName, StringComparison.OrdinalIgnoreCase));
+            var pitInfo = _samsungPitItems.Find(p => string.Equals(p.FileName, fileName, StringComparison.OrdinalIgnoreCase) || p.MatchingFileNames.Contains(fileName, StringComparer.OrdinalIgnoreCase));
             if (pitInfo != null)
             {
                 TxtPitSelectedInfo.Text = $"[{pitInfo.ModelCode}] {pitInfo.ModelName} | Vendor: {pitInfo.VendorCode} ({pitInfo.VendorRegion}) | Rev: {pitInfo.BinaryRev} | Build: {pitInfo.BuildNumber} | Size: {new FileInfo(fullPath).Length} Bytes";
