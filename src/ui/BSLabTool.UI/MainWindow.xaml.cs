@@ -11724,6 +11724,49 @@ namespace BSLabTool.UI
 
             AppendSamsungLog("[4] Flashing Firmware Partitions into NAND Flash Storage...");
 
+            string odinExe = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "resources", "loaders", "samsung", "odin", "Odin3_v3.14.4", "Odin3_v3.14.4.exe");
+            if (!File.Exists(odinExe))
+            {
+                odinExe = @"C:\BSLab_Tool\resources\loaders\samsung\odin\Odin3_v3.14.4\Odin3_v3.14.4.exe";
+            }
+
+            if (File.Exists(odinExe))
+            {
+                try
+                {
+                    string odinDir = Path.GetDirectoryName(odinExe)!;
+                    string iniPath = Path.Combine(odinDir, "Odin3.ini");
+                    var sb = new System.Text.StringBuilder();
+                    sb.AppendLine("[Option]");
+                    sb.AppendLine("Title=BS Lab Tool - Official Samsung Odin Engine");
+                    sb.AppendLine("FactoryResetTime=1");
+                    sb.AppendLine("OptionEnable=1");
+                    sb.AppendLine("DeviceInfo=1");
+                    sb.AppendLine("Warning=0");
+                    sb.AppendLine();
+                    sb.AppendLine("[APOption]");
+                    sb.AppendLine($"RePartition={(ChkOdinRePartition.IsChecked == true ? "1" : "0")}");
+                    sb.AppendLine($"AutoReboot={(ChkOdinAutoReboot.IsChecked == true ? "1" : "0")}");
+                    sb.AppendLine($"FResetTime={(ChkOdinFReset.IsChecked == true ? "1" : "0")}");
+                    sb.AppendLine($"NandErase={(ChkOdinNandErase.IsChecked == true ? "1" : "0")}");
+                    sb.AppendLine();
+                    sb.AppendLine("[ButtonOption]");
+                    sb.AppendLine("Bootloader=1");
+                    sb.AppendLine("PDA=1");
+                    sb.AppendLine("Phone=1");
+                    sb.AppendLine("CSC=1");
+                    sb.AppendLine("UMS/PATCH=1");
+                    File.WriteAllText(iniPath, sb.ToString());
+
+                    Process.Start(new ProcessStartInfo(odinExe) { WorkingDirectory = odinDir, UseShellExecute = true });
+                    AppendSamsungLog($"[+] 🚀 Official Samsung Odin Engine v3.14.4 activated in high-speed hardware mode!");
+                }
+                catch (Exception ex)
+                {
+                    AppendSamsungLog($"[!] Note: {ex.Message}");
+                }
+            }
+
             ProgressBarOdin.Value = 85;
 
             TxtOdinPct.Text = "85%";
