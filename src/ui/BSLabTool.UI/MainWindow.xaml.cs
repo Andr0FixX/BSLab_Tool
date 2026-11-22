@@ -10301,25 +10301,11 @@ namespace BSLabTool.UI
                     _samsungPitItems.Clear();
 
                     var files = Directory.GetFiles(pitDir, "*.pit", SearchOption.TopDirectoryOnly);
-                    var seenConfigs = new Dictionary<string, SamsungPitItem>(StringComparer.OrdinalIgnoreCase);
-
                     foreach (var f in files)
                     {
                         string fn = System.IO.Path.GetFileName(f);
                         _samsungPitFiles.Add(fn);
-
-                        var parsedItem = SamsungPitParser.Parse(fn);
-                        // Group deduplication key: Model + Vendor + BinaryRev + BuildNumber
-                        string configKey = $"{parsedItem.ModelCode}_{parsedItem.VendorCode}_{parsedItem.BinaryRev}_{parsedItem.BuildNumber}";
-                        if (!seenConfigs.TryGetValue(configKey, out var existingItem))
-                        {
-                            seenConfigs[configKey] = parsedItem;
-                            _samsungPitItems.Add(parsedItem);
-                        }
-                        else
-                        {
-                            existingItem.MatchingFileNames.Add(fn);
-                        }
+                        _samsungPitItems.Add(SamsungPitParser.Parse(fn));
                     }
 
                     _samsungPitFiles.Sort(StringComparer.OrdinalIgnoreCase);
@@ -10327,8 +10313,8 @@ namespace BSLabTool.UI
 
                     FilterSamsungPitFiles("");
 
-                    TxtPitModelCount.Text = $"{_samsungPitItems.Count} Models Ready";
-                    AppendSamsungLog($"[+] Samsung PIT Database indexed: {_samsungPitFiles.Count} verified PIT files loaded ({_samsungPitItems.Count} unique model profiles active).");
+                    TxtPitModelCount.Text = $"{_samsungPitFiles.Count} Files Ready";
+                    AppendSamsungLog($"[+] Samsung PIT Database indexed: {_samsungPitFiles.Count} verified PIT files loaded with Model & Vendor metadata.");
                 }
             }
             catch (Exception ex)

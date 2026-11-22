@@ -18,7 +18,7 @@ namespace BSLabTool.UI.Services
 
         public string DisplayText => string.IsNullOrEmpty(PitHash) || PitHash.Equals("Official", StringComparison.OrdinalIgnoreCase)
             ? $"[{ModelCode}] {ModelName} • Vendor: {VendorCode} ({VendorRegion}) • Rev: {BinaryRev} • Build: {BuildNumber}"
-            : $"[{ModelCode}] {ModelName} • Vendor: {VendorCode} ({VendorRegion}) • Rev: {BinaryRev} • Build: {BuildNumber} [#{PitHash}]";
+            : $"[{ModelCode}] {ModelName} • Vendor: {VendorCode} ({VendorRegion}) • Rev: {BinaryRev} • Build: {BuildNumber} • [PIT #{PitHash}]";
 
         public override string ToString() => DisplayText;
     }
@@ -122,13 +122,16 @@ namespace BSLabTool.UI.Services
 
         public static string ExtractPitHash(string fileName)
         {
-            string name = Path.GetFileNameWithoutExtension(fileName);
+            string name = Path.GetFileName(fileName);
             int idx = name.IndexOf("_PIT_", StringComparison.OrdinalIgnoreCase);
             if (idx >= 0 && idx + 5 < name.Length)
             {
                 string rem = name.Substring(idx + 5);
                 string h = rem.Split('.')[0];
-                return h.Length > 8 ? h.Substring(0, 8) : h;
+                string baseHash = h.Length > 8 ? h.Substring(0, 8) : h;
+                if (rem.Contains(".new", StringComparison.OrdinalIgnoreCase)) return $"{baseHash}-NEW";
+                if (rem.Contains(".org", StringComparison.OrdinalIgnoreCase)) return $"{baseHash}-ORG";
+                return baseHash;
             }
             return "Official";
         }
@@ -138,6 +141,7 @@ namespace BSLabTool.UI.Services
             var item = new SamsungPitItem { FileName = fn };
             item.MatchingFileNames.Add(fn);
 
+            string name = Path.GetFileName(fn);
             string baseName = Path.GetFileNameWithoutExtension(fn);
 
             // 1. Engineering / Special PITs
@@ -149,7 +153,7 @@ namespace BSLabTool.UI.Services
                 item.VendorRegion = "Factory / Internal";
                 item.BinaryRev = "Test";
                 item.BuildNumber = "ENG";
-                item.PitHash = ExtractPitHash(baseName);
+                item.PitHash = ExtractPitHash(name);
                 return item;
             }
 
@@ -161,7 +165,7 @@ namespace BSLabTool.UI.Services
                 item.VendorRegion = "Universal";
                 item.BinaryRev = "All";
                 item.BuildNumber = "Raw";
-                item.PitHash = ExtractPitHash(baseName);
+                item.PitHash = ExtractPitHash(name);
                 return item;
             }
 
@@ -184,7 +188,7 @@ namespace BSLabTool.UI.Services
             if (pitIdx > 0)
             {
                 pda = baseName.Substring(0, pitIdx);
-                item.PitHash = ExtractPitHash(baseName);
+                item.PitHash = ExtractPitHash(name);
             }
             else
             {
@@ -221,7 +225,7 @@ namespace BSLabTool.UI.Services
                 item.VendorRegion = "Global / Europe";
                 item.BinaryRev = "All";
                 item.BuildNumber = "Stock";
-                item.PitHash = ExtractPitHash(baseName);
+                item.PitHash = ExtractPitHash(name);
             }
 
             return item;
