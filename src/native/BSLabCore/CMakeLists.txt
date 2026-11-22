@@ -22,11 +22,16 @@ set(SOURCES
     src/QcSahara.cpp
     src/QcFirehose.cpp
     src/QcEngine.cpp
+    src/NativeTarReader.cpp
+    src/NativeMd5.cpp
+    src/SamsungPitReader.cpp
+    src/SamsungModemEngine.cpp
+    src/SamsungOdinEngine.cpp
 )
 
 add_library(BSLabCore SHARED ${SOURCES})
 
-target_link_libraries(BSLabCore PRIVATE kernel32 user32)
+target_link_libraries(BSLabCore PRIVATE kernel32 user32 advapi32)
 
 # Post-build copy targets
 set(UI_TARGET_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../ui/BSLabTool.UI")

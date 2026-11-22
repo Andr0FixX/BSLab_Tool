@@ -38,7 +38,12 @@ $Sources = @(
     (Join-Path $NativeSrcDir "MtkServiceEngine.cpp"),
     (Join-Path $NativeSrcDir "QcSahara.cpp"),
     (Join-Path $NativeSrcDir "QcFirehose.cpp"),
-    (Join-Path $NativeSrcDir "QcEngine.cpp")
+    (Join-Path $NativeSrcDir "QcEngine.cpp"),
+    (Join-Path $NativeSrcDir "NativeTarReader.cpp"),
+    (Join-Path $NativeSrcDir "NativeMd5.cpp"),
+    (Join-Path $NativeSrcDir "SamsungPitReader.cpp"),
+    (Join-Path $NativeSrcDir "SamsungModemEngine.cpp"),
+    (Join-Path $NativeSrcDir "SamsungOdinEngine.cpp")
 )
 
 foreach ($src in $Sources) {
@@ -149,6 +154,7 @@ if ($compilerInfo.Type -in @("GCC", "Clang")) {
     }
     $compileArgs += "-lkernel32"
     $compileArgs += "-luser32"
+    $compileArgs += "-ladvapi32"
 
     Write-Host "[*] Executing: $compilerExe $($compileArgs -join ' ')"
     & $compilerExe @compileArgs
@@ -172,6 +178,7 @@ elseif ($compilerInfo.Type -eq "MSVC") {
     }
     $compileArgs += "kernel32.lib"
     $compileArgs += "user32.lib"
+    $compileArgs += "advapi32.lib"
 
     $process = Start-Process -FilePath $compilerInfo.Path -ArgumentList $compileArgs -WorkingDirectory $BuildOutputDir -NoNewWindow -PassThru -Wait
     if ($process.ExitCode -ne 0) {
@@ -181,7 +188,7 @@ elseif ($compilerInfo.Type -eq "MSVC") {
 elseif ($compilerInfo.Type -eq "MSVC_VCVARS") {
     $vcvarsBat = $compilerInfo.Path
     $srcList = ($Sources | ForEach-Object { "`"$_`"" }) -join " "
-    $cmdString = "call `"$vcvarsBat`" && cl.exe /std:c++20 /O2 /MD /LD /DBSLABCORE_EXPORTS /I`"$NativeIncludeDir`" /I`"$NativeSrcDir`" /Fe:`"$OutputDll`" $srcList kernel32.lib user32.lib"
+    $cmdString = "call `"$vcvarsBat`" && cl.exe /std:c++20 /O2 /MD /LD /DBSLABCORE_EXPORTS /I`"$NativeIncludeDir`" /I`"$NativeSrcDir`" /Fe:`"$OutputDll`" $srcList kernel32.lib user32.lib advapi32.lib"
     
     $process = Start-Process -FilePath "cmd.exe" -ArgumentList "/c $cmdString" -WorkingDirectory $BuildOutputDir -NoNewWindow -PassThru -Wait
     if ($process.ExitCode -ne 0) {

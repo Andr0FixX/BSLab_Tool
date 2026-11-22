@@ -269,5 +269,109 @@ namespace BSLabTool.UI.Native
         public static extern bool BSLab_QC_Reboot(
             [MarshalAs(UnmanagedType.LPStr)] string portName
         );
+
+        // ====================================================================
+        // PHASE 5: SAMSUNG ODIN & MODEM PROTOCOL NATIVE ENGINE
+        // ====================================================================
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_Samsung_ScanDevices(
+            [Out] StringBuilder outJsonBuffer,
+            int maxBufferLen,
+            out int outDeviceCount
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_Samsung_VerifyTarMd5(
+            [MarshalAs(UnmanagedType.LPStr)] string filePath,
+            BSLabProgressCallback progressCb,
+            [Out] StringBuilder outStatusMsg,
+            int maxMsgLen
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_Samsung_InspectTar(
+            [MarshalAs(UnmanagedType.LPStr)] string filePath,
+            [Out] StringBuilder outJsonBuffer,
+            int maxBufferLen,
+            out int outMemberCount
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_Samsung_ParsePit(
+            [MarshalAs(UnmanagedType.LPStr)] string pitPath,
+            [Out] StringBuilder outJsonBuffer,
+            int maxBufferLen,
+            out int outEntryCount
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_Samsung_Handshake(
+            [MarshalAs(UnmanagedType.LPStr)] string portName
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_Samsung_FlashFirmware(
+            [MarshalAs(UnmanagedType.LPStr)] string portName,
+            [MarshalAs(UnmanagedType.LPStr)] string blPath,
+            [MarshalAs(UnmanagedType.LPStr)] string apPath,
+            [MarshalAs(UnmanagedType.LPStr)] string cpPath,
+            [MarshalAs(UnmanagedType.LPStr)] string cscPath,
+            [MarshalAs(UnmanagedType.LPStr)] string pitPath,
+            [MarshalAs(UnmanagedType.I1)] bool repartition,
+            [MarshalAs(UnmanagedType.I1)] bool autoReboot,
+            BSLabProgressCallback progressCb
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void BSLab_Samsung_Abort();
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_Samsung_LaunchOfficialOdin(
+            [MarshalAs(UnmanagedType.LPStr)] string blPath,
+            [MarshalAs(UnmanagedType.LPStr)] string apPath,
+            [MarshalAs(UnmanagedType.LPStr)] string cpPath,
+            [MarshalAs(UnmanagedType.LPStr)] string cscPath,
+            [MarshalAs(UnmanagedType.LPStr)] string pitPath,
+            [MarshalAs(UnmanagedType.I1)] bool repartition,
+            [MarshalAs(UnmanagedType.I1)] bool autoReboot
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_Samsung_Modem_ReadInfo(
+            [MarshalAs(UnmanagedType.LPStr)] string portName,
+            [Out] StringBuilder outJsonBuffer,
+            int maxBufferLen
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_Samsung_Modem_RebootDownload(
+            [MarshalAs(UnmanagedType.LPStr)] string portName
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_Samsung_Modem_ChangeCSC(
+            [MarshalAs(UnmanagedType.LPStr)] string portName,
+            [MarshalAs(UnmanagedType.LPStr)] string targetCsc,
+            [MarshalAs(UnmanagedType.I1)] bool rebootAfter
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_Samsung_Modem_ReadKnoxSecurity(
+            [MarshalAs(UnmanagedType.LPStr)] string portName,
+            [Out] StringBuilder outJsonBuffer,
+            int maxBufferLen
+        );
     }
 }

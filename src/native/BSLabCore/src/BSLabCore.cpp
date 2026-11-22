@@ -5,6 +5,11 @@
 #include "MtkStreamFlasher.h"
 #include "MtkServiceEngine.h"
 #include "QcEngine.h"
+#include "NativeTarReader.h"
+#include "NativeMd5.h"
+#include "SamsungPitReader.h"
+#include "SamsungModemEngine.h"
+#include "SamsungOdinEngine.h"
 #include <memory>
 #include <string>
 #include <vector>
@@ -13,6 +18,7 @@
 #include <chrono>
 #include <filesystem>
 #include <fstream>
+#include <sstream>
 
 static BSLab_LogCallback g_log_cb = nullptr;
 static std::unique_ptr<BSLab::MtkEngine> g_mtk_engine = nullptr;
@@ -20,6 +26,8 @@ static std::unique_ptr<BSLab::DaParser> g_da_parser = nullptr;
 static std::unique_ptr<BSLab::MtkStreamFlasher> g_flasher = nullptr;
 static std::unique_ptr<BSLab::MtkServiceEngine> g_service = nullptr;
 static std::unique_ptr<BSLab::QcEngine> g_qc_engine = nullptr;
+static std::unique_ptr<BSLab::SamsungModemEngine> g_samsung_modem = nullptr;
+static std::unique_ptr<BSLab::SamsungOdinEngine> g_samsung_odin = nullptr;
 static std::vector<BSLab::GptPartition> g_cached_gpt_partitions;
 static uint16_t g_last_hw_code = 0x6768;
 
@@ -33,11 +41,17 @@ BSLAB_API bool BSLab_Initialize(BSLab_LogCallback log_cb) {
     g_flasher = std::make_unique<BSLab::MtkStreamFlasher>(g_log_cb);
     g_service = std::make_unique<BSLab::MtkServiceEngine>(g_log_cb);
     g_qc_engine = std::make_unique<BSLab::QcEngine>(g_log_cb);
+    g_samsung_modem = std::make_unique<BSLab::SamsungModemEngine>([log_cb](int lvl, const std::string& msg) {
+        if (log_cb) log_cb(lvl, msg.c_str());
+    });
+    g_samsung_odin = std::make_unique<BSLab::SamsungOdinEngine>([log_cb](int lvl, const std::string& msg) {
+        if (log_cb) log_cb(lvl, msg.c_str());
+    });
 
     if (g_log_cb) {
         g_log_cb(BSLAB_LOG_SUCCESS, "[+] BSLabCore.dll Enterprise Engine Initialized Successfully.");
         g_log_cb(BSLAB_LOG_INFO, "[*] Zero-Copy Memory Mapped Win32 Overlapped Driver Ready.");
-        g_log_cb(BSLAB_LOG_INFO, "[*] MediaTek BROM/Preloader & Qualcomm Snapdragon EDL 9008 Engines Online.");
+        g_log_cb(BSLAB_LOG_INFO, "[*] MediaTek BROM, Qualcomm Snapdragon EDL 9008 & Samsung Odin Engines Online.");
     }
     return true;
 }
@@ -48,6 +62,13 @@ BSLAB_API void BSLab_Shutdown(void) {
     }
     if (g_qc_engine) {
         g_qc_engine.reset();
+    }
+    if (g_samsung_odin) {
+        g_samsung_odin->Abort();
+        g_samsung_odin.reset();
+    }
+    if (g_samsung_modem) {
+        g_samsung_modem.reset();
     }
     g_da_parser.reset();
     g_flasher.reset();
@@ -601,4 +622,288 @@ BSLAB_API bool BSLab_QC_Reboot(
 ) {
     if (!g_qc_engine) return false;
     return g_qc_engine->Reboot();
+}
+
+// ============================================================================
+// PHASE 5: SAMSUNG ODIN & MODEM PROTOCOL EXPORTS
+// ============================================================================
+
+BSLAB_API bool BSLab_Samsung_ScanDevices(
+    char* out_json_buffer,
+    int max_buffer_len,
+    int* out_device_count
+) {
+    if (!out_json_buffer || max_buffer_len <= 0) return false;
+
+    auto devices = BSLab::SamsungModemEngine::ScanSamsungPorts();
+    if (out_device_count) *out_device_count = static_cast<int>(devices.size());
+
+    std::ostringstream ss;
+    ss << "[";
+    for (size_t i = 0; i < devices.size(); ++i) {
+        if (i > 0) ss << ",";
+        ss << "{\"port\":\"" << devices[i].port << "\","
+           << "\"description\":\"" << devices[i].description << "\","
+           << "\"hwid\":\"" << devices[i].hwid << "\","
+           << "\"mode\":\"" << devices[i].mode << "\"}";
+    }
+    ss << "]";
+
+    std::string jsonStr = ss.str();
+    if (static_cast<int>(jsonStr.length()) >= max_buffer_len) {
+        jsonStr = jsonStr.substr(0, max_buffer_len - 1);
+    }
+    std::memcpy(out_json_buffer, jsonStr.c_str(), jsonStr.length());
+    out_json_buffer[jsonStr.length()] = '\0';
+    return true;
+}
+
+BSLAB_API bool BSLab_Samsung_VerifyTarMd5(
+    const char* file_path,
+    BSLab_ProgressCallback progress_cb,
+    char* out_status_msg,
+    int max_msg_len
+) {
+    if (!file_path || !*file_path) return false;
+
+    std::string msg;
+    bool ok = BSLab::NativeMd5::VerifySamsungTarMd5(
+        file_path,
+        [progress_cb, file_path](float pct) {
+            if (progress_cb) {
+                int p = static_cast<int>(pct * 100.0f);
+                progress_cb(p, p, file_path, "Calculating MD5 Hash...");
+            }
+        },
+        msg
+    );
+
+    if (out_status_msg && max_msg_len > 0) {
+        if (static_cast<int>(msg.length()) >= max_msg_len) {
+            msg = msg.substr(0, max_msg_len - 1);
+        }
+        std::memcpy(out_status_msg, msg.c_str(), msg.length());
+        out_status_msg[msg.length()] = '\0';
+    }
+    return ok;
+}
+
+BSLAB_API bool BSLab_Samsung_InspectTar(
+    const char* file_path,
+    char* out_json_buffer,
+    int max_buffer_len,
+    int* out_member_count
+) {
+    if (!file_path || !out_json_buffer || max_buffer_len <= 0) return false;
+
+    std::vector<BSLab::TarEntryInfo> entries;
+    std::string err;
+    bool ok = BSLab::NativeTarReader::InspectTar(file_path, entries, err);
+    if (out_member_count) *out_member_count = static_cast<int>(entries.size());
+
+    std::ostringstream ss;
+    ss << "[";
+    for (size_t i = 0; i < entries.size(); ++i) {
+        if (i > 0) ss << ",";
+        ss << "{\"name\":\"" << entries[i].name << "\","
+           << "\"size\":" << entries[i].size << ","
+           << "\"size_mb\":" << std::fixed << std::setprecision(2) << entries[i].size_mb << ","
+           << "\"is_lz4\":" << (entries[i].is_lz4 ? "true" : "false") << "}";
+    }
+    ss << "]";
+
+    std::string jsonStr = ss.str();
+    if (static_cast<int>(jsonStr.length()) >= max_buffer_len) {
+        jsonStr = jsonStr.substr(0, max_buffer_len - 1);
+    }
+    std::memcpy(out_json_buffer, jsonStr.c_str(), jsonStr.length());
+    out_json_buffer[jsonStr.length()] = '\0';
+    return ok;
+}
+
+BSLAB_API bool BSLab_Samsung_ParsePit(
+    const char* pit_path,
+    char* out_json_buffer,
+    int max_buffer_len,
+    int* out_entry_count
+) {
+    if (!pit_path || !out_json_buffer || max_buffer_len <= 0) return false;
+
+    std::vector<BSLab::SamsungNativePitEntry> entries;
+    std::string err;
+    bool ok = BSLab::SamsungPitReader::ParsePitFile(pit_path, entries, err);
+    if (out_entry_count) *out_entry_count = static_cast<int>(entries.size());
+
+    std::string jsonStr = BSLab::SamsungPitReader::ToJson(entries);
+    if (static_cast<int>(jsonStr.length()) >= max_buffer_len) {
+        jsonStr = jsonStr.substr(0, max_buffer_len - 1);
+    }
+    std::memcpy(out_json_buffer, jsonStr.c_str(), jsonStr.length());
+    out_json_buffer[jsonStr.length()] = '\0';
+    return ok;
+}
+
+BSLAB_API bool BSLab_Samsung_Handshake(
+    const char* port_name
+) {
+    if (!port_name || !*port_name) return false;
+    if (!g_samsung_odin) {
+        g_samsung_odin = std::make_unique<BSLab::SamsungOdinEngine>([log_cb = g_log_cb](int lvl, const std::string& msg) {
+            if (log_cb) log_cb(lvl, msg.c_str());
+        });
+    }
+    return g_samsung_odin->PerformHandshake(port_name);
+}
+
+BSLAB_API bool BSLab_Samsung_FlashFirmware(
+    const char* port_name,
+    const char* bl_path,
+    const char* ap_path,
+    const char* cp_path,
+    const char* csc_path,
+    const char* pit_path,
+    bool repartition,
+    bool auto_reboot,
+    BSLab_ProgressCallback progress_cb
+) {
+    if (!port_name || !*port_name) return false;
+    if (!g_samsung_odin) {
+        g_samsung_odin = std::make_unique<BSLab::SamsungOdinEngine>([log_cb = g_log_cb](int lvl, const std::string& msg) {
+            if (log_cb) log_cb(lvl, msg.c_str());
+        });
+    }
+
+    BSLab::SamsungFlashSlots slots;
+    if (bl_path) slots.bl_path = bl_path;
+    if (ap_path) slots.ap_path = ap_path;
+    if (cp_path) slots.cp_path = cp_path;
+    if (csc_path) slots.csc_path = csc_path;
+    if (pit_path) slots.pit_path = pit_path;
+
+    return g_samsung_odin->FlashFirmware(
+        port_name,
+        slots,
+        repartition,
+        auto_reboot,
+        progress_cb
+    );
+}
+
+BSLAB_API void BSLab_Samsung_Abort(void) {
+    if (g_samsung_odin) {
+        g_samsung_odin->Abort();
+    }
+}
+
+BSLAB_API bool BSLab_Samsung_LaunchOfficialOdin(
+    const char* bl_path,
+    const char* ap_path,
+    const char* cp_path,
+    const char* csc_path,
+    const char* pit_path,
+    bool repartition,
+    bool auto_reboot
+) {
+    if (!g_samsung_odin) {
+        g_samsung_odin = std::make_unique<BSLab::SamsungOdinEngine>([log_cb = g_log_cb](int lvl, const std::string& msg) {
+            if (log_cb) log_cb(lvl, msg.c_str());
+        });
+    }
+
+    BSLab::SamsungFlashSlots slots;
+    if (bl_path) slots.bl_path = bl_path;
+    if (ap_path) slots.ap_path = ap_path;
+    if (cp_path) slots.cp_path = cp_path;
+    if (csc_path) slots.csc_path = csc_path;
+    if (pit_path) slots.pit_path = pit_path;
+
+    return g_samsung_odin->LaunchOfficialOdin(slots, repartition, auto_reboot);
+}
+
+BSLAB_API bool BSLab_Samsung_Modem_ReadInfo(
+    const char* port_name,
+    char* out_json_buffer,
+    int max_buffer_len
+) {
+    if (!port_name || !*port_name || !out_json_buffer || max_buffer_len <= 0) return false;
+    if (!g_samsung_modem) {
+        g_samsung_modem = std::make_unique<BSLab::SamsungModemEngine>([log_cb = g_log_cb](int lvl, const std::string& msg) {
+            if (log_cb) log_cb(lvl, msg.c_str());
+        });
+    }
+
+    BSLab::SamsungModemInfo info;
+    bool ok = g_samsung_modem->ReadDeviceInfo(port_name, info);
+
+    std::ostringstream ss;
+    ss << "{\"model\":\"" << info.model << "\","
+       << "\"serial_imei\":\"" << info.serial_imei << "\","
+       << "\"baseband_ap\":\"" << info.baseband_ap << "\","
+       << "\"csc\":\"" << info.csc << "\","
+       << "\"knox_guard\":\"" << info.knox_guard << "\","
+       << "\"knox_warranty\":\"" << info.knox_warranty << "\","
+       << "\"frp_status\":\"" << info.frp_status << "\"}";
+
+    std::string jsonStr = ss.str();
+    if (static_cast<int>(jsonStr.length()) >= max_buffer_len) {
+        jsonStr = jsonStr.substr(0, max_buffer_len - 1);
+    }
+    std::memcpy(out_json_buffer, jsonStr.c_str(), jsonStr.length());
+    out_json_buffer[jsonStr.length()] = '\0';
+    return ok;
+}
+
+BSLAB_API bool BSLab_Samsung_Modem_RebootDownload(
+    const char* port_name
+) {
+    if (!port_name || !*port_name) return false;
+    if (!g_samsung_modem) {
+        g_samsung_modem = std::make_unique<BSLab::SamsungModemEngine>([log_cb = g_log_cb](int lvl, const std::string& msg) {
+            if (log_cb) log_cb(lvl, msg.c_str());
+        });
+    }
+    return g_samsung_modem->RebootToDownloadMode(port_name);
+}
+
+BSLAB_API bool BSLab_Samsung_Modem_ChangeCSC(
+    const char* port_name,
+    const char* target_csc,
+    bool reboot_after
+) {
+    if (!port_name || !*port_name || !target_csc || !*target_csc) return false;
+    if (!g_samsung_modem) {
+        g_samsung_modem = std::make_unique<BSLab::SamsungModemEngine>([log_cb = g_log_cb](int lvl, const std::string& msg) {
+            if (log_cb) log_cb(lvl, msg.c_str());
+        });
+    }
+    return g_samsung_modem->ChangeCsc(port_name, target_csc, reboot_after);
+}
+
+BSLAB_API bool BSLab_Samsung_Modem_ReadKnoxSecurity(
+    const char* port_name,
+    char* out_json_buffer,
+    int max_buffer_len
+) {
+    if (!port_name || !*port_name || !out_json_buffer || max_buffer_len <= 0) return false;
+    if (!g_samsung_modem) {
+        g_samsung_modem = std::make_unique<BSLab::SamsungModemEngine>([log_cb = g_log_cb](int lvl, const std::string& msg) {
+            if (log_cb) log_cb(lvl, msg.c_str());
+        });
+    }
+
+    std::string kg, war, frp;
+    bool ok = g_samsung_modem->ReadKnoxSecurity(port_name, kg, war, frp);
+
+    std::ostringstream ss;
+    ss << "{\"knox_guard\":\"" << kg << "\","
+       << "\"knox_warranty\":\"" << war << "\","
+       << "\"frp_status\":\"" << frp << "\"}";
+
+    std::string jsonStr = ss.str();
+    if (static_cast<int>(jsonStr.length()) >= max_buffer_len) {
+        jsonStr = jsonStr.substr(0, max_buffer_len - 1);
+    }
+    std::memcpy(out_json_buffer, jsonStr.c_str(), jsonStr.length());
+    out_json_buffer[jsonStr.length()] = '\0';
+    return ok;
 }

@@ -261,6 +261,127 @@ BSLAB_API bool BSLab_QC_Reboot(
     const char* port_name
 );
 
+// ============================================================================
+// PHASE 5: SAMSUNG ODIN & MODEM PROTOCOL ENGINE
+// ============================================================================
+
+/**
+ * Scans connected Samsung devices (Modem, CDC, and Download Mode ports).
+ * Returns JSON array in out_json_buffer.
+ */
+BSLAB_API bool BSLab_Samsung_ScanDevices(
+    char* out_json_buffer,
+    int max_buffer_len,
+    int* out_device_count
+);
+
+/**
+ * Verifies Samsung .tar.md5 file integrity.
+ */
+BSLAB_API bool BSLab_Samsung_VerifyTarMd5(
+    const char* file_path,
+    BSLab_ProgressCallback progress_cb,
+    char* out_status_msg,
+    int max_msg_len
+);
+
+/**
+ * Inspects members inside a Samsung TAR or TAR.MD5 archive without unpacking.
+ * Returns JSON array in out_json_buffer.
+ */
+BSLAB_API bool BSLab_Samsung_InspectTar(
+    const char* file_path,
+    char* out_json_buffer,
+    int max_buffer_len,
+    int* out_member_count
+);
+
+/**
+ * Parses binary Samsung PIT file and returns structured partitions JSON.
+ */
+BSLAB_API bool BSLab_Samsung_ParsePit(
+    const char* pit_path,
+    char* out_json_buffer,
+    int max_buffer_len,
+    int* out_entry_count
+);
+
+/**
+ * Executes Odin Download Mode hardware sync handshake.
+ */
+BSLAB_API bool BSLab_Samsung_Handshake(
+    const char* port_name
+);
+
+/**
+ * Flashes 4-File Samsung firmware (BL, AP, CP, CSC, PIT) in high-speed hardware mode.
+ */
+BSLAB_API bool BSLab_Samsung_FlashFirmware(
+    const char* port_name,
+    const char* bl_path,
+    const char* ap_path,
+    const char* cp_path,
+    const char* csc_path,
+    const char* pit_path,
+    bool repartition,
+    bool auto_reboot,
+    BSLab_ProgressCallback progress_cb
+);
+
+/**
+ * Aborts any ongoing Samsung flashing operation.
+ */
+BSLAB_API void BSLab_Samsung_Abort(void);
+
+/**
+ * Launches Official Samsung Odin3 with pre-configured slots and options.
+ */
+BSLAB_API bool BSLab_Samsung_LaunchOfficialOdin(
+    const char* bl_path,
+    const char* ap_path,
+    const char* cp_path,
+    const char* csc_path,
+    const char* pit_path,
+    bool repartition,
+    bool auto_reboot
+);
+
+/**
+ * Reads detailed Samsung device info via Modem AT port (Model, IMEI, Baseband, CSC).
+ * Returns JSON in out_json_buffer.
+ */
+BSLAB_API bool BSLab_Samsung_Modem_ReadInfo(
+    const char* port_name,
+    char* out_json_buffer,
+    int max_buffer_len
+);
+
+/**
+ * Triggers reboot to Odin Download Mode from Modem / MTP mode.
+ */
+BSLAB_API bool BSLab_Samsung_Modem_RebootDownload(
+    const char* port_name
+);
+
+/**
+ * Executes 1-Click CSC carrier change via Modem AT commands.
+ */
+BSLAB_API bool BSLab_Samsung_Modem_ChangeCSC(
+    const char* port_name,
+    const char* target_csc,
+    bool reboot_after
+);
+
+/**
+ * Reads Knox Guard, Knox Warranty bit, and FRP lock status.
+ * Returns JSON in out_json_buffer.
+ */
+BSLAB_API bool BSLab_Samsung_Modem_ReadKnoxSecurity(
+    const char* port_name,
+    char* out_json_buffer,
+    int max_buffer_len
+);
+
 #ifdef __cplusplus
 }
 #endif
