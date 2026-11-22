@@ -373,5 +373,68 @@ namespace BSLabTool.UI.Native
             [Out] StringBuilder outJsonBuffer,
             int maxBufferLen
         );
+
+        // ====================================================================
+        // PHASE 4: UNISOC / SPREADTRUM (SPD) HIGH-SPEED BSL ENGINE
+        // ====================================================================
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_Unisoc_ScanPorts(
+            [Out] StringBuilder outJsonBuffer,
+            int maxBufferLen,
+            out int outPortCount
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_Unisoc_ParsePac(
+            [MarshalAs(UnmanagedType.LPStr)] string pacPath,
+            [Out] StringBuilder outJsonBuffer,
+            int maxBufferLen,
+            out int outFileCount
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_Unisoc_Connect(
+            [MarshalAs(UnmanagedType.LPStr)] string portName,
+            [MarshalAs(UnmanagedType.LPStr)] string pacPath,
+            BSLabProgressCallback progressCb
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_Unisoc_FlashFirmware(
+            [MarshalAs(UnmanagedType.LPStr)] string portName,
+            [MarshalAs(UnmanagedType.LPStr)] string pacPath,
+            [MarshalAs(UnmanagedType.I1)] bool rebootAfter,
+            BSLabProgressCallback progressCb
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_Unisoc_ResetFRP(
+            [MarshalAs(UnmanagedType.LPStr)] string portName,
+            [MarshalAs(UnmanagedType.LPStr)] string pacPath,
+            BSLabProgressCallback progressCb
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_Unisoc_FactoryReset(
+            [MarshalAs(UnmanagedType.LPStr)] string portName,
+            [MarshalAs(UnmanagedType.LPStr)] string pacPath,
+            BSLabProgressCallback progressCb
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_Unisoc_Reboot(
+            [MarshalAs(UnmanagedType.LPStr)] string portName
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void BSLab_Unisoc_Abort();
     }
 }

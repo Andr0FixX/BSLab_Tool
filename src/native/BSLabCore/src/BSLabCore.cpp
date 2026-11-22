@@ -10,6 +10,10 @@
 #include "SamsungPitReader.h"
 #include "SamsungModemEngine.h"
 #include "SamsungOdinEngine.h"
+#include "SpdBslProtocol.h"
+#include "SpdPacParser.h"
+#include "SpdFdlEngine.h"
+#include "UnisocEngine.h"
 #include <memory>
 #include <string>
 #include <vector>
@@ -28,6 +32,7 @@ static std::unique_ptr<BSLab::MtkServiceEngine> g_service = nullptr;
 static std::unique_ptr<BSLab::QcEngine> g_qc_engine = nullptr;
 static std::unique_ptr<BSLab::SamsungModemEngine> g_samsung_modem = nullptr;
 static std::unique_ptr<BSLab::SamsungOdinEngine> g_samsung_odin = nullptr;
+static std::unique_ptr<BSLab::UnisocEngine> g_unisoc_engine = nullptr;
 static std::vector<BSLab::GptPartition> g_cached_gpt_partitions;
 static uint16_t g_last_hw_code = 0x6768;
 
@@ -47,11 +52,14 @@ BSLAB_API bool BSLab_Initialize(BSLab_LogCallback log_cb) {
     g_samsung_odin = std::make_unique<BSLab::SamsungOdinEngine>([log_cb](int lvl, const std::string& msg) {
         if (log_cb) log_cb(lvl, msg.c_str());
     });
+    g_unisoc_engine = std::make_unique<BSLab::UnisocEngine>([log_cb](int lvl, const std::string& msg) {
+        if (log_cb) log_cb(lvl, msg.c_str());
+    });
 
     if (g_log_cb) {
         g_log_cb(BSLAB_LOG_SUCCESS, "[+] BSLabCore.dll Enterprise Engine Initialized Successfully.");
         g_log_cb(BSLAB_LOG_INFO, "[*] Zero-Copy Memory Mapped Win32 Overlapped Driver Ready.");
-        g_log_cb(BSLAB_LOG_INFO, "[*] MediaTek BROM, Qualcomm Snapdragon EDL 9008 & Samsung Odin Engines Online.");
+        g_log_cb(BSLAB_LOG_INFO, "[*] MediaTek, Qualcomm Snapdragon, Samsung Odin & Unisoc SPD Engines Online.");
     }
     return true;
 }
@@ -69,6 +77,10 @@ BSLAB_API void BSLab_Shutdown(void) {
     }
     if (g_samsung_modem) {
         g_samsung_modem.reset();
+    }
+    if (g_unisoc_engine) {
+        g_unisoc_engine->Abort();
+        g_unisoc_engine.reset();
     }
     g_da_parser.reset();
     g_flasher.reset();
@@ -906,4 +918,134 @@ BSLAB_API bool BSLab_Samsung_Modem_ReadKnoxSecurity(
     std::memcpy(out_json_buffer, jsonStr.c_str(), jsonStr.length());
     out_json_buffer[jsonStr.length()] = '\0';
     return ok;
+}
+
+// ============================================================================
+// PHASE 6: UNISOC / SPREADTRUM (SPD) PROTOCOL EXPORTS
+// ============================================================================
+
+BSLAB_API bool BSLab_Unisoc_ScanPorts(
+    char* out_json_buffer,
+    int max_buffer_len,
+    int* out_count
+) {
+    if (!out_json_buffer || max_buffer_len <= 0) return false;
+
+    auto ports = BSLab::UnisocEngine::ScanPorts();
+    if (out_count) *out_count = static_cast<int>(ports.size());
+
+    std::ostringstream ss;
+    ss << "[";
+    for (size_t i = 0; i < ports.size(); ++i) {
+        if (i > 0) ss << ",";
+        ss << "{\"port\":\"" << ports[i].port << "\","
+           << "\"description\":\"" << ports[i].description << "\","
+           << "\"hwid\":\"" << ports[i].hwid << "\"}";
+    }
+    ss << "]";
+
+    std::string jsonStr = ss.str();
+    if (static_cast<int>(jsonStr.length()) >= max_buffer_len) {
+        jsonStr = jsonStr.substr(0, max_buffer_len - 1);
+    }
+    std::memcpy(out_json_buffer, jsonStr.c_str(), jsonStr.length());
+    out_json_buffer[jsonStr.length()] = '\0';
+    return true;
+}
+
+BSLAB_API bool BSLab_Unisoc_ParsePac(
+    const char* pac_path,
+    char* out_json_buffer,
+    int max_buffer_len,
+    int* out_count
+) {
+    if (!pac_path || !*pac_path || !out_json_buffer || max_buffer_len <= 0) return false;
+
+    BSLab::SpdPacInfo pacInfo;
+    std::string err;
+    bool ok = BSLab::SpdPacParser::Parse(pac_path, pacInfo, err);
+    if (out_count) *out_count = static_cast<int>(pacInfo.partitions.size());
+
+    std::string jsonStr = BSLab::SpdPacParser::ToJson(pacInfo);
+    if (static_cast<int>(jsonStr.length()) >= max_buffer_len) {
+        jsonStr = jsonStr.substr(0, max_buffer_len - 1);
+    }
+    std::memcpy(out_json_buffer, jsonStr.c_str(), jsonStr.length());
+    out_json_buffer[jsonStr.length()] = '\0';
+    return ok;
+}
+
+BSLAB_API bool BSLab_Unisoc_Connect(
+    const char* port_name,
+    const char* pac_path,
+    BSLab_ProgressCallback progress_cb
+) {
+    if (!port_name || !*port_name) return false;
+    if (!g_unisoc_engine) {
+        g_unisoc_engine = std::make_unique<BSLab::UnisocEngine>([log_cb = g_log_cb](int lvl, const std::string& msg) {
+            if (log_cb) log_cb(lvl, msg.c_str());
+        });
+    }
+    return g_unisoc_engine->Connect(port_name, pac_path ? pac_path : "", progress_cb);
+}
+
+BSLAB_API bool BSLab_Unisoc_FlashFirmware(
+    const char* port_name,
+    const char* pac_path,
+    bool reboot_after,
+    BSLab_ProgressCallback progress_cb
+) {
+    if (!port_name || !*port_name || !pac_path || !*pac_path) return false;
+    if (!g_unisoc_engine) {
+        g_unisoc_engine = std::make_unique<BSLab::UnisocEngine>([log_cb = g_log_cb](int lvl, const std::string& msg) {
+            if (log_cb) log_cb(lvl, msg.c_str());
+        });
+    }
+    return g_unisoc_engine->FlashFirmware(port_name, pac_path, reboot_after, progress_cb);
+}
+
+BSLAB_API bool BSLab_Unisoc_ResetFRP(
+    const char* port_name,
+    const char* pac_path,
+    BSLab_ProgressCallback progress_cb
+) {
+    if (!port_name || !*port_name) return false;
+    if (!g_unisoc_engine) {
+        g_unisoc_engine = std::make_unique<BSLab::UnisocEngine>([log_cb = g_log_cb](int lvl, const std::string& msg) {
+            if (log_cb) log_cb(lvl, msg.c_str());
+        });
+    }
+    return g_unisoc_engine->ResetFRP(port_name, pac_path ? pac_path : "", progress_cb);
+}
+
+BSLAB_API bool BSLab_Unisoc_FactoryReset(
+    const char* port_name,
+    const char* pac_path,
+    BSLab_ProgressCallback progress_cb
+) {
+    if (!port_name || !*port_name) return false;
+    if (!g_unisoc_engine) {
+        g_unisoc_engine = std::make_unique<BSLab::UnisocEngine>([log_cb = g_log_cb](int lvl, const std::string& msg) {
+            if (log_cb) log_cb(lvl, msg.c_str());
+        });
+    }
+    return g_unisoc_engine->FactoryReset(port_name, pac_path ? pac_path : "", progress_cb);
+}
+
+BSLAB_API bool BSLab_Unisoc_Reboot(
+    const char* port_name
+) {
+    if (!port_name || !*port_name) return false;
+    if (!g_unisoc_engine) {
+        g_unisoc_engine = std::make_unique<BSLab::UnisocEngine>([log_cb = g_log_cb](int lvl, const std::string& msg) {
+            if (log_cb) log_cb(lvl, msg.c_str());
+        });
+    }
+    return g_unisoc_engine->Reboot(port_name);
+}
+
+BSLAB_API void BSLab_Unisoc_Abort(void) {
+    if (g_unisoc_engine) {
+        g_unisoc_engine->Abort();
+    }
 }

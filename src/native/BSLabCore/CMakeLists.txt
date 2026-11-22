@@ -27,6 +27,10 @@ set(SOURCES
     src/SamsungPitReader.cpp
     src/SamsungModemEngine.cpp
     src/SamsungOdinEngine.cpp
+    src/SpdBslProtocol.cpp
+    src/SpdPacParser.cpp
+    src/SpdFdlEngine.cpp
+    src/UnisocEngine.cpp
 )
 
 add_library(BSLabCore SHARED ${SOURCES})

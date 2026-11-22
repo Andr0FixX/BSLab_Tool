@@ -43,7 +43,11 @@ $Sources = @(
     (Join-Path $NativeSrcDir "NativeMd5.cpp"),
     (Join-Path $NativeSrcDir "SamsungPitReader.cpp"),
     (Join-Path $NativeSrcDir "SamsungModemEngine.cpp"),
-    (Join-Path $NativeSrcDir "SamsungOdinEngine.cpp")
+    (Join-Path $NativeSrcDir "SamsungOdinEngine.cpp"),
+    (Join-Path $NativeSrcDir "SpdBslProtocol.cpp"),
+    (Join-Path $NativeSrcDir "SpdPacParser.cpp"),
+    (Join-Path $NativeSrcDir "SpdFdlEngine.cpp"),
+    (Join-Path $NativeSrcDir "UnisocEngine.cpp")
 )
 
 foreach ($src in $Sources) {

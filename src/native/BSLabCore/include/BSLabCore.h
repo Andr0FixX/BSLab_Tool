@@ -382,6 +382,80 @@ BSLAB_API bool BSLab_Samsung_Modem_ReadKnoxSecurity(
     int max_buffer_len
 );
 
+// ============================================================================
+// PHASE 6: UNISOC / SPREADTRUM (SPD) PROTOCOL ENGINE
+// ============================================================================
+
+/**
+ * Scans connected Unisoc / Spreadtrum COM ports.
+ * Returns JSON array in out_json_buffer.
+ */
+BSLAB_API bool BSLab_Unisoc_ScanPorts(
+    char* out_json_buffer,
+    int max_buffer_len,
+    int* out_count
+);
+
+/**
+ * Parses a Unisoc .PAC firmware archive.
+ * Returns JSON object with version, product name, and partitions in out_json_buffer.
+ */
+BSLAB_API bool BSLab_Unisoc_ParsePac(
+    const char* pac_path,
+    char* out_json_buffer,
+    int max_buffer_len,
+    int* out_count
+);
+
+/**
+ * Connects to Unisoc BROM (0x7E sync) and optionally loads FDL1/FDL2 from PAC.
+ */
+BSLAB_API bool BSLab_Unisoc_Connect(
+    const char* port_name,
+    const char* pac_path,
+    BSLab_ProgressCallback progress_cb
+);
+
+/**
+ * Flashes complete PAC firmware archive to Unisoc device.
+ */
+BSLAB_API bool BSLab_Unisoc_FlashFirmware(
+    const char* port_name,
+    const char* pac_path,
+    bool reboot_after,
+    BSLab_ProgressCallback progress_cb
+);
+
+/**
+ * 1-Click Unisoc FRP Reset (erases persist / misc / frp).
+ */
+BSLAB_API bool BSLab_Unisoc_ResetFRP(
+    const char* port_name,
+    const char* pac_path,
+    BSLab_ProgressCallback progress_cb
+);
+
+/**
+ * 1-Click Unisoc Safe Factory Reset (erases userdata & cache).
+ */
+BSLAB_API bool BSLab_Unisoc_FactoryReset(
+    const char* port_name,
+    const char* pac_path,
+    BSLab_ProgressCallback progress_cb
+);
+
+/**
+ * Reboots Unisoc device to system.
+ */
+BSLAB_API bool BSLab_Unisoc_Reboot(
+    const char* port_name
+);
+
+/**
+ * Aborts ongoing Unisoc operation.
+ */
+BSLAB_API void BSLab_Unisoc_Abort(void);
+
 #ifdef __cplusplus
 }
 #endif
