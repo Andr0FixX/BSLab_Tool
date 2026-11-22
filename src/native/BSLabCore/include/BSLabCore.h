@@ -618,6 +618,125 @@ BSLAB_API bool BSLab_PartitionDoctor_SurgicalFlashFastboot(
     int max_error_len
 );
 
+// ============================================================================
+// PHASE 7: QUALCOMM DIAGNOSTIC PROTOCOL & QCN BASEBAND ENGINE
+// ============================================================================
+
+/**
+ * Validates IMEI and computes 15th Luhn checksum digit if 14 digits given.
+ */
+BSLAB_API bool BSLab_QC_Diag_ValidateImei(
+    const char* imei,
+    char* out_full_imei,
+    int max_imei_len,
+    char* out_error,
+    int max_err_len
+);
+
+/**
+ * Encodes 15-digit IMEI to Qualcomm 9-byte BCD (3GPP TS 24.008 format).
+ */
+BSLAB_API bool BSLab_QC_Diag_EncodeImeiBcd(
+    const char* imei15,
+    uint8_t* out_bcd9,
+    int max_bcd_len
+);
+
+/**
+ * Decodes Qualcomm 9-byte BCD into 15-digit IMEI string.
+ */
+BSLAB_API bool BSLab_QC_Diag_DecodeImeiBcd(
+    const uint8_t* bcd9,
+    int bcd_len,
+    char* out_imei15,
+    int max_imei_len
+);
+
+/**
+ * Parses QCN / XQCN calibration file and returns JSON summary of NV items.
+ */
+BSLAB_API bool BSLab_QC_Diag_InspectQcn(
+    const char* qcn_path,
+    char* out_json_buffer,
+    int max_json_len,
+    int* out_record_count
+);
+
+/**
+ * Patches QCN file on disk with custom IMEI 1 and optional IMEI 2.
+ */
+BSLAB_API bool BSLab_QC_Diag_PatchQcnFile(
+    const char* in_qcn_path,
+    const char* out_qcn_path,
+    const char* imei1,
+    const char* imei2,
+    int* out_patched_count,
+    char* out_status_msg,
+    int max_msg_len
+);
+
+/**
+ * Sends 6-digit SPC unlock code to live Qualcomm Diagnostic COM port.
+ */
+BSLAB_API bool BSLab_QC_Diag_SendSPC(
+    const char* port_name,
+    const char* spc_code,
+    bool* out_unlocked
+);
+
+/**
+ * Reads Primary IMEI (NV 550) and Secondary IMEI (NV 650) from live device.
+ */
+BSLAB_API bool BSLab_QC_Diag_ReadIMEI(
+    const char* port_name,
+    char* out_imei1,
+    int max_len1,
+    char* out_imei2,
+    int max_len2
+);
+
+/**
+ * Writes Primary IMEI (NV 550) and optional Secondary IMEI (NV 650) to live device.
+ */
+BSLAB_API bool BSLab_QC_Diag_WriteIMEI(
+    const char* port_name,
+    const char* imei1,
+    const char* imei2
+);
+
+/**
+ * Restores complete QCN file to live phone with optional on-the-fly IMEI replacement.
+ */
+BSLAB_API bool BSLab_QC_Diag_RestoreQCN(
+    const char* port_name,
+    const char* qcn_path,
+    const char* custom_imei1,
+    const char* custom_imei2,
+    BSLab_ProgressCallback progress_cb
+);
+
+/**
+ * Backs up essential RF calibration & Baseband NV items to a QCN file.
+ */
+BSLAB_API bool BSLab_QC_Diag_BackupQCN(
+    const char* port_name,
+    const char* out_qcn_path,
+    BSLab_ProgressCallback progress_cb
+);
+
+/**
+ * Sends phone mode reset (0x29, 0x01) to reboot device after calibration.
+ */
+BSLAB_API bool BSLab_QC_Diag_Reboot(
+    const char* port_name
+);
+
+/**
+ * Aborts active Diag/QCN operation.
+ */
+BSLAB_API void BSLab_QC_Diag_Abort();
+
+
 #ifdef __cplusplus
 }
 #endif

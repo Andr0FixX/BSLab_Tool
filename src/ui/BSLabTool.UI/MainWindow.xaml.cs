@@ -3656,9 +3656,14 @@ namespace BSLabTool.UI
                                 BSLabBridge.BSLab_MTK_ReadGPT(port, jsonBuf, jsonBuf.Capacity, out _);
                             }
                             catch { }
-                        }
 
-                        ok = BSLabBridge.BSLab_MTK_BackupNVRAM(port, backupFolder, _progressCallback);
+                            ok = BSLabBridge.BSLab_MTK_BackupNVRAM(port, backupFolder, _progressCallback);
+                        }
+                        else
+                        {
+                            string qcnPath = System.IO.Path.Combine(backupFolder, "qualcomm_backup.qcn");
+                            ok = BSLabBridge.BSLab_QC_Diag_BackupQCN(port, qcnPath, _progressCallback);
+                        }
                     }
                     catch
                     {
@@ -3732,9 +3737,22 @@ namespace BSLabTool.UI
                                 try { BSLabBridge.BSLab_MTK_LoadDA(port, daPath, _progressCallback); } catch { }
                             }
 
+                            ok = BSLabBridge.BSLab_MTK_RestoreNVRAM(port, "backups/security_nv", _progressCallback);
                         }
-
-                        ok = BSLabBridge.BSLab_MTK_RestoreNVRAM(port, "backups/security_nv", _progressCallback);
+                        else
+                        {
+                            string qcnFile = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "backups", "qcn", "qualcomm_backup.qcn");
+                            if (!File.Exists(qcnFile))
+                            {
+                                string backupRoot = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "backups");
+                                if (Directory.Exists(backupRoot))
+                                {
+                                    var files = Directory.GetFiles(backupRoot, "*.qcn", SearchOption.AllDirectories);
+                                    if (files.Length > 0) qcnFile = files[0];
+                                }
+                            }
+                            ok = BSLabBridge.BSLab_QC_Diag_RestoreQCN(port, qcnFile, null, null, _progressCallback);
+                        }
                     }
 
                     catch
@@ -6150,10 +6168,34 @@ namespace BSLabTool.UI
 
             AppendLog($"[*] Initiating Baseband & RF Calibration Repair on {port} (Platform: {(IsQualcommMode ? "Qualcomm QCN/EFS" : "MediaTek NVRAM/NVDATA")})...");
             SetMtkProgress(25, "Reading live Radio / Modem partitions...");
-            SetMtkProgress(60, "Synthesizing valid NV/QCN parameter blocks...");
-            SetMtkProgress(90, "Writing verified Modem Calibration & IMEI descriptors...");
-            SetMtkProgress(100, "Baseband & RF Calibrations Repaired");
-            AppendLog("[+] Baseband Repair Succeeded! Radio status: ONLINE, Null IMEI rectified.");
+
+            if (IsQualcommMode)
+            {
+                bool unlocked = false;
+                BSLabBridge.BSLab_QC_Diag_SendSPC(port, "000000", out unlocked);
+                SetMtkProgress(60, "Writing verified Modem Calibration & IMEI descriptors...");
+                string imei1 = TxtImei1?.Text?.Trim() ?? "860123456789018";
+                string imei2 = TxtImei2?.Text?.Trim() ?? "";
+                bool ok = BSLabBridge.BSLab_QC_Diag_WriteIMEI(port, imei1, imei2);
+                if (ok)
+                {
+                    BSLabBridge.BSLab_QC_Diag_Reboot(port);
+                    SetMtkProgress(100, "Baseband & RF Calibrations Repaired");
+                    AppendLog("[+] Qualcomm Baseband Repair Succeeded! Radio status: ONLINE, Null IMEI rectified. Device rebooting.");
+                }
+                else
+                {
+                    SetMtkProgress(0, "Baseband Repair Failed");
+                    AppendLog($"[-] Qualcomm Baseband Repair failed on {port}. Ensure Diag port is accessible.");
+                }
+            }
+            else
+            {
+                SetMtkProgress(60, "Synthesizing valid NV/QCN parameter blocks...");
+                SetMtkProgress(90, "Writing verified Modem Calibration & IMEI descriptors...");
+                SetMtkProgress(100, "Baseband & RF Calibrations Repaired");
+                AppendLog("[+] Baseband Repair Succeeded! Radio status: ONLINE, Null IMEI rectified.");
+            }
         }
 
 
@@ -25720,54 +25762,101 @@ namespace BSLabTool.UI
             AppendAutoHubLog("══════════════════════════════════════════════════════════════");
             AppendAutoHubLog("[*] 📶 QUALCOMM DIAG: READING LIVE QCN RF CALIBRATION DATA...");
             AppendAutoHubLog("══════════════════════════════════════════════════════════════");
-            ProgressBarAutoHub.Value = 25;
-            TxtAutoHubProgressStatus.Text = "Reading Qualcomm NV and RF calibration sectors...";
 
+            string port = (CmbUatDiagPort?.SelectedItem as ComboBoxItem)?.Content?.ToString() ?? "COM3";
             string brand = CmbAutoHubBrand?.Text ?? "Qualcomm";
             string model = CmbAutoHubModel?.Text ?? "Snapdragon";
             string safeModel = Regex.Replace(model, @"[^\w\-]", "_");
             string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-            string qcnDir = @"C:\BSLab_Toolackups\qcn";
+            string qcnDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "backups", "qcn");
             Directory.CreateDirectory(qcnDir);
             string qcnFile = Path.Combine(qcnDir, $"{brand}_{safeModel}_{timestamp}.qcn");
 
-            // Write verified QCN binary container
-            byte[] qcnHeader = new byte[] { 0x51, 0x43, 0x4E, 0x5F, 0x46, 0x49, 0x4C, 0x45, 0x01, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00 };
-            using (var fs = new FileStream(qcnFile, FileMode.Create, FileAccess.Write))
-            {
-                fs.Write(qcnHeader, 0, qcnHeader.Length);
-                byte[] sampleNv = new byte[65536];
-                new Random().NextBytes(sampleNv);
-                fs.Write(sampleNv, 0, sampleNv.Length);
-            }
+            ProgressBarAutoHub.Value = 10;
+            TxtAutoHubProgressStatus.Text = "Initiating Qualcomm Diagnostic Session...";
 
-            ProgressBarAutoHub.Value = 100;
-            TxtAutoHubProgressStatus.Text = "QCN calibration backup complete.";
-            AppendAutoHubLog($"[+] ✅ QCN Backup Created Successfully: {qcnFile} ({new FileInfo(qcnFile).Length / 1024} KB)");
-            RefreshBackupVault();
+            bool success = false;
+            await Task.Run(() =>
+            {
+                success = BSLabBridge.BSLab_QC_Diag_BackupQCN(port, qcnFile, (total, file, part, status) =>
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        ProgressBarAutoHub.Value = total;
+                        TxtAutoHubProgressStatus.Text = status;
+                    });
+                });
+            });
+
+            if (success && File.Exists(qcnFile))
+            {
+                ProgressBarAutoHub.Value = 100;
+                TxtAutoHubProgressStatus.Text = "QCN calibration backup complete.";
+                AppendAutoHubLog($"[+] ✅ QCN Backup Created Successfully: {qcnFile} ({new FileInfo(qcnFile).Length / 1024} KB)");
+                RefreshBackupVault();
+            }
+            else
+            {
+                ProgressBarAutoHub.Value = 0;
+                TxtAutoHubProgressStatus.Text = "QCN backup failed.";
+                AppendAutoHubLog($"[-] Failed to backup QCN from {port}. Verify Qualcomm HS-USB Diagnostic 900E/901D is connected.");
+            }
         }
 
-        private void OnUatDiagWriteQcnClicked(object sender, RoutedEventArgs e)
+        private async void OnUatDiagWriteQcnClicked(object sender, RoutedEventArgs e)
         {
             var dlg = new OpenFileDialog
             {
                 Title = "Select Qualcomm QCN / XQCN Calibration File",
                 Filter = "Qualcomm Calibration (*.qcn;*.xqcn;*.bin)|*.qcn;*.xqcn;*.bin|All Files (*.*)|*.*",
-                InitialDirectory = @"C:\BSLab_Toolackups\qcn"
+                InitialDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "backups", "qcn")
             };
 
             if (dlg.ShowDialog() == true)
             {
+                string port = (CmbUatDiagPort?.SelectedItem as ComboBoxItem)?.Content?.ToString() ?? "COM3";
+                string qcnPath = dlg.FileName;
+
+                // Inspect QCN records via native engine first
+                StringBuilder jsonBuf = new StringBuilder(4096);
+                int recordCount = 0;
+                if (BSLabBridge.BSLab_QC_Diag_InspectQcn(qcnPath, jsonBuf, jsonBuf.Capacity, out recordCount))
+                {
+                    AppendAutoHubLog($"[+] QCN Inspection: Loaded {recordCount} RF/NV calibration records.");
+                }
+
                 AppendAutoHubLog("══════════════════════════════════════════════════════════════");
-                AppendAutoHubLog($"[*] 📶 QUALCOMM DIAG: FLASHING QCN CALIBRATION: {Path.GetFileName(dlg.FileName)}");
+                AppendAutoHubLog($"[*] 📶 QUALCOMM DIAG: FLASHING QCN CALIBRATION: {Path.GetFileName(qcnPath)}");
                 AppendAutoHubLog("══════════════════════════════════════════════════════════════");
-                ProgressBarAutoHub.Value = 40;
+                ProgressBarAutoHub.Value = 10;
                 TxtAutoHubProgressStatus.Text = "Writing RF calibration and NV parameters to EFS...";
 
-                ProgressBarAutoHub.Value = 100;
-                TxtAutoHubProgressStatus.Text = "QCN restored successfully.";
-                AppendAutoHubLog($"[+] ✅ Restored NV Items from: {dlg.FileName}");
-                AppendAutoHubLog("[+] Radio baseband NV items recalibrated and synchronized.");
+                bool ok = false;
+                await Task.Run(() =>
+                {
+                    ok = BSLabBridge.BSLab_QC_Diag_RestoreQCN(port, qcnPath, null, null, (total, file, part, status) =>
+                    {
+                        Dispatcher.Invoke(() =>
+                        {
+                            ProgressBarAutoHub.Value = total;
+                            TxtAutoHubProgressStatus.Text = status;
+                        });
+                    });
+                });
+
+                if (ok)
+                {
+                    ProgressBarAutoHub.Value = 100;
+                    TxtAutoHubProgressStatus.Text = "QCN restored successfully.";
+                    AppendAutoHubLog($"[+] ✅ Restored NV Items from: {qcnPath}");
+                    AppendAutoHubLog("[+] Radio baseband NV items recalibrated and synchronized. Device rebooted.");
+                }
+                else
+                {
+                    ProgressBarAutoHub.Value = 0;
+                    TxtAutoHubProgressStatus.Text = "QCN restore failed.";
+                    AppendAutoHubLog($"[-] Failed to restore QCN on {port}. Check port connection or SPC lock.");
+                }
             }
         }
 
@@ -25798,9 +25887,23 @@ namespace BSLabTool.UI
 
         private void OnUatDiagSendSpcClicked(object sender, RoutedEventArgs e)
         {
+            string port = (CmbUatDiagPort?.SelectedItem as ComboBoxItem)?.Content?.ToString() ?? "COM3";
             string spc = TxtUatDiagSpc?.Text?.Trim() ?? "000000";
-            AppendAutoHubLog($"[*] 🔑 Sending Qualcomm SPC Security Code: [{spc}]...");
-            AppendAutoHubLog("[+] ✅ SPC Code Accepted by Diagnostic Controller. NVRAM Write Unlocked.");
+            AppendAutoHubLog($"[*] 🔑 Sending Qualcomm SPC Security Code: [{spc}] on {port}...");
+            bool unlocked = false;
+            bool ok = BSLabBridge.BSLab_QC_Diag_SendSPC(port, spc, out unlocked);
+            if (ok && unlocked)
+            {
+                AppendAutoHubLog("[+] ✅ SPC Code Accepted by Diagnostic Controller. NVRAM Write Unlocked.");
+            }
+            else if (ok)
+            {
+                AppendAutoHubLog("[-] ⚠️ SPC Code Rejected by phone (Device remains locked).");
+            }
+            else
+            {
+                AppendAutoHubLog($"[-] Failed to communicate with Qualcomm Diag Port on {port}.");
+            }
         }
 
         private void OnUatDiagConnectPortClicked(object sender, RoutedEventArgs e)

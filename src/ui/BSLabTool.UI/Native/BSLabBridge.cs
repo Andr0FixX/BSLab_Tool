@@ -573,5 +573,110 @@ namespace BSLabTool.UI.Native
             [Out] StringBuilder outErrorBuffer,
             int maxErrorLen
         );
+
+        // ====================================================================
+        // PHASE 7: QUALCOMM DIAGNOSTIC PROTOCOL & QCN BASEBAND ENGINE
+        // ====================================================================
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_QC_Diag_ValidateImei(
+            [MarshalAs(UnmanagedType.LPStr)] string imei,
+            [Out] StringBuilder outFullImei,
+            int maxImeiLen,
+            [Out] StringBuilder outError,
+            int maxErrLen
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_QC_Diag_EncodeImeiBcd(
+            [MarshalAs(UnmanagedType.LPStr)] string imei15,
+            byte[] outBcd9,
+            int maxBcdLen
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_QC_Diag_DecodeImeiBcd(
+            byte[] bcd9,
+            int bcdLen,
+            [Out] StringBuilder outImei15,
+            int maxImeiLen
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_QC_Diag_InspectQcn(
+            [MarshalAs(UnmanagedType.LPStr)] string qcnPath,
+            [Out] StringBuilder outJsonBuffer,
+            int maxJsonLen,
+            out int outRecordCount
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_QC_Diag_PatchQcnFile(
+            [MarshalAs(UnmanagedType.LPStr)] string inQcnPath,
+            [MarshalAs(UnmanagedType.LPStr)] string outQcnPath,
+            [MarshalAs(UnmanagedType.LPStr)] string imei1,
+            [MarshalAs(UnmanagedType.LPStr)] string imei2,
+            out int outPatchedCount,
+            [Out] StringBuilder outStatusMsg,
+            int maxMsgLen
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_QC_Diag_SendSPC(
+            [MarshalAs(UnmanagedType.LPStr)] string portName,
+            [MarshalAs(UnmanagedType.LPStr)] string spcCode,
+            [MarshalAs(UnmanagedType.I1)] out bool outUnlocked
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_QC_Diag_ReadIMEI(
+            [MarshalAs(UnmanagedType.LPStr)] string portName,
+            [Out] StringBuilder outImei1,
+            int maxLen1,
+            [Out] StringBuilder outImei2,
+            int maxLen2
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_QC_Diag_WriteIMEI(
+            [MarshalAs(UnmanagedType.LPStr)] string portName,
+            [MarshalAs(UnmanagedType.LPStr)] string imei1,
+            [MarshalAs(UnmanagedType.LPStr)] string imei2
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_QC_Diag_RestoreQCN(
+            [MarshalAs(UnmanagedType.LPStr)] string portName,
+            [MarshalAs(UnmanagedType.LPStr)] string qcnPath,
+            [MarshalAs(UnmanagedType.LPStr)] string customImei1,
+            [MarshalAs(UnmanagedType.LPStr)] string customImei2,
+            BSLabProgressCallback progressCb
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_QC_Diag_BackupQCN(
+            [MarshalAs(UnmanagedType.LPStr)] string portName,
+            [MarshalAs(UnmanagedType.LPStr)] string outQcnPath,
+            BSLabProgressCallback progressCb
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_QC_Diag_Reboot(
+            [MarshalAs(UnmanagedType.LPStr)] string portName
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void BSLab_QC_Diag_Abort();
     }
 }

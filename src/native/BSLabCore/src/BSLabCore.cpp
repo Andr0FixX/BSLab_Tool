@@ -18,6 +18,7 @@
 #include "HuaweiPcuiEngine.h"
 #include "HuaweiFastboot.h"
 #include "PartitionDoctorEngine.h"
+#include "QcDiagQcnEngine.h"
 #include <memory>
 #include <string>
 #include <vector>
@@ -40,6 +41,7 @@ static std::unique_ptr<BSLab::UnisocEngine> g_unisoc_engine = nullptr;
 static std::unique_ptr<BSLab::KirinRescueEngine> g_kirin_engine = nullptr;
 static std::unique_ptr<BSLab::HuaweiPcuiEngine> g_huawei_pcui = nullptr;
 static std::unique_ptr<BSLab::HuaweiFastboot> g_huawei_fastboot = nullptr;
+static std::unique_ptr<BSLab::QcDiagQcnEngine> g_qc_diag = nullptr;
 static std::vector<BSLab::GptPartition> g_cached_gpt_partitions;
 static uint16_t g_last_hw_code = 0x6768;
 
@@ -1373,4 +1375,232 @@ BSLAB_API bool BSLab_PartitionDoctor_SurgicalFlashFastboot(
     }
 
     return ok;
+}
+
+// ============================================================================
+// PHASE 7: QUALCOMM DIAGNOSTIC PROTOCOL & QCN BASEBAND ENGINE
+// ============================================================================
+
+BSLAB_API bool BSLab_QC_Diag_ValidateImei(
+    const char* imei,
+    char* out_full_imei,
+    int max_imei_len,
+    char* out_error,
+    int max_err_len
+) {
+    if (!imei) return false;
+    std::string full, err;
+    bool ok = BSLab::QcDiagQcnEngine::ValidateImei(imei, full, err);
+    if (out_full_imei && max_imei_len > 0) {
+        strncpy(out_full_imei, full.c_str(), max_imei_len - 1);
+        out_full_imei[max_imei_len - 1] = '\0';
+    }
+    if (out_error && max_err_len > 0) {
+        strncpy(out_error, err.c_str(), max_err_len - 1);
+        out_error[max_err_len - 1] = '\0';
+    }
+    return ok;
+}
+
+BSLAB_API bool BSLab_QC_Diag_EncodeImeiBcd(
+    const char* imei15,
+    uint8_t* out_bcd9,
+    int max_bcd_len
+) {
+    if (!imei15 || !out_bcd9 || max_bcd_len < 9) return false;
+    std::vector<uint8_t> bcd;
+    if (!BSLab::QcDiagQcnEngine::EncodeImeiQcBcd(imei15, bcd)) return false;
+    std::memcpy(out_bcd9, bcd.data(), 9);
+    return true;
+}
+
+BSLAB_API bool BSLab_QC_Diag_DecodeImeiBcd(
+    const uint8_t* bcd9,
+    int bcd_len,
+    char* out_imei15,
+    int max_imei_len
+) {
+    if (!bcd9 || bcd_len < 9 || !out_imei15 || max_imei_len < 16) return false;
+    std::string imei;
+    if (!BSLab::QcDiagQcnEngine::DecodeImeiQcBcd(bcd9, bcd_len, imei)) return false;
+    strncpy(out_imei15, imei.c_str(), max_imei_len - 1);
+    out_imei15[max_imei_len - 1] = '\0';
+    return true;
+}
+
+BSLAB_API bool BSLab_QC_Diag_InspectQcn(
+    const char* qcn_path,
+    char* out_json_buffer,
+    int max_json_len,
+    int* out_record_count
+) {
+    if (out_record_count) *out_record_count = 0;
+    if (!qcn_path || !out_json_buffer || max_json_len <= 0) return false;
+    std::vector<BSLab::QcnNvRecord> records;
+    std::string err;
+    if (!BSLab::QcDiagQcnEngine::ParseQcnFile(qcn_path, records, err)) {
+        std::string errJson = "{\"status\": \"ERROR\", \"message\": \"" + err + "\"}";
+        strncpy(out_json_buffer, errJson.c_str(), max_json_len - 1);
+        out_json_buffer[max_json_len - 1] = '\0';
+        return false;
+    }
+    if (out_record_count) *out_record_count = static_cast<int>(records.size());
+
+    std::ostringstream ss;
+    ss << "{\"status\": \"OK\", \"total_nv_records\": " << records.size() << ", \"items\": [";
+    for (size_t i = 0; i < records.size(); ++i) {
+        if (i > 0) ss << ", ";
+        ss << "{\"id\": " << records[i].itemId << ", \"size\": " << records[i].data.size() << "}";
+        if (i >= 50) {
+            ss << ", {\"id\": \"...\", \"remaining\": " << (records.size() - 51) << "}";
+            break;
+        }
+    }
+    ss << "]}";
+    std::string jsonStr = ss.str();
+    strncpy(out_json_buffer, jsonStr.c_str(), max_json_len - 1);
+    out_json_buffer[max_json_len - 1] = '\0';
+    return true;
+}
+
+BSLAB_API bool BSLab_QC_Diag_PatchQcnFile(
+    const char* in_qcn_path,
+    const char* out_qcn_path,
+    const char* imei1,
+    const char* imei2,
+    int* out_patched_count,
+    char* out_status_msg,
+    int max_msg_len
+) {
+    if (!in_qcn_path || !out_qcn_path) return false;
+    int patched = 0;
+    std::string msg;
+    bool ok = BSLab::QcDiagQcnEngine::PatchQcnFile(
+        in_qcn_path, out_qcn_path,
+        imei1 ? imei1 : "",
+        imei2 ? imei2 : "",
+        patched, msg
+    );
+    if (out_patched_count) *out_patched_count = patched;
+    if (out_status_msg && max_msg_len > 0) {
+        strncpy(out_status_msg, msg.c_str(), max_msg_len - 1);
+        out_status_msg[max_msg_len - 1] = '\0';
+    }
+    return ok;
+}
+
+BSLAB_API bool BSLab_QC_Diag_SendSPC(
+    const char* port_name,
+    const char* spc_code,
+    bool* out_unlocked
+) {
+    if (!port_name) return false;
+    if (!g_qc_diag) g_qc_diag = std::make_unique<BSLab::QcDiagQcnEngine>();
+    if (!g_qc_diag->IsConnected()) {
+        if (!g_qc_diag->Connect(port_name)) return false;
+    }
+    return g_qc_diag->SendSPC(spc_code ? spc_code : "000000", out_unlocked);
+}
+
+BSLAB_API bool BSLab_QC_Diag_ReadIMEI(
+    const char* port_name,
+    char* out_imei1,
+    int max_len1,
+    char* out_imei2,
+    int max_len2
+) {
+    if (!port_name) return false;
+    if (!g_qc_diag) g_qc_diag = std::make_unique<BSLab::QcDiagQcnEngine>();
+    if (!g_qc_diag->IsConnected()) {
+        if (!g_qc_diag->Connect(port_name)) return false;
+    }
+    std::string imei1, imei2;
+    bool ok = g_qc_diag->ReadImei(imei1, imei2);
+    if (out_imei1 && max_len1 > 0) {
+        strncpy(out_imei1, imei1.c_str(), max_len1 - 1);
+        out_imei1[max_len1 - 1] = '\0';
+    }
+    if (out_imei2 && max_len2 > 0) {
+        strncpy(out_imei2, imei2.c_str(), max_len2 - 1);
+        out_imei2[max_len2 - 1] = '\0';
+    }
+    return ok;
+}
+
+BSLAB_API bool BSLab_QC_Diag_WriteIMEI(
+    const char* port_name,
+    const char* imei1,
+    const char* imei2
+) {
+    if (!port_name || !imei1) return false;
+    if (!g_qc_diag) g_qc_diag = std::make_unique<BSLab::QcDiagQcnEngine>();
+    if (!g_qc_diag->IsConnected()) {
+        if (!g_qc_diag->Connect(port_name)) return false;
+    }
+    return g_qc_diag->WriteImei(imei1, imei2 ? imei2 : "");
+}
+
+BSLAB_API bool BSLab_QC_Diag_RestoreQCN(
+    const char* port_name,
+    const char* qcn_path,
+    const char* custom_imei1,
+    const char* custom_imei2,
+    BSLab_ProgressCallback progress_cb
+) {
+    if (!port_name || !qcn_path) return false;
+    if (!g_qc_diag) g_qc_diag = std::make_unique<BSLab::QcDiagQcnEngine>();
+    if (!g_qc_diag->IsConnected()) {
+        if (!g_qc_diag->Connect(port_name)) return false;
+    }
+    return g_qc_diag->RestoreQcn(
+        qcn_path,
+        custom_imei1 ? custom_imei1 : "",
+        custom_imei2 ? custom_imei2 : "",
+        [progress_cb](float pct, const std::string& status) {
+            if (progress_cb) {
+                int p = static_cast<int>(pct * 100.0f);
+                progress_cb(p, p, "QCN", status.c_str());
+            }
+        }
+    );
+}
+
+BSLAB_API bool BSLab_QC_Diag_BackupQCN(
+    const char* port_name,
+    const char* out_qcn_path,
+    BSLab_ProgressCallback progress_cb
+) {
+    if (!port_name || !out_qcn_path) return false;
+    if (!g_qc_diag) g_qc_diag = std::make_unique<BSLab::QcDiagQcnEngine>();
+    if (!g_qc_diag->IsConnected()) {
+        if (!g_qc_diag->Connect(port_name)) return false;
+    }
+    std::vector<uint16_t> emptyList;
+    return g_qc_diag->BackupQcn(
+        out_qcn_path,
+        emptyList,
+        [progress_cb](float pct, const std::string& status) {
+            if (progress_cb) {
+                int p = static_cast<int>(pct * 100.0f);
+                progress_cb(p, p, "QCN", status.c_str());
+            }
+        }
+    );
+}
+
+BSLAB_API bool BSLab_QC_Diag_Reboot(
+    const char* port_name
+) {
+    if (!port_name) return false;
+    if (!g_qc_diag) g_qc_diag = std::make_unique<BSLab::QcDiagQcnEngine>();
+    if (!g_qc_diag->IsConnected()) {
+        if (!g_qc_diag->Connect(port_name)) return false;
+    }
+    return g_qc_diag->RebootPhone();
+}
+
+BSLAB_API void BSLab_QC_Diag_Abort() {
+    if (g_qc_diag) {
+        g_qc_diag->Abort();
+    }
 }
