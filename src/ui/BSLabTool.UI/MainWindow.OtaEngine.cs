@@ -12,7 +12,7 @@ namespace BSLabTool.UI
     public partial class MainWindow : Window
     {
         private string _lastAppliedOtaHash = "";
-        private string _currentOtaVersion = "2.5.0";
+        private string _currentOtaVersion = "2.5.5";
         private const string GITHUB_REPO = "Andr0FixX/BSLab_Tool";
         private const string GITHUB_RAW_MANIFEST = "https://raw.githubusercontent.com/Andr0FixX/BSLab_Tool/main/resources/ota/update_manifest.json";
         private const string GITHUB_RAW_DB = "https://raw.githubusercontent.com/Andr0FixX/BSLab_Tool/main/resources/database/brands_models.json";

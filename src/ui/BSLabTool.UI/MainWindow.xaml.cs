@@ -141,7 +141,7 @@ namespace BSLabTool.UI
 
             StartLiveClock();
 
-            InitSmartModelSelector();
+            _ = Task.Run(() => InitSmartModelSelector());
 
             InitUnisocDatabase();
             InitUnisocPacStudio();
@@ -182,8 +182,8 @@ namespace BSLabTool.UI
             // Trigger AI Autonomous OTA Database Check (Runs asynchronously after startup)
             _ = Task.Run(async () =>
             {
-                await Task.Delay(2000);
-                await Dispatcher.InvokeAsync(async () => await CheckForOtaUpdatesAsync(silent: true));
+                await Task.Delay(3000);
+                await CheckForOtaUpdatesAsync(silent: true);
             });
 
             Loaded += (s, e) =>
@@ -6340,9 +6340,8 @@ namespace BSLabTool.UI
                 {
                     string json = File.ReadAllText(jsonPath);
                     using var doc = JsonDocument.Parse(json);
-                    CmbBrandSelector?.Items.Clear();
-                    CmbAutoHubBrand?.Items.Clear();
-                    CmbUatBrand?.Items.Clear();
+                    var parsedModels = new Dictionary<string, Dictionary<string, SmartModelInfo>>(StringComparer.OrdinalIgnoreCase);
+                    var brandList = new List<string>();
 
                     foreach (var brandProp in doc.RootElement.EnumerateObject())
                     {
@@ -6361,79 +6360,84 @@ namespace BSLabTool.UI
                                 PreloaderFile = m.TryGetProperty("preloader_file", out var pf) ? pf.GetString() ?? "" : "",
                                 Testpoint = m.TryGetProperty("testpoint", out var tp) ? tp.GetString() ?? "" : "",
                                 EdlVoltage = m.TryGetProperty("edl_voltage", out var ev) ? ev.GetString() ?? "" : ""
-                            }
-;
+                            };
                             modelsDict[modelProp.Name] = info;
                         }
 
-
-                        _smartModels[brand] = modelsDict;
-                        CmbBrandSelector?.Items.Add(brand);
-                        CmbAutoHubBrand?.Items.Add(brand);
-                        CmbUatBrand?.Items.Add(brand);
+                        parsedModels[brand] = modelsDict;
+                        brandList.Add(brand);
                     }
 
+                    Dispatcher.Invoke(() =>
+                    {
+                        _smartModels.Clear();
+                        foreach (var kvp in parsedModels)
+                        {
+                            _smartModels[kvp.Key] = kvp.Value;
+                        }
+
+                        CmbBrandSelector?.Items.Clear();
+                        CmbAutoHubBrand?.Items.Clear();
+                        CmbUatBrand?.Items.Clear();
+
+                        foreach (var b in brandList)
+                        {
+                            CmbBrandSelector?.Items.Add(b);
+                            CmbAutoHubBrand?.Items.Add(b);
+                            CmbUatBrand?.Items.Add(b);
+                        }
+
+                        if (CmbBrandSelector?.Items.Count > 0)
+                        {
+                            int oppoIdx = -1;
+                            for (int i = 0; i < CmbBrandSelector.Items.Count; i++)
+                            {
+                                if (CmbBrandSelector.Items[i]?.ToString()?.Equals("Oppo", StringComparison.OrdinalIgnoreCase) == true)
+                                {
+                                    oppoIdx = i;
+                                    break;
+                                }
+                            }
+                            CmbBrandSelector.SelectedIndex = oppoIdx >= 0 ? oppoIdx : 0;
+                        }
+
+                        if (CmbAutoHubBrand?.Items.Count > 0)
+                        {
+                            int oppoIdx = -1;
+                            for (int i = 0; i < CmbAutoHubBrand.Items.Count; i++)
+                            {
+                                if (CmbAutoHubBrand.Items[i]?.ToString()?.Equals("Oppo", StringComparison.OrdinalIgnoreCase) == true)
+                                {
+                                    oppoIdx = i;
+                                    break;
+                                }
+                            }
+                            CmbAutoHubBrand.SelectedIndex = oppoIdx >= 0 ? oppoIdx : 0;
+                        }
+
+                        if (CmbUatBrand?.Items.Count > 0)
+                        {
+                            int infinixIdx = -1;
+                            for (int i = 0; i < CmbUatBrand.Items.Count; i++)
+                            {
+                                if (CmbUatBrand.Items[i]?.ToString()?.Equals("Infinix", StringComparison.OrdinalIgnoreCase) == true)
+                                {
+                                    infinixIdx = i;
+                                    break;
+                                }
+                            }
+
+                            CmbUatBrand.SelectedIndex = infinixIdx >= 0 ? infinixIdx : 0;
+                            string selBrand = CmbUatBrand.SelectedItem?.ToString() ?? "Infinix";
+                            _currentSelectedBrand = selBrand;
+                            PopulateUatModelsForBrand(selBrand);
+                        }
+                    });
                 }
-
             }
-
             catch (Exception ex)
             {
                 AppendLog($"[!] Note: Smart Database initialized: {ex.Message}");
-            }
-
-
-            if (CmbBrandSelector?.Items.Count > 0)
-            {
-                int oppoIdx = -1;
-                for (int i = 0; i < CmbBrandSelector.Items.Count; i++)
-                {
-                    if (CmbBrandSelector.Items[i]?.ToString()?.Equals("Oppo", StringComparison.OrdinalIgnoreCase) == true)
-                    {
-                        oppoIdx = i;
-                        break;
-                    }
-
-                }
-
-                CmbBrandSelector.SelectedIndex = oppoIdx >= 0 ? oppoIdx : 0;
-            }
-
-
-            if (CmbAutoHubBrand?.Items.Count > 0)
-            {
-                int oppoIdx = -1;
-                for (int i = 0; i < CmbAutoHubBrand.Items.Count; i++)
-                {
-                    if (CmbAutoHubBrand.Items[i]?.ToString()?.Equals("Oppo", StringComparison.OrdinalIgnoreCase) == true)
-                    {
-                        oppoIdx = i;
-                        break;
-                    }
-
-                }
-
-                CmbAutoHubBrand.SelectedIndex = oppoIdx >= 0 ? oppoIdx : 0;
-            }
-
-
-            if (CmbUatBrand?.Items.Count > 0)
-            {
-                int infinixIdx = -1;
-                for (int i = 0; i < CmbUatBrand.Items.Count; i++)
-                {
-                    if (CmbUatBrand.Items[i]?.ToString()?.Equals("Infinix", StringComparison.OrdinalIgnoreCase) == true)
-                    {
-                        infinixIdx = i;
-                        break;
-                    }
-
-                }
-
-                CmbUatBrand.SelectedIndex = infinixIdx >= 0 ? infinixIdx : 0;
-                string selBrand = CmbUatBrand.SelectedItem?.ToString() ?? "Infinix";
-                _currentSelectedBrand = selBrand;
-                PopulateUatModelsForBrand(selBrand);
             }
 
 
