@@ -652,13 +652,22 @@ namespace BSLabTool.UI
             _currentSelectedModel = activeModel;
 
             // Update Loader File Path immediately
+            string resolvedLoader = ResolveAppropriateLoaderPath(_currentSelectedBrand, _currentSelectedModel);
             if (TxtUatLoaderPath != null)
             {
-                TxtUatLoaderPath.Text = ResolveAppropriateLoaderPath(_currentSelectedBrand, _currentSelectedModel);
+                TxtUatLoaderPath.Text = resolvedLoader;
             }
+
+            // Resolve smart preloader if MTK
+            string resolvedPreloader = ResolveMtkPreloaderPath(_currentSelectedBrand, _currentSelectedModel);
 
             UpdateUatLiveDeviceCard(_currentSelectedBrand, $"{activeModel} (Ready)", GetBrandColorHex(_currentSelectedBrand), isConnected: false);
             AppendAutoHubLog($"[*] 🎯 Brand Card Engaged: {_currentSelectedBrand} -> {_currentSelectedModel} [Pipeline Latched]");
+            AppendAutoHubLog($"[+] 📦 Assigned Loader / DA : {Path.GetFileName(resolvedLoader)}");
+            if (!string.IsNullOrEmpty(resolvedPreloader))
+            {
+                AppendAutoHubLog($"[+] 🧬 Assigned Preloader   : {Path.GetFileName(resolvedPreloader)}");
+            }
 
             // Latch SoC architecture
             AutoLatchSocForBrand(bTag);

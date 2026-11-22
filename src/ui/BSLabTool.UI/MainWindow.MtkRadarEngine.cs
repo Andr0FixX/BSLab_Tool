@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
@@ -14,13 +16,15 @@ namespace BSLabTool.UI
         private string _lastLatchedPort = "";
         private bool _isLatchInProgress = false;
 
-        /// <summary>
-        /// Intelligent MediaTek DA Loader Resolver
+        private static readonly object _preloaderCacheLock = new object();
+        private static List<string>? _cachedPreloaderFiles = null;
+
         /// <summary>
         /// Intelligent MediaTek DA Loader & Protocol Selection Resolver:
         /// - Helio G25/G35/G85/G88/G96/G99 and Dimensity 700/810/900/1200: Always Protocol - New (V6) -> MTK_DA_V6.bin.
         /// - Legacy MT6580 / MT6735 / MT6737 / MT6753 / QMobile / Hot 4: Protocol - Old (V5) -> MTK_DA_V5.bin.
-        /// - Infinix, Tecno, Oppo, Realme, Xiaomi: Auto-assigns certified Brand DA container with 100% Zero-Brick Safety.
+        /// - Specialized custom DAs: oppo_realme.mt6768_android15, Redmi_14c.13.13c.15c_android15.
+        /// - Brand DAs: Vivo, Xiaomi, Oppo, Realme, Infinix/Tecno, Samsung, Motorola, Huawei.
         /// </summary>
         public string ResolveMtkDaPath(string brand = "", string model = "", ushort hwCode = 0)
         {
@@ -31,14 +35,8 @@ namespace BSLabTool.UI
             string v5Path = Path.Combine(baseDir, "resources", "loaders", "mtk", "MTK_DA_V5.bin");
             if (!File.Exists(v5Path)) v5Path = @"C:\BSLab_Tool\resources\loaders\mtk\MTK_DA_V5.bin";
 
-            string transsionDa = Path.Combine(baseDir, "resources", "loaders", "mtk", "brand_da", "INFINIX_TECNO.da");
-            if (!File.Exists(transsionDa)) transsionDa = @"C:\BSLab_Tool\resources\loaders\mtk\brand_da\INFINIX_TECNO.da";
-
-            string oppoDa = Path.Combine(baseDir, "resources", "loaders", "mtk", "brand_da", "OPPO.da");
-            if (!File.Exists(oppoDa)) oppoDa = @"C:\BSLab_Tool\resources\loaders\mtk\brand_da\OPPO.da";
-
-            string xiaomiDa = Path.Combine(baseDir, "resources", "loaders", "mtk", "brand_da", "XIAOMI.da");
-            if (!File.Exists(xiaomiDa)) xiaomiDa = @"C:\BSLab_Tool\resources\loaders\mtk\brand_da\XIAOMI.da";
+            string brandDaDir = Path.Combine(baseDir, "resources", "loaders", "mtk", "brand_da");
+            if (!Directory.Exists(brandDaDir)) brandDaDir = @"C:\BSLab_Tool\resources\loaders\mtk\brand_da";
 
             string bUpper = (brand ?? "").ToUpperInvariant();
             string mUpper = (model ?? "").ToUpperInvariant();
@@ -64,35 +62,297 @@ namespace BSLabTool.UI
                 if (File.Exists(v5Path)) return v5Path;
             }
 
-            // 3. Brand DA Containers with 100% Zero-Brick Safety
-            if (bUpper.Contains("INFINIX") || bUpper.Contains("TECNO") || bUpper.Contains("ITEL"))
+            // 3. Specialized Custom DA Containers (Helio G85/G88 MT6768 / Redmi 13C/14C)
+            if ((bUpper.Contains("OPPO") || bUpper.Contains("REALME")) && (mUpper.Contains("6768") || mUpper.Contains("G85") || mUpper.Contains("G88")))
             {
-                ApplyProtocolSelection(true);
-                if (File.Exists(transsionDa)) return transsionDa;
+                string oppoMt6768Da = Path.Combine(baseDir, "resources", "loaders", "mtk", "oppo_realme.mt6768_android15(01.08.2025).bin");
+                if (!File.Exists(oppoMt6768Da)) oppoMt6768Da = @"C:\BSLab_Tool\resources\loaders\mtk\oppo_realme.mt6768_android15(01.08.2025).bin";
+                if (File.Exists(oppoMt6768Da))
+                {
+                    ApplyProtocolSelection(true);
+                    return oppoMt6768Da;
+                }
             }
 
-            if (bUpper.Contains("OPPO") || bUpper.Contains("REALME") || bUpper.Contains("ONEPLUS"))
+            if ((bUpper.Contains("XIAOMI") || bUpper.Contains("REDMI") || bUpper.Contains("POCO")) &&
+                (mUpper.Contains("13C") || mUpper.Contains("14C") || mUpper.Contains("15C") || mUpper.Contains("6768")))
             {
-                ApplyProtocolSelection(true);
+                string redmiDa = Path.Combine(baseDir, "resources", "loaders", "mtk", "Redmi_14c.13.13c.15c_android15.da(01.08.2025_.bin");
+                if (!File.Exists(redmiDa)) redmiDa = @"C:\BSLab_Tool\resources\loaders\mtk\Redmi_14c.13.13c.15c_android15.da(01.08.2025_.bin";
+                if (File.Exists(redmiDa))
+                {
+                    ApplyProtocolSelection(true);
+                    return redmiDa;
+                }
+            }
+
+            // 4. Certified Brand DA Containers
+            if (bUpper.Contains("INFINIX") || bUpper.Contains("TECNO") || bUpper.Contains("ITEL") || bUpper.Contains("TRANSSION"))
+            {
+                string transDa = Path.Combine(brandDaDir, "INFINIX_TECNO.da");
+                if (File.Exists(transDa)) { ApplyProtocolSelection(true); return transDa; }
+            }
+
+            if (bUpper.Contains("VIVO") || bUpper.Contains("IQOO"))
+            {
+                string vivoDa = Path.Combine(brandDaDir, "VIVO.da");
+                if (File.Exists(vivoDa)) { ApplyProtocolSelection(true); return vivoDa; }
+            }
+
+            if (bUpper.Contains("REALME"))
+            {
+                string realmeDa = Path.Combine(brandDaDir, "REALME.da");
+                if (File.Exists(realmeDa)) { ApplyProtocolSelection(true); return realmeDa; }
+            }
+
+            if (bUpper.Contains("OPPO") || bUpper.Contains("ONEPLUS"))
+            {
                 if (mUpper.Contains("A53S") || mUpper.Contains("CPH2321") || mUpper.Contains("6833") || mUpper.Contains("DIMENSITY"))
                 {
-                    if (File.Exists(v6Path)) return v6Path;
+                    if (File.Exists(v6Path)) { ApplyProtocolSelection(true); return v6Path; }
                 }
-                if (File.Exists(oppoDa)) return oppoDa;
+                string oppoDa = Path.Combine(brandDaDir, "OPPO.da");
+                if (File.Exists(oppoDa)) { ApplyProtocolSelection(true); return oppoDa; }
             }
 
             if (bUpper.Contains("XIAOMI") || bUpper.Contains("REDMI") || bUpper.Contains("POCO"))
             {
-                ApplyProtocolSelection(true);
-                if (File.Exists(xiaomiDa)) return xiaomiDa;
+                string xiaomiDa = Path.Combine(brandDaDir, "XIAOMI.da");
+                if (File.Exists(xiaomiDa)) { ApplyProtocolSelection(true); return xiaomiDa; }
             }
 
-            // 4. Default to Protocol V6 (ARM64 Modern)
+            if (bUpper.Contains("SAMSUNG"))
+            {
+                string samsungDa = Path.Combine(brandDaDir, "samsung.da");
+                if (File.Exists(samsungDa)) { ApplyProtocolSelection(true); return samsungDa; }
+            }
+
+            if (bUpper.Contains("MOTOROLA"))
+            {
+                string motoDa = Path.Combine(brandDaDir, "MOTOROLA.da");
+                if (File.Exists(motoDa)) { ApplyProtocolSelection(true); return motoDa; }
+            }
+
+            if (bUpper.Contains("HUAWEI") || bUpper.Contains("HONOR"))
+            {
+                string huaweiDa = Path.Combine(brandDaDir, "HUAWEI_HONOR.da");
+                if (File.Exists(huaweiDa)) { ApplyProtocolSelection(true); return huaweiDa; }
+            }
+
+            // 5. Default to Protocol V6 (ARM64 Modern)
             ApplyProtocolSelection(true);
             if (File.Exists(v6Path)) return v6Path;
             if (File.Exists(v5Path)) return v5Path;
 
             return @"resources\loaders\mtk\MTK_DA_V6.bin";
+        }
+
+        /// <summary>
+        /// Smart Preloader Resolver for 853 MTK Binary Files
+        /// Dynamically locates the exact preloader binary based on brand, model code, and hardware platform.
+        /// </summary>
+        public string ResolveMtkPreloaderPath(string brand = "", string model = "")
+        {
+            try
+            {
+                string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+                string preloaderDir = Path.Combine(baseDir, "resources", "loaders", "mtk", "preloader");
+                if (!Directory.Exists(preloaderDir))
+                {
+                    preloaderDir = @"C:\BSLab_Tool\resources\loaders\mtk\preloader";
+                }
+
+                if (!Directory.Exists(preloaderDir)) return "";
+
+                lock (_preloaderCacheLock)
+                {
+                    if (_cachedPreloaderFiles == null)
+                    {
+                        _cachedPreloaderFiles = Directory.GetFiles(preloaderDir, "*.bin", SearchOption.TopDirectoryOnly).ToList();
+                    }
+                }
+
+                if (_cachedPreloaderFiles == null || _cachedPreloaderFiles.Count == 0) return "";
+
+                string bUpper = (brand ?? "").ToUpperInvariant().Trim();
+                string mUpper = (model ?? "").ToUpperInvariant().Trim();
+
+                // 1. Sanitize model name for search tokens
+                var tokens = Regex.Matches(mUpper, @"[A-Z0-9]+")
+                                  .Cast<Match>()
+                                  .Select(m => m.Value)
+                                  .Where(t => t.Length >= 2 && !t.Equals("5G") && !t.Equals("4G") && !t.Equals("PRO") && !t.Equals("PLUS"))
+                                  .ToList();
+
+                // 2. Xiaomi / Redmi / POCO specific codenames & models
+                if (bUpper.Contains("XIAOMI") || bUpper.Contains("REDMI") || bUpper.Contains("POCO"))
+                {
+                    if (mUpper.Contains("6A") || mUpper.Contains("CACTUS"))
+                    {
+                        var match = _cachedPreloaderFiles.FirstOrDefault(f => Path.GetFileName(f).Contains("cactus", StringComparison.OrdinalIgnoreCase));
+                        if (match != null) return match;
+                    }
+                    if (mUpper.Contains("6") || mUpper.Contains("CEREUS"))
+                    {
+                        var match = _cachedPreloaderFiles.FirstOrDefault(f => Path.GetFileName(f).Contains("cereus", StringComparison.OrdinalIgnoreCase));
+                        if (match != null) return match;
+                    }
+                    if (mUpper.Contains("NOTE 8 PRO") || mUpper.Contains("BEGONIA"))
+                    {
+                        var match = _cachedPreloaderFiles.FirstOrDefault(f => Path.GetFileName(f).Contains("begonia", StringComparison.OrdinalIgnoreCase));
+                        if (match != null) return match;
+                    }
+                    if (mUpper.Contains("NOTE 10S") || mUpper.Contains("ROSEMARY") || mUpper.Contains("MALTESE"))
+                    {
+                        var match = _cachedPreloaderFiles.FirstOrDefault(f => Path.GetFileName(f).Contains("Note_10s", StringComparison.OrdinalIgnoreCase));
+                        if (match != null) return match;
+                    }
+                }
+
+                // 3. Samsung MTK Models
+                if (bUpper.Contains("SAMSUNG") && (mUpper.Contains("A32") || mUpper.Contains("A325")))
+                {
+                    var match = _cachedPreloaderFiles.FirstOrDefault(f => Path.GetFileName(f).Contains("Samsung_A32", StringComparison.OrdinalIgnoreCase));
+                    if (match != null) return match;
+                }
+
+                // 4. Infinix Model Code Matching (e.g. X682 -> Hot 10, X680 -> Hot 9, X657 -> Smart 5, X688 -> Hot 10 Play, X687 -> Note 8, X690 -> Zero 8)
+                if (bUpper.Contains("INFINIX"))
+                {
+                    foreach (var tok in tokens.Where(t => t.StartsWith("X") && t.Length >= 4))
+                    {
+                        var match = _cachedPreloaderFiles.FirstOrDefault(f => Path.GetFileName(f).IndexOf(tok, StringComparison.OrdinalIgnoreCase) >= 0);
+                        if (match != null) return match;
+                    }
+                    if (mUpper.Contains("HOT 10 PLAY") || mUpper.Contains("HOT10 PLAY"))
+                    {
+                        var match = _cachedPreloaderFiles.FirstOrDefault(f => Path.GetFileName(f).Contains("x688", StringComparison.OrdinalIgnoreCase));
+                        if (match != null) return match;
+                    }
+                    else if (mUpper.Contains("HOT 10") || mUpper.Contains("HOT10"))
+                    {
+                        var match = _cachedPreloaderFiles.FirstOrDefault(f => Path.GetFileName(f).Contains("x682", StringComparison.OrdinalIgnoreCase));
+                        if (match != null) return match;
+                    }
+                    else if (mUpper.Contains("HOT 9") || mUpper.Contains("HOT9"))
+                    {
+                        var match = _cachedPreloaderFiles.FirstOrDefault(f => Path.GetFileName(f).Contains("x680", StringComparison.OrdinalIgnoreCase));
+                        if (match != null) return match;
+                    }
+                    else if (mUpper.Contains("SMART 5") || mUpper.Contains("SMART5"))
+                    {
+                        var match = _cachedPreloaderFiles.FirstOrDefault(f => Path.GetFileName(f).Contains("x657", StringComparison.OrdinalIgnoreCase));
+                        if (match != null) return match;
+                    }
+                    else if (mUpper.Contains("NOTE 8") || mUpper.Contains("NOTE8"))
+                    {
+                        var match = _cachedPreloaderFiles.FirstOrDefault(f => Path.GetFileName(f).Contains("x687", StringComparison.OrdinalIgnoreCase));
+                        if (match != null) return match;
+                    }
+                    else if (mUpper.Contains("ZERO 8") || mUpper.Contains("ZERO8"))
+                    {
+                        var match = _cachedPreloaderFiles.FirstOrDefault(f => Path.GetFileName(f).Contains("x690", StringComparison.OrdinalIgnoreCase));
+                        if (match != null) return match;
+                    }
+                }
+
+                // 5. Tecno Model Code Matching (Camon, Spark, Pop)
+                if (bUpper.Contains("TECNO"))
+                {
+                    if (mUpper.Contains("CAMON 16"))
+                    {
+                        var match = _cachedPreloaderFiles.FirstOrDefault(f => Path.GetFileName(f).Contains("camon_16", StringComparison.OrdinalIgnoreCase));
+                        if (match != null) return match;
+                    }
+                    if (mUpper.Contains("CAMON 15"))
+                    {
+                        var match = _cachedPreloaderFiles.FirstOrDefault(f => Path.GetFileName(f).Contains("camon15", StringComparison.OrdinalIgnoreCase) || Path.GetFileName(f).Contains("camon_15", StringComparison.OrdinalIgnoreCase));
+                        if (match != null) return match;
+                    }
+                    if (mUpper.Contains("CAMON 12"))
+                    {
+                        var match = _cachedPreloaderFiles.FirstOrDefault(f => Path.GetFileName(f).Contains("camon_12", StringComparison.OrdinalIgnoreCase));
+                        if (match != null) return match;
+                    }
+                    if (mUpper.Contains("SPARK 6"))
+                    {
+                        var match = _cachedPreloaderFiles.FirstOrDefault(f => Path.GetFileName(f).Contains("spark_6", StringComparison.OrdinalIgnoreCase));
+                        if (match != null) return match;
+                    }
+                    if (mUpper.Contains("SPARK 5"))
+                    {
+                        var match = _cachedPreloaderFiles.FirstOrDefault(f => Path.GetFileName(f).Contains("spark_5", StringComparison.OrdinalIgnoreCase) || Path.GetFileName(f).Contains("spark5", StringComparison.OrdinalIgnoreCase));
+                        if (match != null) return match;
+                    }
+                    if (mUpper.Contains("SPARK 4"))
+                    {
+                        var match = _cachedPreloaderFiles.FirstOrDefault(f => Path.GetFileName(f).Contains("spark_4", StringComparison.OrdinalIgnoreCase));
+                        if (match != null) return match;
+                    }
+                    if (mUpper.Contains("SPARK 3"))
+                    {
+                        var match = _cachedPreloaderFiles.FirstOrDefault(f => Path.GetFileName(f).Contains("spark_3", StringComparison.OrdinalIgnoreCase));
+                        if (match != null) return match;
+                    }
+                    if (mUpper.Contains("POP 3") || mUpper.Contains("POP3"))
+                    {
+                        var match = _cachedPreloaderFiles.FirstOrDefault(f => Path.GetFileName(f).Contains("pop_3", StringComparison.OrdinalIgnoreCase));
+                        if (match != null) return match;
+                    }
+                    if (mUpper.Contains("POP 2") || mUpper.Contains("POP2"))
+                    {
+                        var match = _cachedPreloaderFiles.FirstOrDefault(f => Path.GetFileName(f).Contains("pop_2", StringComparison.OrdinalIgnoreCase));
+                        if (match != null) return match;
+                    }
+                }
+
+                // 6. Vivo Model Code Matching
+                if (bUpper.Contains("VIVO"))
+                {
+                    if (mUpper.Contains("Y15") || mUpper.Contains("1901"))
+                    {
+                        var match = _cachedPreloaderFiles.FirstOrDefault(f => Path.GetFileName(f).Contains("vivo_y15", StringComparison.OrdinalIgnoreCase));
+                        if (match != null) return match;
+                    }
+                    if (mUpper.Contains("Y69"))
+                    {
+                        var match = _cachedPreloaderFiles.FirstOrDefault(f => Path.GetFileName(f).Contains("Y69", StringComparison.OrdinalIgnoreCase));
+                        if (match != null) return match;
+                    }
+                    if (mUpper.Contains("Y75"))
+                    {
+                        var match = _cachedPreloaderFiles.FirstOrDefault(f => Path.GetFileName(f).Contains("VY75", StringComparison.OrdinalIgnoreCase));
+                        if (match != null) return match;
+                    }
+                    if (mUpper.Contains("Y8"))
+                    {
+                        var match = _cachedPreloaderFiles.FirstOrDefault(f => Path.GetFileName(f).Contains("Y8X", StringComparison.OrdinalIgnoreCase));
+                        if (match != null) return match;
+                    }
+                }
+
+                // 7. Oppo / Realme Specific Models (A15s, A15, A7x, F11, A91, Reno Z, A3)
+                if (bUpper.Contains("OPPO") || bUpper.Contains("REALME"))
+                {
+                    foreach (var tok in tokens)
+                    {
+                        var match = _cachedPreloaderFiles.FirstOrDefault(f =>
+                            Path.GetFileName(f).Contains("oppo", StringComparison.OrdinalIgnoreCase) &&
+                            Path.GetFileName(f).IndexOf(tok, StringComparison.OrdinalIgnoreCase) >= 0);
+                        if (match != null) return match;
+                    }
+                }
+
+                // 8. General Token Matching across all 853 preloader files
+                foreach (var tok in tokens.Where(t => t.Length >= 3))
+                {
+                    var match = _cachedPreloaderFiles.FirstOrDefault(f => Path.GetFileName(f).IndexOf(tok, StringComparison.OrdinalIgnoreCase) >= 0);
+                    if (match != null) return match;
+                }
+            }
+            catch { }
+
+            return "";
         }
 
         public void ApplyProtocolSelection(bool isNewProtocol, bool userManualSwitch = false)
@@ -257,7 +517,8 @@ namespace BSLabTool.UI
 
             bool isMtk = bUpper.Contains("OPPO") || bUpper.Contains("REALME") ||
                          bUpper.Contains("INFINIX") || bUpper.Contains("TECNO") ||
-                         bUpper.Contains("ITEL") ||
+                         bUpper.Contains("ITEL") || bUpper.Contains("VIVO") ||
+                         bUpper.Contains("XIAOMI") || bUpper.Contains("REDMI") ||
                          mUpper.Contains("A56") || mUpper.Contains("CPH2321") ||
                          mUpper.Contains("MTK") || mUpper.Contains("DIMENSITY") || mUpper.Contains("HELIO") ||
                          (_lastHardwareRadarResult?.UsbMode?.Contains("MTK", StringComparison.OrdinalIgnoreCase) == true) ||

@@ -548,15 +548,15 @@ namespace BSLabTool.UI
             else if (modelList.Count == 0)
             {
                 if (bUpper.Contains("VIVO"))
-                    modelList.AddRange(new[] { "Y20 (V2029)", "Y21 (V2111)", "V23 5G (V2130)", "Y12s (V2026)", "Y15 (1901)", "Y33s (V2109)", "Y11 (1906)", "V20 (V2025)" });
+                    modelList.AddRange(new[] { "Y15 (1901)", "Y69 (1714)", "Y75 (1717)", "Y81 (1808)", "Y20 (V2029)", "Y21 (V2111)", "V23 5G (V2130)", "Y12s (V2026)", "Y33s (V2109)", "Y11 (1906)", "V20 (V2025)" });
                 else if (bUpper.Contains("XIAOMI"))
-                    modelList.AddRange(new[] { "Redmi Note 11 (spes)", "Redmi Note 10 (mojito)", "Redmi 9A (dandelion)", "Redmi 9C (angelica)", "POCO X3 Pro (vayu)", "Redmi 10 (selene)", "Redmi Note 8 (ginkgo)" });
+                    modelList.AddRange(new[] { "Redmi 6 (cereus)", "Redmi 6A (cactus)", "Redmi Note 8 Pro (begonia)", "Redmi Note 10s (rosemary)", "Redmi 13C / 14C (MT6768)", "Redmi Note 11 (spes)", "Redmi Note 10 (mojito)", "Redmi 9A (dandelion)", "Redmi 9C (angelica)", "POCO X3 Pro (vayu)", "Redmi 10 (selene)", "Redmi Note 8 (ginkgo)" });
                 else if (bUpper.Contains("SAMSUNG"))
-                    modelList.AddRange(new[] { "Galaxy A12 (SM-A125F)", "Galaxy A21s (SM-A217F)", "Galaxy A03s (SM-A037F)", "Galaxy A51 (SM-A515F)", "Galaxy A13 (SM-A135F)", "Galaxy A32 (SM-A325F)", "Galaxy S21 (SM-G991B)" });
+                    modelList.AddRange(new[] { "Galaxy A32 (SM-A325F)", "Galaxy A12 (SM-A125F)", "Galaxy A21s (SM-A217F)", "Galaxy A03s (SM-A037F)", "Galaxy A51 (SM-A515F)", "Galaxy A13 (SM-A135F)", "Galaxy S21 (SM-G991B)" });
                 else if (bUpper.Contains("TECNO"))
-                    modelList.AddRange(new[] { "Spark 7 (KF6)", "Spark 8 (KG6)", "Camon 17 (CG6)", "Pova 2 (LE7)", "Pop 5 (BD2)", "Spark 10 Pro (KI7)", "Camon 20 (CK6)" });
+                    modelList.AddRange(new[] { "Camon 16 (CE7)", "Camon 15 Pro (CD8)", "Camon 12 (CC7)", "Spark 6 (KE7)", "Spark 5 Pro (KD7)", "Spark 4 (BB4K)", "Spark 3 (KB7)", "Pop 3 (K80)", "Pop 2F (B1F)", "Spark 7 (KF6)", "Spark 8 (KG6)", "Camon 17 (CG6)", "Pova 2 (LE7)", "Pop 5 (BD2)", "Spark 10 Pro (KI7)", "Camon 20 (CK6)" });
                 else if (bUpper.Contains("INFINIX"))
-                    modelList.AddRange(new[] { "Hot 10 (X682)", "Hot 11 (X662)", "Note 10 (X693)", "Note 11 (X663)", "Smart 5 (X657)", "Hot 12 (X6817)", "Zero 5G (X6815)" });
+                    modelList.AddRange(new[] { "Hot 10 (X682)", "Hot 10 Play (X688)", "Hot 9 (X680)", "Smart 5 (X657)", "Smart 4 (X625)", "Note 8 (X687)", "Note 8i (X692)", "Zero 8 (X690)", "Hot 6 (X606)", "S5 (X627)", "Hot 11 (X662)", "Note 10 (X693)", "Note 11 (X663)", "Hot 12 (X6817)", "Zero 5G (X6815)" });
                 else if (bUpper.Contains("ONEPLUS"))
                     modelList.AddRange(new[] { "Nord CE (EB2103)", "9 Pro (LE2123)", "Nord 2 (DN2103)", "8T (KB2003)", "10 Pro (NE2213)" });
                 else if (bUpper.Contains("HUAWEI"))
@@ -637,9 +637,16 @@ namespace BSLabTool.UI
                 CmbUatModel.SelectedIndex = matchIdx >= 0 ? matchIdx : 0;
             }
 
+            string resolvedLoader = ResolveAppropriateLoaderPath(_currentSelectedBrand, _currentSelectedModel);
             if (TxtUatLoaderPath != null)
             {
-                TxtUatLoaderPath.Text = ResolveAppropriateLoaderPath(_currentSelectedBrand, _currentSelectedModel);
+                TxtUatLoaderPath.Text = resolvedLoader;
+            }
+
+            string resolvedPreloader = ResolveMtkPreloaderPath(_currentSelectedBrand, _currentSelectedModel);
+            if (!string.IsNullOrEmpty(resolvedPreloader))
+            {
+                AppendAutoHubLog($"[+] 🧬 MTK Preloader Mapped: {Path.GetFileName(resolvedPreloader)} ({_currentSelectedBrand} -> {_currentSelectedModel})");
             }
 
             if (_currentSelectedBrand.Equals("Samsung", StringComparison.OrdinalIgnoreCase))
@@ -657,9 +664,16 @@ namespace BSLabTool.UI
 
             _currentSelectedModel = model.Trim();
 
+            string resolvedLoader = ResolveAppropriateLoaderPath(_currentSelectedBrand, _currentSelectedModel);
             if (TxtUatLoaderPath != null)
             {
-                TxtUatLoaderPath.Text = ResolveAppropriateLoaderPath(_currentSelectedBrand, _currentSelectedModel);
+                TxtUatLoaderPath.Text = resolvedLoader;
+            }
+
+            string resolvedPreloader = ResolveMtkPreloaderPath(_currentSelectedBrand, _currentSelectedModel);
+            if (!string.IsNullOrEmpty(resolvedPreloader))
+            {
+                AppendAutoHubLog($"[+] 🧬 MTK Preloader Mapped: {Path.GetFileName(resolvedPreloader)} ({_currentSelectedBrand} -> {_currentSelectedModel})");
             }
 
             if (_currentSelectedBrand.Equals("Samsung", StringComparison.OrdinalIgnoreCase))
@@ -811,9 +825,15 @@ namespace BSLabTool.UI
                 _currentSelectedModel = activeModel;
 
                 // Update Loader File Path immediately
+                string resolvedLoader = ResolveAppropriateLoaderPath(_currentSelectedBrand, _currentSelectedModel);
                 if (TxtUatLoaderPath != null)
                 {
-                    TxtUatLoaderPath.Text = ResolveAppropriateLoaderPath(_currentSelectedBrand, _currentSelectedModel);
+                    TxtUatLoaderPath.Text = resolvedLoader;
+                }
+                string resolvedPreloader = ResolveMtkPreloaderPath(_currentSelectedBrand, _currentSelectedModel);
+                if (!string.IsNullOrEmpty(resolvedPreloader))
+                {
+                    AppendAutoHubLog($"[+] 🧬 Assigned Preloader: {Path.GetFileName(resolvedPreloader)}");
                 }
 
                 UpdateUatLiveDeviceCard(_currentSelectedBrand, $"{activeModel} (Ready)", GetBrandColorHex(_currentSelectedBrand), isConnected: false);
