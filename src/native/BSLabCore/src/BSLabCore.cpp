@@ -17,6 +17,7 @@
 #include "KirinRescueEngine.h"
 #include "HuaweiPcuiEngine.h"
 #include "HuaweiFastboot.h"
+#include "PartitionDoctorEngine.h"
 #include <memory>
 #include <string>
 #include <vector>
@@ -1245,4 +1246,131 @@ BSLAB_API void BSLab_Huawei_Abort(void) {
     if (g_kirin_engine) {
         g_kirin_engine->Abort();
     }
+}
+
+// ============================================================================
+// PARTITION DOCTOR & SURGICAL FLASHER EXPORTS
+// ============================================================================
+
+BSLAB_API bool BSLab_PartitionDoctor_IdentifyMagic(
+    const uint8_t* buffer,
+    int buffer_size,
+    char* out_magic_name,
+    int max_name_len
+) {
+    if (!buffer || buffer_size <= 0 || !out_magic_name || max_name_len <= 0) return false;
+    BSLab::MagicType type = BSLab::PartitionDoctorEngine::IdentifyMagic(buffer, static_cast<size_t>(buffer_size));
+    const char* str = BSLab::PartitionDoctorEngine::MagicTypeToString(type);
+    strncpy(out_magic_name, str, max_name_len - 1);
+    out_magic_name[max_name_len - 1] = '\0';
+    return true;
+}
+
+BSLAB_API bool BSLab_PartitionDoctor_IsProtected(
+    const char* partition_name
+) {
+    if (!partition_name) return false;
+    return BSLab::PartitionDoctorEngine::IsProtectedPartition(partition_name);
+}
+
+BSLAB_API bool BSLab_PartitionDoctor_InspectHeader(
+    const char* partition_name,
+    const uint8_t* header_buffer,
+    int buffer_size,
+    char* out_json_buffer,
+    int max_json_len
+) {
+    if (!partition_name || !header_buffer || buffer_size <= 0 || !out_json_buffer || max_json_len <= 0) return false;
+    auto res = BSLab::PartitionDoctorEngine::InspectPartition(partition_name, header_buffer, static_cast<size_t>(buffer_size));
+    std::string json = BSLab::PartitionDoctorEngine::InspectionResultToJson(res);
+    strncpy(out_json_buffer, json.c_str(), max_json_len - 1);
+    out_json_buffer[max_json_len - 1] = '\0';
+    return true;
+}
+
+BSLAB_API bool BSLab_PartitionDoctor_VerifyImageBeforeFlash(
+    const char* partition_name,
+    const char* image_path,
+    char* out_error_buffer,
+    int max_error_len
+) {
+    if (!partition_name || !image_path) return false;
+    std::string err;
+    bool ok = BSLab::PartitionDoctorEngine::VerifyImageBeforeFlash(partition_name, image_path, err);
+    if (!ok && out_error_buffer && max_error_len > 0) {
+        strncpy(out_error_buffer, err.c_str(), max_error_len - 1);
+        out_error_buffer[max_error_len - 1] = '\0';
+    }
+    return ok;
+}
+
+BSLAB_API bool BSLab_PartitionDoctor_AnalyzeFastbootGetvar(
+    const char* getvar_all_output,
+    char* out_json_buffer,
+    int max_json_len
+) {
+    if (!getvar_all_output || !out_json_buffer || max_json_len <= 0) return false;
+    auto report = BSLab::PartitionDoctorEngine::AnalyzeFastbootGetvar(getvar_all_output);
+    std::string json = BSLab::PartitionDoctorEngine::DiagnosticReportToJson(report);
+    strncpy(out_json_buffer, json.c_str(), max_json_len - 1);
+    out_json_buffer[max_json_len - 1] = '\0';
+    return true;
+}
+
+BSLAB_API bool BSLab_PartitionDoctor_ExtractSingleImage(
+    const char* source_path,
+    const char* target_partition,
+    const char* destination_dir,
+    char* out_image_path,
+    int max_path_len,
+    char* out_error_buffer,
+    int max_error_len
+) {
+    if (!source_path || !target_partition || !destination_dir) return false;
+    std::string img_path, err;
+    bool ok = BSLab::PartitionDoctorEngine::ExtractSingleImage(source_path, target_partition, destination_dir, img_path, err);
+    if (ok) {
+        if (out_image_path && max_path_len > 0) {
+            strncpy(out_image_path, img_path.c_str(), max_path_len - 1);
+            out_image_path[max_path_len - 1] = '\0';
+        }
+    } else {
+        if (out_error_buffer && max_error_len > 0) {
+            strncpy(out_error_buffer, err.c_str(), max_error_len - 1);
+            out_error_buffer[max_error_len - 1] = '\0';
+        }
+    }
+    return ok;
+}
+
+BSLAB_API bool BSLab_PartitionDoctor_SurgicalFlashFastboot(
+    const char* target_partition,
+    const char* image_path,
+    const char* serial,
+    char* out_log_buffer,
+    int max_log_len,
+    char* out_error_buffer,
+    int max_error_len
+) {
+    if (!target_partition || !image_path) return false;
+    std::string log_str, err_str;
+    bool ok = BSLab::PartitionDoctorEngine::SurgicalFlashFastboot(
+        target_partition,
+        image_path,
+        serial ? serial : "",
+        log_str,
+        err_str
+    );
+
+    if (out_log_buffer && max_log_len > 0) {
+        strncpy(out_log_buffer, log_str.c_str(), max_log_len - 1);
+        out_log_buffer[max_log_len - 1] = '\0';
+    }
+
+    if (!ok && out_error_buffer && max_error_len > 0) {
+        strncpy(out_error_buffer, err_str.c_str(), max_error_len - 1);
+        out_error_buffer[max_error_len - 1] = '\0';
+    }
+
+    return ok;
 }

@@ -503,5 +503,75 @@ namespace BSLabTool.UI.Native
 
         [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void BSLab_Huawei_Abort();
+
+        // ====================================================================
+        // PHASE 6: PARTITION DOCTOR & SURGICAL FLASHER (ZERO DATA LOSS ENGINE)
+        // ====================================================================
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_PartitionDoctor_IdentifyMagic(
+            byte[] buffer,
+            int bufferSize,
+            [Out] StringBuilder outMagicName,
+            int maxNameLen
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_PartitionDoctor_IsProtected(
+            [MarshalAs(UnmanagedType.LPStr)] string partitionName
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_PartitionDoctor_InspectHeader(
+            [MarshalAs(UnmanagedType.LPStr)] string partitionName,
+            byte[] headerBuffer,
+            int bufferSize,
+            [Out] StringBuilder outJsonBuffer,
+            int maxJsonLen
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_PartitionDoctor_VerifyImageBeforeFlash(
+            [MarshalAs(UnmanagedType.LPStr)] string partitionName,
+            [MarshalAs(UnmanagedType.LPStr)] string imagePath,
+            [Out] StringBuilder outErrorBuffer,
+            int maxErrorLen
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_PartitionDoctor_AnalyzeFastbootGetvar(
+            [MarshalAs(UnmanagedType.LPStr)] string getvarAllOutput,
+            [Out] StringBuilder outJsonBuffer,
+            int maxJsonLen
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_PartitionDoctor_ExtractSingleImage(
+            [MarshalAs(UnmanagedType.LPStr)] string sourcePath,
+            [MarshalAs(UnmanagedType.LPStr)] string targetPartition,
+            [MarshalAs(UnmanagedType.LPStr)] string destinationDir,
+            [Out] StringBuilder outImagePath,
+            int maxPathLen,
+            [Out] StringBuilder outErrorBuffer,
+            int maxErrorLen
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_PartitionDoctor_SurgicalFlashFastboot(
+            [MarshalAs(UnmanagedType.LPStr)] string targetPartition,
+            [MarshalAs(UnmanagedType.LPStr)] string imagePath,
+            [MarshalAs(UnmanagedType.LPStr)] string serial,
+            [Out] StringBuilder outLogBuffer,
+            int maxLogLen,
+            [Out] StringBuilder outErrorBuffer,
+            int maxErrorLen
+        );
     }
 }

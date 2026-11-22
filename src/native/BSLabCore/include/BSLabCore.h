@@ -536,6 +536,88 @@ BSLAB_API bool BSLab_Huawei_Fastboot_Reboot(
  */
 BSLAB_API void BSLab_Huawei_Abort(void);
 
+// ============================================================================
+// PARTITION DOCTOR & SURGICAL FLASHER (ZERO-DATA-LOSS FORENSIC ENGINE)
+// ============================================================================
+
+/**
+ * Identifies binary magic signature of raw partition/image chunk.
+ * Returns magic string in out_magic_name (e.g. "BOOT_IMG", "AVB_VBMETA", "DTBO", "DYNAMIC_SUPER", "ELF_BOOTLOADER", "SPARSE_IMAGE").
+ */
+BSLAB_API bool BSLab_PartitionDoctor_IdentifyMagic(
+    const uint8_t* buffer,
+    int buffer_size,
+    char* out_magic_name,
+    int max_name_len
+);
+
+/**
+ * Checks whether partition is protected against flashing/wiping (Userdata, NVRAM, EFS, FRP, Persist).
+ * Hard-locked against surgical unbricking to guarantee 100% Zero Data Loss.
+ */
+BSLAB_API bool BSLab_PartitionDoctor_IsProtected(
+    const char* partition_name
+);
+
+/**
+ * Forensically inspects partition header against name and expected signatures.
+ * Returns detailed health verdict and parameters in JSON format.
+ */
+BSLAB_API bool BSLab_PartitionDoctor_InspectHeader(
+    const char* partition_name,
+    const uint8_t* header_buffer,
+    int buffer_size,
+    char* out_json_buffer,
+    int max_json_len
+);
+
+/**
+ * Pre-flash safety verification: reads first 4KB of image, verifies magic against target partition.
+ * Blocks invalid flashing (e.g. DTBO into Boot) to prevent bricking.
+ */
+BSLAB_API bool BSLab_PartitionDoctor_VerifyImageBeforeFlash(
+    const char* partition_name,
+    const char* image_path,
+    char* out_error_buffer,
+    int max_error_len
+);
+
+/**
+ * Forensically evaluates Fastboot 'getvar all' output.
+ * Detects unbootable A/B slots, missing/zero-sized partitions, and formulates INSTANT_FIX or surgical plan.
+ */
+BSLAB_API bool BSLab_PartitionDoctor_AnalyzeFastbootGetvar(
+    const char* getvar_all_output,
+    char* out_json_buffer,
+    int max_json_len
+);
+
+/**
+ * Extracts a single partition image from a directory or TAR/TAR.MD5 container.
+ */
+BSLAB_API bool BSLab_PartitionDoctor_ExtractSingleImage(
+    const char* source_path,
+    const char* target_partition,
+    const char* destination_dir,
+    char* out_image_path,
+    int max_path_len,
+    char* out_error_buffer,
+    int max_error_len
+);
+
+/**
+ * Surgically flashes a single partition via Fastboot with zero data loss guarantee.
+ */
+BSLAB_API bool BSLab_PartitionDoctor_SurgicalFlashFastboot(
+    const char* target_partition,
+    const char* image_path,
+    const char* serial,
+    char* out_log_buffer,
+    int max_log_len,
+    char* out_error_buffer,
+    int max_error_len
+);
+
 #ifdef __cplusplus
 }
 #endif

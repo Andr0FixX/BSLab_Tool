@@ -34,6 +34,7 @@ set(SOURCES
     src/KirinRescueEngine.cpp
     src/HuaweiPcuiEngine.cpp
     src/HuaweiFastboot.cpp
+    src/PartitionDoctorEngine.cpp
 )
 
 add_library(BSLabCore SHARED ${SOURCES})

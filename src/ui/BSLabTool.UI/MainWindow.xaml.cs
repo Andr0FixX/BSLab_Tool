@@ -18698,6 +18698,13 @@ namespace BSLabTool.UI
             int done = 0;
             foreach (var part in selected)
             {
+                // Native Partition Doctor Zero-Loss Firewall Guard
+                if (BSLabBridge.BSLab_PartitionDoctor_IsProtected(part.Name))
+                {
+                    AppendAutoHubLog($"[!] 🛡️ FIREWALL BLOCKED: Partition '{part.Name}' contains critical IMEI/Security/UserData! Erase rejected to prevent bricking.");
+                    continue;
+                }
+
                 done++;
                 AppendAutoHubLog($"[*] Erasing partition [{done}/{selected.Count}]: '{part.Name}'...");
                 if (fbOnline)
@@ -18740,6 +18747,33 @@ namespace BSLabTool.UI
             if (dlg.ShowDialog() != true) return;
             string filePath = dlg.FileName;
             var fi = new FileInfo(filePath);
+
+            // Pre-Flash Verification via native C++ Partition Doctor
+            var outErr = new System.Text.StringBuilder(512);
+            bool verified = BSLabBridge.BSLab_PartitionDoctor_VerifyImageBeforeFlash(targetPart.Name, filePath, outErr, outErr.Capacity);
+            if (!verified)
+            {
+                string errMsg = outErr.ToString();
+                AppendAutoHubLog($"[!] ❌ PARTITION DOCTOR SAFETY ALERT: {errMsg}");
+                var warnResult = MessageBox.Show(
+                    $"Partition Doctor Pre-Flash Safety Firewall Alert:\n\n{errMsg}\n\n" +
+                    "Flashing mismatched binary formats (e.g. DTBO into BOOT) can permanently brick the device!\n\n" +
+                    "Do you still want to force override and flash anyway?",
+                    "Pre-Flash Verification Warning",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Error);
+
+                if (warnResult != MessageBoxResult.Yes)
+                {
+                    AppendAutoHubLog("[*] Write aborted safely by technician following Partition Doctor firewall alert.");
+                    return;
+                }
+                AppendAutoHubLog("[!] ⚠️ MANUAL OVERRIDE: Proceeding with write despite format mismatch warning.");
+            }
+            else
+            {
+                AppendAutoHubLog($"[+] 🛡️ Partition Doctor verified: Image format matches target partition '{targetPart.Name}'.");
+            }
 
             var confirm = MessageBox.Show(
                 $"Are you sure you want to FLASH image:\n{Path.GetFileName(filePath)} ({fi.Length / (1024.0 * 1024.0):F2} MB)\n\n" +
@@ -21788,6 +21822,32 @@ namespace BSLabTool.UI
                 string partPath = System.IO.Path.Combine(backupDir, "partition_guard_checkpoint.json");
                 File.WriteAllText(partPath, "{\"status\": \"GUARD_ACTIVE\", \"zero_brick\": true, \"lba_verified\": true}");
                 AppendAiAnalyseLog($"[+] Zero-Brick Partition Checkpoint Saved: {partPath}");
+
+                try
+                {
+                    string fbCheck = await ExecuteCliAsync("fastboot.exe", "devices");
+                    if (!string.IsNullOrWhiteSpace(fbCheck) && !fbCheck.Contains("Error") && !fbCheck.Contains("no permissions"))
+                    {
+                        AppendAiAnalyseLog("[*] Querying live device partition topology via Fastboot getvar all...");
+                        string getvarAll = await ExecuteCliAsync("fastboot.exe", "getvar all");
+                        if (!string.IsNullOrWhiteSpace(getvarAll))
+                        {
+                            var reportBuf = new System.Text.StringBuilder(16384);
+                            if (BSLabBridge.BSLab_PartitionDoctor_AnalyzeFastbootGetvar(getvarAll, reportBuf, reportBuf.Capacity))
+                            {
+                                string reportJson = reportBuf.ToString();
+                                AppendAiAnalyseLog($"[+] Partition Doctor Deep Forensic Analysis Complete:\n{reportJson}");
+                                string diagFile = System.IO.Path.Combine(backupDir, "partition_doctor_forensic_report.json");
+                                File.WriteAllText(diagFile, reportJson);
+                                AppendAiAnalyseLog($"[+] Diagnostic report saved: {diagFile}");
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    AppendAiAnalyseLog($"[-] Partition Doctor fastboot telemetry note: {ex.Message}");
+                }
             }
 
             else if (_currentAiWorkflow.ActionType == "AdbReadInfo")
