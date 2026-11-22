@@ -216,7 +216,7 @@ namespace BSLabTool.UI
         {
             try
             {
-                Process.Start(new ProcessStartInfo("https://facebook.com") { UseShellExecute = true });
+                Process.Start(new ProcessStartInfo("https://www.facebook.com/profile.php?id=61596682954709") { UseShellExecute = true });
             }
             catch { }
         }

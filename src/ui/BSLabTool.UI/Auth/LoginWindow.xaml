@@ -364,7 +364,8 @@
                         <TextBlock Text="🔒 256-bit DPAPI Vault &amp; Supabase Auth" FontSize="9.5" Foreground="#64748B"/>
                     </StackPanel>
                     <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                        <TextBlock Text="📅 7-Day Offline Lease Engine" FontSize="9.5" FontWeight="SemiBold" Foreground="#38BDF8"/>
+                        <TextBlock Text="🌐 Facebook Community" Cursor="Hand" MouseDown="OnFacebookLinkClicked" ToolTip="Visit Official BS Lab Tool Facebook Page" FontSize="9.5" FontWeight="SemiBold" Foreground="#38BDF8" Margin="0,0,12,0"/>
+                        <TextBlock Text="📅 7-Day Lease Engine" FontSize="9.5" FontWeight="SemiBold" Foreground="#64748B"/>
                     </StackPanel>
                 </Grid>
             </Border>

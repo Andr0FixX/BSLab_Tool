@@ -398,5 +398,14 @@ namespace BSLabTool.UI.Auth
                 TxtStatusMessage.Foreground = new SolidColorBrush(Color.FromRgb(0x34, 0xD3, 0x99));
             }
         }
+
+        private void OnFacebookLinkClicked(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo("https://www.facebook.com/profile.php?id=61596682954709") { UseShellExecute = true });
+            }
+            catch { }
+        }
     }
 }
