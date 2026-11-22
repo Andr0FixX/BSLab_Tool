@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
+using BSLabTool.UI.Auth;
 
 namespace BSLabTool.UI
 {
@@ -34,6 +35,43 @@ namespace BSLabTool.UI
                 LogCrash("UnobservedTaskException", args.Exception);
                 args.SetObserved();
             };
+
+            // Layer 4: Supabase Auth & 7-Day Offline Lease Engine
+            bool allowLaunch = false;
+            var offlineStatus = LocalLicenseManager.ValidateOfflineStatus();
+
+            if (offlineStatus.IsAllowedToProceed && offlineStatus.License != null && offlineStatus.License.RememberMe)
+            {
+                allowLaunch = true;
+
+                // Silently auto-renew 7-day lease if connected to internet
+                _ = Task.Run(async () =>
+                {
+                    await Task.Delay(2000);
+                    await new SupabaseAuthService().TryAutoRenewLeaseAsync();
+                });
+            }
+            else
+            {
+                // Show Login & Registration Card Dialog
+                var loginWindow = new LoginWindow();
+                bool? result = loginWindow.ShowDialog();
+                if (result == true)
+                {
+                    allowLaunch = true;
+                }
+            }
+
+            if (allowLaunch)
+            {
+                var mainWindow = new MainWindow();
+                MainWindow = mainWindow;
+                mainWindow.Show();
+            }
+            else
+            {
+                Shutdown();
+            }
         }
 
         private static void LogCrash(string source, Exception ex)

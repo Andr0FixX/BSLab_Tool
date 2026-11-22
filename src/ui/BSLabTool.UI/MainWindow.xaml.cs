@@ -197,7 +197,45 @@ namespace BSLabTool.UI
                 if (BtnVivoSubTabService != null) HighlightSubTab(BtnVivoSubTabService, BtnVivoSubTabService, BtnVivoSubTabFastboot, BtnVivoSubTabFlasher);
                 if (BtnItAdminSubTabFinTech != null) HighlightSubTab(BtnItAdminSubTabFinTech, BtnItAdminSubTabFinTech, BtnItAdminSubTabTestMode, BtnItAdminSubTabPartitions);
                 HighlightBrandRibbonButton("samsung");
+                RefreshAuthUserProfileHeader();
             };
+        }
+
+        private void RefreshAuthUserProfileHeader()
+        {
+            try
+            {
+                var lic = BSLabTool.UI.Auth.LocalLicenseManager.LoadLicense();
+                if (lic != null && TxtHeaderUserName != null)
+                {
+                    TxtHeaderUserName.Text = !string.IsNullOrWhiteSpace(lic.Username) ? lic.Username : "Syed Bisharat Ali";
+                    var off = BSLabTool.UI.Auth.LocalLicenseManager.ValidateOfflineStatus();
+                    if (off.Status == BSLabTool.UI.Auth.LicenseValidationStatus.ValidOffline)
+                    {
+                        TxtHeaderUserSubtitle.Text = $"Offline: {off.RemainingTime.Days}d {off.RemainingTime.Hours}h left";
+                    }
+                    else
+                    {
+                        TxtHeaderUserSubtitle.Text = "● Online (HWID Bound)";
+                    }
+                }
+            }
+            catch { }
+        }
+
+        private void OnUserProfileHeaderClicked(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                var loginWin = new BSLabTool.UI.Auth.LoginWindow();
+                loginWin.Owner = this;
+                loginWin.ShowDialog();
+                RefreshAuthUserProfileHeader();
+            }
+            catch (Exception ex)
+            {
+                AppendLog($"[!] Account Auth Notice: {ex.Message}");
+            }
         }
 
 

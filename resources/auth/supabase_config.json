@@ -1,0 +1,7 @@
+{
+  "supabase_url": "https://xyzcompany.supabase.co",
+  "supabase_anon_key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.dummy_anon_key_for_bslab_tool",
+  "offline_grace_days": 7,
+  "enable_hwid_binding": true,
+  "allow_offline_mode": true
+}

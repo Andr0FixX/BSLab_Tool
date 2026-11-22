@@ -420,14 +420,18 @@
 
                 <!-- Col 1: Centered Profile & Hardware Telemetry (No Text Overlap) -->
                 <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <!-- User Profile Avatar -->
-                    <Border Width="26" Height="26" CornerRadius="13" Background="#FBC02D" Margin="0,0,6,0" VerticalAlignment="Center">
-                        <TextBlock Text="👤" FontSize="13" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#37474F"/>
+                    <!-- User Profile Avatar & Account Launcher -->
+                    <Border Cursor="Hand" MouseDown="OnUserProfileHeaderClicked" ToolTip="Click to view Account, HWID Binding &amp; License Status" Background="Transparent" CornerRadius="6" Padding="4,2" Margin="0,0,8,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Border Width="26" Height="26" CornerRadius="13" Background="#FBC02D" Margin="0,0,6,0" VerticalAlignment="Center">
+                                <TextBlock Text="👤" FontSize="13" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#37474F"/>
+                            </Border>
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock x:Name="TxtHeaderUserName" Text="Syed Bisharat Ali" FontSize="9" FontWeight="Bold" Foreground="#ECEFF1"/>
+                                <TextBlock x:Name="TxtHeaderUserSubtitle" Text="Shop #5, Arif Center (HWID Bound)" FontSize="7.5" Foreground="#90A4AE"/>
+                            </StackPanel>
+                        </StackPanel>
                     </Border>
-                    <StackPanel VerticalAlignment="Center" Margin="0,0,8,0">
-                        <TextBlock Text="Syed Bisharat Ali" FontSize="9" FontWeight="Bold" Foreground="#ECEFF1"/>
-                        <TextBlock Text="Shop #5, Arif Center" FontSize="7.5" Foreground="#90A4AE"/>
-                    </StackPanel>
 
                     <!-- Hidden LED indicators to preserve C# bindings -->
                     <StackPanel Visibility="Collapsed">
