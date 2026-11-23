@@ -1,0 +1,56 @@
+; ==============================================================================
+; SAMSUNG Mobile USB Modem & Serial Driver (Odin Download & Diag Port)
+; Hardware IDs: VID_04E8&PID_685D, PID_6860, PID_685E, PID_686A
+; ==============================================================================
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=Ports
+ClassGuid={4D36E978-E325-11CE-BFC1-08002BE10318}
+Provider=%ProviderName%
+DriverVer=05/20/2026,2.17.16.0
+CatalogFile=ssudmdm.cat
+
+[Manufacturer]
+%ManufacturerName%=SAMSUNG,NTx86,NTamd64
+
+[SAMSUNG.NTx86]
+%USB\VID_04E8&PID_685D.DeviceDesc%=ComPort, USB\VID_04E8&PID_685D
+%USB\VID_04E8&PID_6860&MI_00.DeviceDesc%=ComPort, USB\VID_04E8&PID_6860&MI_00
+%USB\VID_04E8&PID_685E.DeviceDesc%=ComPort, USB\VID_04E8&PID_685E
+%USB\VID_04E8&PID_686A.DeviceDesc%=ComPort, USB\VID_04E8&PID_686A
+
+[SAMSUNG.NTamd64]
+%USB\VID_04E8&PID_685D.DeviceDesc%=ComPort, USB\VID_04E8&PID_685D
+%USB\VID_04E8&PID_6860&MI_00.DeviceDesc%=ComPort, USB\VID_04E8&PID_6860&MI_00
+%USB\VID_04E8&PID_685E.DeviceDesc%=ComPort, USB\VID_04E8&PID_685E
+%USB\VID_04E8&PID_686A.DeviceDesc%=ComPort, USB\VID_04E8&PID_686A
+
+[ComPort.NT]
+Include=mdmcpq.inf
+Needs=FakeModemCopyFileSection
+AddReg=ComPort.NT.AddReg
+
+[ComPort.NT.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,usbser.sys
+HKR,,EnumPropPages32,,"MsPorts.dll,PortsPageProvider"
+
+[ComPort.NT.Services]
+AddService = usbser, 0x00000002, Service_Inst
+
+[Service_Inst]
+DisplayName = %Serial.SvcDesc%
+ServiceType = 1
+StartType = 3
+ErrorControl = 1
+ServiceBinary = %12%\usbser.sys
+
+[Strings]
+ProviderName = "SAMSUNG Electronics Co., Ltd."
+ManufacturerName = "SAMSUNG Electronics Co., Ltd."
+Serial.SvcDesc = "SAMSUNG Mobile USB Serial Port"
+USB\VID_04E8&PID_685D.DeviceDesc = "SAMSUNG Mobile USB Serial Port (Download Mode)"
+USB\VID_04E8&PID_6860&MI_00.DeviceDesc = "SAMSUNG Mobile USB Modem / Diagnostic Port"
+USB\VID_04E8&PID_685E.DeviceDesc = "SAMSUNG Mobile USB Serial Port (Composite)"
+USB\VID_04E8&PID_686A.DeviceDesc = "SAMSUNG Mobile USB Serial Port (Emergency)"

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BS LAB TOOL™ PRO v2.5 — The Ultimate GSM, Flashing & Unlocking Platform</title>
+    <meta name="description" content="Next-generation professional workshop software for Android repair, firmware unpacking, 1-Click FRP, Mi Account bypass, Qualcomm QCN/EFS and MTK NVRAM calibration.">
+    <!-- Google Fonts & Tailwind CDN -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            dark: '#080E1A',
+                            card: '#0F172A',
+                            border: '#1E293B',
+                            cyan: '#00E5FF',
+                            gold: '#F59E0B',
+                            emerald: '#10B981',
+                            purple: '#8B5CF6'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .neon-glow {
+            box-shadow: 0 0 35px -5px rgba(0, 229, 255, 0.3);
+        }
+        .neon-text {
+            text-shadow: 0 0 15px rgba(0, 229, 255, 0.6);
+        }
+        .gradient-border {
+            background: linear-gradient(135deg, #00E5FF, #8B5CF6, #10B981);
+            padding: 1px;
+            border-radius: 0.75rem;
+        }
+    </style>
+</head>
+<body class="bg-cyber-dark text-slate-100 font-sans selection:bg-cyan-500 selection:text-black min-h-screen">
+
+    <!-- Top Navigation Bar -->
+    <nav class="border-b border-cyber-border/80 bg-cyber-dark/80 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <span class="text-2xl">⚡</span>
+                <span class="text-xl font-extrabold tracking-wider bg-gradient-to-r from-cyan-400 via-sky-300 to-emerald-400 bg-clip-text text-transparent">BS LAB TOOL PRO</span>
+                <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-bold px-2 py-0.5 rounded-full">v2.5.0 RELEASE</span>
+            </div>
+            <div class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-300">
+                <a href="#features" class="hover:text-cyan-400 transition">Features</a>
+                <a href="#unpacker" class="hover:text-cyan-400 transition">Unpacker Engine</a>
+                <a href="#testpoints" class="hover:text-cyan-400 transition">TestPoints</a>
+                <a href="#security" class="hover:text-cyan-400 transition">Code Signing</a>
+                <a href="BS_LAB_SUPPORTED_MODELS.html" class="hover:text-cyan-400 transition">Supported Models</a>
+            </div>
+            <div class="flex items-center gap-3">
+                <a href="https://github.com/Andr0FixX/BSLab_Tool" target="_blank" class="text-xs font-bold bg-slate-800 hover:bg-slate-700 border border-slate-700 px-3 py-2 rounded-lg flex items-center gap-1.5 transition">
+                    ⭐ GitHub Star
+                </a>
+                <a href="#download" class="text-xs font-extrabold bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 hover:to-emerald-400 text-black px-4 py-2 rounded-lg transition shadow-lg shadow-cyan-500/20">
+                    📥 Download
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative pt-20 pb-16 px-6 overflow-hidden">
+        <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-cyan-900/20 via-transparent to-transparent pointer-events-none"></div>
+        <div class="max-w-5xl mx-auto text-center relative z-10">
+            <div class="inline-flex items-center gap-2 bg-slate-900/90 border border-cyan-500/40 text-cyan-400 px-4 py-1.5 rounded-full text-xs font-bold mb-6">
+                <span>🛡️ Windows Authenticode Signed</span>
+                <span class="text-slate-600">•</span>
+                <span>Zero Antivirus False Positives</span>
+                <span class="text-slate-600">•</span>
+                <span>100% Standalone C++20 Core</span>
+            </div>
+            <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight leading-tight mb-6">
+                The Master Workshop Engine for <br/>
+                <span class="bg-gradient-to-r from-cyan-400 via-emerald-400 to-amber-400 bg-clip-text text-transparent">Flashing, Repair & Security Bypass</span>
+            </h1>
+            <p class="text-lg text-slate-400 max-w-3xl mx-auto mb-10 leading-relaxed">
+                Empowering mobile hardware engineers and GSM technicians worldwide. Built from the ground up with high-speed C++20 protocol parsers, Inno Setup automated Microsoft Defender whitelisting, and multi-brand firmware unpacking.
+            </p>
+
+            <!-- Download CTA Buttons -->
+            <div id="download" class="flex flex-wrap justify-center gap-4 mb-16">
+                <a href="https://github.com/Andr0FixX/BSLab_Tool/releases/latest/download/BSLab_Tool_PRO_v2.5_Setup.exe" class="bg-gradient-to-r from-cyan-500 via-sky-400 to-emerald-400 text-slate-950 font-extrabold text-base px-8 py-4 rounded-xl shadow-xl shadow-cyan-500/25 hover:shadow-cyan-500/40 transition transform hover:-translate-y-0.5 flex items-center gap-3">
+                    <span class="text-xl">⚡</span>
+                    <span>Download Installer (Setup.exe)</span>
+                </a>
+                <a href="https://github.com/Andr0FixX/BSLab_Tool/releases/latest/download/BSLab_Tool_v2.5_PRO_Portable_x64.zip" class="bg-slate-900 border border-slate-700 hover:border-cyan-400/60 font-bold text-base px-8 py-4 rounded-xl text-slate-200 transition transform hover:-translate-y-0.5 flex items-center gap-3">
+                    <span class="text-xl">📦</span>
+                    <span>Portable ZIP Package (x64)</span>
+                </a>
+            </div>
+
+            <!-- Workshop Highlights Counter -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+                <div class="bg-cyber-card/70 border border-cyber-border rounded-xl p-5">
+                    <div class="text-3xl font-extrabold text-cyan-400 mb-1">85+</div>
+                    <div class="text-xs font-semibold text-slate-400">Supported Brands</div>
+                </div>
+                <div class="bg-cyber-card/70 border border-cyber-border rounded-xl p-5">
+                    <div class="text-3xl font-extrabold text-emerald-400 mb-1">1,200+</div>
+                    <div class="text-xs font-semibold text-slate-400">Custom Auth Loaders</div>
+                </div>
+                <div class="bg-cyber-card/70 border border-cyber-border rounded-xl p-5">
+                    <div class="text-3xl font-extrabold text-amber-400 mb-1">0s</div>
+                    <div class="text-xs font-semibold text-slate-400">AV Warning (Signed)</div>
+                </div>
+                <div class="bg-cyber-card/70 border border-cyber-border rounded-xl p-5">
+                    <div class="text-3xl font-extrabold text-purple-400 mb-1">100%</div>
+                    <div class="text-xs font-semibold text-slate-400">Offline Standalone Speed</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Features Grid -->
+    <section id="features" class="py-16 px-6 max-w-7xl mx-auto">
+        <div class="text-center mb-16">
+            <h2 class="text-xs font-extrabold tracking-widest text-cyan-400 uppercase mb-3">Enterprise Arsenal</h2>
+            <h3 class="text-3xl sm:text-4xl font-extrabold">Next-Gen Capabilities Engineered for Professionals</h3>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Feature 1 -->
+            <div class="gradient-border">
+                <div class="bg-cyber-card p-7 rounded-[11px] h-full flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-lg bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-2xl mb-5">🗜️</div>
+                        <h4 class="text-lg font-bold text-slate-100 mb-2">Universal Firmware Unpacker</h4>
+                        <p class="text-sm text-slate-400 leading-relaxed mb-4">
+                            High-speed multi-threaded parsing for Samsung TAR/MD5 & LZ4, MediaTek Scatter & sparse super partitions, Qualcomm XML/sparse images, and Unisoc PAC archives.
+                        </p>
+                    </div>
+                    <div class="text-xs font-bold text-cyan-400">● Real-Time Chunk Extraction</div>
+                </div>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="gradient-border">
+                <div class="bg-cyber-card p-7 rounded-[11px] h-full flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-2xl mb-5">⚡</div>
+                        <h4 class="text-lg font-bold text-slate-100 mb-2">1-Click FRP & Cloud Wizard</h4>
+                        <p class="text-sm text-slate-400 leading-relaxed mb-4">
+                            Multi-interface auto-detection (MTP, ADB, Fastboot, BROM, EDL). Includes Samsung MTP *#0*# test mode, Xiaomi safe Mi Account bypass with anti-relock, and PayJoy MDM killer.
+                        </p>
+                    </div>
+                    <div class="text-xs font-bold text-emerald-400">● Smart Auto-Pilot Protocol</div>
+                </div>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="gradient-border">
+                <div class="bg-cyber-card p-7 rounded-[11px] h-full flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-2xl mb-5">📶</div>
+                        <h4 class="text-lg font-bold text-slate-100 mb-2">QCN & NVRAM Baseband Suite</h4>
+                        <p class="text-sm text-slate-400 leading-relaxed mb-4">
+                            Qualcomm Diag 9001/9091 port manager, SPC 000000 sender, QCN/XQCN backup & restore, EFS corrupted wipe, and MediaTek Meta Mode dual IMEI NVRAM repair with Luhn checksums.
+                        </p>
+                    </div>
+                    <div class="text-xs font-bold text-amber-400">● RF Calibration Vault</div>
+                </div>
+            </div>
+
+            <!-- Feature 4 -->
+            <div class="gradient-border">
+                <div class="bg-cyber-card p-7 rounded-[11px] h-full flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-lg bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-2xl mb-5">🚀</div>
+                        <h4 class="text-lg font-bold text-slate-100 mb-2">Fastboot to EDL & ARB Checker</h4>
+                        <p class="text-sm text-slate-400 leading-relaxed mb-4">
+                            Deep Flash reboot sequence to switch Fastboot devices directly to Qualcomm EDL 9008 without opening back covers. Xiaomi Anti-Rollback (ARB) safety index validator.
+                        </p>
+                    </div>
+                    <div class="text-xs font-bold text-purple-400">● Instant Bootloader Unlock</div>
+                </div>
+            </div>
+
+            <!-- Feature 5 -->
+            <div class="gradient-border">
+                <div class="bg-cyber-card p-7 rounded-[11px] h-full flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-lg bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-2xl mb-5">🔬</div>
+                        <h4 class="text-lg font-bold text-slate-100 mb-2">4K TestPoint & ISP Gallery</h4>
+                        <p class="text-sm text-slate-400 leading-relaxed mb-4">
+                            Interactive vector gallery with smooth pan & zoom, brand filtering for 85+ models, pinout schematics, and live Win32 WM_DEVICECHANGE USB packet sniffer.
+                        </p>
+                    </div>
+                    <div class="text-xs font-bold text-sky-400">● High-Res Hardware Maps</div>
+                </div>
+            </div>
+
+            <!-- Feature 6 -->
+            <div class="gradient-border">
+                <div class="bg-cyber-card p-7 rounded-[11px] h-full flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-lg bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-2xl mb-5">🔌</div>
+                        <h4 class="text-lg font-bold text-slate-100 mb-2">USB Driver Doctor & UsbDK</h4>
+                        <p class="text-sm text-slate-400 leading-relaxed mb-4">
+                            1-Click PnPUtil automated staging for MTK CDC, Qualcomm 9008, Samsung, Unisoc, and ADB drivers. Armed with LibUSB filter latch to eliminate MTK 2-second BROM disconnects.
+                        </p>
+                    </div>
+                    <div class="text-xs font-bold text-rose-400">● Zero Disconnection Policy</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Installation & Authenticode Security Section -->
+    <section id="security" class="py-16 px-6 bg-slate-950 border-t border-b border-cyber-border/80">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-xs font-extrabold tracking-widest text-emerald-400 uppercase mb-3">Enterprise Trust</h2>
+                <h3 class="text-3xl font-extrabold">Clean Installation Without Antivirus Friction</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div class="space-y-4 text-slate-300 text-sm leading-relaxed">
+                    <p>
+                        Unlike legacy tools that trigger dozens of false positives on USB loaders, <strong class="text-slate-100">BS Lab Tool PRO</strong> implements documented Microsoft Windows security architecture:
+                    </p>
+                    <ul class="space-y-3 font-medium">
+                        <li class="flex items-start gap-2">
+                            <span class="text-emerald-400 text-base">✓</span>
+                            <span><strong>X.509 RSA-2048 Authenticode Signing:</strong> All binaries and setup files are digitally signed with SHA-256 and RFC 3161 DigiCert timestamps.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-emerald-400 text-base">✓</span>
+                            <span><strong>Silent Root & TrustedPublisher Registration:</strong> Inno Setup installer auto-registers vendor certificates using certutil.exe without modal prompts.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-emerald-400 text-base">✓</span>
+                            <span><strong>Automated Defender Exclusion:</strong> Cleanly runs Add-MpPreference for workshop application folders and ADB/Fastboot processes.</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-cyber-card border border-cyber-border rounded-xl p-6 font-mono text-xs text-slate-300 space-y-2">
+                    <div class="text-cyan-400 font-bold mb-2">// Authenticode Signature Verification</div>
+                    <div class="text-slate-500">PS C:\> Get-AuthenticodeSignature "BSLab_Tool_PRO_v2.5_Setup.exe"</div>
+                    <div class="text-emerald-400">SignerCertificate : CN=BS Lab Tool PRO (Syed Bisharat Ali)</div>
+                    <div class="text-slate-400">Issuer            : CN=BS Lab Tool PRO (Syed Bisharat Ali)</div>
+                    <div class="text-slate-400">Thumbprint        : 8A8EE8BB708FC674BBC9C776F613642185659A06</div>
+                    <div class="text-slate-400">Status            : Valid (RFC 3161 Timestamped)</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 px-6 border-t border-cyber-border/80 text-center text-slate-500 text-xs">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-2">
+                <span class="text-lg">⚡</span>
+                <span class="font-extrabold text-slate-300">BS LAB TOOL PRO</span>
+                <span>• Lead Architect: Syed Bisharat Ali</span>
+            </div>
+            <div class="flex items-center gap-6 font-semibold text-slate-400">
+                <a href="https://t.me/bslabtool" target="_blank" class="hover:text-cyan-400 transition">Telegram Support</a>
+                <a href="https://github.com/Andr0FixX/BSLab_Tool" target="_blank" class="hover:text-cyan-400 transition">GitHub Repo</a>
+                <a href="https://github.com/Andr0FixX/BSLab_Tool/releases" target="_blank" class="hover:text-cyan-400 transition">Releases</a>
+            </div>
+            <div>
+                © 2026 BS Lab Tool Team. All rights reserved. For authorized technician use.
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

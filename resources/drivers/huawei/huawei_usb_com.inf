@@ -1,0 +1,47 @@
+; ==============================================================================
+; HUAWEI USB COM 1.0 (HiSilicon Kirin Test Point Driver)
+; Hardware ID: USB\VID_12D1&PID_3609
+; ==============================================================================
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=Ports
+ClassGuid={4D36E978-E325-11CE-BFC1-08002BE10318}
+Provider=%ProviderName%
+DriverVer=05/12/2021,2.0.6.725
+CatalogFile=huawei_usb_com.cat
+
+[Manufacturer]
+%ManufacturerName%=Huawei,NTx86,NTamd64
+
+[Huawei.NTx86]
+%USB\VID_12D1&PID_3609.DeviceDesc%=ComPort, USB\VID_12D1&PID_3609
+
+[Huawei.NTamd64]
+%USB\VID_12D1&PID_3609.DeviceDesc%=ComPort, USB\VID_12D1&PID_3609
+
+[ComPort.NT]
+Include=mdmcpq.inf
+Needs=FakeModemCopyFileSection
+AddReg=ComPort.NT.AddReg
+
+[ComPort.NT.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,usbser.sys
+HKR,,EnumPropPages32,,"MsPorts.dll,PortsPageProvider"
+
+[ComPort.NT.Services]
+AddService = usbser, 0x00000002, Service_Inst
+
+[Service_Inst]
+DisplayName = %Serial.SvcDesc%
+ServiceType = 1
+StartType = 3
+ErrorControl = 1
+ServiceBinary = %12%\usbser.sys
+
+[Strings]
+ProviderName = "Huawei Technologies Co., Ltd."
+ManufacturerName = "Huawei Technologies Co., Ltd."
+Serial.SvcDesc = "HUAWEI USB COM 1.0 Driver"
+USB\VID_12D1&PID_3609.DeviceDesc = "HUAWEI USB COM 1.0"

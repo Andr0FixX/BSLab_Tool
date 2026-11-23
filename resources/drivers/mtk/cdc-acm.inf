@@ -1,0 +1,49 @@
+; ==============================================================================
+; MediaTek USB CDC Serial Driver (BROM Mode & META AT Diag)
+; ==============================================================================
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=Ports
+ClassGuid={4D36E978-E325-11CE-BFC1-08002BE10318}
+Provider=%ProviderName%
+DriverVer=05/18/2021,2.0.1136.0
+CatalogFile=cdc-acm.cat
+
+[Manufacturer]
+%ManufacturerName%=MediaTek,NTx86,NTamd64
+
+[MediaTek.NTx86]
+%USB\VID_0E8D&PID_0003.DeviceDesc%=ComPort, USB\VID_0E8D&PID_0003
+%USB\VID_0E8D&PID_0023.DeviceDesc%=ComPort, USB\VID_0E8D&PID_0023
+
+[MediaTek.NTamd64]
+%USB\VID_0E8D&PID_0003.DeviceDesc%=ComPort, USB\VID_0E8D&PID_0003
+%USB\VID_0E8D&PID_0023.DeviceDesc%=ComPort, USB\VID_0E8D&PID_0023
+
+[ComPort.NT]
+Include=mdmcpq.inf
+Needs=FakeModemCopyFileSection
+AddReg=ComPort.NT.AddReg
+
+[ComPort.NT.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,usbser.sys
+HKR,,EnumPropPages32,,"MsPorts.dll,PortsPageProvider"
+
+[ComPort.NT.Services]
+AddService = usbser, 0x00000002, Service_Inst
+
+[Service_Inst]
+DisplayName = %Serial.SvcDesc%
+ServiceType = 1
+StartType = 3
+ErrorControl = 1
+ServiceBinary = %12%\usbser.sys
+
+[Strings]
+ProviderName = "MediaTek Inc."
+ManufacturerName = "MediaTek Inc."
+Serial.SvcDesc = "MediaTek CDC Serial Device"
+USB\VID_0E8D&PID_0003.DeviceDesc = "MediaTek USB VCOM (Android)"
+USB\VID_0E8D&PID_0023.DeviceDesc = "MediaTek MT65xx Preloader"

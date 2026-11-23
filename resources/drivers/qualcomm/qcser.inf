@@ -1,0 +1,78 @@
+; ==============================================================================
+; Qualcomm HS-USB QDLoader 9008 Driver & Diagnostics Driver
+; High-Speed EDL 9008, 9006, 9091, 9025 & Modem Diag for Windows 10 & 11
+; Hardware IDs: VID_05C6&PID_9008, PID_9006, PID_9091, PID_900E, PID_9025, PID_901D
+; ==============================================================================
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=Ports
+ClassGuid={4D36E978-E325-11CE-BFC1-08002BE10318}
+Provider=%ProviderName%
+DriverVer=05/20/2026,3.0.1080.0
+CatalogFile=qcser.cat
+
+[Manufacturer]
+%ManufacturerName%=Qualcomm,NTx86,NTamd64
+
+[Qualcomm.NTx86]
+%USB\VID_05C6&PID_9008.DeviceDesc%=ComPort, USB\VID_05C6&PID_9008
+%USB\VID_05C6&PID_9008&MI_00.DeviceDesc%=ComPort, USB\VID_05C6&PID_9008&MI_00
+%USB\VID_05C6&PID_9091.DeviceDesc%=ComPort, USB\VID_05C6&PID_9091
+%USB\VID_05C6&PID_9091&MI_00.DeviceDesc%=ComPort, USB\VID_05C6&PID_9091&MI_00
+%USB\VID_05C6&PID_9091&MI_01.DeviceDesc%=ComPort, USB\VID_05C6&PID_9091&MI_01
+%USB\VID_05C6&PID_9006.DeviceDesc%=ComPort, USB\VID_05C6&PID_9006
+%USB\VID_05C6&PID_900E.DeviceDesc%=ComPort, USB\VID_05C6&PID_900E
+%USB\VID_05C6&PID_9025.DeviceDesc%=ComPort, USB\VID_05C6&PID_9025
+%USB\VID_05C6&PID_9025&MI_00.DeviceDesc%=ComPort, USB\VID_05C6&PID_9025&MI_00
+%USB\VID_05C6&PID_9025&MI_01.DeviceDesc%=ComPort, USB\VID_05C6&PID_9025&MI_01
+%USB\VID_05C6&PID_901D.DeviceDesc%=ComPort, USB\VID_05C6&PID_901D
+
+[Qualcomm.NTamd64]
+%USB\VID_05C6&PID_9008.DeviceDesc%=ComPort, USB\VID_05C6&PID_9008
+%USB\VID_05C6&PID_9008&MI_00.DeviceDesc%=ComPort, USB\VID_05C6&PID_9008&MI_00
+%USB\VID_05C6&PID_9091.DeviceDesc%=ComPort, USB\VID_05C6&PID_9091
+%USB\VID_05C6&PID_9091&MI_00.DeviceDesc%=ComPort, USB\VID_05C6&PID_9091&MI_00
+%USB\VID_05C6&PID_9091&MI_01.DeviceDesc%=ComPort, USB\VID_05C6&PID_9091&MI_01
+%USB\VID_05C6&PID_9006.DeviceDesc%=ComPort, USB\VID_05C6&PID_9006
+%USB\VID_05C6&PID_900E.DeviceDesc%=ComPort, USB\VID_05C6&PID_900E
+%USB\VID_05C6&PID_9025.DeviceDesc%=ComPort, USB\VID_05C6&PID_9025
+%USB\VID_05C6&PID_9025&MI_00.DeviceDesc%=ComPort, USB\VID_05C6&PID_9025&MI_00
+%USB\VID_05C6&PID_9025&MI_01.DeviceDesc%=ComPort, USB\VID_05C6&PID_9025&MI_01
+%USB\VID_05C6&PID_901D.DeviceDesc%=ComPort, USB\VID_05C6&PID_901D
+
+[ComPort.NT]
+Include=mdmcpq.inf
+Needs=FakeModemCopyFileSection
+AddReg=ComPort.NT.AddReg
+
+[ComPort.NT.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,usbser.sys
+HKR,,EnumPropPages32,,"MsPorts.dll,PortsPageProvider"
+
+[ComPort.NT.Services]
+AddService = usbser, 0x00000002, Service_Inst
+
+[Service_Inst]
+DisplayName = %Serial.SvcDesc%
+ServiceType = 1
+StartType = 3
+ErrorControl = 1
+ServiceBinary = %12%\usbser.sys
+
+[Strings]
+ProviderName = "Qualcomm Incorporated"
+ManufacturerName = "Qualcomm Incorporated"
+Serial.SvcDesc = "Qualcomm HS-USB Driver"
+USB\VID_05C6&PID_9008.DeviceDesc = "Qualcomm HS-USB QDLoader 9008"
+USB\VID_05C6&PID_9008&MI_00.DeviceDesc = "Qualcomm HS-USB QDLoader 9008 (Composite)"
+USB\VID_05C6&PID_9091.DeviceDesc = "Qualcomm HS-USB Diagnostics 9091"
+USB\VID_05C6&PID_9091&MI_00.DeviceDesc = "Qualcomm HS-USB Diagnostics 9091 (MI_00)"
+USB\VID_05C6&PID_9091&MI_01.DeviceDesc = "Qualcomm HS-USB NMEA 9091 (MI_01)"
+USB\VID_05C6&PID_9006.DeviceDesc = "Qualcomm HS-USB Diagnostics 9006"
+USB\VID_05C6&PID_900E.DeviceDesc = "Qualcomm HS-USB QDLoader 900E (Emergency Mode)"
+USB\VID_05C6&PID_9025.DeviceDesc = "Qualcomm HS-USB Diagnostics 9025"
+USB\VID_05C6&PID_9025&MI_00.DeviceDesc = "Qualcomm HS-USB Diagnostics 9025 (MI_00)"
+USB\VID_05C6&PID_9025&MI_01.DeviceDesc = "Qualcomm HS-USB Modem 9025 (MI_01)"
+USB\VID_05C6&PID_901D.DeviceDesc = "Qualcomm HS-USB Diagnostics 901D"

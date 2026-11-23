@@ -1,0 +1,83 @@
+; ==============================================================================
+; MediaTek USB VCOM Port Driver (Preloader, BROM, DA, & META Mode)
+; High-Speed CDC-ACM & Virtual Serial Port for Windows 10 & 11 (64-bit / 32-bit)
+; Supported Chipsets: MT6580, MT6737, MT6753, MT6765, MT6768, MT6785, MT6833, MT6877, MT6983
+; Hardware IDs: VID_0E8D&PID_2000, PID_0003, PID_2001, PID_2006, PID_2007, PID_2026, PID_2040
+; ==============================================================================
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=Ports
+ClassGuid={4D36E978-E325-11CE-BFC1-08002BE10318}
+Provider=%ProviderName%
+DriverVer=05/20/2026,3.5.2401.0
+CatalogFile=usbvcom.cat
+
+[Manufacturer]
+%ManufacturerName%=MediaTek,NTx86,NTamd64
+
+[MediaTek.NTx86]
+%USB\VID_0E8D&PID_2000.DeviceDesc%=ComPort, USB\VID_0E8D&PID_2000
+%USB\VID_0E8D&PID_0003.DeviceDesc%=ComPort, USB\VID_0E8D&PID_0003
+%USB\VID_0E8D&PID_2001.DeviceDesc%=ComPort, USB\VID_0E8D&PID_2001
+%USB\VID_0E8D&PID_2002.DeviceDesc%=ComPort, USB\VID_0E8D&PID_2002
+%USB\VID_0E8D&PID_2006.DeviceDesc%=ComPort, USB\VID_0E8D&PID_2006
+%USB\VID_0E8D&PID_2006&MI_00.DeviceDesc%=ComPort, USB\VID_0E8D&PID_2006&MI_00
+%USB\VID_0E8D&PID_2006&MI_01.DeviceDesc%=ComPort, USB\VID_0E8D&PID_2006&MI_01
+%USB\VID_0E8D&PID_2007.DeviceDesc%=ComPort, USB\VID_0E8D&PID_2007
+%USB\VID_0E8D&PID_2007&MI_00.DeviceDesc%=ComPort, USB\VID_0E8D&PID_2007&MI_00
+%USB\VID_0E8D&PID_2026.DeviceDesc%=ComPort, USB\VID_0E8D&PID_2026
+%USB\VID_0E8D&PID_2040.DeviceDesc%=ComPort, USB\VID_0E8D&PID_2040
+%USB\VID_0E8D&PID_0003&MI_00.DeviceDesc%=ComPort, USB\VID_0E8D&PID_0003&MI_00
+
+[MediaTek.NTamd64]
+%USB\VID_0E8D&PID_2000.DeviceDesc%=ComPort, USB\VID_0E8D&PID_2000
+%USB\VID_0E8D&PID_0003.DeviceDesc%=ComPort, USB\VID_0E8D&PID_0003
+%USB\VID_0E8D&PID_2001.DeviceDesc%=ComPort, USB\VID_0E8D&PID_2001
+%USB\VID_0E8D&PID_2002.DeviceDesc%=ComPort, USB\VID_0E8D&PID_2002
+%USB\VID_0E8D&PID_2006.DeviceDesc%=ComPort, USB\VID_0E8D&PID_2006
+%USB\VID_0E8D&PID_2006&MI_00.DeviceDesc%=ComPort, USB\VID_0E8D&PID_2006&MI_00
+%USB\VID_0E8D&PID_2006&MI_01.DeviceDesc%=ComPort, USB\VID_0E8D&PID_2006&MI_01
+%USB\VID_0E8D&PID_2007.DeviceDesc%=ComPort, USB\VID_0E8D&PID_2007
+%USB\VID_0E8D&PID_2007&MI_00.DeviceDesc%=ComPort, USB\VID_0E8D&PID_2007&MI_00
+%USB\VID_0E8D&PID_2026.DeviceDesc%=ComPort, USB\VID_0E8D&PID_2026
+%USB\VID_0E8D&PID_2040.DeviceDesc%=ComPort, USB\VID_0E8D&PID_2040
+%USB\VID_0E8D&PID_0003&MI_00.DeviceDesc%=ComPort, USB\VID_0E8D&PID_0003&MI_00
+
+[ComPort.NT]
+Include=mdmcpq.inf
+Needs=FakeModemCopyFileSection
+AddReg=ComPort.NT.AddReg
+
+[ComPort.NT.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,usbser.sys
+HKR,,EnumPropPages32,,"MsPorts.dll,PortsPageProvider"
+
+[ComPort.NT.Services]
+AddService = usbser, 0x00000002, Service_Inst
+
+[Service_Inst]
+DisplayName = %Serial.SvcDesc%
+ServiceType = 1 ; SERVICE_KERNEL_DRIVER
+StartType = 3 ; SERVICE_DEMAND_START
+ErrorControl = 1 ; SERVICE_ERROR_NORMAL
+ServiceBinary = %12%\usbser.sys
+LoadOrderGroup = Base
+
+[Strings]
+ProviderName = "MediaTek Inc."
+ManufacturerName = "MediaTek Inc."
+Serial.SvcDesc = "MediaTek USB VCOM Driver"
+USB\VID_0E8D&PID_2000.DeviceDesc = "MediaTek PreLoader USB VCOM (Android)"
+USB\VID_0E8D&PID_0003.DeviceDesc = "MediaTek USB VCOM (Android)"
+USB\VID_0E8D&PID_2001.DeviceDesc = "MediaTek DA USB VCOM (Android)"
+USB\VID_0E8D&PID_2002.DeviceDesc = "MediaTek USB Port"
+USB\VID_0E8D&PID_2006.DeviceDesc = "MediaTek USB VCOM (META Mode)"
+USB\VID_0E8D&PID_2006&MI_00.DeviceDesc = "MediaTek META Communication Port (MI_00)"
+USB\VID_0E8D&PID_2006&MI_01.DeviceDesc = "MediaTek META Diagnostic Port (MI_01)"
+USB\VID_0E8D&PID_2007.DeviceDesc = "MediaTek USB Modern VCOM (META Mode)"
+USB\VID_0E8D&PID_2007&MI_00.DeviceDesc = "MediaTek High-Speed META Port"
+USB\VID_0E8D&PID_2026.DeviceDesc = "MediaTek Dual Serial USB Port"
+USB\VID_0E8D&PID_2040.DeviceDesc = "MediaTek High-Speed DA VCOM Port"
+USB\VID_0E8D&PID_0003&MI_00.DeviceDesc = "MediaTek USB VCOM Android Composite"

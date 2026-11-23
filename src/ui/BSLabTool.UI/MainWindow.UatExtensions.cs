@@ -159,19 +159,14 @@ namespace BSLabTool.UI
         {
             try
             {
-                string driverScript = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Install_All_Drivers.bat");
-                if (File.Exists(driverScript))
-                {
-                    Process.Start(new ProcessStartInfo(driverScript) { UseShellExecute = true, Verb = "runas" });
-                }
-                else
-                {
-                    Process.Start(new ProcessStartInfo("devmgmt.msc") { UseShellExecute = true });
-                }
+                var docWin = new BSLabTool.UI.Views.UsbDriverDoctorWindow();
+                docWin.Owner = this;
+                docWin.Show();
+                AppendAutoHubLog("[+] 🔌 USB Driver Doctor & UsbDK / LibUSB Filter Manager opened.");
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Driver Wizard chalane mein masla: {ex.Message}", "USB Wizard", MessageBoxButton.OK, MessageBoxImage.Warning);
+                AppendAutoHubLog($"[!] USB Driver Doctor Launch Error: {ex.Message}");
             }
         }
 
