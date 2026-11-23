@@ -736,6 +736,82 @@ BSLAB_API bool BSLab_QC_Diag_Reboot(
  */
 BSLAB_API void BSLab_QC_Diag_Abort();
 
+// ============================================================================
+// PHASE 8: UNIVERSAL FIRMWARE UNPACKER ENGINE (PAYLOAD.BIN, SPARSE, SUPER, APP)
+// ============================================================================
+
+/**
+ * Identifies container/archive type by inspecting magic header.
+ */
+BSLAB_API int BSLab_Unpacker_IdentifyType(
+    const char* file_path,
+    char* out_type_name,
+    int max_name_len
+);
+
+/**
+ * Decompresses Android Sparse Image to raw linear image (simg2img).
+ */
+BSLAB_API bool BSLab_Unpacker_UnsparseImage(
+    const char* sparse_path,
+    const char* out_raw_path,
+    BSLab_ProgressCallback progress_cb
+);
+
+/**
+ * Unpacks dynamic partitions (system, vendor, product, etc.) from super.img.
+ */
+BSLAB_API bool BSLab_Unpacker_UnpackSuper(
+    const char* super_path,
+    const char* out_dir,
+    char* out_json_buffer,
+    int max_json_len,
+    int* out_file_count,
+    BSLab_ProgressCallback progress_cb
+);
+
+/**
+ * Inspects Android OTA payload.bin and returns JSON list of partitions.
+ */
+BSLAB_API bool BSLab_Unpacker_InspectPayloadBin(
+    const char* payload_path,
+    char* out_json_buffer,
+    int max_json_len,
+    int* out_partition_count
+);
+
+/**
+ * Unpacks specified (or all) partitions from Android OTA payload.bin.
+ * target_partitions_csv: comma-separated list of partition names (e.g. "boot,vbmeta,init_boot") or empty for all.
+ */
+BSLAB_API bool BSLab_Unpacker_UnpackPayloadBin(
+    const char* payload_path,
+    const char* out_dir,
+    const char* target_partitions_csv,
+    char* out_json_buffer,
+    int max_json_len,
+    int* out_file_count,
+    BSLab_ProgressCallback progress_cb
+);
+
+/**
+ * Extracts partition images from Huawei / Honor UPDATE.APP package.
+ */
+BSLAB_API bool BSLab_Unpacker_UnpackHuaweiApp(
+    const char* app_path,
+    const char* out_dir,
+    char* out_json_buffer,
+    int max_json_len,
+    int* out_file_count,
+    BSLab_ProgressCallback progress_cb
+);
+
+/**
+ * Aborts any ongoing unpacking operation.
+ */
+BSLAB_API void BSLab_Unpacker_Abort();
+
+
 
 #ifdef __cplusplus
 }

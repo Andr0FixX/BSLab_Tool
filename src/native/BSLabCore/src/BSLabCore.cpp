@@ -19,6 +19,7 @@
 #include "HuaweiFastboot.h"
 #include "PartitionDoctorEngine.h"
 #include "QcDiagQcnEngine.h"
+#include "UniversalUnpackerEngine.h"
 #include <memory>
 #include <string>
 #include <vector>
@@ -1603,4 +1604,204 @@ BSLAB_API void BSLab_QC_Diag_Abort() {
     if (g_qc_diag) {
         g_qc_diag->Abort();
     }
+}
+
+// ============================================================================
+// PHASE 8: UNIVERSAL FIRMWARE UNPACKER ENGINE (PAYLOAD.BIN, SPARSE, SUPER, APP)
+// ============================================================================
+
+BSLAB_API int BSLab_Unpacker_IdentifyType(
+    const char* file_path,
+    char* out_type_name,
+    int max_name_len
+) {
+    if (!file_path) return 0;
+    auto type = BSLab::UniversalUnpackerEngine::IdentifyFileType(file_path);
+    if (out_type_name && max_name_len > 0) {
+        const char* name = BSLab::UniversalUnpackerEngine::FirmwareTypeToString(type);
+        strncpy(out_type_name, name, max_name_len - 1);
+        out_type_name[max_name_len - 1] = '\0';
+    }
+    return static_cast<int>(type);
+}
+
+BSLAB_API bool BSLab_Unpacker_UnsparseImage(
+    const char* sparse_path,
+    const char* out_raw_path,
+    BSLab_ProgressCallback progress_cb
+) {
+    if (!sparse_path || !out_raw_path) return false;
+    return BSLab::UniversalUnpackerEngine::UnsparseImage(
+        sparse_path,
+        out_raw_path,
+        [progress_cb](float pct, const std::string& status) {
+            if (progress_cb) {
+                int p = static_cast<int>(pct * 100.0f);
+                progress_cb(p, p, "RAW", status.c_str());
+            }
+        }
+    );
+}
+
+BSLAB_API bool BSLab_Unpacker_UnpackSuper(
+    const char* super_path,
+    const char* out_dir,
+    char* out_json_buffer,
+    int max_json_len,
+    int* out_file_count,
+    BSLab_ProgressCallback progress_cb
+) {
+    if (out_file_count) *out_file_count = 0;
+    if (!super_path || !out_dir) return false;
+    std::vector<BSLab::ExtractedPartitionInfo> files;
+    bool ok = BSLab::UniversalUnpackerEngine::UnpackSuperImage(
+        super_path,
+        out_dir,
+        files,
+        [progress_cb](float pct, const std::string& status) {
+            if (progress_cb) {
+                int p = static_cast<int>(pct * 100.0f);
+                progress_cb(p, p, "SUPER", status.c_str());
+            }
+        }
+    );
+    if (out_file_count) *out_file_count = static_cast<int>(files.size());
+    if (out_json_buffer && max_json_len > 0) {
+        std::ostringstream ss;
+        ss << "{\"status\": \"" << (ok ? "OK" : "ERROR") << "\", \"total_files\": " << files.size() << ", \"files\": [";
+        for (size_t i = 0; i < files.size(); ++i) {
+            if (i > 0) ss << ", ";
+            ss << "{\"name\": \"" << files[i].name << "\", \"size\": " << files[i].size << "}";
+        }
+        ss << "]}";
+        std::string jsonStr = ss.str();
+        strncpy(out_json_buffer, jsonStr.c_str(), max_json_len - 1);
+        out_json_buffer[max_json_len - 1] = '\0';
+    }
+    return ok;
+}
+
+BSLAB_API bool BSLab_Unpacker_InspectPayloadBin(
+    const char* payload_path,
+    char* out_json_buffer,
+    int max_json_len,
+    int* out_partition_count
+) {
+    if (out_partition_count) *out_partition_count = 0;
+    if (!payload_path || !out_json_buffer || max_json_len <= 0) return false;
+    std::vector<BSLab::PayloadPartition> parts;
+    std::string err;
+    bool ok = BSLab::UniversalUnpackerEngine::InspectPayloadBin(payload_path, parts, err);
+    if (!ok) {
+        std::string errJson = "{\"status\": \"ERROR\", \"message\": \"" + err + "\"}";
+        strncpy(out_json_buffer, errJson.c_str(), max_json_len - 1);
+        out_json_buffer[max_json_len - 1] = '\0';
+        return false;
+    }
+    if (out_partition_count) *out_partition_count = static_cast<int>(parts.size());
+    std::ostringstream ss;
+    ss << "{\"status\": \"OK\", \"total_partitions\": " << parts.size() << ", \"partitions\": [";
+    for (size_t i = 0; i < parts.size(); ++i) {
+        if (i > 0) ss << ", ";
+        ss << "{\"name\": \"" << parts[i].name << "\", \"size\": " << parts[i].size << "}";
+    }
+    ss << "]}";
+    std::string jsonStr = ss.str();
+    strncpy(out_json_buffer, jsonStr.c_str(), max_json_len - 1);
+    out_json_buffer[max_json_len - 1] = '\0';
+    return true;
+}
+
+BSLAB_API bool BSLab_Unpacker_UnpackPayloadBin(
+    const char* payload_path,
+    const char* out_dir,
+    const char* target_partitions_csv,
+    char* out_json_buffer,
+    int max_json_len,
+    int* out_file_count,
+    BSLab_ProgressCallback progress_cb
+) {
+    if (out_file_count) *out_file_count = 0;
+    if (!payload_path || !out_dir) return false;
+    std::vector<std::string> targets;
+    if (target_partitions_csv && *target_partitions_csv) {
+        std::stringstream ss(target_partitions_csv);
+        std::string item;
+        while (std::getline(ss, item, ',')) {
+            size_t start = item.find_first_not_of(" \t\r\n");
+            size_t end = item.find_last_not_of(" \t\r\n");
+            if (start != std::string::npos && end != std::string::npos) {
+                targets.push_back(item.substr(start, end - start + 1));
+            }
+        }
+    }
+    std::vector<BSLab::ExtractedPartitionInfo> files;
+    bool ok = BSLab::UniversalUnpackerEngine::UnpackPayloadBin(
+        payload_path,
+        out_dir,
+        targets,
+        files,
+        [progress_cb](float pct, const std::string& status) {
+            if (progress_cb) {
+                int p = static_cast<int>(pct * 100.0f);
+                progress_cb(p, p, "PAYLOAD", status.c_str());
+            }
+        }
+    );
+    if (out_file_count) *out_file_count = static_cast<int>(files.size());
+    if (out_json_buffer && max_json_len > 0) {
+        std::ostringstream ss;
+        ss << "{\"status\": \"" << (ok ? "OK" : "ERROR") << "\", \"total_files\": " << files.size() << ", \"files\": [";
+        for (size_t i = 0; i < files.size(); ++i) {
+            if (i > 0) ss << ", ";
+            ss << "{\"name\": \"" << files[i].name << "\", \"size\": " << files[i].size << "}";
+        }
+        ss << "]}";
+        std::string jsonStr = ss.str();
+        strncpy(out_json_buffer, jsonStr.c_str(), max_json_len - 1);
+        out_json_buffer[max_json_len - 1] = '\0';
+    }
+    return ok;
+}
+
+BSLAB_API bool BSLab_Unpacker_UnpackHuaweiApp(
+    const char* app_path,
+    const char* out_dir,
+    char* out_json_buffer,
+    int max_json_len,
+    int* out_file_count,
+    BSLab_ProgressCallback progress_cb
+) {
+    if (out_file_count) *out_file_count = 0;
+    if (!app_path || !out_dir) return false;
+    std::vector<BSLab::ExtractedPartitionInfo> files;
+    bool ok = BSLab::UniversalUnpackerEngine::UnpackHuaweiUpdateApp(
+        app_path,
+        out_dir,
+        files,
+        [progress_cb](float pct, const std::string& status) {
+            if (progress_cb) {
+                int p = static_cast<int>(pct * 100.0f);
+                progress_cb(p, p, "HUAWEI", status.c_str());
+            }
+        }
+    );
+    if (out_file_count) *out_file_count = static_cast<int>(files.size());
+    if (out_json_buffer && max_json_len > 0) {
+        std::ostringstream ss;
+        ss << "{\"status\": \"" << (ok ? "OK" : "ERROR") << "\", \"total_files\": " << files.size() << ", \"files\": [";
+        for (size_t i = 0; i < files.size(); ++i) {
+            if (i > 0) ss << ", ";
+            ss << "{\"name\": \"" << files[i].name << "\", \"size\": " << files[i].size << "}";
+        }
+        ss << "]}";
+        std::string jsonStr = ss.str();
+        strncpy(out_json_buffer, jsonStr.c_str(), max_json_len - 1);
+        out_json_buffer[max_json_len - 1] = '\0';
+    }
+    return ok;
+}
+
+BSLAB_API void BSLab_Unpacker_Abort() {
+    BSLab::UniversalUnpackerEngine::Abort();
 }

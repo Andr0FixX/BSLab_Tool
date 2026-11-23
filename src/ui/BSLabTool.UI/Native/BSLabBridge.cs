@@ -678,5 +678,70 @@ namespace BSLabTool.UI.Native
 
         [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void BSLab_QC_Diag_Abort();
+
+        // ====================================================================
+        // PHASE 8: UNIVERSAL FIRMWARE UNPACKER ENGINE (PAYLOAD.BIN, SPARSE, SUPER, APP)
+        // ====================================================================
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int BSLab_Unpacker_IdentifyType(
+            [MarshalAs(UnmanagedType.LPStr)] string filePath,
+            [Out] StringBuilder outTypeName,
+            int maxNameLen
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_Unpacker_UnsparseImage(
+            [MarshalAs(UnmanagedType.LPStr)] string sparsePath,
+            [MarshalAs(UnmanagedType.LPStr)] string outRawPath,
+            BSLabProgressCallback progressCb
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_Unpacker_UnpackSuper(
+            [MarshalAs(UnmanagedType.LPStr)] string superPath,
+            [MarshalAs(UnmanagedType.LPStr)] string outDir,
+            [Out] StringBuilder outJsonBuffer,
+            int maxJsonLen,
+            out int outFileCount,
+            BSLabProgressCallback progressCb
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_Unpacker_InspectPayloadBin(
+            [MarshalAs(UnmanagedType.LPStr)] string payloadPath,
+            [Out] StringBuilder outJsonBuffer,
+            int maxJsonLen,
+            out int outPartitionCount
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_Unpacker_UnpackPayloadBin(
+            [MarshalAs(UnmanagedType.LPStr)] string payloadPath,
+            [MarshalAs(UnmanagedType.LPStr)] string outDir,
+            [MarshalAs(UnmanagedType.LPStr)] string targetPartitionsCsv,
+            [Out] StringBuilder outJsonBuffer,
+            int maxJsonLen,
+            out int outFileCount,
+            BSLabProgressCallback progressCb
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool BSLab_Unpacker_UnpackHuaweiApp(
+            [MarshalAs(UnmanagedType.LPStr)] string appPath,
+            [MarshalAs(UnmanagedType.LPStr)] string outDir,
+            [Out] StringBuilder outJsonBuffer,
+            int maxJsonLen,
+            out int outFileCount,
+            BSLabProgressCallback progressCb
+        );
+
+        [DllImport(DllName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void BSLab_Unpacker_Abort();
     }
 }

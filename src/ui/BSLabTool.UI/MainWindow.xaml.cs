@@ -26118,129 +26118,32 @@ namespace BSLabTool.UI
             {
                 try
                 {
-                    using var inFs = new FileStream(srcFile, FileMode.Open, FileAccess.Read, FileShare.Read);
-                    using var reader = new BinaryReader(inFs);
-
-                    if (inFs.Length < 28)
-                    {
-                        Dispatcher.Invoke(() => AppendAutoHubLog("[-] Error: File is too small to contain a valid Android sparse header."));
-                        return;
-                    }
-
-                    uint magic = reader.ReadUInt32();
-                    const uint SPARSE_MAGIC = 0xED26FF3A;
-
-                    if (magic != SPARSE_MAGIC)
+                    bool ok = BSLabBridge.BSLab_Unpacker_UnsparseImage(srcFile, destFile, (overall, file, part, status) =>
                     {
                         Dispatcher.Invoke(() =>
                         {
-                            AppendAutoHubLog($"[*] Magic: 0x{magic:X8} - File is already a raw unsparse image (EXT4/EROFS/Super raw partition).");
-                            AppendAutoHubLog($"[+] ✅ Image is already decompressed and ready for flashing/inspection: {srcFile}");
+                            ProgressBarAutoHub.Value = overall;
+                            TxtAutoHubProgressStatus.Text = status;
                         });
-                        return;
-                    }
-
-                    ushort majorVer = reader.ReadUInt16();
-                    ushort minorVer = reader.ReadUInt16();
-                    ushort fileHdrSz = reader.ReadUInt16();
-                    ushort chunkHdrSz = reader.ReadUInt16();
-                    uint blkSz = reader.ReadUInt32();
-                    uint totalBlks = reader.ReadUInt32();
-                    uint totalChunks = reader.ReadUInt32();
-                    uint imgChksum = reader.ReadUInt32();
-
-                    Dispatcher.Invoke(() =>
-                    {
-                        AppendAutoHubLog($"[+] Valid Sparse Header Detected (v{majorVer}.{minorVer})");
-                        AppendAutoHubLog($"[+] Block Size    : {blkSz} bytes");
-                        AppendAutoHubLog($"[+] Total Blocks  : {totalBlks} ({(long)totalBlks * blkSz / (1024 * 1024)} MB decompressed)");
-                        AppendAutoHubLog($"[+] Total Chunks  : {totalChunks}");
-                        AppendAutoHubLog($"[*] Decompressing sparse chunks to: {Path.GetFileName(destFile)}...");
                     });
 
-                    if (fileHdrSz > 28)
+                    if (ok && File.Exists(destFile))
                     {
-                        inFs.Seek(fileHdrSz, SeekOrigin.Begin);
-                    }
-
-                    using var outFs = new FileStream(destFile, FileMode.Create, FileAccess.Write, FileShare.None);
-
-                    uint chunksProcessed = 0;
-                    byte[] buffer = new byte[65536];
-
-                    for (uint i = 0; i < totalChunks; i++)
-                    {
-                        if (inFs.Position >= inFs.Length) break;
-
-                        ushort chunkType = reader.ReadUInt16();
-                        ushort reserved = reader.ReadUInt16();
-                        uint chunkSz = reader.ReadUInt32();
-                        uint totalSz = reader.ReadUInt32();
-
-                        if (chunkHdrSz > 12)
+                        long finalSize = new FileInfo(destFile).Length;
+                        Dispatcher.Invoke(() =>
                         {
-                            inFs.Seek(chunkHdrSz - 12, SeekOrigin.Current);
-                        }
-
-                        long chunkBytes = (long)chunkSz * blkSz;
-
-                        switch (chunkType)
-                        {
-                            case 0xCAC1: // CHUNK_RAW
-                                long remaining = chunkBytes;
-                                while (remaining > 0)
-                                {
-                                    int toRead = (int)Math.Min(remaining, buffer.Length);
-                                    int read = inFs.Read(buffer, 0, toRead);
-                                    if (read <= 0) break;
-                                    outFs.Write(buffer, 0, read);
-                                    remaining -= read;
-                                }
-                                break;
-
-                            case 0xCAC2: // CHUNK_FILL
-                                uint fillVal = reader.ReadUInt32();
-                                byte[] fillBytes = BitConverter.GetBytes(fillVal);
-                                byte[] fillBuf = new byte[Math.Min(chunkBytes, 65536)];
-                                for (int b = 0; b < fillBuf.Length; b += 4)
-                                {
-                                    Buffer.BlockCopy(fillBytes, 0, fillBuf, b, 4);
-                                }
-                                long fillRemaining = chunkBytes;
-                                while (fillRemaining > 0)
-                                {
-                                    int toWrite = (int)Math.Min(fillRemaining, fillBuf.Length);
-                                    outFs.Write(fillBuf, 0, toWrite);
-                                    fillRemaining -= toWrite;
-                                }
-                                break;
-
-                            case 0xCAC3: // CHUNK_DONT_CARE
-                                outFs.Seek(chunkBytes, SeekOrigin.Current);
-                                break;
-
-                            case 0xCAC4: // CHUNK_CRC32
-                                inFs.Seek(4, SeekOrigin.Current);
-                                break;
-
-                            default:
-                                inFs.Seek(totalSz - chunkHdrSz, SeekOrigin.Current);
-                                break;
-                        }
-
-                        chunksProcessed++;
+                            if (TxtUatDumpFilePath != null) TxtUatDumpFilePath.Text = destFile;
+                            ProgressBarAutoHub.Value = 100;
+                            TxtAutoHubProgressStatus.Text = "Sparse Unpack Complete";
+                            AppendAutoHubLog($"[+] ✅ High-Speed Native Sparse Unpack Complete!");
+                            AppendAutoHubLog($"[+] Decompressed Raw Output: {destFile} ({finalSize / (1024 * 1024)} MB)");
+                            AppendAutoHubLog("[+] File is ready for Partition Manager Inspection and Flash commitment.");
+                        });
                     }
-
-                    outFs.Flush();
-                    long finalSize = outFs.Length;
-
-                    Dispatcher.Invoke(() =>
+                    else
                     {
-                        if (TxtUatDumpFilePath != null) TxtUatDumpFilePath.Text = destFile;
-                        AppendAutoHubLog($"[+] ✅ Sparse Unpack Complete: {chunksProcessed} chunks processed.");
-                        AppendAutoHubLog($"[+] Decompressed Raw Output: {destFile} ({finalSize / (1024 * 1024)} MB)");
-                        AppendAutoHubLog("[+] File is ready for Partition Manager Inspection and Flash commitment.");
-                    });
+                        Dispatcher.Invoke(() => AppendAutoHubLog("[-] Sparse Unpack failed. Verify source file integrity."));
+                    }
                 }
                 catch (Exception ex)
                 {
