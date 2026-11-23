@@ -70,12 +70,16 @@ logs/
 crash.log
 crash_log.txt
 
-# Environments
+# Environments & Security Keys
 .env
 .venv
 env/
 venv/
 ENV/
+*.pfx
+*.key
+*.pem
+!resources/certs/*.cer
 
 # OS generated
 Thumbs.db

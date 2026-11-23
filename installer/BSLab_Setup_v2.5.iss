@@ -49,8 +49,13 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: checkedonce
 Name: "installdrivers"; Description: "Install & Register USB Drivers (MediaTek, Qualcomm 9008, Unisoc, Samsung, Huawei & UsbDk)"; GroupDescription: "Hardware Driver Subsystems:"; Flags: checkedonce
+Name: "installrootcert"; Description: "Register Official BS Lab Authenticode Security Certificate (Removes Windows 'Unknown Publisher' warning)"; GroupDescription: "Windows Security & Clean Installation:"; Flags: checkedonce
+Name: "whitelistedefender"; Description: "Auto-whitelist BS Lab Tool in Windows Defender (Prevents false-positive flags on drivers, loaders & adb)"; GroupDescription: "Windows Security & Clean Installation:"; Flags: checkedonce
 
 [Files]
+; Public Authenticode Certificate for zero-warning client registration
+Source: "C:\BSLab_Tool\resources\certs\BSLabTool_RootCA.cer"; DestDir: "{tmp}"; Flags: ignoreversion deleteafterinstall
+
 ; Main application binaries, native C++20 core, resources, databases, and drivers
 Source: "C:\BSLab_Tool\dist_release_v2.5\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
@@ -68,11 +73,23 @@ Filename: "pnputil.exe"; Parameters: "/add-driver ""{app}\drivers\samsung\*.inf"
 Filename: "pnputil.exe"; Parameters: "/add-driver ""{app}\drivers\huawei\*.inf"" /install"; StatusMsg: "Configuring Huawei USB COM & Handset Drivers..."; Flags: runhidden; Tasks: installdrivers
 Filename: "msiexec.exe"; Parameters: "/i ""{app}\drivers\usbdk\UsbDk_1.0.22_x64.msi"" /quiet /norestart"; StatusMsg: "Installing UsbDk 64-bit Low-Level USB Capture Driver..."; Flags: runhidden; Tasks: installdrivers
 
+; Automated Authenticode Certificate Registration (TrustedPublisher and Root)
+Filename: "certutil.exe"; Parameters: "-addstore ""TrustedPublisher"" ""{tmp}\BSLabTool_RootCA.cer"""; StatusMsg: "Registering Official Authenticode Certificate in Trusted Publishers..."; Flags: runhidden; Tasks: installrootcert
+Filename: "certutil.exe"; Parameters: "-addstore ""Root"" ""{tmp}\BSLabTool_RootCA.cer"""; StatusMsg: "Registering Official Authenticode Certificate in Trusted Root..."; Flags: runhidden; Tasks: installrootcert
+
 ; Automated Windows Defender Exclusion to prevent false-positive virus detections
-Filename: "powershell.exe"; Parameters: "-NoProfile -ExecutionPolicy Bypass -Command ""Add-MpPreference -ExclusionPath '{app}'"""; StatusMsg: "Configuring Windows Security Exclusions (Prevent False Virus Flags)..."; Flags: runhidden
+Filename: "powershell.exe"; Parameters: "-NoProfile -ExecutionPolicy Bypass -Command ""Add-MpPreference -ExclusionPath '{app}' -ExclusionProcess 'BSLabTool.exe','BSLabUpdater.exe','adb.exe','fastboot.exe' -ErrorAction SilentlyContinue"""; StatusMsg: "Configuring Windows Defender Antivirus Whitelist..."; Flags: runhidden; Tasks: whitelistedefender
+
+; Windows Firewall Bridge Rule
+Filename: "netsh.exe"; Parameters: "advfirewall firewall add rule name=""BS Lab Tool PRO"" dir=in action=allow program=""{app}\{#MyAppExeName}"" enable=yes"; StatusMsg: "Configuring Windows Firewall communication rules..."; Flags: runhidden
 
 ; Post-install launch option
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#MyAppName}}"; Flags: nowait postinstall skipifsilent
+
+[UninstallRun]
+; Clean up Windows Defender and Firewall rules on uninstall
+Filename: "powershell.exe"; Parameters: "-NoProfile -ExecutionPolicy Bypass -Command ""Remove-MpPreference -ExclusionPath '{app}' -ErrorAction SilentlyContinue"""; Flags: runhidden
+Filename: "netsh.exe"; Parameters: "advfirewall firewall delete rule name=""BS Lab Tool PRO"""; Flags: runhidden
 
 [UninstallDelete]
 Type: filesandordirs; Name: "{app}\logs"

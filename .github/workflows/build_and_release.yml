@@ -111,6 +111,17 @@ jobs:
 
           Get-ChildItem -Path $stage | Select-Object Name, Length
 
+      - name: 🔐 Sign Staged Binaries with Authenticode Code Signing
+        shell: pwsh
+        run: |
+          powershell -ExecutionPolicy Bypass -File scripts/Generate-BSLabCertificate.ps1
+          powershell -ExecutionPolicy Bypass -File scripts/Sign-ReleaseBinaries.ps1 `
+            -Targets @(
+              "C:\BSLab_Tool_Stage\BSLabTool.exe",
+              "C:\BSLab_Tool_Stage\BSLabCore.dll",
+              "C:\BSLab_Tool_Stage\BSLabUpdater.exe"
+            )
+
       - name: 📦 Setup Inno Setup
         uses: opticalflare/install-inno-setup@v2
 
@@ -127,6 +138,11 @@ jobs:
             Set-Content "installer\BSLab_Setup_Runner.iss"
 
           iscc "installer\BSLab_Setup_Runner.iss"
+
+          # Sign the generated setup installer
+          powershell -ExecutionPolicy Bypass -File scripts/Sign-ReleaseBinaries.ps1 `
+            -Targets @("$outputDir\BSLab_Tool_PRO_v2.5_Setup.exe")
+
           Get-ChildItem -Path $outputDir | Select-Object Name, Length
 
       - name: 🗜️ Package Standalone Portable Zip & Delta OTA Bundle
