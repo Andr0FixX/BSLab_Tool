@@ -1,0 +1,187 @@
+name: Build & Release BS Lab Tool PRO
+
+on:
+  push:
+    branches: [ main ]
+    tags:
+      - 'v*'
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build Native Core, UI & Installer
+    runs-on: windows-latest
+
+    steps:
+      - name: 📥 Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: ⚙️ Setup .NET 8.0 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: 🛠️ Setup MinGW-w64 C++20 Toolchain
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: true
+          install: >-
+            mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-binutils
+          path-type: inherit
+
+      - name: 🔨 Compile Native C++20 Core (BSLabCore.dll)
+        shell: msys2 {0}
+        run: |
+          mkdir -p dist_build
+          g++ -std=c++20 -O2 -shared -DBSLABCORE_EXPORTS \
+            -I src/native/BSLabCore/include \
+            -I src/native/BSLabCore/src \
+            src/native/BSLabCore/src/BSLabCore.cpp \
+            src/native/BSLabCore/src/UniversalUnpackerEngine.cpp \
+            -o dist_build/BSLabCore.dll \
+            -static -lsetupapi -lws2_32
+          ls -lh dist_build/BSLabCore.dll
+
+      - name: 🧪 Execute Native Unit Tests
+        shell: msys2 {0}
+        run: |
+          g++ -std=c++20 -O2 \
+            -I src/native/BSLabCore/include \
+            -I src/native/BSLabCore/src \
+            src/native/BSLabCore/test_unpacker.cpp \
+            dist_build/BSLabCore.dll \
+            -o dist_build/test_unpacker.exe \
+            -static
+          ./dist_build/test_unpacker.exe
+          rm -f dist_build/test_unpacker.exe
+
+      - name: 🚀 Compile Standalone BSLabUpdater.exe
+        shell: msys2 {0}
+        run: |
+          g++ -O2 -mwindows -static \
+            src/updater/updater.cpp \
+            -o dist_build/BSLabUpdater.exe \
+            -lkernel32 -lshell32 -luser32
+          ls -lh dist_build/BSLabUpdater.exe
+
+      - name: 💻 Build .NET 8 WPF Frontend
+        shell: pwsh
+        run: |
+          # Copy compiled native DLL to UI source for interop verification
+          Copy-Item "dist_build\BSLabCore.dll" "src\ui\BSLabTool.UI\BSLabCore.dll" -Force
+
+          dotnet publish src/ui/BSLabTool.UI/BSLabTool.UI.csproj `
+            -c Release `
+            -r win-x64 `
+            --self-contained false `
+            -o dist_build
+
+      - name: 📦 Assemble Full Release Staging Directory
+        shell: pwsh
+        run: |
+          $stage = "C:\BSLab_Tool_Stage"
+          if (Test-Path $stage) { Remove-Item -Recurse -Force $stage }
+          New-Item -ItemType Directory -Path $stage | Out-Null
+
+          # Copy compiled binaries
+          Copy-Item "dist_build\*" $stage -Recurse -Force
+
+          # Copy runtime assets and drivers from repo
+          if (Test-Path "drivers") { Copy-Item "drivers" "$stage\drivers" -Recurse -Force }
+          if (Test-Path "engines") { Copy-Item "engines" "$stage\engines" -Recurse -Force }
+          if (Test-Path "resources") { Copy-Item "resources" "$stage\resources" -Recurse -Force }
+
+          # Ensure DA loader and models database are present
+          if (Test-Path "DA_SWSEC_AUTO.bin") { Copy-Item "DA_SWSEC_AUTO.bin" "$stage\" -Force }
+          if (Test-Path "BS_LAB_SUPPORTED_MODELS.html") { Copy-Item "BS_LAB_SUPPORTED_MODELS.html" "$stage\" -Force }
+
+          # Create clean empty runtime directories
+          @("backups", "dumps", "logs", "workspace", "screenshots") | ForEach-Object {
+            New-Item -ItemType Directory -Path "$stage\$_" -Force | Out-Null
+          }
+
+          Get-ChildItem -Path $stage | Select-Object Name, Length
+
+      - name: 📦 Setup Inno Setup
+        uses: opticalflare/install-inno-setup@v2
+
+      - name: 💿 Compile Inno Setup Master Installer
+        shell: pwsh
+        run: |
+          $outputDir = "C:\installer_output"
+          New-Item -ItemType Directory -Path $outputDir -Force | Out-Null
+
+          # Update installer source path for runner environment
+          (Get-Content "installer\BSLab_Setup_v2.5.iss") `
+            -replace 'Source: "C:\\BSLab_Tool\\dist_release_v2.5\\\*";', 'Source: "C:\BSLab_Tool_Stage\*";' `
+            -replace 'OutputDir=C:\\BSLab_Tool\\installer_output', "OutputDir=$outputDir" |
+            Set-Content "installer\BSLab_Setup_Runner.iss"
+
+          iscc "installer\BSLab_Setup_Runner.iss"
+          Get-ChildItem -Path $outputDir | Select-Object Name, Length
+
+      - name: 🗜️ Package Standalone Portable Zip & Delta OTA Bundle
+        shell: pwsh
+        run: |
+          $outputDir = "C:\installer_output"
+          $stage = "C:\BSLab_Tool_Stage"
+
+          # 1. Full Standalone Portable Zip
+          Add-Type -AssemblyName System.IO.Compression.FileSystem
+          $portableZip = Join-Path $outputDir "BSLab_Tool_v2.5_PRO_Portable_x64.zip"
+          [System.IO.Compression.ZipFile]::CreateFromDirectory($stage, $portableZip, [System.IO.Compression.CompressionLevel]::Fastest, $false)
+
+          # 2. Fast Delta OTA Update Bundle
+          $deltaDir = "C:\BSLab_Delta"
+          New-Item -ItemType Directory -Path $deltaDir -Force | Out-Null
+          Copy-Item "$stage\BSLabCore.dll" "$deltaDir\" -Force
+          Copy-Item "$stage\BSLabTool.dll" "$deltaDir\" -Force
+          Copy-Item "$stage\BSLabTool.exe" "$deltaDir\" -Force
+          Copy-Item "$stage\BSLabUpdater.exe" "$deltaDir\" -Force
+          if (Test-Path "$stage\BSLabTool.runtimeconfig.json") { Copy-Item "$stage\BSLabTool.runtimeconfig.json" "$deltaDir\" -Force }
+          if (Test-Path "$stage\BSLabTool.deps.json") { Copy-Item "$stage\BSLabTool.deps.json" "$deltaDir\" -Force }
+
+          $deltaZip = Join-Path $outputDir "BSLab_Update.zip"
+          [System.IO.Compression.ZipFile]::CreateFromDirectory($deltaDir, $deltaZip, [System.IO.Compression.CompressionLevel]::Optimal, $false)
+
+          # Copy standalone native core for direct single-file updates
+          Copy-Item "$stage\BSLabCore.dll" "$outputDir\BSLabCore.dll" -Force
+
+          # 3. Compute SHA256 Checksums
+          $checksumFile = Join-Path $outputDir "SHA256SUMS.txt"
+          Get-ChildItem -Path $outputDir -File | Where-Object { $_.Name -ne "SHA256SUMS.txt" } | ForEach-Object {
+            $hash = (Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+            "$hash  $($_.Name)"
+          } | Out-File -Encoding utf8 $checksumFile
+
+          Get-Content $checksumFile
+
+      - name: 📤 Upload Build Artifacts (CI Archive)
+        uses: actions/upload-artifact@v4
+        with:
+          name: BSLab_Tool_PRO_Build
+          path: C:\installer_output\*
+          if-no-files-found: error
+
+      - name: 🚀 Publish Official GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            C:\installer_output\BSLab_Tool_PRO_v2.5_Setup.exe
+            C:\installer_output\BSLab_Tool_v2.5_PRO_Portable_x64.zip
+            C:\installer_output\BSLab_Update.zip
+            C:\installer_output\BSLabCore.dll
+            C:\installer_output\SHA256SUMS.txt
+          generate_release_notes: true
+          draft: false
+          prerelease: false
