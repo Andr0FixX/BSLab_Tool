@@ -211,6 +211,167 @@ namespace BSLabTool.UI
             OnUatTestPointsClicked(sender, e);
         }
 
+        private void OnOpenFrpWizardClicked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var frpWin = new BSLabTool.UI.Views.UniversalFrpWizardWindow();
+                frpWin.Owner = this;
+                frpWin.Show();
+                AppendAutoHubLog("[+] ⚡ Universal 1-Click FRP & Cloud Lock Bypass Wizard engaged.");
+            }
+            catch (Exception ex)
+            {
+                AppendAutoHubLog($"[!] FRP Wizard Launch Error: {ex.Message}");
+            }
+        }
+
+        private void OnOpenNetworkSuiteClicked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var netWin = new BSLabTool.UI.Views.NetworkBasebandSuiteWindow();
+                netWin.Owner = this;
+                netWin.Show();
+                AppendAutoHubLog("[+] 📶 Qualcomm QCN & MTK NVRAM Network / Baseband Suite opened.");
+            }
+            catch (Exception ex)
+            {
+                AppendAutoHubLog($"[!] Network Suite Launch Error: {ex.Message}");
+            }
+        }
+
+        private void OnOpenCloudLoaderClicked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var cloudWin = new BSLabTool.UI.Views.CloudLoaderManagerWindow();
+                cloudWin.Owner = this;
+                cloudWin.Show();
+                AppendAutoHubLog("[+] ☁️ Cloud Loader & TestPoint Auto-Downloader opened.");
+            }
+            catch (Exception ex)
+            {
+                AppendAutoHubLog($"[!] Cloud Loader Launch Error: {ex.Message}");
+            }
+        }
+
+        #region Fastboot to EDL & BL Unlock Helper Suite
+
+        private async void OnFastbootMultiEdlClicked(object sender, RoutedEventArgs e)
+        {
+            AppendAdbLog("══════════════════════════════════════════════════════════════");
+            AppendAdbLog("⚡ [FASTBOOT TO EDL 9008] DEEP FLASH REBOOT ENGINE");
+            AppendAdbLog("══════════════════════════════════════════════════════════════");
+            AppendAdbLog("[*] Attempting Method 1: fastboot oem edl...");
+            string r = await ExecuteCliAsync("fastboot.exe", "oem edl");
+            if (r.Contains("unknown") || r.Contains("FAILED") || r.Contains("error"))
+            {
+                AppendAdbLog("[*] Method 1 refused. Trying Method 2: fastboot reboot-edl...");
+                r = await ExecuteCliAsync("fastboot.exe", "reboot-edl");
+            }
+            if (r.Contains("unknown") || r.Contains("FAILED") || r.Contains("error"))
+            {
+                AppendAdbLog("[*] Method 2 refused. Trying Method 3: fastboot reboot edl...");
+                r = await ExecuteCliAsync("fastboot.exe", "reboot edl");
+            }
+            if (r.Contains("unknown") || r.Contains("FAILED") || r.Contains("error"))
+            {
+                AppendAdbLog("[*] Method 3 refused. Trying Method 4: fastboot oem reboot-edl...");
+                r = await ExecuteCliAsync("fastboot.exe", "oem reboot-edl");
+            }
+            AppendAdbLog($"[+] Final Dispatch Result: {r.Trim()}");
+            AppendAdbLog("[+] Check Windows Device Manager: Port should latch as 'Qualcomm HS-USB QDLoader 9008'.");
+        }
+
+        private async void OnFastbootCheckArbClicked(object sender, RoutedEventArgs e)
+        {
+            AppendAdbLog("══════════════════════════════════════════════════════════════");
+            AppendAdbLog("🛡️ [XIAOMI ARB CHECKER] ANTI-ROLLBACK PROTECTION INDEX");
+            AppendAdbLog("══════════════════════════════════════════════════════════");
+            string prod = await ExecuteCliAsync("fastboot.exe", "getvar product");
+            string anti = await ExecuteCliAsync("fastboot.exe", "getvar anti");
+            AppendAdbLog(prod.Trim());
+            AppendAdbLog(anti.Trim());
+
+            var match = Regex.Match(anti, @"anti:\s*(\d+)");
+            if (match.Success)
+            {
+                int arbIndex = int.Parse(match.Groups[1].Value);
+                AppendAdbLog($"[+] DETECTED HARDWARE ARB INDEX: {arbIndex}");
+                if (arbIndex >= 4)
+                {
+                    AppendAdbLog($"[⚠️] CRITICAL SECURITY ALERT: ARB index is {arbIndex}.");
+                    AppendAdbLog("[⚠️] Never flash a firmware ROM with anti-rollback version lower than this, or device will HARD BRICK.");
+                }
+                else
+                {
+                    AppendAdbLog($"[✓] ARB Index is {arbIndex} (Standard rollback protection). Safe to flash matching or higher firmware.");
+                }
+            }
+            else
+            {
+                AppendAdbLog("[*] ARB variable not locked or generic target detected.");
+            }
+        }
+
+        private async void OnFastbootUnlockBlClicked(object sender, RoutedEventArgs e)
+        {
+            var confirm = MessageBox.Show(
+                "Warning: Bootloader unlocking will wipe user data and factory reset device!\n\nDo you want to proceed with instant unlock?",
+                "Bootloader Unlock Confirmation",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning
+            );
+            if (confirm != MessageBoxResult.Yes) return;
+
+            AppendAdbLog("══════════════════════════════════════════════════════════════");
+            AppendAdbLog("🔓 [INSTANT BOOTLOADER UNLOCK] TRANSMITTING UNLOCK SEQUENCE");
+            AppendAdbLog("══════════════════════════════════════════════════════════");
+            AppendAdbLog("[*] Sending: fastboot flashing unlock...");
+            string r1 = await ExecuteCliAsync("fastboot.exe", "flashing unlock");
+            AppendAdbLog($"[+] Result: {r1.Trim()}");
+
+            AppendAdbLog("[*] Sending: fastboot flashing unlock_critical...");
+            string r2 = await ExecuteCliAsync("fastboot.exe", "flashing unlock_critical");
+            AppendAdbLog($"[+] Result: {r2.Trim()}");
+
+            AppendAdbLog("[*] Sending: fastboot oem unlock...");
+            string r3 = await ExecuteCliAsync("fastboot.exe", "oem unlock");
+            AppendAdbLog($"[+] Result: {r3.Trim()}");
+
+            string state = await ExecuteCliAsync("fastboot.exe", "getvar unlocked");
+            AppendAdbLog($"[+] Lock State: {state.Trim()}");
+        }
+
+        private async void OnFastbootFixDestroyedClicked(object sender, RoutedEventArgs e)
+        {
+            AppendAdbLog("══════════════════════════════════════════════════════════════");
+            AppendAdbLog("🚀 [RESCUE] FIX 'THE SYSTEM HAS BEEN DESTROYED' / FASTBOOT LOOP");
+            AppendAdbLog("══════════════════════════════════════════════════════════");
+            AppendAdbLog("[1] Erasing active corrupt recovery triggers (misc)...");
+            string r1 = await ExecuteCliAsync("fastboot.exe", "erase misc");
+            AppendAdbLog($"[+] misc: {r1.Trim()}");
+
+            AppendAdbLog("[2] Clearing AVB custom security key...");
+            string r2 = await ExecuteCliAsync("fastboot.exe", "erase avb_custom_key");
+            AppendAdbLog($"[+] avb_custom_key: {r2.Trim()}");
+
+            AppendAdbLog("[3] Checking active slot...");
+            string slot = await ExecuteCliAsync("fastboot.exe", "getvar current-slot");
+            AppendAdbLog(slot.Trim());
+
+            AppendAdbLog("[4] Disabling AVB 2.0 verification flags on active vbmeta...");
+            string r3 = await ExecuteCliAsync("fastboot.exe", "--disable-verity --disable-verification flash vbmeta");
+            AppendAdbLog($"[+] vbmeta: {r3.Trim()}");
+
+            AppendAdbLog("[5] Rebooting device...");
+            await ExecuteCliAsync("fastboot.exe", "reboot");
+            AppendAdbLog("[✓] Rescue sequence completed. Device should boot normally without red warning.");
+        }
+
+        #endregion
+
         private void OnUatTelegramClicked(object sender, RoutedEventArgs e)
         {
             try

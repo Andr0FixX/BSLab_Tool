@@ -518,7 +518,9 @@
                 <Button x:Name="TabUatBackup" Content="⋮ BACKUP FIRMWARE" Style="{StaticResource CyberNavTab}" Click="OnNavTabClicked" Margin="0,0,4,0"/>
                 <Button x:Name="TabUatDiag" Content="⋮ DIAG" Style="{StaticResource CyberNavTab}" Click="OnNavTabClicked" Margin="0,0,4,0"/>
                 <Button x:Name="TabUatDump" Content="⋮ DUMP" Style="{StaticResource CyberNavTab}" Click="OnNavTabClicked" Margin="0,0,4,0"/>
-                <Button x:Name="TabUatPinouts" Content="⋮ PINOUTS &amp; TP" ToolTip="Interactive Visual TestPoint &amp; ISP Schematic Gallery" Style="{StaticResource CyberNavTab}" Click="OnOpenTestPointGalleryClicked" Margin="0,0,8,0"/>
+                <Button x:Name="TabUatPinouts" Content="⋮ PINOUTS &amp; TP" ToolTip="Interactive Visual TestPoint &amp; ISP Schematic Gallery" Style="{StaticResource CyberNavTab}" Click="OnOpenTestPointGalleryClicked" Margin="0,0,4,0"/>
+                <Button x:Name="TabUatFrpWizard" Content="⚡ 1-CLICK FRP WIZARD" ToolTip="Unified 1-Click FRP, Mi Account &amp; Cloud Lock Bypass Wizard" Style="{StaticResource CyberNavTab}" Foreground="#F59E0B" FontWeight="ExtraBold" Click="OnOpenFrpWizardClicked" Margin="0,0,4,0"/>
+                <Button x:Name="TabUatCloudLoader" Content="☁️ CLOUD LOADERS" ToolTip="Dynamic Cloud Loaders, Programmers &amp; TestPoints Vault" Style="{StaticResource CyberNavTab}" Foreground="#38BDF8" FontWeight="ExtraBold" Click="OnOpenCloudLoaderClicked" Margin="0,0,8,0"/>
 
                 <!-- Legacy Navigation Buttons Kept Hidden to preserve C# field bindings with 0 errors -->
                 <StackPanel Visibility="Collapsed">
@@ -563,6 +565,9 @@
                         <Button Content="💻" ToolTip="Serial AT Command Terminal" Width="38" Height="28" Margin="0,1" Style="{StaticResource WindowCtrlButton}" Click="OnUatTerminalClicked"/>
                         <Button Content="📱" ToolTip="ADB &amp; Fastboot Toolkit" Width="38" Height="28" Margin="0,1" Style="{StaticResource WindowCtrlButton}" Click="OnUatFastbootSuiteClicked"/>
                         <Button Content="🦊" ToolTip="Hardware Pinout &amp; EDL Testpoint Database" Width="38" Height="28" Margin="0,1" Style="{StaticResource WindowCtrlButton}" Click="OnUatTestPointsClicked"/>
+                        <Button Content="⚡" ToolTip="Universal 1-Click FRP &amp; Cloud Lock Wizard" Width="38" Height="28" Margin="0,1" Foreground="#F59E0B" Style="{StaticResource WindowCtrlButton}" Click="OnOpenFrpWizardClicked"/>
+                        <Button Content="📶" ToolTip="Qualcomm QCN &amp; MTK NVRAM Network / Baseband Suite" Width="38" Height="28" Margin="0,1" Foreground="#00E5FF" Style="{StaticResource WindowCtrlButton}" Click="OnOpenNetworkSuiteClicked"/>
+                        <Button Content="☁️" ToolTip="Cloud Loader &amp; TestPoint Auto-Downloader" Width="38" Height="28" Margin="0,1" Foreground="#38BDF8" Style="{StaticResource WindowCtrlButton}" Click="OnOpenCloudLoaderClicked"/>
                         <Button Content="f" FontWeight="ExtraBold" FontSize="13" Foreground="#4267B2" ToolTip="Facebook Community Support" Width="38" Height="28" Margin="0,1" Style="{StaticResource WindowCtrlButton}" Click="OnUatFacebookClicked"/>
                         <Button Content="✈️" ToolTip="Official Telegram Updates" Width="38" Height="28" Margin="0,1" Style="{StaticResource WindowCtrlButton}" Click="OnUatTelegramClicked"/>
                         <Button Content="▶️" ToolTip="Official Video Guides" Width="38" Height="28" Margin="0,1" Style="{StaticResource WindowCtrlButton}" Click="OnUatYouTubeClicked"/>
@@ -2230,6 +2235,10 @@
                                     <Button Content="Fastboot Reboot Recovery (Nokia)" Style="{StaticResource CyberBulletButton}" Click="OnFastbootRebootRecoveryNokiaClicked"/>
                                     <Button Content="Fastboot Reboot FastbootD (Nokia)" Style="{StaticResource CyberBulletButton}" Click="OnFastbootRebootFastbootdNokiaClicked"/>
                                     <Button Content="Fastboot OEM EDL (BL-Unlocked)" Style="{StaticResource CyberBulletButton}" Click="OnFastbootOemEdlClicked"/>
+                                    <Button Content="⚡ 1-Click Fastboot to EDL 9008 (Deep Flash)" Style="{StaticResource CyberBulletButton}" Foreground="#00E5FF" FontWeight="Bold" Click="OnFastbootMultiEdlClicked"/>
+                                    <Button Content="🛡️ Check Anti-Rollback (ARB) Protection Index" Style="{StaticResource CyberBulletButton}" Foreground="#F59E0B" FontWeight="Bold" Click="OnFastbootCheckArbClicked"/>
+                                    <Button Content="🔓 Instant Bootloader Unlock (Fastboot / BROM)" Style="{StaticResource CyberBulletButton}" Foreground="#34D399" FontWeight="Bold" Click="OnFastbootUnlockBlClicked"/>
+                                    <Button Content="🚀 1-Click Fix 'The system has been destroyed'" Style="{StaticResource CyberBulletButton}" Foreground="#F43F5E" FontWeight="Bold" Click="OnFastbootFixDestroyedClicked"/>
                                     <Button Content="Fastboot WIPE EFS (BL-Unlocked)" Style="{StaticResource CyberBulletButton}" Click="OnFastbootWipeEfsClicked"/>
                                     <Button Content="⚡ Flash Google Factory Image (flash-all.bat)" Style="{StaticResource CyberBulletButton}" Foreground="#F59E0B" Click="OnFastbootFlashAllClicked"/>
                                     <Button Content="⚡ 1-Click Fastboot Temp Root" Style="{StaticResource CyberBulletButton}" Foreground="#38BDF8" FontWeight="Bold" Click="OnFastbootTempRootClicked"/>

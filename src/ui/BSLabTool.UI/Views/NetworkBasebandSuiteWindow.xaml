@@ -1,0 +1,392 @@
+<Window x:Class="BSLabTool.UI.Views.NetworkBasebandSuiteWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="BS LAB TOOL™ PRO — Network, Baseband &amp; NVRAM / QCN Calibration Suite"
+        Width="1050" Height="700" MinWidth="850" MinHeight="580"
+        WindowStartupLocation="CenterOwner"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent"
+        ResizeMode="CanResizeWithGrip">
+
+    <Window.Resources>
+        <!-- Neon Gradient Brushes -->
+        <LinearGradientBrush x:Key="BorderGlow" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#00E5FF" Offset="0.0"/>
+            <GradientStop Color="#38BDF8" Offset="0.5"/>
+            <GradientStop Color="#34D399" Offset="1.0"/>
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="CyanBlueGradient" StartPoint="0,0" EndPoint="1,0">
+            <GradientStop Color="#0284C7" Offset="0.0"/>
+            <GradientStop Color="#00E5FF" Offset="1.0"/>
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="EmeraldGradient" StartPoint="0,0" EndPoint="1,0">
+            <GradientStop Color="#059669" Offset="0.0"/>
+            <GradientStop Color="#10B981" Offset="1.0"/>
+        </LinearGradientBrush>
+
+        <!-- Modern Action Button Style -->
+        <Style x:Key="SuiteActionButton" TargetType="Button">
+            <Setter Property="Background" Value="#1E293B"/>
+            <Setter Property="Foreground" Value="#F8FAFC"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#334155"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bd" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#334155"/>
+                                <Setter TargetName="bd" Property="BorderBrush" Value="#00E5FF"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#0F172A"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.4"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Giant Button Style -->
+        <Style x:Key="SuiteGiantButton" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource CyanBlueGradient}"/>
+            <Setter Property="Foreground" Value="#0B132B"/>
+            <Setter Property="FontWeight" Value="ExtraBold"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Padding" Value="14,10"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bd" Background="{TemplateBinding Background}"
+                                CornerRadius="8" Padding="{TemplateBinding Padding}">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="15" Color="#00E5FF" Opacity="0.35" ShadowDepth="2"/>
+                            </Border.Effect>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Opacity" Value="0.9"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="bd" Property="Opacity" Value="0.75"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Nav Tab Style -->
+        <Style x:Key="SuiteNavTab" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#94A3B8"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="11.5"/>
+            <Setter Property="Padding" Value="16,8"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0,0,0,2"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bd" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="#F8FAFC"/>
+                                <Setter TargetName="bd" Property="BorderBrush" Value="#475569"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <!-- Outer Container with Neon Border -->
+    <Border CornerRadius="12" BorderThickness="1.5" BorderBrush="{StaticResource BorderGlow}" Background="#0B132B" Margin="8">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="25" Color="#00E5FF" Opacity="0.3" Direction="270" ShadowDepth="4"/>
+        </Border.Effect>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <!-- Title Bar -->
+                <RowDefinition Height="46"/>
+                <!-- Telemetry & Radio Status Banner -->
+                <RowDefinition Height="64"/>
+                <!-- Mode Navigation Tabs -->
+                <RowDefinition Height="42"/>
+                <!-- Main Workspace Panels -->
+                <RowDefinition Height="*"/>
+                <!-- Bottom Info Bar -->
+                <RowDefinition Height="36"/>
+            </Grid.RowDefinitions>
+
+            <!-- ================================================================ -->
+            <!-- ROW 0: CUSTOM TITLE BAR                                           -->
+            <!-- ================================================================ -->
+            <Border Grid.Row="0" Background="#0F172A" CornerRadius="12,12,0,0" MouseDown="OnTitleBarMouseDown" BorderBrush="#1E293B" BorderThickness="0,0,0,1">
+                <Grid Margin="12,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="📶" FontSize="18" Foreground="#00E5FF" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="BS LAB TOOL PRO" FontSize="14" FontWeight="ExtraBold" Foreground="#F8FAFC" VerticalAlignment="Center"/>
+                        <Border Background="#0284C7" CornerRadius="4" Padding="6,2" Margin="10,0,0,0" VerticalAlignment="Center">
+                            <TextBlock Text="NETWORK, BASEBAND &amp; NVRAM / QCN SUITE" FontSize="9" FontWeight="Bold" Foreground="#FFFFFF"/>
+                        </Border>
+                    </StackPanel>
+
+                    <TextBlock Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Qualcomm Diag 9001/9091 • MediaTek Meta Mode • EFS / NVRAM Repair" FontSize="10" Foreground="#64748B"/>
+
+                    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Button Content="—" Width="30" Height="26" Background="Transparent" Foreground="#94A3B8" BorderThickness="0" FontSize="14" Click="OnMinimizeClicked" Cursor="Hand"/>
+                        <Button Content="✕" Width="30" Height="26" Background="Transparent" Foreground="#EF4444" BorderThickness="0" FontSize="14" FontWeight="Bold" Click="OnCloseClicked" Cursor="Hand" Margin="4,0,0,0"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- ================================================================ -->
+            <!-- ROW 1: LIVE RADIO & HARDWARE STATUS BANNER                        -->
+            <!-- ================================================================ -->
+            <Border Grid.Row="1" Background="#131F37" BorderBrush="#1E293B" BorderThickness="0,0,0,1" Padding="14,8">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Border Background="#1E293B" BorderBrush="#334155" BorderThickness="1" CornerRadius="8" Width="44" Height="44" Margin="0,0,12,0">
+                            <TextBlock x:Name="TxtRadioIcon" Text="📡" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <StackPanel VerticalAlignment="Center">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock x:Name="TxtRadioBadge" Text="DIAG &amp; BASEBAND ENGINE READY" FontWeight="ExtraBold" FontSize="11" Foreground="#00E5FF" Margin="0,0,8,0"/>
+                                <Border Background="#166534" CornerRadius="3" Padding="5,1">
+                                    <TextBlock Text="ONLINE" FontSize="8.5" FontWeight="Bold" Foreground="#4ADE80"/>
+                                </Border>
+                            </StackPanel>
+                            <TextBlock x:Name="TxtPortDetail" Text="Qualcomm Diag 9001/9091 or MediaTek USB VCOM Mode" FontSize="12" FontWeight="Bold" Foreground="#F8FAFC" Margin="0,2,0,0"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Button Content="🔄 Scan Diag / Meta Ports" Style="{StaticResource SuiteActionButton}" Click="OnScanPortsClicked" Margin="0,0,8,0"/>
+                        <Button Content="⚙️ Device Manager" Style="{StaticResource SuiteActionButton}" Click="OnOpenDevMgrClicked"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- ================================================================ -->
+            <!-- ROW 2: METHOD NAVIGATION TABS                                     -->
+            <!-- ================================================================ -->
+            <Border Grid.Row="2" Background="#0F172A" BorderBrush="#1E293B" BorderThickness="0,0,0,1">
+                <StackPanel Orientation="Horizontal" Margin="12,0" VerticalAlignment="Center">
+                    <Button x:Name="TabBtnQualcommQcn" Content="📶 QUALCOMM QCN &amp; EFS" Style="{StaticResource SuiteNavTab}" Foreground="#00E5FF" BorderBrush="#00E5FF" Click="OnSuiteTabClicked" Tag="Qcn"/>
+                    <Button x:Name="TabBtnMtkMeta" Content="🔬 MEDIATEK META NVRAM" Style="{StaticResource SuiteNavTab}" Click="OnSuiteTabClicked" Tag="Meta"/>
+                    <Button x:Name="TabBtnXiaomiNvData" Content="⚡ XIAOMI NV DATA CORRUPTED" Style="{StaticResource SuiteNavTab}" Click="OnSuiteTabClicked" Tag="Xiaomi"/>
+                    <Button x:Name="TabBtnQcnPatch" Content="🔧 QCN INSPECTOR &amp; PATCHER" Style="{StaticResource SuiteNavTab}" Click="OnSuiteTabClicked" Tag="Patcher"/>
+                </StackPanel>
+            </Border>
+
+            <!-- ================================================================ -->
+            <!-- ROW 3: MAIN WORKSPACE (LEFT ACTIONS + RIGHT CONSOLE)              -->
+            <!-- ================================================================ -->
+            <Grid Grid.Row="3" Margin="12,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="460"/> <!-- Action Panels -->
+                    <ColumnDefinition Width="*"/>   <!-- Live Protocol Console -->
+                </Grid.ColumnDefinitions>
+
+                <!-- LEFT PANELS -->
+                <Grid Grid.Column="0" Margin="0,0,10,0">
+                    <!-- PANEL 1: QUALCOMM QCN & EFS -->
+                    <ScrollViewer x:Name="PanelQualcommQcn" VerticalScrollBarVisibility="Auto" Visibility="Visible">
+                        <StackPanel Margin="0,0,4,0">
+                            <!-- Diag Port Selector -->
+                            <Border Background="#1E293B" CornerRadius="8" Padding="12" Margin="0,0,0,10" BorderBrush="#334155" BorderThickness="1">
+                                <StackPanel>
+                                    <TextBlock Text="📡 QUALCOMM DIAGNOSTIC PORT &amp; SPC" FontSize="11" FontWeight="Bold" Foreground="#38BDF8" Margin="0,0,0,6"/>
+                                    <Grid Margin="0,0,0,8">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <ComboBox x:Name="CmbDiagComPort" Height="26" Background="#0F172A" Foreground="#FFFFFF" BorderBrush="#334155" VerticalContentAlignment="Center" Margin="0,0,6,0">
+                                            <ComboBoxItem Content="COM3: Qualcomm HS-USB Diagnostics 900E" IsSelected="True"/>
+                                            <ComboBoxItem Content="COM4: Qualcomm HS-USB Android Diag 901D"/>
+                                            <ComboBoxItem Content="COM5: Qualcomm HS-USB QDLoader 9008"/>
+                                        </ComboBox>
+                                        <Button Grid.Column="1" Content="Send SPC (000000)" Style="{StaticResource SuiteActionButton}" Click="OnSendSpcClicked"/>
+                                    </Grid>
+
+                                    <Button Content="⚡ Enable Diag Port (*#*#717717#*#* / ADB Root)" Style="{StaticResource SuiteActionButton}" Click="OnEnableDiagAdbClicked"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- QCN Backup & Restore -->
+                            <Border Background="#1E293B" CornerRadius="8" Padding="12" Margin="0,0,0,10" BorderBrush="#334155" BorderThickness="1">
+                                <StackPanel>
+                                    <TextBlock Text="💾 QCN / XQCN RF CALIBRATION VAULT" FontSize="11" FontWeight="Bold" Foreground="#34D399" Margin="0,0,0,6"/>
+                                    <Button Content="📥 Backup QCN from Connected Device" Style="{StaticResource SuiteGiantButton}" Click="OnBackupQcnClicked" Margin="0,0,0,6"/>
+                                    <Button Content="📤 Restore QCN Calibration File to Device" Style="{StaticResource SuiteActionButton}" Click="OnRestoreQcnClicked" Margin="0,0,0,6"/>
+                                    <Button Content="🧹 Wipe Corrupted EFS (modemst1/2/fsg)" Style="{StaticResource SuiteActionButton}" Background="#7F1D1D" BorderBrush="#EF4444" Foreground="#FCA5A5" FontWeight="Bold" Click="OnWipeEfsClicked"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Reboot & Radio Power -->
+                            <Border Background="#162032" CornerRadius="8" Padding="12" BorderBrush="#1E293B" BorderThickness="1">
+                                <StackPanel>
+                                    <TextBlock Text="🔄 DIAG POWER &amp; REBOOT CONTROLS" FontSize="10.5" FontWeight="Bold" Foreground="#94A3B8" Margin="0,0,0,4"/>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Button Grid.Column="0" Content="Soft Reboot Phone" Style="{StaticResource SuiteActionButton}" Click="OnDiagSoftRebootClicked" Margin="0,0,4,0"/>
+                                        <Button Grid.Column="1" Content="Exit Diag &amp; Radio ON" Style="{StaticResource SuiteActionButton}" Click="OnDiagExitRadioClicked" Margin="4,0,0,0"/>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </ScrollViewer>
+
+                    <!-- PANEL 2: MEDIATEK META NVRAM -->
+                    <ScrollViewer x:Name="PanelMtkMeta" VerticalScrollBarVisibility="Auto" Visibility="Collapsed">
+                        <StackPanel Margin="0,0,4,0">
+                            <Border Background="#1E293B" CornerRadius="8" Padding="12" Margin="0,0,0,10" BorderBrush="#334155" BorderThickness="1">
+                                <StackPanel>
+                                    <TextBlock Text="🔬 MEDIATEK META MODE HANDSHAKE" FontSize="11" FontWeight="Bold" Foreground="#00D2FF" Margin="0,0,0,6"/>
+                                    <Button Content="⚡ Connect / Handshake (In META Mode)" Style="{StaticResource SuiteGiantButton}" Background="{StaticResource EmeraldGradient}" Click="OnMtkMetaConnectClicked" Margin="0,0,0,6"/>
+                                    <Button Content="🔄 Reboot Phone to META Mode (BROM / Preloader)" Style="{StaticResource SuiteActionButton}" Click="OnMtkMetaRebootClicked" Margin="0,0,0,6"/>
+                                    <Button Content="📖 Read META Hardware Info &amp; Baseband" Style="{StaticResource SuiteActionButton}" Click="OnMtkMetaReadInfoClicked"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Background="#1E293B" CornerRadius="8" Padding="12" Margin="0,0,0,10" BorderBrush="#334155" BorderThickness="1">
+                                <StackPanel>
+                                    <TextBlock Text="📶 DUAL SIM IMEI CALIBRATION (NVRAM / NVDATA)" FontSize="11" FontWeight="Bold" Foreground="#F59E0B" Margin="0,0,0,6"/>
+                                    <TextBlock Text="IMEI 1 (Primary SIM):" FontSize="9" Foreground="#94A3B8" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtMetaImei1" Height="26" Background="#0F172A" Foreground="#34D399" BorderBrush="#334155" FontWeight="Bold" FontSize="11" Padding="6,2" Margin="0,0,0,6"/>
+                                    <TextBlock Text="IMEI 2 (Secondary SIM):" FontSize="9" Foreground="#94A3B8" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="TxtMetaImei2" Height="26" Background="#0F172A" Foreground="#34D399" BorderBrush="#334155" FontWeight="Bold" FontSize="11" Padding="6,2" Margin="0,0,0,8"/>
+
+                                    <Button Content="⚡ Write Dual IMEI (Permanent Hardware NV)" Style="{StaticResource SuiteActionButton}" Background="#047857" BorderBrush="#10B981" FontWeight="Bold" Click="OnMtkWriteImeiClicked" Margin="0,0,0,6"/>
+                                    <Button Content="📖 Read Dual IMEI from Phone" Style="{StaticResource SuiteActionButton}" Click="OnMtkReadImeiClicked"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Background="#162032" CornerRadius="8" Padding="12" BorderBrush="#1E293B" BorderThickness="1">
+                                <StackPanel>
+                                    <TextBlock Text="💾 NVRAM DATABASE BACKUP &amp; RESTORE" FontSize="10.5" FontWeight="Bold" Foreground="#94A3B8" Margin="0,0,0,6"/>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Button Grid.Column="0" Content="Backup NVRAM" Style="{StaticResource SuiteActionButton}" Click="OnMtkBackupNvramClicked" Margin="0,0,4,0"/>
+                                        <Button Grid.Column="1" Content="Restore NVRAM" Style="{StaticResource SuiteActionButton}" Click="OnMtkRestoreNvramClicked" Margin="4,0,0,0"/>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </ScrollViewer>
+
+                    <!-- PANEL 3: XIAOMI NV DATA CORRUPTED 1-CLICK FIX -->
+                    <ScrollViewer x:Name="PanelXiaomiNvData" VerticalScrollBarVisibility="Auto" Visibility="Collapsed">
+                        <StackPanel Margin="0,0,4,0">
+                            <Border Background="#431407" CornerRadius="8" Padding="12" Margin="0,0,0,10" BorderBrush="#EA580C" BorderThickness="1">
+                                <StackPanel>
+                                    <TextBlock Text="⚡ XIAOMI 'NV DATA IS CORRUPTED' RESCUE" FontSize="12.5" FontWeight="Bold" Foreground="#F97316"/>
+                                    <TextBlock Text="Fixes the infamous NV Data Corrupted recovery bootloop by formatting corrupt modem NV caches while retaining factory radio tables." FontSize="10" Foreground="#FED7AA" TextWrapping="Wrap" Margin="0,3,0,10"/>
+
+                                    <Button Content="🚀 1-CLICK FIX NV DATA CORRUPTED" Style="{StaticResource SuiteGiantButton}" Background="{StaticResource CyanBlueGradient}" Click="OnXiaomiFixNvDataClicked" Margin="0,0,0,8"/>
+                                    <Button Content="🧹 Fastboot Erase EFS (modemst1, modemst2, fsg)" Style="{StaticResource SuiteActionButton}" Click="OnXiaomiFastbootEraseEfsClicked" Margin="0,0,0,6"/>
+                                    <Button Content="🔄 Reboot Xiaomi to Normal OS" Style="{StaticResource SuiteActionButton}" Click="OnXiaomiRebootNormalClicked"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </ScrollViewer>
+
+                    <!-- PANEL 4: QCN INSPECTOR & PATCHER -->
+                    <ScrollViewer x:Name="PanelQcnPatch" VerticalScrollBarVisibility="Auto" Visibility="Collapsed">
+                        <StackPanel Margin="0,0,4,0">
+                            <Border Background="#1E293B" CornerRadius="8" Padding="12" Margin="0,0,0,10" BorderBrush="#334155" BorderThickness="1">
+                                <StackPanel>
+                                    <TextBlock Text="🔧 QCN FILE INSPECTOR &amp; PATCH ENGINE" FontSize="11" FontWeight="Bold" Foreground="#38BDF8" Margin="0,0,0,6"/>
+                                    <TextBlock Text="Select official/read QCN file to inspect NV items, verify Luhn checksums, and patch target IMEI." FontSize="10" Foreground="#94A3B8" TextWrapping="Wrap" Margin="0,0,0,8"/>
+
+                                    <Button Content="📂 Browse &amp; Inspect QCN File" Style="{StaticResource SuiteActionButton}" Click="OnBrowseInspectQcnClicked" Margin="0,0,0,6"/>
+                                    <Button Content="⚡ Patch Target IMEI into Selected QCN" Style="{StaticResource SuiteActionButton}" Click="OnPatchQcnClicked"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+
+                <!-- RIGHT PANEL: LIVE EXECUTION CONSOLE -->
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <!-- Header -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- Console Box -->
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <DockPanel Grid.Row="0" Margin="2,0,2,4">
+                        <TextBlock Text="BASEBAND &amp; RF PROTOCOL LOG" FontSize="9.5" FontWeight="Bold" Foreground="#64748B" VerticalAlignment="Center"/>
+                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+                            <Button Content="📋 Copy Log" Style="{StaticResource SuiteActionButton}" Padding="8,3" FontSize="10" Click="OnCopyLogClicked" Margin="0,0,4,0"/>
+                            <Button Content="🧹 Clear" Style="{StaticResource SuiteActionButton}" Padding="8,3" FontSize="10" Click="OnClearLogClicked"/>
+                        </StackPanel>
+                    </DockPanel>
+
+                    <Border Grid.Row="1" Background="#060A14" CornerRadius="8" BorderBrush="#1E293B" BorderThickness="1" Padding="8">
+                        <TextBox x:Name="TxtConsoleLog" Background="Transparent" Foreground="#38BDF8" BorderThickness="0" FontFamily="Consolas, Lucida Console, Courier New" FontSize="11" IsReadOnly="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/>
+                    </Border>
+                </Grid>
+            </Grid>
+
+            <!-- ================================================================ -->
+            <!-- ROW 4: BOTTOM STATUS BAR                                          -->
+            <!-- ================================================================ -->
+            <Border Grid.Row="4" Background="#0F172A" CornerRadius="0,0,12,12" BorderBrush="#1E293B" BorderThickness="0,1,0,0" Padding="12,0">
+                <DockPanel VerticalAlignment="Center">
+                    <TextBlock Text="BS LAB TOOL PRO V2.5 • RF &amp; BASEBAND SUITE • FOR AUTHORIZED HARDWARE REPAIR ONLY" FontSize="9.5" Foreground="#64748B" VerticalAlignment="Center"/>
+                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" VerticalAlignment="Center">
+                        <TextBlock Text="STATUS: " FontSize="9.5" Foreground="#64748B"/>
+                        <TextBlock x:Name="TxtBottomStatus" Text="STANDBY" FontSize="9.5" FontWeight="Bold" Foreground="#10B981"/>
+                    </StackPanel>
+                </DockPanel>
+            </Border>
+        </Grid>
+    </Border>
+</Window>
