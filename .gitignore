@@ -19,6 +19,7 @@ dist/
 dist_clean/
 dist_new/
 dist_release/
+dist_release_v2.5/
 BSLab_Tool_v2.5_PRO_dist_new_*/
 installer_output/
 test_install_verify/
