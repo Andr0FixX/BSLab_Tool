@@ -195,12 +195,20 @@ namespace BSLabTool.UI
         {
             try
             {
-                Process.Start(new ProcessStartInfo("https://mrm-developer.com/pinouts") { UseShellExecute = true });
+                var tpWin = new BSLabTool.UI.Views.VisualTestPointWindow();
+                tpWin.Owner = this;
+                tpWin.Show();
+                AppendAutoHubLog("[+] 📍 Hardware TestPoint & ISP Pinout Gallery opened in interactive vector view.");
             }
-            catch
+            catch (Exception ex)
             {
-                MessageBox.Show("Official TestPoint & ISP Pinout Database browser mein open ho raha hai.", "Pinout Database", MessageBoxButton.OK, MessageBoxImage.Information);
+                AppendAutoHubLog($"[!] TestPoint Gallery Launch Error: {ex.Message}");
             }
+        }
+
+        private void OnOpenTestPointGalleryClicked(object sender, RoutedEventArgs e)
+        {
+            OnUatTestPointsClicked(sender, e);
         }
 
         private void OnUatTelegramClicked(object sender, RoutedEventArgs e)

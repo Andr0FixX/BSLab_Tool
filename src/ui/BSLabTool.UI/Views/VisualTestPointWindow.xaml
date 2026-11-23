@@ -1,0 +1,246 @@
+<Window x:Class="BSLabTool.UI.Views.VisualTestPointWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="BS LAB TOOL™ — Hardware TestPoint &amp; ISP Pinout Gallery"
+        Width="1050" Height="680" MinWidth="850" MinHeight="550"
+        WindowStartupLocation="CenterOwner"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent"
+        ResizeMode="CanResizeWithGrip">
+
+    <Window.Resources>
+        <LinearGradientBrush x:Key="BorderGlow" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#00E5FF" Offset="0.0"/>
+            <GradientStop Color="#818CF8" Offset="0.5"/>
+            <GradientStop Color="#0284C7" Offset="1.0"/>
+        </LinearGradientBrush>
+
+        <Style x:Key="ModernSearchBox" TargetType="TextBox">
+            <Setter Property="Background" Value="#0F172A"/>
+            <Setter Property="Foreground" Value="#F8FAFC"/>
+            <Setter Property="BorderBrush" Value="#334155"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="10,6"/>
+            <Setter Property="FontSize" Value="12.5"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border x:Name="border" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6">
+                            <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="#00E5FF"/>
+                                <Setter TargetName="border" Property="Background" Value="#1E293B"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <!-- Outer Container with Neon Border -->
+    <Border CornerRadius="12" BorderThickness="1.5" BorderBrush="{StaticResource BorderGlow}" Background="#0B132B" Margin="8">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="25" Color="#00E5FF" Opacity="0.35" Direction="270" ShadowDepth="4"/>
+        </Border.Effect>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <!-- Title Bar -->
+                <RowDefinition Height="44"/>
+                <!-- Main Workspace -->
+                <RowDefinition Height="*"/>
+                <!-- Bottom Info Bar -->
+                <RowDefinition Height="36"/>
+            </Grid.RowDefinitions>
+
+            <!-- 1. Custom Title Bar -->
+            <Border Grid.Row="0" Background="#111C35" CornerRadius="11,11,0,0" BorderThickness="0,0,0,1" BorderBrush="#1E293B" MouseDown="OnTitleBarMouseDown">
+                <Grid Margin="16,0,12,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Border Width="26" Height="26" Background="#0284C7" CornerRadius="6" VerticalAlignment="Center" Margin="0,0,10,0">
+                            <TextBlock Text="⚡" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FFFFFF"/>
+                        </Border>
+                        <TextBlock Text="HARDWARE TESTPOINT &amp; ISP PINOUT GALLERY" FontSize="12.5" FontWeight="Bold" Foreground="#38BDF8" VerticalAlignment="Center"/>
+                        <Border Background="#1E293B" CornerRadius="4" Padding="6,2" Margin="10,0,0,0" VerticalAlignment="Center">
+                            <TextBlock Text="EDL 9008 • MTK BROM • KIRIN COM 1.0" FontSize="9.5" FontWeight="SemiBold" Foreground="#94A3B8"/>
+                        </Border>
+                    </StackPanel>
+
+                    <!-- Window Control Buttons -->
+                    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Button Click="OnCloseClicked" Width="30" Height="26" Background="#3F1B22" BorderBrush="#E11D48" Foreground="#FDA4AF" Cursor="Hand">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" CornerRadius="6">
+                                        <TextBlock Text="✕" FontSize="11" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{TemplateBinding Foreground}"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- 2. Main Workspace (Split: Left Selector | Center Interactive Canvas | Right Instructions) -->
+            <Grid Grid.Row="1" Margin="12,10,12,6">
+                <Grid.ColumnDefinitions>
+                    <!-- Left: Model Selector List -->
+                    <ColumnDefinition Width="260" MinWidth="200" MaxWidth="340"/>
+                    <ColumnDefinition Width="8"/>
+                    <!-- Center: Interactive Schematic Canvas -->
+                    <ColumnDefinition Width="*" MinWidth="350"/>
+                    <ColumnDefinition Width="8"/>
+                    <!-- Right: Step-by-Step Instructions -->
+                    <ColumnDefinition Width="310" MinWidth="240" MaxWidth="400"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- LEFT COLUMN: Search & Model List -->
+                <Border Grid.Column="0" Background="#0F172A" BorderBrush="#1E293B" BorderThickness="1" CornerRadius="8" Padding="10">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Search Box -->
+                        <TextBox x:Name="TxtSearch" Grid.Row="0" Style="{StaticResource ModernSearchBox}" Height="34" Margin="0,0,0,8" TextChanged="OnSearchTextChanged"/>
+
+                        <!-- Brand Filter Pills -->
+                        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" Margin="0,0,0,8">
+                            <StackPanel Orientation="Horizontal">
+                                <Button x:Name="BtnFilterAll" Click="OnBrandFilterClicked" Tag="ALL" Content="ALL" Padding="8,3" Margin="0,0,4,0" Background="#0284C7" Foreground="#FFFFFF" FontWeight="Bold" FontSize="10" Cursor="Hand"/>
+                                <Button Click="OnBrandFilterClicked" Tag="Xiaomi" Content="Xiaomi" Padding="8,3" Margin="0,0,4,0" Background="#1E293B" Foreground="#94A3B8" FontSize="10" Cursor="Hand"/>
+                                <Button Click="OnBrandFilterClicked" Tag="Samsung" Content="Samsung" Padding="8,3" Margin="0,0,4,0" Background="#1E293B" Foreground="#94A3B8" FontSize="10" Cursor="Hand"/>
+                                <Button Click="OnBrandFilterClicked" Tag="Infinix" Content="Infinix" Padding="8,3" Margin="0,0,4,0" Background="#1E293B" Foreground="#94A3B8" FontSize="10" Cursor="Hand"/>
+                                <Button Click="OnBrandFilterClicked" Tag="Tecno" Content="Tecno" Padding="8,3" Margin="0,0,4,0" Background="#1E293B" Foreground="#94A3B8" FontSize="10" Cursor="Hand"/>
+                                <Button Click="OnBrandFilterClicked" Tag="Huawei" Content="Huawei" Padding="8,3" Margin="0,0,4,0" Background="#1E293B" Foreground="#94A3B8" FontSize="10" Cursor="Hand"/>
+                                <Button Click="OnBrandFilterClicked" Tag="Vivo" Content="Vivo" Padding="8,3" Margin="0,0,4,0" Background="#1E293B" Foreground="#94A3B8" FontSize="10" Cursor="Hand"/>
+                                <Button Click="OnBrandFilterClicked" Tag="Oppo" Content="Oppo" Padding="8,3" Margin="0,0,4,0" Background="#1E293B" Foreground="#94A3B8" FontSize="10" Cursor="Hand"/>
+                            </StackPanel>
+                        </ScrollViewer>
+
+                        <!-- Models ListBox -->
+                        <ListBox x:Name="LstModels" Grid.Row="2" Background="Transparent" BorderThickness="0" SelectionChanged="OnModelSelectionChanged" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="#131F37" BorderBrush="#1E3A8A" BorderThickness="1" CornerRadius="6" Padding="8,6" Margin="0,0,0,6">
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+                                            <TextBlock Grid.Row="0" Text="{Binding Key}" FontWeight="Bold" FontSize="11.5" Foreground="#F8FAFC"/>
+                                            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,2,0,0">
+                                                <Border Background="#0284C7" CornerRadius="3" Padding="4,1" Margin="0,0,6,0">
+                                                    <TextBlock Text="{Binding Value.brand}" FontSize="8.5" FontWeight="SemiBold" Foreground="#FFFFFF"/>
+                                                </Border>
+                                                <TextBlock Text="{Binding Value.mode}" FontSize="9" Foreground="#64748B" TextTrimming="CharacterEllipsis"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                </Border>
+
+                <!-- CENTER COLUMN: Interactive Schematic Canvas -->
+                <Border Grid.Column="2" Background="#050B18" BorderBrush="#1E293B" BorderThickness="1" CornerRadius="8" ClipToBounds="True">
+                    <Grid>
+                        <!-- Canvas Zoom/Pan Container -->
+                        <ScrollViewer x:Name="CanvasScrollViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Background="#070D1E">
+                            <Canvas x:Name="BoardCanvas" Width="550" Height="480" Background="#1E3A2F" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <!-- Motherboard Elements are injected programmatically -->
+                            </Canvas>
+                        </ScrollViewer>
+
+                        <!-- Canvas Overlay Controls (Zoom +, Zoom -, Reset) -->
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="12">
+                            <Button Click="OnZoomInClicked" Content="➕" Width="32" Height="30" Background="#1E293B" BorderBrush="#334155" Foreground="#38BDF8" Margin="0,0,6,0" Cursor="Hand"/>
+                            <Button Click="OnZoomOutClicked" Content="➖" Width="32" Height="30" Background="#1E293B" BorderBrush="#334155" Foreground="#38BDF8" Margin="0,0,6,0" Cursor="Hand"/>
+                            <Button Click="OnResetZoomClicked" Content="🔄 Reset" Padding="8,2" Height="30" Background="#1E293B" BorderBrush="#334155" Foreground="#94A3B8" FontSize="10" Cursor="Hand"/>
+                        </StackPanel>
+
+                        <!-- Top Model Title Overlay -->
+                        <Border HorizontalAlignment="Left" VerticalAlignment="Top" Background="#0F172ACC" CornerRadius="0,0,8,0" Padding="12,6" BorderBrush="#1E293B" BorderThickness="0,0,1,1">
+                            <TextBlock x:Name="TxtCanvasModelTitle" Text="Select a device model to view pinout" FontSize="11.5" FontWeight="Bold" Foreground="#38BDF8"/>
+                        </Border>
+                    </Grid>
+                </Border>
+
+                <!-- RIGHT COLUMN: Hardware Instructions & Details -->
+                <Border Grid.Column="4" Background="#0F172A" BorderBrush="#1E293B" BorderThickness="1" CornerRadius="8" Padding="12">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Header Badges -->
+                        <StackPanel Grid.Row="0" Margin="0,0,0,8">
+                            <TextBlock x:Name="TxtDetailModelName" Text="Model Details" FontSize="14" FontWeight="Bold" Foreground="#F8FAFC" TextWrapping="Wrap"/>
+                            <TextBlock x:Name="TxtDetailChipset" Text="Chipset info" FontSize="11" Foreground="#38BDF8" Margin="0,2,0,0"/>
+                        </StackPanel>
+
+                        <!-- Mode & Difficulty Pills -->
+                        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
+                            <Border x:Name="BadgeMode" Background="#065F46" BorderBrush="#10B981" BorderThickness="1" CornerRadius="4" Padding="6,2" Margin="0,0,6,0">
+                                <TextBlock x:Name="TxtDetailMode" Text="BROM Mode" FontSize="9.5" FontWeight="Bold" Foreground="#34D399"/>
+                            </Border>
+                            <Border Background="#1E293B" CornerRadius="4" Padding="6,2">
+                                <TextBlock x:Name="TxtDetailDifficulty" Text="Easy" FontSize="9.5" Foreground="#94A3B8"/>
+                            </Border>
+                        </StackPanel>
+
+                        <Separator Grid.Row="2" Background="#1E293B" Margin="0,0,0,10"/>
+
+                        <!-- Step-by-Step Instructions -->
+                        <ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Auto">
+                            <StackPanel>
+                                <TextBlock Text="Technician Procedure:" FontSize="10.5" FontWeight="Bold" Foreground="#94A3B8" Margin="0,0,0,6"/>
+                                <TextBlock x:Name="TxtDetailInstructions" Text="Select a model from the list to see exact pinout instructions." FontSize="11.5" Foreground="#E2E8F0" TextWrapping="Wrap" LineHeight="18"/>
+                            </StackPanel>
+                        </ScrollViewer>
+
+                        <!-- Action Buttons (Copy Instructions & Close) -->
+                        <StackPanel Grid.Row="4" Margin="0,10,0,0">
+                            <Button Click="OnCopyInstructionsClicked" Height="34" Background="#1E293B" BorderBrush="#38BDF8" BorderThickness="1" Foreground="#38BDF8" FontWeight="SemiBold" FontSize="11" Cursor="Hand" Margin="0,0,0,6">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <TextBlock Text="📋 Copy Pinout Guide" Margin="0,0,6,0"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <!-- 3. Bottom Information Bar -->
+            <Border Grid.Row="2" Background="#070D1E" CornerRadius="0,0,11,11" BorderThickness="0,1,0,0" BorderBrush="#1E293B" Padding="16,8">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="🔒 Verified PCB Test Point Schematics • Hardware Pinout Subsystem" FontSize="9.5" Foreground="#64748B" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="1" Text="BS LAB TOOL™ Enterprise" FontSize="9.5" FontWeight="SemiBold" Foreground="#38BDF8" VerticalAlignment="Center"/>
+                </Grid>
+            </Border>
+        </Grid>
+    </Border>
+</Window>

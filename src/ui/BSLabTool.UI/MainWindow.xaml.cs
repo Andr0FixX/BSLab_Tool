@@ -27,6 +27,7 @@ using System.Windows.Media.Effects;
 using System.Windows.Threading;
 
 using Microsoft.Win32;
+using System.Windows.Interop;
 
 using BSLabTool.UI.Native;
 using BSLabTool.UI.Services;
@@ -297,8 +298,76 @@ namespace BSLabTool.UI
         // REAL-TIME HARDWARE RADAR & DUAL NOTIFICATION SYSTEM (COM & USB)
 
         // ====================================================================
+        // WIN32 PNP HARDWARE HOOK & SMART USB SNIFFER (<10ms LATENCY)
+        // ====================================================================
 
+        protected override void OnSourceInitialized(EventArgs e)
+        {
+            base.OnSourceInitialized(e);
+            InitUsbDeviceChangePnpHook();
+        }
 
+        private void InitUsbDeviceChangePnpHook()
+        {
+            try
+            {
+                if (PresentationSource.FromVisual(this) is HwndSource source)
+                {
+                    source.AddHook(HwndDeviceChangeHook);
+                    AppendAutoHubLog("[+] ⚡ SMART USB SNIFFER: Win32 PnP Hardware Hook (WM_DEVICECHANGE) Active [<10ms Detection].");
+                }
+            }
+            catch { }
+        }
+
+        private IntPtr HwndDeviceChangeHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+        {
+            const int WM_DEVICECHANGE = 0x0219;
+            const int DBT_DEVICEARRIVAL = 0x8000;
+            const int DBT_DEVICEREMOVECOMPLETE = 0x8004;
+            const int DBT_DEVNODES_CHANGED = 0x0007;
+
+            if (msg == WM_DEVICECHANGE)
+            {
+                int wp = wParam.ToInt32();
+                if (wp == DBT_DEVICEARRIVAL || wp == DBT_DEVICEREMOVECOMPLETE || wp == DBT_DEVNODES_CHANGED)
+                {
+                    _ = Dispatcher.InvokeAsync(async () =>
+                    {
+                        await TriggerInstantPnpDeviceProbeAsync(wp == DBT_DEVICEARRIVAL);
+                    });
+                }
+            }
+            return IntPtr.Zero;
+        }
+
+        private async Task TriggerInstantPnpDeviceProbeAsync(bool isArrival)
+        {
+            if (_isRadarBusy || _isManualSnifferActive) return;
+            _isRadarBusy = true;
+            try
+            {
+                var result = await Task.Run(() => PerformQuickHardwareProbe(true));
+                UpdateLiveHardwareNotificationUi(result);
+
+                if (isArrival && (result.HasCom || result.HasUsb))
+                {
+                    string devName = !string.IsNullOrEmpty(result.UsbName) ? result.UsbName : result.ComDesc;
+                    string portStr = !string.IsNullOrEmpty(result.ComPort) ? $" on {result.ComPort}" : "";
+                    AppendAutoHubLog($"[+] ⚡ SMART USB SNIFFER: Instant PnP Detection -> {devName}{portStr} ({result.UsbMode})");
+
+                    if (!string.IsNullOrEmpty(result.ComPort) && result.UsbMode.Contains("MTK"))
+                    {
+                        _ = AutoLatchMtkBromPortAsync(result.ComPort, result.ComDesc);
+                    }
+                }
+            }
+            catch { }
+            finally
+            {
+                _isRadarBusy = false;
+            }
+        }
 
         private void StartLiveHardwareRadar()
 
@@ -2310,6 +2379,12 @@ namespace BSLabTool.UI
 
             }
 
+
+            else if (btn == TabBtnTestPoints)
+            {
+                OnOpenTestPointGalleryClicked(sender, e);
+                return;
+            }
 
             else if (btn == TabBtnSettings)
 

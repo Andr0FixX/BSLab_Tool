@@ -517,7 +517,8 @@
                 <Button x:Name="TabUatPartition" Content="⋮ PARTITION MANAGER" Style="{StaticResource CyberNavTab}" Click="OnNavTabClicked" Margin="0,0,4,0"/>
                 <Button x:Name="TabUatBackup" Content="⋮ BACKUP FIRMWARE" Style="{StaticResource CyberNavTab}" Click="OnNavTabClicked" Margin="0,0,4,0"/>
                 <Button x:Name="TabUatDiag" Content="⋮ DIAG" Style="{StaticResource CyberNavTab}" Click="OnNavTabClicked" Margin="0,0,4,0"/>
-                <Button x:Name="TabUatDump" Content="⋮ DUMP" Style="{StaticResource CyberNavTab}" Click="OnNavTabClicked" Margin="0,0,8,0"/>
+                <Button x:Name="TabUatDump" Content="⋮ DUMP" Style="{StaticResource CyberNavTab}" Click="OnNavTabClicked" Margin="0,0,4,0"/>
+                <Button x:Name="TabUatPinouts" Content="⋮ PINOUTS &amp; TP" ToolTip="Interactive Visual TestPoint &amp; ISP Schematic Gallery" Style="{StaticResource CyberNavTab}" Click="OnOpenTestPointGalleryClicked" Margin="0,0,8,0"/>
 
                 <!-- Legacy Navigation Buttons Kept Hidden to preserve C# field bindings with 0 errors -->
                 <StackPanel Visibility="Collapsed">
