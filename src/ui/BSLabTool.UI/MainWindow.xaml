@@ -408,7 +408,7 @@
 
                 <!-- Col 0: Left Title & Version Badge -->
                 <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock Text="BS LAB TOOL™ v2.6.2" FontSize="11.5" FontWeight="ExtraBold" Foreground="#4DD0E1" VerticalAlignment="Center"/>
+                    <TextBlock Text="BS LAB TOOL™ v2.6.3" FontSize="11.5" FontWeight="ExtraBold" Foreground="#4DD0E1" VerticalAlignment="Center"/>
                     <Border Background="#1A3A54" BorderBrush="#0288D1" BorderThickness="1" CornerRadius="3" Padding="5,1" Margin="6,0,6,0" VerticalAlignment="Center">
                         <TextBlock Text="PRO ENTERPRISE" FontSize="8" FontWeight="Bold" Foreground="#4FC3F7"/>
                     </Border>
@@ -4419,160 +4419,137 @@
             <!-- ================================================================ -->
             <Grid x:Name="ViewSettings" Visibility="Collapsed">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="520"/>
-                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="485"/>
+                    <ColumnDefinition Width="8"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Left Column: Tool Paths, Baud Rates & Safety Guard -->
-                <Border Grid.Column="0" Background="#13131A" CornerRadius="6" BorderBrush="#232332" BorderThickness="1" Padding="10">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <!-- Left Column: Tool Paths, Baud Rates & Safety Guard (Zero Scroll) -->
+                <Border Grid.Column="0" Background="#13131A" CornerRadius="6" BorderBrush="#232332" BorderThickness="1" Padding="7">
+                    <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
                         <StackPanel>
                             <!-- Settings Header Banner -->
-                            <Border Background="#0C1427" BorderBrush="#1D4ED8" BorderThickness="1" CornerRadius="5" Padding="8,6" Margin="0,0,0,8">
+                            <Border Background="#0C1427" BorderBrush="#1D4ED8" BorderThickness="1" CornerRadius="5" Padding="7,4" Margin="0,0,0,5">
                                 <DockPanel>
+                                    <TextBlock DockPanel.Dock="Right" Text="● SYNCED" FontSize="8.5" FontWeight="Bold" Foreground="#34D399" VerticalAlignment="Center"/>
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                        <TextBlock Text="⚙️ WORKSTATION SETTINGS" FontSize="11" FontWeight="ExtraBold" Foreground="#38BDF8"/>
+                                        <TextBlock Text="⚙️ WORKSTATION SETTINGS" FontSize="10" FontWeight="ExtraBold" Foreground="#38BDF8"/>
                                         <Border Background="#1E3A8A" CornerRadius="3" Padding="5,1" Margin="6,0,0,0">
-                                            <TextBlock Text="ENTERPRISE CORE" FontSize="8.5" FontWeight="Bold" Foreground="#93C5FD"/>
+                                            <TextBlock Text="ENTERPRISE CORE" FontSize="7.5" FontWeight="Bold" Foreground="#93C5FD"/>
                                         </Border>
                                     </StackPanel>
-                                    <TextBlock Text="● SYNCED" FontSize="9" FontWeight="Bold" Foreground="#34D399" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                                 </DockPanel>
                             </Border>
 
                             <!-- CARD 0: APPLICATION THEME & APPEARANCE -->
-                            <Border Background="#161A26" CornerRadius="5" Padding="10" Margin="0,0,0,8" BorderBrush="#253248" BorderThickness="1">
+                            <Border Background="#161A26" CornerRadius="5" Padding="7,5" Margin="0,0,0,5" BorderBrush="#253248" BorderThickness="1">
                                 <StackPanel>
-                                    <DockPanel Margin="0,0,0,6">
+                                    <DockPanel Margin="0,0,0,4">
+                                        <TextBlock x:Name="TxtCurrentThemeBadge" DockPanel.Dock="Right" Text="● ACTIVE: DARK" FontSize="8" FontWeight="Bold" Foreground="#34D399" VerticalAlignment="Center"/>
                                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                            <TextBlock Text="🎨 APPLICATION THEME &amp; APPEARANCE" FontSize="9.5" FontWeight="Bold" Foreground="#38BDF8"/>
-                                            <Border Background="#1E293B" CornerRadius="3" Padding="5,1" Margin="6,0,0,0">
-                                                <TextBlock Text="REAL-TIME UI" FontSize="7.5" FontWeight="Bold" Foreground="#94A3B8"/>
+                                            <TextBlock Text="🎨 APPLICATION THEME" FontSize="9" FontWeight="Bold" Foreground="#38BDF8"/>
+                                            <Border Background="#1E293B" CornerRadius="3" Padding="4,1" Margin="6,0,0,0">
+                                                <TextBlock Text="REAL-TIME UI" FontSize="7" FontWeight="Bold" Foreground="#94A3B8"/>
                                             </Border>
                                         </StackPanel>
-                                        <TextBlock x:Name="TxtCurrentThemeBadge" Text="● ACTIVE: DARK" FontSize="9" FontWeight="Bold" Foreground="#34D399" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                                     </DockPanel>
 
-                                    <TextBlock Text="Select workstation visual interface theme:" FontSize="8.5" Foreground="#94A3B8" Margin="0,0,0,6"/>
-
                                     <!-- 3 Theme Cards Grid -->
-                                    <Grid Margin="0,0,0,8">
+                                    <Grid Margin="0,0,0,5">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="6"/>
+                                            <ColumnDefinition Width="5"/>
                                             <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="6"/>
+                                            <ColumnDefinition Width="5"/>
                                             <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
 
                                         <!-- Option 1: Dark Theme -->
-                                        <Border x:Name="BorderThemeDark" Grid.Column="0" Background="#0C1427" BorderBrush="#0284C7" BorderThickness="1.5" CornerRadius="5" Padding="8,8" Cursor="Hand" MouseLeftButtonDown="OnThemeDarkClicked">
+                                        <Border x:Name="BorderThemeDark" Grid.Column="0" Background="#0C1427" BorderBrush="#0284C7" BorderThickness="1.5" CornerRadius="4" Padding="6,4" Cursor="Hand" MouseLeftButtonDown="OnThemeDarkClicked">
                                             <StackPanel HorizontalAlignment="Center">
-                                                <TextBlock Text="🌙" FontSize="15" HorizontalAlignment="Center" Margin="0,0,0,3"/>
-                                                <TextBlock Text="Dark Theme" FontSize="9.5" FontWeight="Bold" Foreground="#FFFFFF" HorizontalAlignment="Center"/>
-                                                <TextBlock Text="Midnight Cyber" FontSize="7.5" Foreground="#38BDF8" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                                                <TextBlock Text="🌙 Dark Theme" FontSize="9" FontWeight="Bold" Foreground="#FFFFFF" HorizontalAlignment="Center"/>
+                                                <TextBlock Text="Midnight Cyber" FontSize="7.5" Foreground="#38BDF8" HorizontalAlignment="Center" Margin="0,1,0,0"/>
                                             </StackPanel>
                                         </Border>
 
                                         <!-- Option 2: Light Theme -->
-                                        <Border x:Name="BorderThemeLight" Grid.Column="2" Background="#0F172A" BorderBrush="#334155" BorderThickness="1" CornerRadius="5" Padding="8,8" Cursor="Hand" MouseLeftButtonDown="OnThemeLightClicked">
+                                        <Border x:Name="BorderThemeLight" Grid.Column="2" Background="#0F172A" BorderBrush="#334155" BorderThickness="1" CornerRadius="4" Padding="6,4" Cursor="Hand" MouseLeftButtonDown="OnThemeLightClicked">
                                             <StackPanel HorizontalAlignment="Center">
-                                                <TextBlock Text="☀️" FontSize="15" HorizontalAlignment="Center" Margin="0,0,0,3"/>
-                                                <TextBlock Text="Light Theme" FontSize="9.5" FontWeight="Bold" Foreground="#CBD5E1" HorizontalAlignment="Center"/>
-                                                <TextBlock Text="Clean Lab White" FontSize="7.5" Foreground="#94A3B8" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                                                <TextBlock Text="☀️ Light Theme" FontSize="9" FontWeight="Bold" Foreground="#CBD5E1" HorizontalAlignment="Center"/>
+                                                <TextBlock Text="Clean Lab White" FontSize="7.5" Foreground="#94A3B8" HorizontalAlignment="Center" Margin="0,1,0,0"/>
                                             </StackPanel>
                                         </Border>
 
                                         <!-- Option 3: Default by System -->
-                                        <Border x:Name="BorderThemeSystem" Grid.Column="4" Background="#0F172A" BorderBrush="#334155" BorderThickness="1" CornerRadius="5" Padding="8,8" Cursor="Hand" MouseLeftButtonDown="OnThemeSystemClicked">
+                                        <Border x:Name="BorderThemeSystem" Grid.Column="4" Background="#0F172A" BorderBrush="#334155" BorderThickness="1" CornerRadius="4" Padding="6,4" Cursor="Hand" MouseLeftButtonDown="OnThemeSystemClicked">
                                             <StackPanel HorizontalAlignment="Center">
-                                                <TextBlock Text="💻" FontSize="15" HorizontalAlignment="Center" Margin="0,0,0,3"/>
-                                                <TextBlock Text="Default by System" FontSize="9.5" FontWeight="Bold" Foreground="#CBD5E1" HorizontalAlignment="Center"/>
-                                                <TextBlock Text="Follows Windows" FontSize="7.5" Foreground="#94A3B8" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                                                <TextBlock Text="💻 System Theme" FontSize="9" FontWeight="Bold" Foreground="#CBD5E1" HorizontalAlignment="Center"/>
+                                                <TextBlock Text="Follows Windows" FontSize="7.5" Foreground="#94A3B8" HorizontalAlignment="Center" Margin="0,1,0,0"/>
                                             </StackPanel>
                                         </Border>
                                     </Grid>
 
                                     <!-- Theme Status & Info Ribbon -->
-                                    <Border Background="#0B0F19" CornerRadius="4" Padding="8,5" BorderBrush="#1E293B" BorderThickness="1">
+                                    <Border Background="#0B0F19" CornerRadius="4" Padding="6,3" BorderBrush="#1E293B" BorderThickness="1">
                                         <DockPanel>
-                                            <TextBlock x:Name="TxtThemeStatusInfo" Text="Active: 🌙 Dark Cyber Core (OLED contrast &amp; reduced eye fatigue for firmware flashing)." FontSize="8" Foreground="#CBD5E1" VerticalAlignment="Center"/>
-                                            <Button Content="⚡ Apply Now" Width="80" Height="22" Background="#0284C7" Foreground="#FFFFFF" FontSize="8.5" FontWeight="Bold" BorderThickness="0" HorizontalAlignment="Right" Click="OnApplyThemeClicked"/>
+                                            <Button Content="⚡ Apply Now" DockPanel.Dock="Right" Width="76" Height="20" Background="#0284C7" Foreground="#FFFFFF" FontSize="8" FontWeight="Bold" BorderThickness="0" Margin="6,0,0,0" Click="OnApplyThemeClicked"/>
+                                            <TextBlock x:Name="TxtThemeStatusInfo" Text="Active: 🌙 Dark Cyber Core (OLED contrast)." FontSize="8" Foreground="#CBD5E1" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
                                         </DockPanel>
                                     </Border>
                                 </StackPanel>
                             </Border>
 
                             <!-- CARD 1: PLATFORM-TOOLS & BINARY ENVIRONMENT -->
-                            <Border Background="#161A26" CornerRadius="5" Padding="10" Margin="0,0,0,8" BorderBrush="#253248" BorderThickness="1">
+                            <Border Background="#161A26" CornerRadius="5" Padding="7,5" Margin="0,0,0,5" BorderBrush="#253248" BorderThickness="1">
                                 <StackPanel>
-                                    <TextBlock Text="📁 PLATFORM-TOOLS &amp; BINARY PATHS" FontSize="9.5" FontWeight="Bold" Foreground="#38BDF8" Margin="0,0,0,6"/>
+                                    <TextBlock Text="📁 PLATFORM-TOOLS &amp; BINARY PATHS" FontSize="9" FontWeight="Bold" Foreground="#38BDF8" Margin="0,0,0,4"/>
 
                                     <!-- ADB / Fastboot Path -->
-                                    <TextBlock Text="ADB &amp; Fastboot Executable Directory:" FontSize="8.5" Foreground="#94A3B8" Margin="0,0,0,2"/>
-                                    <Grid Margin="0,0,0,6">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBox x:Name="TxtSettingsPlatformToolsPath" Grid.Column="0" Height="24" Background="#0B0F19" Foreground="#38BDF8" BorderBrush="#334155" FontSize="9" Padding="4,2" Text="C:\BSLab_Tool\tools\platform-tools" IsReadOnly="True"/>
-                                        <Button Grid.Column="1" Content="📁" ToolTip="Browse Folder" Width="28" Height="24" Margin="4,0,0,0" Background="#1E293B" Foreground="#38BDF8" FontWeight="Bold" BorderThickness="0" Click="OnSettingsBrowsePlatformToolsClicked"/>
-                                        <Button Grid.Column="2" Content="⚡ Test" ToolTip="Test ADB &amp; Fastboot" Width="48" Height="24" Margin="4,0,0,0" Background="#0284C7" Foreground="#FFFFFF" FontWeight="Bold" BorderThickness="0" Click="OnSettingsTestAdbClicked"/>
-                                    </Grid>
+                                    <DockPanel Margin="0,0,0,4">
+                                        <TextBlock Text="ADB/Fastboot:" Width="78" FontSize="8" Foreground="#94A3B8" VerticalAlignment="Center"/>
+                                        <Button DockPanel.Dock="Right" Content="⚡ Test" ToolTip="Test ADB &amp; Fastboot" Width="44" Height="21" Margin="4,0,0,0" Background="#0284C7" Foreground="#FFFFFF" FontSize="8" FontWeight="Bold" BorderThickness="0" Click="OnSettingsTestAdbClicked"/>
+                                        <Button DockPanel.Dock="Right" Content="📁" ToolTip="Browse Folder" Width="26" Height="21" Margin="4,0,0,0" Background="#1E293B" Foreground="#38BDF8" FontWeight="Bold" BorderThickness="0" Click="OnSettingsBrowsePlatformToolsClicked"/>
+                                        <TextBox x:Name="TxtSettingsPlatformToolsPath" Height="21" Background="#0B0F19" Foreground="#38BDF8" BorderBrush="#334155" FontSize="8.5" Padding="4,1" VerticalContentAlignment="Center" Text="C:\BSLab_Tool\tools\platform-tools" IsReadOnly="True"/>
+                                    </DockPanel>
 
                                     <!-- Loaders & DA Path -->
-                                    <TextBlock Text="Hardware Loaders Directory (MTK DA / Firehose / Kirin xLoader):" FontSize="8.5" Foreground="#94A3B8" Margin="0,0,0,2"/>
-                                    <Grid Margin="0,0,0,6">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBox x:Name="TxtSettingsLoadersPath" Grid.Column="0" Height="24" Background="#0B0F19" Foreground="#38BDF8" BorderBrush="#334155" FontSize="9" Padding="4,2" Text="C:\BSLab_Tool\resources\loaders" IsReadOnly="True"/>
-                                        <Button Grid.Column="1" Content="📁" ToolTip="Browse Folder" Width="28" Height="24" Margin="4,0,0,0" Background="#1E293B" Foreground="#38BDF8" FontWeight="Bold" BorderThickness="0" Click="OnSettingsBrowseLoadersClicked"/>
-                                    </Grid>
+                                    <DockPanel Margin="0,0,0,4">
+                                        <TextBlock Text="Loaders / DA:" Width="78" FontSize="8" Foreground="#94A3B8" VerticalAlignment="Center"/>
+                                        <Button DockPanel.Dock="Right" Content="📁" ToolTip="Browse Folder" Width="26" Height="21" Margin="4,0,0,0" Background="#1E293B" Foreground="#38BDF8" FontWeight="Bold" BorderThickness="0" Click="OnSettingsBrowseLoadersClicked"/>
+                                        <TextBox x:Name="TxtSettingsLoadersPath" Height="21" Background="#0B0F19" Foreground="#38BDF8" BorderBrush="#334155" FontSize="8.5" Padding="4,1" VerticalContentAlignment="Center" Text="C:\BSLab_Tool\resources\loaders" IsReadOnly="True"/>
+                                    </DockPanel>
 
                                     <!-- PIT Database Path -->
-                                    <TextBlock Text="Samsung 484 PIT Database Directory:" FontSize="8.5" Foreground="#94A3B8" Margin="0,0,0,2"/>
-                                    <Grid Margin="0,0,0,6">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBox x:Name="TxtSettingsPitPath" Grid.Column="0" Height="24" Background="#0B0F19" Foreground="#38BDF8" BorderBrush="#334155" FontSize="9" Padding="4,2" Text="C:\BSLab_Tool\resources\pit_database" IsReadOnly="True"/>
-                                        <Button Grid.Column="1" Content="📁" ToolTip="Browse Folder" Width="28" Height="24" Margin="4,0,0,0" Background="#1E293B" Foreground="#38BDF8" FontWeight="Bold" BorderThickness="0" Click="OnSettingsBrowsePitClicked"/>
-                                    </Grid>
+                                    <DockPanel Margin="0,0,0,4">
+                                        <TextBlock Text="Samsung PIT:" Width="78" FontSize="8" Foreground="#94A3B8" VerticalAlignment="Center"/>
+                                        <Button DockPanel.Dock="Right" Content="📁" ToolTip="Browse Folder" Width="26" Height="21" Margin="4,0,0,0" Background="#1E293B" Foreground="#38BDF8" FontWeight="Bold" BorderThickness="0" Click="OnSettingsBrowsePitClicked"/>
+                                        <TextBox x:Name="TxtSettingsPitPath" Height="21" Background="#0B0F19" Foreground="#38BDF8" BorderBrush="#334155" FontSize="8.5" Padding="4,1" VerticalContentAlignment="Center" Text="C:\BSLab_Tool\resources\pit_database" IsReadOnly="True"/>
+                                    </DockPanel>
 
                                     <!-- Local Backups Path -->
-                                    <TextBlock Text="Local Backups &amp; Surgical Snapshots Directory:" FontSize="8.5" Foreground="#94A3B8" Margin="0,0,0,2"/>
-                                    <Grid Margin="0,0,0,4">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBox x:Name="TxtSettingsBackupsPath" Grid.Column="0" Height="24" Background="#0B0F19" Foreground="#38BDF8" BorderBrush="#334155" FontSize="9" Padding="4,2" Text="C:\BSLab_Tool\backups" IsReadOnly="True"/>
-                                        <Button Grid.Column="1" Content="📁" ToolTip="Browse Folder" Width="28" Height="24" Margin="4,0,0,0" Background="#1E293B" Foreground="#38BDF8" FontWeight="Bold" BorderThickness="0" Click="OnSettingsBrowseBackupsClicked"/>
-                                        <Button Grid.Column="2" Content="📂 Open" ToolTip="Open Backups Folder in Explorer" Width="55" Height="24" Margin="4,0,0,0" Background="#1E293B" Foreground="#34D399" FontWeight="Bold" BorderThickness="0" Click="OnSettingsOpenBackupsFolderClicked"/>
-                                    </Grid>
+                                    <DockPanel>
+                                        <TextBlock Text="Backups Dir:" Width="78" FontSize="8" Foreground="#94A3B8" VerticalAlignment="Center"/>
+                                        <Button DockPanel.Dock="Right" Content="📂 Open" ToolTip="Open Backups Folder in Explorer" Width="48" Height="21" Margin="4,0,0,0" Background="#1E293B" Foreground="#34D399" FontSize="8" FontWeight="Bold" BorderThickness="0" Click="OnSettingsOpenBackupsFolderClicked"/>
+                                        <Button DockPanel.Dock="Right" Content="📁" ToolTip="Browse Folder" Width="26" Height="21" Margin="4,0,0,0" Background="#1E293B" Foreground="#38BDF8" FontWeight="Bold" BorderThickness="0" Click="OnSettingsBrowseBackupsClicked"/>
+                                        <TextBox x:Name="TxtSettingsBackupsPath" Height="21" Background="#0B0F19" Foreground="#38BDF8" BorderBrush="#334155" FontSize="8.5" Padding="4,1" VerticalContentAlignment="Center" Text="C:\BSLab_Tool\backups" IsReadOnly="True"/>
+                                    </DockPanel>
                                 </StackPanel>
                             </Border>
 
                             <!-- CARD 2: HARDWARE COMMUNICATION & PORT SETTINGS -->
-                            <Border Background="#161A26" CornerRadius="5" Padding="10" Margin="0,0,0,8" BorderBrush="#253248" BorderThickness="1">
+                            <Border Background="#161A26" CornerRadius="5" Padding="7,5" Margin="0,0,0,5" BorderBrush="#253248" BorderThickness="1">
                                 <StackPanel>
-                                    <TextBlock Text="🔌 HARDWARE COMMUNICATION &amp; COM RADAR" FontSize="9.5" FontWeight="Bold" Foreground="#38BDF8" Margin="0,0,0,6"/>
+                                    <TextBlock Text="🔌 HARDWARE COMMUNICATION &amp; COM RADAR" FontSize="9" FontWeight="Bold" Foreground="#38BDF8" Margin="0,0,0,4"/>
 
-                                    <Grid Margin="0,0,0,6">
+                                    <Grid Margin="0,0,0,4">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
 
                                         <StackPanel Grid.Column="0" Margin="0,0,4,0">
-                                            <TextBlock Text="Default Serial Baud Rate:" FontSize="8.5" Foreground="#94A3B8" Margin="0,0,0,2"/>
-                                            <ComboBox x:Name="CmbSettingsBaudRate" Style="{StaticResource DarkCyberComboBox}" Height="24" SelectedIndex="0">
+                                            <TextBlock Text="Default Serial Baud Rate:" FontSize="8" Foreground="#94A3B8" Margin="0,0,0,2"/>
+                                            <ComboBox x:Name="CmbSettingsBaudRate" Style="{StaticResource DarkCyberComboBox}" Height="22" SelectedIndex="0">
                                                 <ComboBoxItem Content="115200 (Standard Diagnostic)"/>
                                                 <ComboBoxItem Content="921600 (High-Speed BROM / EDL)"/>
                                                 <ComboBoxItem Content="460800 (Fast UART)"/>
@@ -4582,8 +4559,8 @@
                                         </StackPanel>
 
                                         <StackPanel Grid.Column="1" Margin="4,0,0,0">
-                                            <TextBlock Text="Serial Read Timeout:" FontSize="8.5" Foreground="#94A3B8" Margin="0,0,0,2"/>
-                                            <ComboBox x:Name="CmbSettingsTimeout" Style="{StaticResource DarkCyberComboBox}" Height="24" SelectedIndex="1">
+                                            <TextBlock Text="Serial Read Timeout:" FontSize="8" Foreground="#94A3B8" Margin="0,0,0,2"/>
+                                            <ComboBox x:Name="CmbSettingsTimeout" Style="{StaticResource DarkCyberComboBox}" Height="22" SelectedIndex="1">
                                                 <ComboBoxItem Content="1000 ms (Fast Response)"/>
                                                 <ComboBoxItem Content="1500 ms (Optimal)"/>
                                                 <ComboBoxItem Content="3000 ms (Extended USB)"/>
@@ -4592,122 +4569,113 @@
                                         </StackPanel>
                                     </Grid>
 
-                                    <Grid Margin="0,0,0,2">
+                                    <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
 
                                         <StackPanel Grid.Column="0" Margin="0,0,4,0">
-                                            <TextBlock Text="USB Radar Polling Interval:" FontSize="8.5" Foreground="#94A3B8" Margin="0,0,0,2"/>
-                                            <ComboBox x:Name="CmbSettingsPollInterval" Style="{StaticResource DarkCyberComboBox}" Height="24" SelectedIndex="0">
+                                            <TextBlock Text="USB Radar Polling Interval:" FontSize="8" Foreground="#94A3B8" Margin="0,0,0,2"/>
+                                            <ComboBox x:Name="CmbSettingsPollInterval" Style="{StaticResource DarkCyberComboBox}" Height="22" SelectedIndex="0">
                                                 <ComboBoxItem Content="1.5 Seconds (Real-Time)"/>
                                                 <ComboBoxItem Content="3.0 Seconds (Standard)"/>
                                                 <ComboBoxItem Content="5.0 Seconds (Low CPU)"/>
                                             </ComboBox>
                                         </StackPanel>
 
-                                        <StackPanel Grid.Column="1" Margin="4,16,0,0" VerticalAlignment="Center">
-                                            <CheckBox x:Name="ChkSettingsAutoSniffer" Content="Auto-Engage on Device Plug" IsChecked="True" Foreground="#CBD5E1" FontWeight="SemiBold" FontSize="9"/>
+                                        <StackPanel Grid.Column="1" Margin="4,13,0,0" VerticalAlignment="Center">
+                                            <CheckBox x:Name="ChkSettingsAutoSniffer" Content="Auto-Engage on Device Plug" IsChecked="True" Foreground="#CBD5E1" FontWeight="SemiBold" FontSize="8.5"/>
                                         </StackPanel>
                                     </Grid>
                                 </StackPanel>
                             </Border>
 
                             <!-- CARD 3: ANTI-BRICK SAFETY GUARD SYSTEM -->
-                            <Border Background="#161A26" CornerRadius="5" Padding="10" Margin="0,0,0,8" BorderBrush="#253248" BorderThickness="1">
+                            <Border Background="#161A26" CornerRadius="5" Padding="7,5" Margin="0,0,0,2" BorderBrush="#253248" BorderThickness="1">
                                 <StackPanel>
-                                    <DockPanel Margin="0,0,0,6">
-                                        <TextBlock Text="🛡️ ANTI-BRICK SAFETY GUARD ENGINE" FontSize="9.5" FontWeight="Bold" Foreground="#34D399" VerticalAlignment="Center"/>
-                                        <Border Background="#064E3B" CornerRadius="3" Padding="4,1" HorizontalAlignment="Right">
-                                            <TextBlock Text="100% ACTIVE" FontSize="8" FontWeight="Bold" Foreground="#34D399"/>
+                                    <DockPanel Margin="0,0,0,4">
+                                        <Border DockPanel.Dock="Right" Background="#064E3B" CornerRadius="3" Padding="4,1">
+                                            <TextBlock Text="100% ACTIVE" FontSize="7.5" FontWeight="Bold" Foreground="#34D399"/>
                                         </Border>
+                                        <TextBlock Text="🛡️ ANTI-BRICK SAFETY GUARD ENGINE" FontSize="9" FontWeight="Bold" Foreground="#34D399" VerticalAlignment="Center"/>
                                     </DockPanel>
 
-                                    <CheckBox x:Name="ChkSettingsAntiBrick" Content="Enable Universal Anti-Brick Guard (Zero-Brick Protection)" IsChecked="True" Foreground="#FFFFFF" FontWeight="ExtraBold" FontSize="9.5" Margin="0,0,0,5"/>
-                                    <CheckBox x:Name="ChkSettingsPreflightBackup" Content="Mandatory Automated Pre-Flight EFS / NVRAM Backup" IsChecked="True" Foreground="#CBD5E1" FontWeight="SemiBold" FontSize="9" Margin="0,0,0,5"/>
-                                    <CheckBox x:Name="ChkSettingsBatteryThreshold" Content="Enforce Safe Battery Level (&gt; 30% / 3750mV) Before Write" IsChecked="True" Foreground="#CBD5E1" FontWeight="SemiBold" FontSize="9" Margin="0,0,0,5"/>
-                                    <CheckBox x:Name="ChkSettingsGptCrc" Content="Verify Storage Geometry &amp; Header CRC Checksums" IsChecked="True" Foreground="#CBD5E1" FontWeight="SemiBold" FontSize="9"/>
+                                    <CheckBox x:Name="ChkSettingsAntiBrick" Content="Enable Universal Anti-Brick Guard (Zero-Brick Protection)" IsChecked="True" Foreground="#FFFFFF" FontWeight="ExtraBold" FontSize="8.5" Margin="0,0,0,3"/>
+                                    <CheckBox x:Name="ChkSettingsPreflightBackup" Content="Mandatory Automated Pre-Flight EFS / NVRAM Backup" IsChecked="True" Foreground="#CBD5E1" FontWeight="SemiBold" FontSize="8.5" Margin="0,0,0,3"/>
+                                    <CheckBox x:Name="ChkSettingsBatteryThreshold" Content="Enforce Safe Battery Level (&gt; 30% / 3750mV) Before Write" IsChecked="True" Foreground="#CBD5E1" FontWeight="SemiBold" FontSize="8.5" Margin="0,0,0,3"/>
+                                    <CheckBox x:Name="ChkSettingsGptCrc" Content="Verify Storage Geometry &amp; Header CRC Checksums" IsChecked="True" Foreground="#CBD5E1" FontWeight="SemiBold" FontSize="8.5"/>
                                 </StackPanel>
                             </Border>
                         </StackPanel>
                     </ScrollViewer>
                 </Border>
 
-                <!-- Right Column: Cloud Backups, Driver Tools & Shop Profile -->
-                <Border Grid.Column="2" Background="#13131A" CornerRadius="6" BorderBrush="#232332" BorderThickness="1" Padding="10">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <!-- Right Column: Cloud Backups, Driver Tools & Shop Profile (Zero Scroll & Zero Clipping) -->
+                <Border Grid.Column="2" Background="#13131A" CornerRadius="6" BorderBrush="#232332" BorderThickness="1" Padding="7">
+                    <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
                         <StackPanel>
                             <!-- CARD 4: CLOUD BACKUP & GOOGLE DRIVE INTEGRATION -->
-                            <Border Background="#161A26" CornerRadius="5" Padding="10" Margin="0,0,0,8" BorderBrush="#253248" BorderThickness="1">
+                            <Border Background="#161A26" CornerRadius="5" Padding="7,5" Margin="0,0,0,5" BorderBrush="#253248" BorderThickness="1">
                                 <StackPanel>
-                                    <DockPanel Margin="0,0,0,6">
-                                        <TextBlock Text="☁️ GOOGLE DRIVE CLOUD BACKUP &amp; ARCHIVING" FontSize="9.5" FontWeight="Bold" Foreground="#38BDF8" VerticalAlignment="Center"/>
-                                        <Border Background="#0C4A6E" CornerRadius="3" Padding="5,1" HorizontalAlignment="Right">
-                                            <TextBlock Text="GDRIVE ONLINE" FontSize="8.5" FontWeight="Bold" Foreground="#38BDF8"/>
+                                    <DockPanel Margin="0,0,0,4">
+                                        <Border DockPanel.Dock="Right" Background="#0C4A6E" CornerRadius="3" Padding="5,1">
+                                            <TextBlock Text="GDRIVE ONLINE" FontSize="7.5" FontWeight="Bold" Foreground="#38BDF8"/>
                                         </Border>
+                                        <TextBlock Text="☁️ GOOGLE DRIVE CLOUD BACKUP &amp; ARCHIVING" FontSize="9" FontWeight="Bold" Foreground="#38BDF8" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
                                     </DockPanel>
 
                                     <!-- Cloud Status Info Card -->
-                                    <Border Background="#0B0F19" BorderBrush="#1E293B" BorderThickness="1" CornerRadius="4" Padding="8,6" Margin="0,0,0,8">
+                                    <Border Background="#0B0F19" BorderBrush="#1E293B" BorderThickness="1" CornerRadius="4" Padding="7,4" Margin="0,0,0,5">
                                         <StackPanel>
-                                            <TextBlock Text="Authenticated Google Account: m.basharat99ali@gmail.com" FontSize="9" FontWeight="Bold" Foreground="#34D399"/>
-                                            <TextBlock x:Name="TxtSettingsLastCloudBackup" Text="Latest Archive: BSLab_Tool_Full_Backup_20261109_031743.zip (ID: 14rtsnSTHuZW1Rw2m4V_G34hpT07yTYi4)" FontSize="9" FontWeight="SemiBold" Foreground="#CBD5E1" Margin="0,3,0,0"/>
-                                            <TextBlock Text="Storage Policy: Full Workstation Archive (Code, Loaders, PIT Database, Roadmaps)" FontSize="8.5" FontWeight="Medium" Foreground="#CBD5E1" Margin="0,3,0,0"/>
+                                            <TextBlock Text="Authenticated Google Account: m.basharat99ali@gmail.com" FontSize="8.5" FontWeight="Bold" Foreground="#34D399" TextTrimming="CharacterEllipsis"/>
+                                            <TextBlock x:Name="TxtSettingsLastCloudBackup" Text="Latest Archive: BSLab_Tool_Full_Backup_20261109_031743.zip" FontSize="8" FontWeight="SemiBold" Foreground="#CBD5E1" Margin="0,2,0,0" TextTrimming="CharacterEllipsis"/>
+                                            <TextBlock Text="Storage Policy: Full Workstation Archive (Code, Loaders, PIT DB)" FontSize="8" FontWeight="Medium" Foreground="#94A3B8" Margin="0,2,0,0" TextTrimming="CharacterEllipsis"/>
                                         </StackPanel>
                                     </Border>
 
                                     <!-- Cloud Actions -->
-                                    <Grid Margin="0,0,0,2">
+                                    <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="5"/>
                                             <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
-                                        <Button Grid.Column="0" Content="☁️ Create &amp; Upload Full Cloud Backup" Height="28" Background="#0284C7" Foreground="#FFFFFF" FontWeight="Bold" BorderThickness="0" Margin="0,0,4,0" Click="OnSettingsTriggerCloudBackupClicked"/>
-                                        <Button Grid.Column="1" Content="📋 View Google Drive File List" Height="28" Background="#1E293B" Foreground="#38BDF8" FontWeight="Bold" BorderThickness="0" Margin="4,0,0,0" Click="OnSettingsViewCloudBackupsClicked"/>
+                                        <Button Grid.Column="0" Content="☁️ Upload Cloud Backup" Height="25" Background="#0284C7" Foreground="#FFFFFF" FontSize="8.5" FontWeight="Bold" BorderThickness="0" Click="OnSettingsTriggerCloudBackupClicked"/>
+                                        <Button Grid.Column="2" Content="📋 View Drive Files" Height="25" Background="#1E293B" Foreground="#38BDF8" FontSize="8.5" FontWeight="Bold" BorderThickness="0" Click="OnSettingsViewCloudBackupsClicked"/>
                                     </Grid>
                                 </StackPanel>
                             </Border>
 
                             <!-- CARD 5: WINDOWS DRIVERS & SYSTEM DIAGNOSTICS -->
-                            <Border Background="#161A26" CornerRadius="5" Padding="10" Margin="0,0,0,8" BorderBrush="#253248" BorderThickness="1">
+                            <Border Background="#161A26" CornerRadius="5" Padding="7,5" Margin="0,0,0,5" BorderBrush="#253248" BorderThickness="1">
                                 <StackPanel>
-                                    <TextBlock Text="🧰 WINDOWS SYSTEM &amp; DRIVER DIAGNOSTICS" FontSize="9.5" FontWeight="Bold" Foreground="#38BDF8" Margin="0,0,0,6"/>
+                                    <TextBlock Text="🧰 WINDOWS SYSTEM &amp; DRIVER DIAGNOSTICS" FontSize="9" FontWeight="Bold" Foreground="#38BDF8" Margin="0,0,0,4"/>
 
-                                    <Grid Margin="0,0,0,4">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
-                                        <Border Background="#0C1427" BorderBrush="#0284C7" BorderThickness="1.5" CornerRadius="5" Padding="3" Margin="0,0,0,6">
-                                        <Button Content="⚡ 1-CLICK AUTO-INSTALL ALL DRIVERS (PNP DRIVERSTORE)" Height="30" Background="#0284C7" Foreground="#FFFFFF" FontWeight="Bold" FontSize="9.5" BorderThickness="0" Cursor="Hand" Click="OnSettingsAutoInstallAllDriversClicked"/>
+                                    <Border Background="#0C1427" BorderBrush="#0284C7" BorderThickness="1" CornerRadius="4" Padding="2" Margin="0,0,0,4">
+                                        <Button Content="⚡ 1-CLICK AUTO-INSTALL ALL DRIVERS (PNP DRIVERSTORE)" Height="25" Background="#0284C7" Foreground="#FFFFFF" FontWeight="Bold" FontSize="8.5" BorderThickness="0" Cursor="Hand" Click="OnSettingsAutoInstallAllDriversClicked"/>
                                     </Border>
-                                    <Button Grid.Column="0" Content="🔌 Device Manager (devmgmt.msc)" Height="28" Background="#1E293B" Foreground="#FFFFFF" FontWeight="SemiBold" BorderThickness="0" Margin="0,0,4,0" Click="OnSettingsOpenDeviceManagerClicked"/>
-                                        <Button Grid.Column="1" Content="🌐 Network Connections (ncpa.cpl)" Height="28" Background="#1E293B" Foreground="#FFFFFF" FontWeight="SemiBold" BorderThickness="0" Margin="4,0,0,0" Click="OnSettingsOpenNetworkConnectionsClicked"/>
-                                    </Grid>
 
-                                    <Grid Margin="0,0,0,2">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
-                                        <Button Grid.Column="0" Content="🔄 Force Rescan USB Bus (pnputil)" Height="28" Background="#1E293B" Foreground="#38BDF8" FontWeight="SemiBold" BorderThickness="0" Margin="0,0,4,0" Click="OnSettingsRescanUsbClicked"/>
-                                        <Button Grid.Column="1" Content="🛡️ Verify LibUsb-win32 Filter" Height="28" Background="#1E293B" Foreground="#34D399" FontWeight="SemiBold" BorderThickness="0" Margin="4,0,0,0" Click="OnSettingsVerifyLibusbClicked"/>
-                                    </Grid>
+                                    <UniformGrid Columns="2">
+                                        <Button Content="🔌 Device Manager" Height="24" Background="#1E293B" Foreground="#FFFFFF" FontSize="8.5" FontWeight="SemiBold" BorderThickness="0" Margin="0,0,3,3" Click="OnSettingsOpenDeviceManagerClicked"/>
+                                        <Button Content="🌐 Network Connections" Height="24" Background="#1E293B" Foreground="#FFFFFF" FontSize="8.5" FontWeight="SemiBold" BorderThickness="0" Margin="3,0,0,3" Click="OnSettingsOpenNetworkConnectionsClicked"/>
+                                        <Button Content="🔄 Rescan USB Bus" Height="24" Background="#1E293B" Foreground="#38BDF8" FontSize="8.5" FontWeight="SemiBold" BorderThickness="0" Margin="0,0,3,0" Click="OnSettingsRescanUsbClicked"/>
+                                        <Button Content="🛡️ Verify LibUsb Filter" Height="24" Background="#1E293B" Foreground="#34D399" FontSize="8.5" FontWeight="SemiBold" BorderThickness="0" Margin="3,0,0,0" Click="OnSettingsVerifyLibusbClicked"/>
+                                    </UniformGrid>
                                 </StackPanel>
                             </Border>
 
                             <!-- CARD 6: WORKSTATION PROFILE & ENTERPRISE LICENSE -->
-                            <Border Background="#161A26" CornerRadius="5" Padding="10" Margin="0,0,0,8" BorderBrush="#253248" BorderThickness="1">
+                            <Border Background="#161A26" CornerRadius="5" Padding="7,5" Margin="0,0,0,5" BorderBrush="#253248" BorderThickness="1">
                                 <StackPanel>
-                                    <DockPanel Margin="0,0,0,6">
-                                        <TextBlock Text="🏢 WORKSTATION PROFILE &amp; LIFETIME LICENSE" FontSize="9.5" FontWeight="Bold" Foreground="#F59E0B" VerticalAlignment="Center"/>
-                                        <Border Background="#78350F" CornerRadius="3" Padding="4,1" HorizontalAlignment="Right">
-                                            <TextBlock Text="LIFETIME PRO" FontSize="8" FontWeight="Bold" Foreground="#FDE68A"/>
+                                    <DockPanel Margin="0,0,0,4">
+                                        <Border DockPanel.Dock="Right" Background="#78350F" CornerRadius="3" Padding="4,1">
+                                            <TextBlock Text="LIFETIME PRO" FontSize="7.5" FontWeight="Bold" Foreground="#FDE68A"/>
                                         </Border>
+                                        <TextBlock Text="🏢 WORKSTATION PROFILE &amp; LIFETIME LICENSE" FontSize="9" FontWeight="Bold" Foreground="#F59E0B" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
                                     </DockPanel>
 
-                                    <Border Background="#0B0F19" BorderBrush="#1E293B" BorderThickness="1" CornerRadius="4" Padding="8,6" Margin="0,0,0,8">
+                                    <Border Background="#0B0F19" BorderBrush="#1E293B" BorderThickness="1" CornerRadius="4" Padding="7,4" Margin="0,0,0,5">
                                         <Grid>
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="Auto"/>
@@ -4716,33 +4684,33 @@
                                                 <RowDefinition Height="Auto"/>
                                             </Grid.RowDefinitions>
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="120"/>
+                                                <ColumnDefinition Width="92"/>
                                                 <ColumnDefinition Width="*"/>
                                             </Grid.ColumnDefinitions>
 
-                                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Proprietor:" FontSize="9" FontWeight="Bold" Foreground="#CBD5E1"/>
-                                            <TextBlock Grid.Row="0" Grid.Column="1" Text="Syed Bisharat Ali (Shah Ji)" FontSize="9.5" FontWeight="ExtraBold" Foreground="#FFFFFF"/>
+                                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Proprietor:" FontSize="8.5" FontWeight="Bold" Foreground="#CBD5E1"/>
+                                            <TextBlock Grid.Row="0" Grid.Column="1" Text="Syed Bisharat Ali (Shah Ji)" FontSize="8.5" FontWeight="ExtraBold" Foreground="#FFFFFF" TextTrimming="CharacterEllipsis"/>
 
-                                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Trading Facility:" FontSize="9" FontWeight="Bold" Foreground="#CBD5E1" Margin="0,3,0,0"/>
-                                            <TextBlock Grid.Row="1" Grid.Column="1" Text="BS Lab &amp; Mobile Traders — Shop #5, Arif Center, Hall Road, Lahore" FontSize="9" FontWeight="Bold" Foreground="#38BDF8" Margin="0,3,0,0"/>
+                                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Facility:" FontSize="8.5" FontWeight="Bold" Foreground="#CBD5E1" Margin="0,2,0,0"/>
+                                            <TextBlock Grid.Row="1" Grid.Column="1" Text="BS Lab &amp; Mobile Traders — Arif Center, Hall Rd, LHR" FontSize="8.5" FontWeight="Bold" Foreground="#38BDF8" Margin="0,2,0,0" TextTrimming="CharacterEllipsis"/>
 
-                                            <TextBlock Grid.Row="2" Grid.Column="0" Text="Enterprise Email:" FontSize="9" FontWeight="Bold" Foreground="#CBD5E1" Margin="0,3,0,0"/>
-                                            <TextBlock Grid.Row="2" Grid.Column="1" Text="m.basharat99ali@gmail.com / admin@bslab.com" FontSize="9" FontWeight="Bold" Foreground="#34D399" Margin="0,3,0,0"/>
+                                            <TextBlock Grid.Row="2" Grid.Column="0" Text="Email:" FontSize="8.5" FontWeight="Bold" Foreground="#CBD5E1" Margin="0,2,0,0"/>
+                                            <TextBlock Grid.Row="2" Grid.Column="1" Text="m.basharat99ali@gmail.com / admin@bslab.com" FontSize="8.5" FontWeight="Bold" Foreground="#34D399" Margin="0,2,0,0" TextTrimming="CharacterEllipsis"/>
 
-                                            <TextBlock Grid.Row="3" Grid.Column="0" Text="License Key:" FontSize="9" FontWeight="Bold" Foreground="#CBD5E1" Margin="0,3,0,0"/>
-                                            <TextBlock Grid.Row="3" Grid.Column="1" Text="BSLAB-ENT-2026-PRO-9941-LHR (Verified &amp; Activated)" FontSize="9" FontWeight="Bold" FontFamily="Consolas" Foreground="#FCD34D" Margin="0,3,0,0"/>
+                                            <TextBlock Grid.Row="3" Grid.Column="0" Text="License Key:" FontSize="8.5" FontWeight="Bold" Foreground="#CBD5E1" Margin="0,2,0,0"/>
+                                            <TextBlock Grid.Row="3" Grid.Column="1" Text="BSLAB-ENT-2026-PRO-9941-LHR (Active)" FontSize="8.5" FontWeight="Bold" FontFamily="Consolas" Foreground="#FCD34D" Margin="0,2,0,0" TextTrimming="CharacterEllipsis"/>
                                         </Grid>
                                     </Border>
 
-                                    <Button Content="💾 Save Settings Configuration" Height="28" Background="#065F46" Foreground="#FFFFFF" FontWeight="Bold" BorderThickness="0" Click="OnSettingsSaveConfigClicked"/>
+                                    <Button Content="💾 Save Settings Configuration" Height="25" Background="#065F46" Foreground="#FFFFFF" FontSize="8.5" FontWeight="Bold" BorderThickness="0" Click="OnSettingsSaveConfigClicked"/>
                                 </StackPanel>
                             </Border>
 
                             <!-- Settings Protocol Log Console -->
-                            <Border Background="#161A26" CornerRadius="5" Padding="10" BorderBrush="#253248" BorderThickness="1">
+                            <Border Background="#161A26" CornerRadius="5" Padding="7,5" BorderBrush="#253248" BorderThickness="1">
                                 <StackPanel>
-                                    <TextBlock Text="SETTINGS &amp; SYSTEM AUDIT LOG" FontSize="9.5" FontWeight="Bold" Foreground="#38BDF8" Margin="0,0,0,4"/>
-                                    <TextBox x:Name="TxtSettingsConsole" Height="100" Background="#070709" Foreground="#34D399" FontFamily="Consolas" FontSize="10.5" IsReadOnly="True" VerticalScrollBarVisibility="Auto" BorderThickness="0" Padding="6" TextWrapping="Wrap"/>
+                                    <TextBlock Text="SETTINGS &amp; SYSTEM AUDIT LOG" FontSize="8.5" FontWeight="Bold" Foreground="#38BDF8" Margin="0,0,0,3"/>
+                                    <TextBox x:Name="TxtSettingsConsole" Height="82" Background="#070709" Foreground="#34D399" FontFamily="Consolas" FontSize="9.5" IsReadOnly="True" VerticalScrollBarVisibility="Auto" BorderThickness="0" Padding="5" TextWrapping="Wrap"/>
                                 </StackPanel>
                             </Border>
                         </StackPanel>
@@ -5075,7 +5043,7 @@
 
             <!-- Active Engine & Live Clock -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                <TextBlock Text="Updated : 25-Nov-2026 (v2.6.2)" FontSize="8.5" Foreground="#78909C" Margin="0,0,16,0" VerticalAlignment="Center"/>
+                <TextBlock Text="Updated : 25-Nov-2026 (v2.6.3)" FontSize="8.5" Foreground="#78909C" Margin="0,0,16,0" VerticalAlignment="Center"/>
                 <TextBlock x:Name="TxtUatClock" Text="15 - November - 2026 - 07:15:00 PM" FontSize="9" Foreground="#ECEFF1" Margin="0,0,16,0" FontFamily="Consolas" VerticalAlignment="Center"/>
                 <TextBlock x:Name="TxtLiveClock" Visibility="Collapsed"/>
                 <Border Background="#1A3A54" BorderBrush="#0288D1" BorderThickness="1" CornerRadius="3" Padding="6,1">
