@@ -152,7 +152,17 @@ namespace BSLabTool.UI
 
         private void OnUatAccountsClicked(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("BS LAB TOOL™ - Enterprise Activation Status: ACTIVE\nDongle/Hardware ID: BSLAB-PK-2026-LIVE\nRegistered To: Syed Bisharat Ali (Shah Ji)\nRemaining Server Credits: UNLIMITED", "User Profile & License", MessageBoxButton.OK, MessageBoxImage.Information);
+            try
+            {
+                var keyGenWin = new BSLabTool.UI.Views.AdminKeyGenWindow();
+                keyGenWin.Owner = this;
+                keyGenWin.Show();
+                AppendAutoHubLog("[+] 🔑 Master HWID Activation & KeyGen Suite opened.");
+            }
+            catch (Exception ex)
+            {
+                AppendAutoHubLog($"[!] KeyGen Launch Error: {ex.Message}");
+            }
         }
 
         private void OnUatUsbWizardClicked(object sender, RoutedEventArgs e)
@@ -293,6 +303,21 @@ namespace BSLabTool.UI
             catch (Exception ex)
             {
                 AppendAutoHubLog($"[!] Auto-Updater Launch Error: {ex.Message}");
+            }
+        }
+
+        private void OnOpenKnoxGuardSuiteClicked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var kgWin = new BSLabTool.UI.Views.SamsungKnoxGuardSuiteWindow();
+                kgWin.Owner = this;
+                kgWin.Show();
+                AppendAutoHubLog("[+] 🛡️ Samsung Knox Guard (KG) & PayJoy MDM Killer Suite opened.");
+            }
+            catch (Exception ex)
+            {
+                AppendAutoHubLog($"[!] Knox Guard Suite Launch Error: {ex.Message}");
             }
         }
 

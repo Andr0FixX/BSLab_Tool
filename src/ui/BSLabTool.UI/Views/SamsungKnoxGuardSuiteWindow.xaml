@@ -1,0 +1,279 @@
+<Window x:Class="BSLabTool.UI.Views.SamsungKnoxGuardSuiteWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="BS LAB TOOL™ PRO — Samsung Knox Guard (KG) &amp; PayJoy MDM Killer Suite"
+        Width="1050" Height="700" MinWidth="850" MinHeight="580"
+        WindowStartupLocation="CenterOwner"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent"
+        ResizeMode="CanResizeWithGrip">
+
+    <Window.Resources>
+        <LinearGradientBrush x:Key="KnoxBorderGlow" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#0284C7" Offset="0.0"/>
+            <GradientStop Color="#38BDF8" Offset="0.5"/>
+            <GradientStop Color="#00FFA3" Offset="1.0"/>
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="SamsungBlueGradient" StartPoint="0,0" EndPoint="1,0">
+            <GradientStop Color="#0284C7" Offset="0.0"/>
+            <GradientStop Color="#38BDF8" Offset="1.0"/>
+        </LinearGradientBrush>
+
+        <Style x:Key="CyberButton" TargetType="Button">
+            <Setter Property="Background" Value="#111B30"/>
+            <Setter Property="Foreground" Value="#F8FAFC"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Padding" Value="14,8"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#1E293B"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bd" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#1E293B"/>
+                                <Setter TargetName="bd" Property="BorderBrush" Value="#38BDF8"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SamsungPrimaryButton" TargetType="Button" BasedOn="{StaticResource CyberButton}">
+            <Setter Property="Background" Value="#0284C7"/>
+            <Setter Property="Foreground" Value="#F8FAFC"/>
+            <Setter Property="FontWeight" Value="Black"/>
+            <Setter Property="BorderBrush" Value="#38BDF8"/>
+        </Style>
+    </Window.Resources>
+
+    <!-- Outer Chrome Window Border -->
+    <Border Background="#040711" BorderBrush="{StaticResource KnoxBorderGlow}" BorderThickness="1.5" CornerRadius="12" Margin="10">
+        <Border.Effect>
+            <DropShadowEffect Color="#0284C7" BlurRadius="25" ShadowDepth="0" Opacity="0.35"/>
+        </Border.Effect>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="52"/>  <!-- Header Bar -->
+                <RowDefinition Height="Auto"/> <!-- Device State Banner -->
+                <RowDefinition Height="*"/>    <!-- Main Actions & Protocol Grid -->
+                <RowDefinition Height="180"/>  <!-- Progress & Real-Time Log -->
+            </Grid.RowDefinitions>
+
+            <!-- 1. HEADER BAR -->
+            <Border Grid.Row="0" Background="#080E1C" CornerRadius="11,11,0,0" BorderBrush="#1E293B" BorderThickness="0,0,0,1" MouseLeftButtonDown="OnHeaderMouseLeftButtonDown">
+                <Grid Margin="16,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Border Width="34" Height="34" CornerRadius="8" Background="#101D38" BorderBrush="#38BDF8" BorderThickness="1" Margin="0,0,10,0">
+                            <TextBlock Text="🛡️" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <StackPanel VerticalAlignment="Center">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="BS LAB TOOL™ PRO" FontWeight="Black" FontSize="12" Foreground="#F8FAFC"/>
+                                <Border Background="{StaticResource SamsungBlueGradient}" CornerRadius="4" Padding="5,1" Margin="8,0,0,0">
+                                    <TextBlock Text="KNOX GUARD &amp; MDM" FontWeight="Black" FontSize="9" Foreground="#02040A"/>
+                                </Border>
+                            </StackPanel>
+                            <TextBlock Text="Samsung Knox Guard (KG), PayJoy, Rent-A-Center &amp; DPC FinTech Killer Suite" FontSize="10" Foreground="#94A3B8" FontFamily="JetBrains Mono, Consolas"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Knox Guard Live Status Pill -->
+                    <Border Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#101D38" BorderBrush="#38BDF8" BorderThickness="1" CornerRadius="20" Padding="14,4">
+                        <StackPanel Orientation="Horizontal">
+                            <Ellipse x:Name="DotKgStatus" Width="8" Height="8" Fill="#F59E0B" Margin="0,0,6,0"/>
+                            <TextBlock x:Name="TxtKgStatus" Text="KG STATUS: DETECTING / LOCKED (FINANCE MDM ENROLLED)" FontSize="10" FontWeight="Bold" Foreground="#38BDF8" FontFamily="JetBrains Mono, Consolas"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Button Grid.Column="2" Click="OnCloseClicked" Width="28" Height="28" Background="Transparent" BorderThickness="0" Foreground="#EF4444" Content="✕" FontSize="12" Cursor="Hand"/>
+                </Grid>
+            </Border>
+
+            <!-- 2. DEVICE STATE & HARDWARE SUMMARY CARD -->
+            <Border Grid.Row="1" Background="#060B16" BorderBrush="#1E293B" BorderThickness="0,0,0,1" Padding="18,12">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="TARGET MODEL:" FontSize="10" FontWeight="Bold" Foreground="#64748B" FontFamily="JetBrains Mono, Consolas"/>
+                        <TextBlock x:Name="TxtModel" Text="SM-A156B (Galaxy A15 5G)" FontSize="12" FontWeight="Black" Foreground="#F8FAFC"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1">
+                        <TextBlock Text="PDA / BINARY BIT:" FontSize="10" FontWeight="Bold" Foreground="#64748B" FontFamily="JetBrains Mono, Consolas"/>
+                        <TextBlock x:Name="TxtBinaryBit" Text="A156BXXU2AXC1 (BIT 2 / U2)" FontSize="12" FontWeight="Bold" Foreground="#00F0FF" FontFamily="JetBrains Mono, Consolas"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="KNOX WARRANTY:" FontSize="10" FontWeight="Bold" Foreground="#64748B" FontFamily="JetBrains Mono, Consolas"/>
+                        <TextBlock x:Name="TxtWarranty" Text="0x0 (OFFICIAL SECURE)" FontSize="12" FontWeight="Bold" Foreground="#00FFA3" FontFamily="JetBrains Mono, Consolas"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="3">
+                        <TextBlock Text="MDM ENROLLMENT:" FontSize="10" FontWeight="Bold" Foreground="#64748B" FontFamily="JetBrains Mono, Consolas"/>
+                        <TextBlock x:Name="TxtMdmProvider" Text="PayJoy + Knox Cloud MDM" FontSize="12" FontWeight="Bold" Foreground="#F59E0B" FontFamily="JetBrains Mono, Consolas"/>
+                    </StackPanel>
+
+                    <Button Grid.Column="4" Click="OnReadKgInfoClicked" Content="🔍 Query Device" Style="{StaticResource CyberButton}" Padding="12,5" FontSize="11" VerticalAlignment="Center"/>
+                </Grid>
+            </Border>
+
+            <!-- 3. MAIN ACTION SUITES (3 OPERATION TILES) -->
+            <Border Grid.Row="2" Background="#050914" Padding="18">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- TILE 1: MTP / QR SIDELOAD BYPASS -->
+                    <Border Grid.Column="0" Background="#070D1A" BorderBrush="#1E293B" BorderThickness="1" CornerRadius="12" Padding="16" Margin="0,0,10,0">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <Border Grid.Row="0" Width="38" Height="38" CornerRadius="8" Background="#0F2444" BorderBrush="#0284C7" BorderThickness="1" HorizontalAlignment="Left" Margin="0,0,0,10">
+                                <TextBlock Text="⚡" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+
+                            <StackPanel Grid.Row="1" Margin="0,0,0,10">
+                                <TextBlock Text="MTP *#0*# &amp; QR Sideload" FontSize="13" FontWeight="Black" Foreground="#F8FAFC"/>
+                                <TextBlock Text="For working setup wizard screen without disassembly" FontSize="10" Foreground="#94A3B8"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="2" Margin="0,0,0,12" VerticalAlignment="Top">
+                                <TextBlock Text="• Enables Test Mode via *#0*# dialer" FontSize="10" Foreground="#CBD5E1" Margin="0,0,0,4"/>
+                                <TextBlock Text="• Disables com.sec.knox.kccagent" FontSize="10" Foreground="#CBD5E1" Margin="0,0,0,4"/>
+                                <TextBlock Text="• Strips Cloud MDM Policy Controller" FontSize="10" Foreground="#CBD5E1" Margin="0,0,0,4"/>
+                                <TextBlock Text="• Bypasses QR Enterprise enrollment" FontSize="10" Foreground="#CBD5E1"/>
+                            </StackPanel>
+
+                            <Button Grid.Row="3" Click="OnMtpKgBypassClicked" Content="⚡ 1-Click MTP KG Bypass" Style="{StaticResource SamsungPrimaryButton}"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- TILE 2: PERMANENT PAYJOY & FINTECH KILLER -->
+                    <Border Grid.Column="1" Background="#070D1A" BorderBrush="#1E293B" BorderThickness="1" CornerRadius="12" Padding="16" Margin="5,0,5,0">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <Border Grid.Row="0" Width="38" Height="38" CornerRadius="8" Background="#241B08" BorderBrush="#FFB800" BorderThickness="1" HorizontalAlignment="Left" Margin="0,0,0,10">
+                                <TextBlock Text="💀" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+
+                            <StackPanel Grid.Row="1" Margin="0,0,0,10">
+                                <TextBlock Text="PayJoy &amp; FinTech MDM Killer" FontSize="13" FontWeight="Black" Foreground="#F8FAFC"/>
+                                <TextBlock Text="Permanently disables installment finance locks" FontSize="10" Foreground="#94A3B8"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="2" Margin="0,0,0,12" VerticalAlignment="Top">
+                                <TextBlock Text="• Eliminates PayJoy Access &amp; Status DPC" FontSize="10" Foreground="#CBD5E1" Margin="0,0,0,4"/>
+                                <TextBlock Text="• Removes Trustonic TPA finance agent" FontSize="10" Foreground="#CBD5E1" Margin="0,0,0,4"/>
+                                <TextBlock Text="• Clears param.bin MDM persistence" FontSize="10" Foreground="#CBD5E1" Margin="0,0,0,4"/>
+                                <TextBlock Text="• Unblocks SIM card &amp; network lock" FontSize="10" Foreground="#CBD5E1"/>
+                            </StackPanel>
+
+                            <Button Grid.Row="3" Click="OnPayJoyKillerClicked" Content="💀 Kill PayJoy &amp; DPC" Style="{StaticResource CyberButton}"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- TILE 3: EDL / BROM HARDWARE ERADICATION & RELOCK SHIELD -->
+                    <Border Grid.Column="2" Background="#070D1A" BorderBrush="#1E293B" BorderThickness="1" CornerRadius="12" Padding="16" Margin="10,0,0,0">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <Border Grid.Row="0" Width="38" Height="38" CornerRadius="8" Background="#092A20" BorderBrush="#00FFA3" BorderThickness="1" HorizontalAlignment="Left" Margin="0,0,0,10">
+                                <TextBlock Text="🔒" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+
+                            <StackPanel Grid.Row="1" Margin="0,0,0,10">
+                                <TextBlock Text="Hardware Zero-Fill &amp; Relock Shield" FontSize="13" FontWeight="Black" Foreground="#F8FAFC"/>
+                                <TextBlock Text="Bare-Metal EDL 9008 / BROM permanent fix" FontSize="10" Foreground="#94A3B8"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="2" Margin="0,0,0,12" VerticalAlignment="Top">
+                                <TextBlock Text="• Wipes secops (RPMB) &amp; persistent blocks" FontSize="10" Foreground="#CBD5E1" Margin="0,0,0,4"/>
+                                <TextBlock Text="• Force KG state: COMPLETED" FontSize="10" Foreground="#CBD5E1" Margin="0,0,0,4"/>
+                                <TextBlock Text="• Disables Samsung Cloud FOTA auto-relock" FontSize="10" Foreground="#CBD5E1" Margin="0,0,0,4"/>
+                                <TextBlock Text="• Survives full factory reset" FontSize="10" Foreground="#CBD5E1"/>
+                            </StackPanel>
+
+                            <Button Grid.Row="3" Click="OnHardwareKgEradicationClicked" Content="🛡️ Hardware Eradication &amp; Shield" Style="{StaticResource CyberButton}"/>
+                        </Grid>
+                    </Border>
+
+                </Grid>
+            </Border>
+
+            <!-- 4. BOTTOM PROGRESS BAR & EVENT STREAM -->
+            <Border Grid.Row="3" Background="#060B16" BorderBrush="#1E293B" BorderThickness="0,1,0,0" CornerRadius="0,0,11,11" Padding="16,10">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0" Margin="0,0,0,6">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0">
+                            <TextBlock x:Name="TxtProgressStatus" Text="READY // WAITING FOR SAMSUNG DEVICE..." FontSize="10" FontWeight="Bold" Foreground="#38BDF8" FontFamily="JetBrains Mono, Consolas" Margin="0,0,0,4"/>
+                            <ProgressBar x:Name="ProgressKg" Height="6" Value="0" Maximum="100" Foreground="{StaticResource SamsungBlueGradient}" Background="#111B30" BorderThickness="0"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="14,0,0,0">
+                            <Button Click="OnClearLogClicked" Content="Clear" Style="{StaticResource CyberButton}" Padding="8,3" FontSize="10" Margin="0,0,6,0"/>
+                            <Button Click="OnDisableOtaClicked" Content="Disable Samsung OTA Updates" Style="{StaticResource CyberButton}" Padding="8,3" FontSize="10"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <TextBox x:Name="TxtKgLog" Grid.Row="1" Background="#030712" Foreground="#94A3B8" BorderBrush="#1E293B"
+                             FontFamily="JetBrains Mono, Consolas" FontSize="11"
+                             IsReadOnly="True" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap"/>
+                </Grid>
+            </Border>
+
+        </Grid>
+    </Border>
+</Window>
