@@ -5193,7 +5193,7 @@ namespace BSLabTool.UI
         }
 
 
-        private static class NativeWin32Serial
+        internal static class NativeWin32Serial
         {
             [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
             public struct DCB
@@ -5836,7 +5836,7 @@ namespace BSLabTool.UI
         // QUALCOMM DIAGNOSTIC (DIAG 900E/901D) ENGINE HANDLERS
         // ====================================================================
 
-        private static string[] GetSystemSerialPorts()
+        internal static string[] GetSystemSerialPorts()
         {
             try
             {

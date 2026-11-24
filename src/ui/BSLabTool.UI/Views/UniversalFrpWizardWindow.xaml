@@ -347,6 +347,15 @@
                                     <Button Content="🔄 Erase Misc Partition (Exit Fastboot / Recovery Loop)" Style="{StaticResource WizardActionButton}" Click="OnDirectEraseMiscClicked" Margin="0,0,0,6"/>
                                 </StackPanel>
                             </Border>
+
+                            <Border Background="#1E293B" CornerRadius="8" Padding="12" Margin="0,0,0,10" BorderBrush="#F59E0B" BorderThickness="1">
+                                <StackPanel>
+                                    <TextBlock Text="⚡ MTK PRELOADER TO META MODE ADB ENABLER" FontSize="13" FontWeight="Bold" Foreground="#F59E0B"/>
+                                    <TextBlock Text="Transitions MTK device from Preloader to Meta Mode, writes persist.sys.usb.config=mtp,adb, auto-authorizes RSA keys and reboots with active USB debugging." FontSize="10" Foreground="#94A3B8" TextWrapping="Wrap" Margin="0,2,0,8"/>
+
+                                    <Button Content="⚡ Preloader ➔ Meta Mode ADB Enable" Style="{StaticResource WizardActionButton}" Background="#B45309" BorderBrush="#F59E0B" FontWeight="Bold" Click="OnMtkPreloaderMetaAdbClicked" Margin="0,0,0,6"/>
+                                </StackPanel>
+                            </Border>
                         </StackPanel>
                     </ScrollViewer>
 

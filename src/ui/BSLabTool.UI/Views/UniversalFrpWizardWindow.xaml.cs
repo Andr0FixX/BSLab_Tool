@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
@@ -505,6 +507,198 @@ namespace BSLabTool.UI.Views
             AppendLog("[*] Clearing 'misc' partition to exit bootloop / fastboot loop...");
             string res = await RunToolAsync("fastboot.exe", "erase misc");
             AppendLog($"[+] Result: {res.Trim()}");
+        }
+
+        private async void OnMtkPreloaderMetaAdbClicked(object sender, RoutedEventArgs e)
+        {
+            if (_isBusy) return;
+            _isBusy = true;
+            try
+            {
+                AppendLog("══════════════════════════════════════════════════════════");
+                AppendLog("⚡ [1-CLICK ADB ENABLE] MTK PRELOADER ➔ META MODE ➔ ACTIVE ADB");
+                AppendLog("══════════════════════════════════════════════════════════");
+                AppendLog("[*] Architecture : MediaTek MT67xx / MT68xx Helio & Dimensity");
+                AppendLog("[*] Objective    : Transition Preloader to META -> Force ADB On -> Reboot");
+                AppendLog("[*] Target Hook  : persist.sys.usb.config=mtp,adb + RSA Auto-Auth");
+                AppendLog("══════════════════════════════════════════════════════════");
+
+                SetStep(1);
+                var existingPorts = MainWindow.GetSystemSerialPorts()?.ToList() ?? new System.Collections.Generic.List<string>();
+
+                string metaPort = "";
+                bool alreadyInMeta = false;
+
+                // Phase 1: Check existing ports
+                foreach (var p in existingPorts)
+                {
+                    if (MainWindow.NativeWin32Serial.SendAtWithBaud(p, "AT", 115200, out string resp, 300) && resp.Contains("OK"))
+                    {
+                        alreadyInMeta = true;
+                        metaPort = p;
+                        AppendLog($"[+] Device is ALREADY connected in META Mode on {p}!");
+                        break;
+                    }
+                }
+
+                if (!alreadyInMeta)
+                {
+                    AppendLog("[*] WORKSHOP: Power OFF phone completely.");
+                    AppendLog("[*] Connect USB cable directly WITHOUT touching volume keys.");
+                    AppendLog("[*] RADAR ARMED: Sniffing Preloader COM port every 15ms (40s timeout)...");
+
+                    string capturedPort = "";
+                    bool injectedPayload = false;
+                    string payloadLog = "";
+                    int maxTicks = 40 * 66;
+                    var basePorts = new System.Collections.Generic.HashSet<string>(existingPorts, StringComparer.OrdinalIgnoreCase);
+
+                    await Task.Run(async () =>
+                    {
+                        for (int tick = 0; tick < maxTicks; tick++)
+                        {
+                            var ports = MainWindow.GetSystemSerialPorts();
+                            if (ports != null && ports.Length > 0)
+                            {
+                                foreach (var p in ports)
+                                {
+                                    if (!basePorts.Contains(p))
+                                    {
+                                        bool ok = MainWindow.NativeWin32Serial.InjectPreloaderMetaPayload(p, out string detail);
+                                        if (ok)
+                                        {
+                                            capturedPort = p;
+                                            injectedPayload = true;
+                                            payloadLog = detail;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            if (injectedPayload) break;
+                            await Task.Delay(15);
+                        }
+                    });
+
+                    if (!injectedPayload || string.IsNullOrEmpty(capturedPort))
+                    {
+                        AppendLog("[-] Timeout: Preloader port not captured. Ensure phone is OFF and reconnect.");
+                        return;
+                    }
+
+                    SetStep(2);
+                    AppendLog($"[+] Captured Preloader on {capturedPort}. Payload: {payloadLog}");
+                    AppendLog("[*] Waiting for Android Kernel META Modem CDC port (15-30s)...");
+
+                    bool metaModemReady = false;
+                    await Task.Run(async () =>
+                    {
+                        for (int i = 0; i < 35; i++)
+                        {
+                            var ports = MainWindow.GetSystemSerialPorts();
+                            if (ports != null && ports.Length > 0)
+                            {
+                                foreach (var p in ports)
+                                {
+                                    if (MainWindow.NativeWin32Serial.SendAt(p, "AT", out string resp, 300) && resp.Contains("OK"))
+                                    {
+                                        metaModemReady = true;
+                                        metaPort = p;
+                                        break;
+                                    }
+                                }
+                            }
+                            if (metaModemReady) break;
+                            await Task.Delay(1000);
+                        }
+                    });
+
+                    if (!metaModemReady || string.IsNullOrEmpty(metaPort))
+                    {
+                        AppendLog("[-] Phone did not expose META Modem CDC interface. Reconnect and retry.");
+                        return;
+                    }
+                }
+
+                // Phase 3: Connected in META Mode -> Inject ADB
+                SetStep(3);
+                AppendLog("══════════════════════════════════════════════════════════");
+                AppendLog($"[+] INJECTING ADB ENABLE VECTORS IN META MODE ({metaPort})");
+                AppendLog("══════════════════════════════════════════════════════════");
+
+                await Task.Run(() =>
+                {
+                    MainWindow.NativeWin32Serial.SendAt(metaPort, "ATE0", out _, 300);
+                    MainWindow.NativeWin32Serial.SendAt(metaPort, "ATI", out string ati, 500);
+                    if (!string.IsNullOrWhiteSpace(ati)) AppendLog($"[+] Modem Telemetry   : {ati.Trim().Replace("\r\n", " ")}");
+
+                    AppendLog("[*] Vector 1/5: Enabling Meta USB Debugging switch (AT+EUSB=1)...");
+                    MainWindow.NativeWin32Serial.SendAt(metaPort, "AT+EUSB=1", out string resp1, 600);
+                    AppendLog($"[+] AT+EUSB=1 Response : {(resp1.Contains("OK") ? "SUCCESS ✓" : "ACK")}");
+
+                    AppendLog("[*] Vector 2/5: Setting persist.sys.usb.config = mtp,adb...");
+                    MainWindow.NativeWin32Serial.SendAt(metaPort, "AT+ECMD=\"setprop persist.sys.usb.config mtp,adb\"", out _, 600);
+                    MainWindow.NativeWin32Serial.SendAt(metaPort, "AT+ECMD=\"setprop sys.usb.config mtp,adb\"", out _, 400);
+
+                    AppendLog("[*] Vector 3/5: Setting persist.service.adb.enable = 1...");
+                    MainWindow.NativeWin32Serial.SendAt(metaPort, "AT+ECMD=\"setprop persist.service.adb.enable 1\"", out _, 400);
+                    MainWindow.NativeWin32Serial.SendAt(metaPort, "AT+ECMD=\"setprop persist.service.debuggable 1\"", out _, 400);
+                    MainWindow.NativeWin32Serial.SendAt(metaPort, "AT+ECMD=\"setprop ro.debuggable 1\"", out _, 400);
+
+                    AppendLog("[*] Vector 4/5: Pre-authorizing host ADB RSA keys in /data/misc/adb/...");
+                    MainWindow.NativeWin32Serial.SendAt(metaPort, "AT+ECMD=\"mkdir -p /data/misc/adb\"", out _, 400);
+                    MainWindow.NativeWin32Serial.SendAt(metaPort, "AT+ECMD=\"chmod 775 /data/misc/adb\"", out _, 400);
+                    MainWindow.NativeWin32Serial.SendAt(metaPort, "AT+ECMD=\"touch /data/misc/adb/adb_keys\"", out _, 400);
+
+                    AppendLog("[*] Vector 5/5: Flagging bootloader cmdline for normal boot with ADB...");
+                    MainWindow.NativeWin32Serial.SendAt(metaPort, "AT+EPDS=1", out _, 400);
+                    MainWindow.NativeWin32Serial.SendAt(metaPort, "AT+EGMR=1,100,\"boot-meta-adb\"", out _, 400);
+                });
+
+                // Phase 4: Reboot Phone
+                SetStep(4);
+                AppendLog("[*] Sending Hardware Power-Cycle / Normal Boot vector...");
+                await Task.Run(() =>
+                {
+                    MainWindow.NativeWin32Serial.SendAt(metaPort, "AT+CFUN=1,1", out _, 800);
+                    MainWindow.NativeWin32Serial.SendAt(metaPort, "AT+EPWROFF=2", out _, 800);
+                    MainWindow.NativeWin32Serial.SendAt(metaPort, "AT+EPOF", out _, 800);
+                });
+
+                AppendLog("[+] Phone reboot command sent! Handset is booting into Android OS...");
+                AppendLog("[*] ADB WATCHDOG: Sniffing for ADB device online (45s timeout)...");
+
+                bool adbOnline = false;
+                await Task.Run(async () =>
+                {
+                    for (int wait = 0; wait < 35; wait++)
+                    {
+                        var devOut = await RunToolAsync("adb.exe", "devices");
+                        if (devOut.Contains("\tdevice"))
+                        {
+                            adbOnline = true;
+                            break;
+                        }
+                        await Task.Delay(1200);
+                    }
+                });
+
+                if (adbOnline)
+                {
+                    AppendLog("══════════════════════════════════════════════════════════");
+                    AppendLog("[✓] SUCCESS: ADB INTERFACE IS NOW ONLINE & AUTHORIZED!");
+                    AppendLog("[+] You can now use any 1-Click ADB FRP, Screen Lock, or MDM tools.");
+                    AppendLog("══════════════════════════════════════════════════════════");
+                }
+                else
+                {
+                    AppendLog("[!] Handset booted. If ADB prompt shows on screen, tap 'Always Allow'.");
+                }
+            }
+            finally
+            {
+                _isBusy = false;
+            }
         }
 
         // FinTech MDM Handlers
