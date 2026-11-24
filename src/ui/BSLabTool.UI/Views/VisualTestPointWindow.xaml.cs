@@ -219,7 +219,7 @@ namespace BSLabTool.UI.Views
                             BorderBrush = new SolidColorBrush(Color.FromRgb(245, 158, 11)),
                             BorderThickness = new Thickness(1),
                             CornerRadius = new CornerRadius(4),
-                            Padding = new Thickness(6, 2)
+                            Padding = new Thickness(6, 2, 6, 2)
                         };
                         tweezersBadge.Child = new TextBlock
                         {
@@ -319,7 +319,7 @@ namespace BSLabTool.UI.Views
                 BorderBrush = new SolidColorBrush(c),
                 BorderThickness = new Thickness(1),
                 CornerRadius = new CornerRadius(3),
-                Padding = new Thickness(4, 1)
+                Padding = new Thickness(4, 1, 4, 1)
             };
             labelBorder.Child = new TextBlock
             {

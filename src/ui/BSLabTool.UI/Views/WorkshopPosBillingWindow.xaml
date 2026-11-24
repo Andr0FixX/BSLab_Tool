@@ -280,7 +280,7 @@
                             </Grid>
 
                             <!-- White Simulated Thermal Paper Roll -->
-                            <Border Grid.Row="1" Background="#FFFFFF" CornerRadius="4" Padding="16" HorizontalAlignment="Center" Width="360" ShadowDepth="0">
+                            <Border Grid.Row="1" Background="#FFFFFF" CornerRadius="4" Padding="16" HorizontalAlignment="Center" Width="360">
                                 <Border.Effect>
                                     <DropShadowEffect Color="#000000" BlurRadius="15" Opacity="0.5"/>
                                 </Border.Effect>

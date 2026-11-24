@@ -174,8 +174,9 @@ namespace BSLabTool.UI.Views
             {
                 try
                 {
-                    bool ok = BSLabBridge.BSLab_QC_Diag_SendSPC(port, "000000");
-                    AppendLog(ok ? "[+] SPC 000000 accepted! Diagnostic security unlocked." : "[*] Transmitted SPC frame (acknowledged).");
+                    bool unlocked = false;
+                    bool ok = BSLabBridge.BSLab_QC_Diag_SendSPC(port, "000000", out unlocked);
+                    AppendLog((ok && unlocked) ? "[+] SPC 000000 accepted! Diagnostic security unlocked." : "[*] Transmitted SPC frame (acknowledged).");
                 }
                 catch (Exception ex)
                 {
@@ -265,7 +266,7 @@ namespace BSLabTool.UI.Views
                 {
                     try
                     {
-                        bool ok = BSLabBridge.BSLab_QC_Diag_RestoreQCN(port, dlg.FileName, (total, file, part, status) =>
+                        bool ok = BSLabBridge.BSLab_QC_Diag_RestoreQCN(port, dlg.FileName, "", "", (total, file, part, status) =>
                         {
                             AppendLog($"[>] Writing NV Items: {total}% | {status}");
                         });
@@ -388,7 +389,8 @@ namespace BSLabTool.UI.Views
             AppendLog($"[*] Dumping MTK NVRAM Database to: {nvFile}...");
             try
             {
-                BSLabBridge.BSLab_MTK_BackupNVRAM(nvFile, (total, file, part, status) => { });
+                string port = GetSelectedPort();
+                BSLabBridge.BSLab_MTK_BackupNVRAM(port, nvFile, (total, file, part, status) => { });
                 AppendLog("[✓] NVRAM & NVDATA database backed up successfully!");
             }
             catch (Exception ex)
@@ -409,7 +411,8 @@ namespace BSLabTool.UI.Views
                 AppendLog($"[*] Restoring MTK NVRAM from: {Path.GetFileName(dlg.FileName)}...");
                 try
                 {
-                    BSLabBridge.BSLab_MTK_RestoreNVRAM(dlg.FileName, (total, file, part, status) => { });
+                    string port = GetSelectedPort();
+                    BSLabBridge.BSLab_MTK_RestoreNVRAM(port, dlg.FileName, (total, file, part, status) => { });
                     AppendLog("[✓] NVRAM database restored successfully!");
                 }
                 catch (Exception ex)
@@ -450,7 +453,7 @@ namespace BSLabTool.UI.Views
             AppendLog("[✓] 'NV Data is Corrupted' sequence executed! Phone will boot normally.");
         }
 
-        private async void OnXiaomiFastbootEraseEfsClicked(object sender, RoutedEventArgs e) => await OnWipeEfsClicked(sender, e);
+        private void OnXiaomiFastbootEraseEfsClicked(object sender, RoutedEventArgs e) => OnWipeEfsClicked(sender, e);
         private async void OnXiaomiRebootNormalClicked(object sender, RoutedEventArgs e) => await RunToolAsync("fastboot.exe", "reboot");
 
         #endregion

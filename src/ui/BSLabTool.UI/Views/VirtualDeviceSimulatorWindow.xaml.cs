@@ -222,6 +222,11 @@ namespace BSLabTool.UI.Views
             LogBus("[RF-RESTORE] ✓ RF Calibration complete. Valid Dual IMEI restored, 5G NR connection locked.");
         }
 
+        private void OnRebootVirtualPhoneClicked(object sender, RoutedEventArgs e)
+        {
+            OnTriggerRebootVirtualPhoneClicked(sender, e);
+        }
+
         private async void OnTriggerRebootVirtualPhoneClicked(object sender, RoutedEventArgs e)
         {
             LogBus("[SYS] Virtual Phone reboot requested by host (Fastboot/ADB reboot)...");

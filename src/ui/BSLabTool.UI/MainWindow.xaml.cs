@@ -6496,8 +6496,8 @@ namespace BSLabTool.UI
                 bool unlocked = false;
                 BSLabBridge.BSLab_QC_Diag_SendSPC(port, "000000", out unlocked);
                 SetMtkProgress(60, "Writing verified Modem Calibration & IMEI descriptors...");
-                string imei1 = TxtImei1?.Text?.Trim() ?? "860123456789018";
-                string imei2 = TxtImei2?.Text?.Trim() ?? "";
+                string imei1 = (!string.IsNullOrWhiteSpace(TxtDiagImei1?.Text) ? TxtDiagImei1.Text.Trim() : TxtMetaImei1?.Text?.Trim()) ?? "860123456789018";
+                string imei2 = (!string.IsNullOrWhiteSpace(TxtDiagImei2?.Text) ? TxtDiagImei2.Text.Trim() : TxtMetaImei2?.Text?.Trim()) ?? "";
                 bool ok = BSLabBridge.BSLab_QC_Diag_WriteIMEI(port, imei1, imei2);
                 if (ok)
                 {

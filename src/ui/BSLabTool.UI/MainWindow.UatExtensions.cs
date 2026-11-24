@@ -10,6 +10,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using System.Text.RegularExpressions;
 using Microsoft.Win32;
 
 namespace BSLabTool.UI
