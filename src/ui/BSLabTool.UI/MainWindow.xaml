@@ -514,7 +514,7 @@
             <StackPanel Orientation="Horizontal" Margin="8,0" VerticalAlignment="Center">
                 <Button x:Name="TabUatServices" Content="⋮ SERVICES" Style="{StaticResource ActiveNavTab}" Click="OnNavTabClicked" Margin="0,0,4,0"/>
                 <Button x:Name="TabUatFlasher" Content="⋮ FLASHER" Style="{StaticResource CyberNavTab}" Click="OnNavTabClicked" Margin="0,0,4,0"/>
-                <Button x:Name="TabUatPartition" Content="⋮ PARTITION MANAGER" Style="{StaticResource CyberNavTab}" Click="OnNavTabClicked" Margin="0,0,4,0"/>
+                <Button x:Name="TabUatPartition" Content="💾 PARTITION MANAGER" ToolTip="Advanced GPT Partition Manager &amp; Raw Read/Write Suite" Style="{StaticResource CyberNavTab}" Foreground="#00FFA3" FontWeight="ExtraBold" Click="OnOpenPartitionManagerClicked" Margin="0,0,4,0"/>
                 <Button x:Name="TabUatBackup" Content="⋮ BACKUP FIRMWARE" Style="{StaticResource CyberNavTab}" Click="OnNavTabClicked" Margin="0,0,4,0"/>
                 <Button x:Name="TabUatDiag" Content="⋮ DIAG" Style="{StaticResource CyberNavTab}" Click="OnNavTabClicked" Margin="0,0,4,0"/>
                 <Button x:Name="TabUatDump" Content="⋮ DUMP" Style="{StaticResource CyberNavTab}" Click="OnNavTabClicked" Margin="0,0,4,0"/>
@@ -568,6 +568,9 @@
                         <Button Content="⚡" ToolTip="Universal 1-Click FRP &amp; Cloud Lock Wizard" Width="38" Height="28" Margin="0,1" Foreground="#F59E0B" Style="{StaticResource WindowCtrlButton}" Click="OnOpenFrpWizardClicked"/>
                         <Button Content="📶" ToolTip="Qualcomm QCN &amp; MTK NVRAM Network / Baseband Suite" Width="38" Height="28" Margin="0,1" Foreground="#00E5FF" Style="{StaticResource WindowCtrlButton}" Click="OnOpenNetworkSuiteClicked"/>
                         <Button Content="☁️" ToolTip="Cloud Loader &amp; TestPoint Auto-Downloader" Width="38" Height="28" Margin="0,1" Foreground="#38BDF8" Style="{StaticResource WindowCtrlButton}" Click="OnOpenCloudLoaderClicked"/>
+                        <Button Content="💾" ToolTip="Advanced GPT Partition Manager &amp; Raw Read/Write Suite" Width="38" Height="28" Margin="0,1" Foreground="#00FFA3" Style="{StaticResource WindowCtrlButton}" Click="OnOpenPartitionManagerClicked"/>
+                        <Button Content="📡" ToolTip="Real-Time USB Hex Packet Sniffer &amp; Protocol Radar" Width="38" Height="28" Margin="0,1" Foreground="#00F0FF" Style="{StaticResource WindowCtrlButton}" Click="OnOpenLiveUsbSnifferClicked"/>
+                        <Button Content="🔄" ToolTip="In-App Auto-Updater &amp; GitHub Synchronizer" Width="38" Height="28" Margin="0,1" Foreground="#FFB800" Style="{StaticResource WindowCtrlButton}" Click="OnOpenAutoUpdaterClicked"/>
                         <Button Content="f" FontWeight="ExtraBold" FontSize="13" Foreground="#4267B2" ToolTip="Facebook Community Support" Width="38" Height="28" Margin="0,1" Style="{StaticResource WindowCtrlButton}" Click="OnUatFacebookClicked"/>
                         <Button Content="✈️" ToolTip="Official Telegram Updates" Width="38" Height="28" Margin="0,1" Style="{StaticResource WindowCtrlButton}" Click="OnUatTelegramClicked"/>
                         <Button Content="▶️" ToolTip="Official Video Guides" Width="38" Height="28" Margin="0,1" Style="{StaticResource WindowCtrlButton}" Click="OnUatYouTubeClicked"/>

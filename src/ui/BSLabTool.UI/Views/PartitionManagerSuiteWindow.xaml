@@ -1,0 +1,345 @@
+<Window x:Class="BSLabTool.UI.Views.PartitionManagerSuiteWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="BS LAB TOOL™ PRO — Advanced GPT Partition Manager &amp; Raw Read/Write Suite"
+        Width="1100" Height="720" MinWidth="900" MinHeight="600"
+        WindowStartupLocation="CenterOwner"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent"
+        ResizeMode="CanResizeWithGrip">
+
+    <Window.Resources>
+        <!-- Neon Gradient Brushes -->
+        <LinearGradientBrush x:Key="CyanBorderGlow" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#00F0FF" Offset="0.0"/>
+            <GradientStop Color="#00FFA3" Offset="0.5"/>
+            <GradientStop Color="#A855F7" Offset="1.0"/>
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="CyanEmeraldGradient" StartPoint="0,0" EndPoint="1,0">
+            <GradientStop Color="#00F0FF" Offset="0.0"/>
+            <GradientStop Color="#00FFA3" Offset="1.0"/>
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="AmberOrangeGradient" StartPoint="0,0" EndPoint="1,0">
+            <GradientStop Color="#FFB800" Offset="0.0"/>
+            <GradientStop Color="#F97316" Offset="1.0"/>
+        </LinearGradientBrush>
+
+        <!-- Modern Action Button Style -->
+        <Style x:Key="CyberButton" TargetType="Button">
+            <Setter Property="Background" Value="#111B30"/>
+            <Setter Property="Foreground" Value="#F8FAFC"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Padding" Value="12,7"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#1E293B"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bd" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#1E293B"/>
+                                <Setter TargetName="bd" Property="BorderBrush" Value="#00F0FF"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#0F172A"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="CyberPrimaryButton" TargetType="Button" BasedOn="{StaticResource CyberButton}">
+            <Setter Property="Background" Value="#00F0FF"/>
+            <Setter Property="Foreground" Value="#02040A"/>
+            <Setter Property="FontWeight" Value="Black"/>
+            <Setter Property="BorderBrush" Value="#00F0FF"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bd" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#38BDF8"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <!-- Outer Chrome Window Border -->
+    <Border Background="#040711" BorderBrush="{StaticResource CyanBorderGlow}" BorderThickness="1.5" CornerRadius="12" Margin="10">
+        <Border.Effect>
+            <DropShadowEffect Color="#00F0FF" BlurRadius="25" ShadowDepth="0" Opacity="0.3"/>
+        </Border.Effect>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="52"/>  <!-- Header Bar -->
+                <RowDefinition Height="Auto"/> <!-- Top Controls & Filter -->
+                <RowDefinition Height="*"/>    <!-- Partition DataGrid -->
+                <RowDefinition Height="160"/>  <!-- Bottom Progress & Log -->
+            </Grid.RowDefinitions>
+
+            <!-- 1. HEADER BAR -->
+            <Border Grid.Row="0" Background="#080E1C" CornerRadius="11,11,0,0" BorderBrush="#1E293B" BorderThickness="0,0,0,1" MouseLeftButtonDown="OnHeaderMouseLeftButtonDown">
+                <Grid Margin="16,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Icon & Title -->
+                    <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Border Width="34" Height="34" CornerRadius="8" Background="#101D38" BorderBrush="#00F0FF" BorderThickness="1" Margin="0,0,12,0">
+                            <TextBlock Text="💾" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <StackPanel VerticalAlignment="Center">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="BS LAB TOOL™ PRO" FontWeight="Black" FontSize="14" Foreground="#F8FAFC"/>
+                                <Border Background="{StaticResource CyanEmeraldGradient}" CornerRadius="4" Padding="5,1" Margin="8,0,0,0">
+                                    <TextBlock Text="PARTITION MANAGER" FontWeight="Black" FontSize="9" Foreground="#02040A"/>
+                                </Border>
+                            </StackPanel>
+                            <TextBlock Text="Advanced GPT Table Scanner, Raw Sector Dumper &amp; Flasher" FontSize="10" Foreground="#94A3B8" FontFamily="JetBrains Mono, Consolas"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Target Chipset Mode Badge -->
+                    <Border Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#101D38" BorderBrush="#1E293B" BorderThickness="1" CornerRadius="20" Padding="12,4">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Ellipse Width="8" Height="8" Fill="#00FFA3" Margin="0,0,6,0"/>
+                            <TextBlock x:Name="TxtTargetMode" Text="CONNECTED MODE: AUTO-DETECT (EDL 9008 / BROM / FASTBOOT)" FontSize="10" FontWeight="Bold" Foreground="#00F0FF" FontFamily="JetBrains Mono, Consolas"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Window Control Buttons -->
+                    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Button Click="OnMinimizeClicked" Width="30" Height="28" Background="Transparent" BorderThickness="0" Foreground="#94A3B8" Content="—" FontSize="12" Cursor="Hand"/>
+                        <Button Click="OnCloseClicked" Width="30" Height="28" Background="Transparent" BorderThickness="0" Foreground="#EF4444" Content="✕" FontSize="12" Cursor="Hand" Margin="4,0,0,0"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- 2. TOP TOOLBAR & QUICK ACTIONS -->
+            <Border Grid.Row="1" Background="#060B16" BorderBrush="#1E293B" BorderThickness="0,0,0,1" Padding="16,12">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Row 1: Mode Selector & Primary Operations -->
+                    <Grid Grid.Row="0" Margin="0,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Hardware Mode ComboBox -->
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Protocol:" FontSize="11" FontWeight="Bold" Foreground="#94A3B8" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <ComboBox x:Name="CmbProtocol" Width="220" Height="32" Background="#111B30" Foreground="#F8FAFC" BorderBrush="#334155" FontSize="11" VerticalContentAlignment="Center">
+                                <ComboBoxItem IsSelected="True">⚡ Auto-Pilot Detect</ComboBoxItem>
+                                <ComboBoxItem>Qualcomm Snapdragon (EDL 9008)</ComboBoxItem>
+                                <ComboBoxItem>MediaTek Dimensity / Helio (BROM)</ComboBoxItem>
+                                <ComboBoxItem>Fastboot / Bootloader Protocol</ComboBoxItem>
+                                <ComboBoxItem>ADB Root (/dev/block/by-name)</ComboBoxItem>
+                            </ComboBox>
+                        </StackPanel>
+
+                        <!-- Primary Action Buttons -->
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <Button Click="OnScanGptClicked" Style="{StaticResource CyberPrimaryButton}" Margin="0,0,8,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="🔍" Margin="0,0,6,0"/>
+                                    <TextBlock Text="READ GPT TABLE"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Click="OnDumpSelectedClicked" Style="{StaticResource CyberButton}" Margin="0,0,8,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="💾" Margin="0,0,6,0"/>
+                                    <TextBlock Text="DUMP SELECTED"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Click="OnWritePartitionClicked" Style="{StaticResource CyberButton}" Margin="0,0,8,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="⚡" Margin="0,0,6,0"/>
+                                    <TextBlock Text="WRITE PARTITION"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Click="OnErasePartitionClicked" Style="{StaticResource CyberButton}" Margin="0,0,8,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="🗑️" Margin="0,0,6,0"/>
+                                    <TextBlock Text="ERASE / WIPE"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Click="OnSecurityBackupClicked" Style="{StaticResource CyberButton}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="🛡️" Margin="0,0,6,0"/>
+                                    <TextBlock Text="1-CLICK EFS/NV BACKUP"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Row 2: Search, Category Filters, and Selection Controls -->
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Search Filter -->
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Filter:" FontSize="11" FontWeight="Bold" Foreground="#94A3B8" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <TextBox x:Name="TxtSearchFilter" Width="180" Height="28" Background="#111B30" Foreground="#F8FAFC" BorderBrush="#334155" FontSize="11" Padding="6,4" TextChanged="OnSearchFilterChanged"/>
+                        </StackPanel>
+
+                        <!-- Category Filter Pills -->
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="16,0">
+                            <Button Click="OnFilterAllClicked" Content="All Partitions" Style="{StaticResource CyberButton}" Padding="10,4" FontSize="10" Margin="0,0,6,0"/>
+                            <Button Click="OnFilterBootClicked" Content="Kernel (boot/dtbo)" Style="{StaticResource CyberButton}" Padding="10,4" FontSize="10" Margin="0,0,6,0"/>
+                            <Button Click="OnFilterSecurityClicked" Content="Security (EFS/NV)" Style="{StaticResource CyberButton}" Padding="10,4" FontSize="10" Margin="0,0,6,0"/>
+                            <Button Click="OnFilterSystemClicked" Content="OS (super/userdata)" Style="{StaticResource CyberButton}" Padding="10,4" FontSize="10"/>
+                        </StackPanel>
+
+                        <!-- Selection Buttons & Partition Counter -->
+                        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock x:Name="TxtPartitionStats" Text="PARTITIONS: 68 | SELECTED: 0" FontSize="10" FontWeight="Bold" Foreground="#00F0FF" FontFamily="JetBrains Mono, Consolas" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                            <Button Click="OnSelectAllClicked" Content="Select All" Style="{StaticResource CyberButton}" Padding="8,4" FontSize="10" Margin="0,0,6,0"/>
+                            <Button Click="OnClearSelectionClicked" Content="Clear" Style="{StaticResource CyberButton}" Padding="8,4" FontSize="10"/>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <!-- 3. PARTITION DATAGRID -->
+            <Border Grid.Row="2" Background="#050914" Padding="12">
+                <DataGrid x:Name="GridPartitions" AutoGenerateColumns="False" CanUserAddRows="False"
+                          Background="#070D1A" BorderBrush="#1E293B" BorderThickness="1"
+                          Foreground="#F8FAFC" RowBackground="#091122" AlternatingRowBackground="#0B152B"
+                          GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#142038"
+                          HeadersVisibility="Column" SelectionMode="Single"
+                          FontFamily="JetBrains Mono, Consolas" FontSize="11">
+                    
+                    <DataGrid.ColumnHeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Background" Value="#111B30"/>
+                            <Setter Property="Foreground" Value="#00F0FF"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                            <Setter Property="Padding" Value="10,8"/>
+                            <Setter Property="BorderThickness" Value="0,0,1,1"/>
+                            <Setter Property="BorderBrush" Value="#1E293B"/>
+                        </Style>
+                    </DataGrid.ColumnHeaderStyle>
+
+                    <DataGrid.Columns>
+                        <!-- Checkbox -->
+                        <DataGridCheckBoxColumn Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}" Width="45">
+                            <DataGridCheckBoxColumn.ElementStyle>
+                                <Style TargetType="CheckBox">
+                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridCheckBoxColumn.ElementStyle>
+                        </DataGridCheckBoxColumn>
+
+                        <!-- Index -->
+                        <DataGridTextColumn Header="#" Binding="{Binding Index}" Width="45" IsReadOnly="True"/>
+
+                        <!-- Partition Name -->
+                        <DataGridTextColumn Header="PARTITION NAME" Binding="{Binding Name}" Width="160" FontWeight="Bold" Foreground="#38BDF8" IsReadOnly="True"/>
+
+                        <!-- Start LBA -->
+                        <DataGridTextColumn Header="START LBA (HEX)" Binding="{Binding StartLbaHex}" Width="140" Foreground="#F59E0B" IsReadOnly="True"/>
+
+                        <!-- End LBA -->
+                        <DataGridTextColumn Header="END LBA (HEX)" Binding="{Binding EndLbaHex}" Width="140" Foreground="#94A3B8" IsReadOnly="True"/>
+
+                        <!-- Sectors -->
+                        <DataGridTextColumn Header="SECTORS" Binding="{Binding SectorCount}" Width="110" Foreground="#94A3B8" IsReadOnly="True"/>
+
+                        <!-- Human Readable Size -->
+                        <DataGridTextColumn Header="SIZE" Binding="{Binding FormattedSize}" Width="95" FontWeight="Bold" Foreground="#00FFA3" IsReadOnly="True"/>
+
+                        <!-- FileSystem / Type -->
+                        <DataGridTextColumn Header="TYPE / FS" Binding="{Binding FileSystem}" Width="100" Foreground="#C084FC" IsReadOnly="True"/>
+
+                        <!-- Status / Action -->
+                        <DataGridTemplateColumn Header="ACTIONS" Width="*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button Click="OnRowDumpClicked" Content="Dump" Style="{StaticResource CyberButton}" Padding="8,2" FontSize="10" Margin="0,0,6,0"/>
+                                        <Button Click="OnRowWriteClicked" Content="Flash" Style="{StaticResource CyberButton}" Padding="8,2" FontSize="10" Margin="0,0,6,0"/>
+                                        <Button Click="OnRowEraseClicked" Content="Wipe" Style="{StaticResource CyberButton}" Padding="8,2" FontSize="10"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
+
+            <!-- 4. BOTTOM PROGRESS & LIVE PROTOCOL LOG -->
+            <Border Grid.Row="3" Background="#060B16" BorderBrush="#1E293B" BorderThickness="0,1,0,0" CornerRadius="0,0,11,11" Padding="16,10">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Real-Time Progress Bar & Byte Counter -->
+                    <Grid Grid.Row="0" Margin="0,0,0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0">
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                                <TextBlock x:Name="TxtStatus" Text="READY // GPT TABLE PARSER ENGINE IDLE" FontSize="11" FontWeight="Bold" Foreground="#00F0FF" FontFamily="JetBrains Mono, Consolas"/>
+                                <TextBlock x:Name="TxtSpeed" Text="" FontSize="11" Foreground="#00FFA3" FontFamily="JetBrains Mono, Consolas" Margin="12,0,0,0"/>
+                            </StackPanel>
+                            <ProgressBar x:Name="ProgressTask" Height="7" Value="0" Maximum="100" Foreground="{StaticResource CyanEmeraldGradient}" Background="#111B30" BorderThickness="0"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="16,0,0,0">
+                            <Button Click="OnClearLogClicked" Content="Clear Log" Style="{StaticResource CyberButton}" Padding="10,4" FontSize="10" Margin="0,0,6,0"/>
+                            <Button Click="OnExportXmlClicked" Content="Export rawprogram0.xml" Style="{StaticResource CyberButton}" Padding="10,4" FontSize="10"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Console Event Stream -->
+                    <TextBox x:Name="TxtLog" Grid.Row="1" Background="#030712" Foreground="#94A3B8" BorderBrush="#1E293B"
+                             FontFamily="JetBrains Mono, Consolas" FontSize="11"
+                             IsReadOnly="True" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap"/>
+                </Grid>
+            </Border>
+
+        </Grid>
+    </Border>
+</Window>

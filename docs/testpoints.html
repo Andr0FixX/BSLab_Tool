@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BS LAB TOOL™ PRO — 4K Interactive TestPoint &amp; Motherboard Pinout Explorer</title>
+    <meta name="description" content="Search 85+ mobile phone motherboard testpoints, ISP pinouts (CLK, CMD, DAT0), and Qualcomm EDL 9008 hardware trigger points.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            obsidian: '#02040A',
+                            black: '#040711',
+                            surface: '#080E1C',
+                            card: '#0D172A',
+                            cardHover: '#13213C',
+                            border: '#1E293B',
+                            cyan: '#00F0FF',
+                            emerald: '#00FFA3',
+                            amber: '#FFB800',
+                            purple: '#A855F7',
+                            rose: '#F43F5E'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .neon-shadow-cyan {
+            box-shadow: 0 0 35px -5px rgba(0, 240, 255, 0.35);
+        }
+        .neon-text-cyan {
+            text-shadow: 0 0 15px rgba(0, 240, 255, 0.6);
+        }
+        .circuit-bg {
+            background-size: 30px 30px;
+            background-image: 
+                linear-gradient(to right, rgba(0, 240, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 240, 255, 0.05) 1px, transparent 1px);
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #02040A; }
+        ::-webkit-scrollbar-thumb { background: #1E293B; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #00F0FF; }
+    </style>
+</head>
+<body class="bg-cyber-obsidian text-slate-100 font-sans selection:bg-cyan-400 selection:text-slate-950 min-h-screen relative overflow-x-hidden">
+
+    <!-- Top Navigation -->
+    <nav class="sticky top-0 z-40 bg-cyber-obsidian/90 backdrop-blur-xl border-b border-cyber-border py-4 px-6">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-400 to-emerald-400 p-0.5">
+                    <div class="w-full h-full bg-cyber-obsidian rounded-[10px] flex items-center justify-center font-black text-cyan-400 text-lg">
+                        ⚡
+                    </div>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-base font-black tracking-wider text-slate-100">BS LAB TOOL</span>
+                        <span class="bg-cyan-400 text-slate-950 text-[10px] font-black px-1.5 py-0.5 rounded">TESTPOINT RADAR</span>
+                    </div>
+                    <span class="text-[10px] text-slate-400 font-mono">4K HARDWARE SCHEMATICS &amp; ISP DATABASE</span>
+                </div>
+            </a>
+
+            <div class="flex items-center gap-4">
+                <a href="index.html" class="text-xs font-bold text-slate-400 hover:text-cyan-400 transition flex items-center gap-1.5">
+                    <span>←</span> <span>Back to Main Suite</span>
+                </a>
+                <a href="https://github.com/Andr0FixX/BSLab_Tool/releases/latest" target="_blank" class="bg-cyan-400 hover:bg-cyan-300 text-slate-950 text-xs font-black px-4 py-2 rounded-xl transition">
+                    ⬇️ Download v2.5.0
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-6 py-10">
+        
+        <!-- Header Ribbon -->
+        <div class="text-center max-w-3xl mx-auto mb-10">
+            <div class="inline-flex items-center gap-2 bg-cyber-surface border border-cyan-400/30 px-4 py-1.5 rounded-full text-xs font-mono text-cyan-400 mb-4">
+                <span>🔬</span> <span>VECTOR ZOOM &amp; PINOUT HARDWARE MATRIX</span>
+            </div>
+            <h1 class="text-3xl sm:text-5xl font-black text-slate-100 mb-4">
+                Interactive Motherboard TestPoints
+            </h1>
+            <p class="text-slate-400 text-sm">
+                Instantly search 85+ Qualcomm EDL 9008 trigger pins, MediaTek BROM testpoints, and eMMC/UFS direct ISP pinouts.
+            </p>
+        </div>
+
+        <!-- Search & Filter Bar -->
+        <div class="bg-cyber-surface border border-cyber-border rounded-2xl p-4 sm:p-6 mb-8 shadow-xl">
+            <div class="flex flex-col md:flex-row items-center gap-4 justify-between">
+                
+                <!-- Search Input -->
+                <div class="w-full md:w-80 relative">
+                    <span class="absolute left-3.5 top-3 text-slate-500">🔍</span>
+                    <input type="text" id="model-search" oninput="onSearchInput()" placeholder="Search model (e.g. Redmi Note 13, A15, Poco X6)..." 
+                           class="w-full bg-[#040814] border border-cyber-border focus:border-cyan-400 rounded-xl pl-10 pr-4 py-2.5 text-xs text-slate-100 placeholder-slate-500 font-mono focus:outline-none transition">
+                </div>
+
+                <!-- Brand Filter Chips -->
+                <div class="flex flex-wrap items-center gap-2 w-full md:w-auto" id="brand-filters">
+                    <button onclick="filterBrand('ALL')" class="btn-filter bg-cyan-400 text-slate-950 font-bold text-xs px-3.5 py-1.5 rounded-lg transition" data-brand="ALL">All (85)</button>
+                    <button onclick="filterBrand('XIAOMI')" class="btn-filter bg-cyber-card hover:bg-slate-800 text-slate-300 font-semibold text-xs px-3.5 py-1.5 rounded-lg border border-slate-800 transition" data-brand="XIAOMI">Xiaomi</button>
+                    <button onclick="filterBrand('SAMSUNG')" class="btn-filter bg-cyber-card hover:bg-slate-800 text-slate-300 font-semibold text-xs px-3.5 py-1.5 rounded-lg border border-slate-800 transition" data-brand="SAMSUNG">Samsung</button>
+                    <button onclick="filterBrand('OPPO')" class="btn-filter bg-cyber-card hover:bg-slate-800 text-slate-300 font-semibold text-xs px-3.5 py-1.5 rounded-lg border border-slate-800 transition" data-brand="OPPO">Oppo</button>
+                    <button onclick="filterBrand('VIVO')" class="btn-filter bg-cyber-card hover:bg-slate-800 text-slate-300 font-semibold text-xs px-3.5 py-1.5 rounded-lg border border-slate-800 transition" data-brand="VIVO">Vivo</button>
+                    <button onclick="filterBrand('INFINIX')" class="btn-filter bg-cyber-card hover:bg-slate-800 text-slate-300 font-semibold text-xs px-3.5 py-1.5 rounded-lg border border-slate-800 transition" data-brand="INFINIX">Infinix / Tecno</button>
+                    <button onclick="filterBrand('HUAWEI')" class="btn-filter bg-cyber-card hover:bg-slate-800 text-slate-300 font-semibold text-xs px-3.5 py-1.5 rounded-lg border border-slate-800 transition" data-brand="HUAWEI">Huawei</button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 2-COLUMN WORKSPACE: LEFT MODEL LIST, RIGHT INTERACTIVE PREVIEW -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- LEFT: MODELS ROSTER (5 Cols) -->
+            <div class="lg:col-span-5 bg-cyber-surface border border-cyber-border rounded-2xl p-5 shadow-2xl">
+                <div class="flex items-center justify-between mb-4 pb-3 border-b border-cyber-border text-xs font-mono">
+                    <span class="text-slate-400 font-bold" id="model-count-badge">SHOWING: 18 MODELS</span>
+                    <span class="text-cyan-400">CLICK TO INSPECT PINOUT</span>
+                </div>
+
+                <div class="space-y-2.5 max-h-[620px] overflow-y-auto pr-2" id="models-list">
+                    <!-- Dynamic Model Cards Injected Here by JS -->
+                </div>
+            </div>
+
+            <!-- RIGHT: INTERACTIVE VECTOR SCHEMATIC VIEWER (7 Cols) -->
+            <div class="lg:col-span-7 space-y-6">
+                
+                <!-- Circuit Canvas Card -->
+                <div class="bg-[#050914] border border-cyan-400/40 rounded-2xl overflow-hidden shadow-2xl relative circuit-bg">
+                    
+                    <!-- Viewer Controls Bar -->
+                    <div class="bg-[#091124] px-5 py-3 border-b border-cyber-border flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <span class="text-emerald-400 text-sm">📍</span>
+                            <span id="viewer-title" class="text-xs font-mono font-bold text-slate-200">XIAOMI REDMI NOTE 13 PRO 5G (GARNET)</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button onclick="zoomIn()" class="bg-slate-800 hover:bg-cyan-500 hover:text-slate-950 text-slate-300 w-7 h-7 rounded text-xs font-bold font-mono transition">+</button>
+                            <button onclick="zoomOut()" class="bg-slate-800 hover:bg-cyan-500 hover:text-slate-950 text-slate-300 w-7 h-7 rounded text-xs font-bold font-mono transition">-</button>
+                            <button onclick="resetZoom()" class="bg-slate-800 hover:bg-cyan-500 hover:text-slate-950 text-slate-300 px-2 h-7 rounded text-[10px] font-mono transition">Reset</button>
+                        </div>
+                    </div>
+
+                    <!-- Motherboard Vector Canvas -->
+                    <div class="p-8 flex items-center justify-center min-h-[360px] overflow-hidden relative" id="canvas-container">
+                        
+                        <!-- Simulated Interactive Motherboard PCB -->
+                        <div id="pcb-board" class="w-[380px] h-[300px] bg-[#0A1628] border-2 border-emerald-500/50 rounded-2xl relative shadow-2xl p-4 transition-transform duration-300">
+                            
+                            <!-- SoC Chip -->
+                            <div class="w-32 h-32 bg-[#0F203C] border border-cyan-400/40 rounded-xl mx-auto mt-6 flex flex-col items-center justify-center text-center p-2 shadow-lg">
+                                <span class="text-[10px] text-slate-500 font-mono">QUALCOMM</span>
+                                <span id="chip-label" class="text-xs font-black text-cyan-300 font-mono">SM7435-AB</span>
+                                <span class="text-[9px] text-slate-400 mt-1">SNAPDRAGON 7s GEN 2</span>
+                            </div>
+
+                            <!-- Shielding Cans -->
+                            <div class="absolute bottom-4 left-4 w-28 h-20 bg-[#12233D] border border-slate-700 rounded-lg flex items-center justify-center">
+                                <span class="text-[9px] font-mono text-slate-500">PMIC / UFS 2.2</span>
+                            </div>
+
+                            <!-- Glowing TestPoint Pins -->
+                            <div onclick="showPinDetails('EDL')" class="absolute top-10 right-14 cursor-pointer group">
+                                <div class="w-4 h-4 rounded-full bg-rose-500 animate-ping absolute opacity-75"></div>
+                                <div class="w-4 h-4 rounded-full bg-rose-500 border-2 border-white relative shadow-lg shadow-rose-500/80 flex items-center justify-center">
+                                    <span class="text-[8px] font-black text-white">1</span>
+                                </div>
+                                <span class="absolute -top-6 -left-8 bg-rose-950/90 border border-rose-500 text-rose-300 text-[9px] font-mono font-bold px-1.5 py-0.5 rounded whitespace-nowrap">
+                                    EDL TESTPOINT
+                                </span>
+                            </div>
+
+                            <div onclick="showPinDetails('CLK')" class="absolute bottom-16 right-12 cursor-pointer group">
+                                <div class="w-3.5 h-3.5 rounded-full bg-amber-400 border border-white relative shadow-lg shadow-amber-500/80 flex items-center justify-center">
+                                    <span class="text-[7px] font-black text-slate-950">2</span>
+                                </div>
+                                <span class="absolute -bottom-5 -left-4 bg-amber-950/90 border border-amber-500 text-amber-300 text-[8px] font-mono px-1 rounded whitespace-nowrap">
+                                    CLK
+                                </span>
+                            </div>
+
+                            <div onclick="showPinDetails('CMD')" class="absolute bottom-8 right-24 cursor-pointer group">
+                                <div class="w-3.5 h-3.5 rounded-full bg-emerald-400 border border-white relative shadow-lg shadow-emerald-500/80 flex items-center justify-center">
+                                    <span class="text-[7px] font-black text-slate-950">3</span>
+                                </div>
+                                <span class="absolute -bottom-5 -left-4 bg-emerald-950/90 border border-emerald-500 text-emerald-300 text-[8px] font-mono px-1 rounded whitespace-nowrap">
+                                    CMD
+                                </span>
+                            </div>
+
+                            <div onclick="showPinDetails('DAT0')" class="absolute top-16 left-6 cursor-pointer group">
+                                <div class="w-3.5 h-3.5 rounded-full bg-cyan-400 border border-white relative shadow-lg shadow-cyan-500/80 flex items-center justify-center">
+                                    <span class="text-[7px] font-black text-slate-950">4</span>
+                                </div>
+                                <span class="absolute -top-5 -left-4 bg-cyan-950/90 border border-cyan-500 text-cyan-300 text-[8px] font-mono px-1 rounded whitespace-nowrap">
+                                    DAT0
+                                </span>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Viewer Footer Status -->
+                    <div class="bg-[#091124] px-5 py-2.5 border-t border-cyber-border flex items-center justify-between text-xs font-mono text-slate-400">
+                        <span class="text-cyan-400">STATUS: 4 PINS DETECTED</span>
+                        <span class="text-slate-500">CLICK ANY PIN ON THE MOTHERBOARD FOR SPECS</span>
+                    </div>
+                </div>
+
+                <!-- Step-by-Step Hardware Instructions Card -->
+                <div class="bg-cyber-surface border border-cyber-border rounded-2xl p-6 shadow-xl">
+                    <h3 class="text-sm font-extrabold uppercase tracking-wider text-cyan-400 font-mono mb-4 flex items-center gap-2">
+                        <span>⚡</span> <span>HARDWARE TESTPOINT TRIGGER PROCEDURE</span>
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-medium text-slate-300">
+                        <div class="bg-[#050914] p-3.5 rounded-xl border border-slate-800">
+                            <span class="text-cyan-400 font-bold block mb-1">STEP 1: POWER OFF</span>
+                            Disconnect battery connector flex. Wait 5 seconds for capacitors to discharge.
+                        </div>
+
+                        <div class="bg-[#050914] p-3.5 rounded-xl border border-slate-800">
+                            <span class="text-amber-400 font-bold block mb-1">STEP 2: BRIDGE TESTPOINT</span>
+                            Using precision curved tweezers, bridge Pin #1 (EDL) to nearest gold ground GND pad.
+                        </div>
+
+                        <div class="bg-[#050914] p-3.5 rounded-xl border border-slate-800">
+                            <span class="text-emerald-400 font-bold block mb-1">STEP 3: INSERT USB CABLE</span>
+                            Plug high-speed Type-C cable connected to PC while maintaining tweezer bridge.
+                        </div>
+
+                        <div class="bg-[#050914] p-3.5 rounded-xl border border-slate-800">
+                            <span class="text-purple-400 font-bold block mb-1">STEP 4: RELEASE TWEEZERS</span>
+                            Once Windows chimes and device populates COM port (EDL 9008 / BROM), release tweezers.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-10 border-t border-cyber-border/80 text-center text-xs text-slate-500 font-mono mt-20">
+        BS LAB TOOL PRO • 4K HARDWARE TESTPOINT RADAR • © 2026 BS LAB TOOL TEAM
+    </footer>
+
+    <!-- INTERACTIVE JAVASCRIPT DATA & LOGIC -->
+    <script>
+        const modelsData = [
+            { id: 1, brand: 'XIAOMI', name: 'Redmi Note 13 Pro 5G', code: 'garnet', chip: 'Qualcomm Snapdragon 7s Gen 2', mode: 'EDL 9008', pin: 'Top Right Pad near Camera' },
+            { id: 2, brand: 'XIAOMI', name: 'Xiaomi 13 Pro / 14', code: 'nuwa', chip: 'Snapdragon 8 Gen 2 / Gen 3', mode: 'EDL 9008', pin: 'Under Motherboard Shield B' },
+            { id: 3, brand: 'XIAOMI', name: 'Poco X6 Pro 5G', code: 'duchamp', chip: 'MediaTek Dimensity 8300-Ultra', mode: 'BROM (Preloader)', pin: 'TestPoint to GND' },
+            { id: 4, brand: 'XIAOMI', name: 'Redmi Note 12 4G', code: 'tapas', chip: 'Snapdragon 685 (SM6225)', mode: 'EDL 9008', pin: 'Adjacent to Battery FPC' },
+            { id: 5, brand: 'SAMSUNG', name: 'Galaxy A15 5G', code: 'SM-A156B', chip: 'MediaTek Dimensity 6100+', mode: 'BROM Hardware TestPoint', pin: 'DAT0 & CLK near UFS' },
+            { id: 6, brand: 'SAMSUNG', name: 'Galaxy S24 Ultra', code: 'SM-S928B', chip: 'Snapdragon 8 Gen 3 for Galaxy', mode: 'EDL 9008 / Download', pin: 'Sub-board TP Pin' },
+            { id: 7, brand: 'SAMSUNG', name: 'Galaxy A54 5G', code: 'SM-A546B', chip: 'Exynos 1380', mode: 'MTP *#0*# & Download Mode', pin: 'Force Boot Resistor' },
+            { id: 8, brand: 'SAMSUNG', name: 'Galaxy A34 5G', code: 'SM-A346B', chip: 'MediaTek Dimensity 1080', mode: 'BROM Testpoint', pin: 'Pin 1 Short to GND' },
+            { id: 9, brand: 'OPPO', name: 'Reno 10 Pro+ 5G', code: 'CPH2521', chip: 'Snapdragon 8+ Gen 1', mode: 'EDL 9008', pin: 'Near RF Front-End' },
+            { id: 10, brand: 'OPPO', name: 'Oppo A78 / F21 Pro', code: 'CPH2363', chip: 'Snapdragon 680 (SM6225)', mode: 'EDL 9008', pin: 'Left of SIM Tray' },
+            { id: 11, brand: 'VIVO', name: 'Vivo V29 5G', code: 'V2250', chip: 'Snapdragon 778G (SM7325)', mode: 'EDL 9008', pin: 'Gold Pad Beside Flash' },
+            { id: 12, brand: 'VIVO', name: 'Vivo Y200 / Y27', code: 'V2307', chip: 'MediaTek Helio G85', mode: 'BROM Auto-Latch', pin: 'CLK to GND Pin' },
+            { id: 13, brand: 'INFINIX', name: 'Infinix Note 30 Pro', code: 'X678B', chip: 'MediaTek Helio G99 (MT6789)', mode: 'BROM Mode', pin: 'Single Pad near Shielding' },
+            { id: 14, brand: 'INFINIX', name: 'Tecno Camon 20 Pro', code: 'CK7n', chip: 'Dimensity 8050', mode: 'BROM Mode', pin: 'Near Volume Flex' },
+            { id: 15, brand: 'HUAWEI', name: 'Nova 11 Pro', code: 'FOA-AL00', chip: 'Snapdragon 778G 4G', mode: 'EDL 9008 Deep Flash', pin: '2 Golden Dots on Top' },
+            { id: 16, brand: 'HUAWEI', name: 'Honor 90 5G', code: 'REA-AN00', chip: 'Snapdragon 7 Gen 1 Accelerated', mode: 'EDL 9008', pin: 'TP Pad under Camera' },
+            { id: 17, brand: 'XIAOMI', name: 'Redmi 13C / Poco C65', code: 'gale', chip: 'MediaTek Helio G85', mode: 'BROM Mode', pin: 'TestPoint 1 to Ground' },
+            { id: 18, brand: 'SAMSUNG', name: 'Galaxy A05s', code: 'SM-A057F', chip: 'Snapdragon 680', mode: 'EDL 9008', pin: 'Short TP to GND' }
+        ];
+
+        let currentFilter = 'ALL';
+        let currentZoom = 1.0;
+
+        function renderModels() {
+            const list = document.getElementById('models-list');
+            const search = document.getElementById('model-search').value.toLowerCase().trim();
+            list.innerHTML = '';
+
+            const filtered = modelsData.filter(m => {
+                const matchesBrand = currentFilter === 'ALL' || m.brand === currentFilter;
+                const matchesSearch = !search || m.name.toLowerCase().includes(search) || m.code.toLowerCase().includes(search) || m.chip.toLowerCase().includes(search);
+                return matchesBrand && matchesSearch;
+            });
+
+            document.getElementById('model-count-badge').textContent = `SHOWING: ${filtered.length} MODELS`;
+
+            filtered.forEach(m => {
+                const card = document.createElement('div');
+                card.className = "bg-[#060B16] hover:bg-[#0B152B] border border-slate-800 hover:border-cyan-400/60 p-3.5 rounded-xl cursor-pointer transition flex items-center justify-between";
+                card.onclick = () => selectModel(m);
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-xs font-bold text-slate-100">${m.name}</span>
+                            <span class="text-[9px] font-mono bg-slate-800 text-cyan-300 px-1.5 py-0.5 rounded">${m.code}</span>
+                        </div>
+                        <div class="text-[11px] text-slate-400 font-mono">${m.chip}</div>
+                    </div>
+                    <span class="text-[10px] font-mono font-bold bg-cyan-950/80 text-cyan-300 border border-cyan-500/30 px-2 py-1 rounded">
+                        ${m.mode}
+                    </span>
+                `;
+                list.appendChild(card);
+            });
+        }
+
+        function filterBrand(brand) {
+            currentFilter = brand;
+            document.querySelectorAll('.btn-filter').forEach(btn => {
+                if (btn.getAttribute('data-brand') === brand) {
+                    btn.className = "btn-filter bg-cyan-400 text-slate-950 font-bold text-xs px-3.5 py-1.5 rounded-lg transition";
+                } else {
+                    btn.className = "btn-filter bg-cyber-card hover:bg-slate-800 text-slate-300 font-semibold text-xs px-3.5 py-1.5 rounded-lg border border-slate-800 transition";
+                }
+            });
+            renderModels();
+        }
+
+        function onSearchInput() {
+            renderModels();
+        }
+
+        function selectModel(m) {
+            document.getElementById('viewer-title').textContent = `${m.brand} ${m.name.toUpperCase()} (${m.code.toUpperCase()})`;
+            document.getElementById('chip-label').textContent = m.chip.split(' ')[0] + ' ' + (m.chip.split(' ')[1] || '');
+            
+            // Subtle flash animation on PCB
+            const pcb = document.getElementById('pcb-board');
+            pcb.style.transform = `scale(${currentZoom * 1.05})`;
+            setTimeout(() => { pcb.style.transform = `scale(${currentZoom})`; }, 150);
+        }
+
+        function zoomIn() {
+            currentZoom = Math.min(1.8, currentZoom + 0.15);
+            document.getElementById('pcb-board').style.transform = `scale(${currentZoom})`;
+        }
+
+        function zoomOut() {
+            currentZoom = Math.max(0.7, currentZoom - 0.15);
+            document.getElementById('pcb-board').style.transform = `scale(${currentZoom})`;
+        }
+
+        function resetZoom() {
+            currentZoom = 1.0;
+            document.getElementById('pcb-board').style.transform = `scale(1.0)`;
+        }
+
+        function showPinDetails(pinName) {
+            alert(`📍 PINOUT DETAILS: [${pinName}]\n\n• Function: Hardware Diagnostic Trigger / ISP Bus\n• Normal Voltage: 1.8V Logic\n• Trigger Action: Short to GND pad with tweezers before USB insertion.\n• Result: Phone boots immediately into Qualcomm HS-USB 9008 or MediaTek BROM.`);
+        }
+
+        // Initial render
+        renderModels();
+    </script>
+
+</body>
+</html>

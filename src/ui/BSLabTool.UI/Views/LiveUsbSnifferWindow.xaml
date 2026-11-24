@@ -1,0 +1,239 @@
+<Window x:Class="BSLabTool.UI.Views.LiveUsbSnifferWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="BS LAB TOOL™ PRO — Real-Time Live USB Hex Packet Sniffer &amp; Hardware Protocol Radar"
+        Width="1050" Height="680" MinWidth="850" MinHeight="550"
+        WindowStartupLocation="CenterOwner"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent"
+        ResizeMode="CanResizeWithGrip">
+
+    <Window.Resources>
+        <!-- Neon Gradient Brushes -->
+        <LinearGradientBrush x:Key="RadarBorderGlow" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#00F0FF" Offset="0.0"/>
+            <GradientStop Color="#A855F7" Offset="0.5"/>
+            <GradientStop Color="#00FFA3" Offset="1.0"/>
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="CyanEmeraldGradient" StartPoint="0,0" EndPoint="1,0">
+            <GradientStop Color="#00F0FF" Offset="0.0"/>
+            <GradientStop Color="#00FFA3" Offset="1.0"/>
+        </LinearGradientBrush>
+
+        <Style x:Key="CyberButton" TargetType="Button">
+            <Setter Property="Background" Value="#111B30"/>
+            <Setter Property="Foreground" Value="#F8FAFC"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Padding" Value="12,7"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#1E293B"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bd" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#1E293B"/>
+                                <Setter TargetName="bd" Property="BorderBrush" Value="#00F0FF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="CyberStartButton" TargetType="Button" BasedOn="{StaticResource CyberButton}">
+            <Setter Property="Background" Value="#00FFA3"/>
+            <Setter Property="Foreground" Value="#02040A"/>
+            <Setter Property="FontWeight" Value="Black"/>
+            <Setter Property="BorderBrush" Value="#00FFA3"/>
+        </Style>
+    </Window.Resources>
+
+    <!-- Outer Chrome Window Border -->
+    <Border Background="#040711" BorderBrush="{StaticResource RadarBorderGlow}" BorderThickness="1.5" CornerRadius="12" Margin="10">
+        <Border.Effect>
+            <DropShadowEffect Color="#00F0FF" BlurRadius="25" ShadowDepth="0" Opacity="0.3"/>
+        </Border.Effect>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="52"/>  <!-- Header Bar -->
+                <RowDefinition Height="Auto"/> <!-- Device Selector & Action Controls -->
+                <RowDefinition Height="*"/>    <!-- Packet Capture DataGrid -->
+                <RowDefinition Height="200"/>  <!-- Hex & ASCII Dump Inspector -->
+            </Grid.RowDefinitions>
+
+            <!-- 1. HEADER BAR -->
+            <Border Grid.Row="0" Background="#080E1C" CornerRadius="11,11,0,0" BorderBrush="#1E293B" BorderThickness="0,0,0,1" MouseLeftButtonDown="OnHeaderMouseLeftButtonDown">
+                <Grid Margin="16,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Icon & Title -->
+                    <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Border Width="34" Height="34" CornerRadius="8" Background="#101D38" BorderBrush="#00F0FF" BorderThickness="1" Margin="0,0,12,0">
+                            <TextBlock Text="📡" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <StackPanel VerticalAlignment="Center">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="BS LAB TOOL™ PRO" FontWeight="Black" FontSize="14" Foreground="#F8FAFC"/>
+                                <Border Background="{StaticResource CyanEmeraldGradient}" CornerRadius="4" Padding="5,1" Margin="8,0,0,0">
+                                    <TextBlock Text="USB HEX RADAR" FontWeight="Black" FontSize="9" Foreground="#02040A"/>
+                                </Border>
+                            </StackPanel>
+                            <TextBlock Text="Real-Time USB Endpoint Sniffer, Bulk URB Tracker &amp; Protocol Inspector" FontSize="10" Foreground="#94A3B8" FontFamily="JetBrains Mono, Consolas"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Sniffer Status Pill -->
+                    <Border Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#101D38" BorderBrush="#1E293B" BorderThickness="1" CornerRadius="20" Padding="12,4">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Ellipse x:Name="DotStatus" Width="8" Height="8" Fill="#00FFA3" Margin="0,0,6,0"/>
+                            <TextBlock x:Name="TxtCaptureStatus" Text="RADAR STATUS: CAPTURING LIVE (1.4K PACKETS/SEC)" FontSize="10" FontWeight="Bold" Foreground="#00F0FF" FontFamily="JetBrains Mono, Consolas"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Window Control Buttons -->
+                    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Button Click="OnMinimizeClicked" Width="30" Height="28" Background="Transparent" BorderThickness="0" Foreground="#94A3B8" Content="—" FontSize="12" Cursor="Hand"/>
+                        <Button Click="OnCloseClicked" Width="30" Height="28" Background="Transparent" BorderThickness="0" Foreground="#EF4444" Content="✕" FontSize="12" Cursor="Hand" Margin="4,0,0,0"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- 2. DEVICE SELECTOR & CAPTURE CONTROLS -->
+            <Border Grid.Row="1" Background="#060B16" BorderBrush="#1E293B" BorderThickness="0,0,0,1" Padding="16,10">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Target USB Port -->
+                    <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="Target Device:" FontSize="11" FontWeight="Bold" Foreground="#94A3B8" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                        <ComboBox x:Name="CmbDevices" Width="280" Height="32" Background="#111B30" Foreground="#F8FAFC" BorderBrush="#334155" FontSize="11" VerticalContentAlignment="Center">
+                            <ComboBoxItem IsSelected="True">COM4: Qualcomm HS-USB QDLoader 9008</ComboBoxItem>
+                            <ComboBoxItem>COM7: MediaTek Preloader (VID:0E8D PID:2000)</ComboBoxItem>
+                            <ComboBoxItem>COM9: MediaTek USB Port (BROM VID:0E8D PID:0003)</ComboBoxItem>
+                            <ComboBoxItem>Samsung Mobile USB Modem (COM12)</ComboBoxItem>
+                            <ComboBoxItem>Android ADB Interface (Bulk In/Out)</ComboBoxItem>
+                            <ComboBoxItem>Android Bootloader Fastboot Interface</ComboBoxItem>
+                        </ComboBox>
+                    </StackPanel>
+
+                    <!-- Capture Buttons -->
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="16,0">
+                        <Button x:Name="BtnToggleCapture" Click="OnToggleCaptureClicked" Style="{StaticResource CyberStartButton}" Margin="0,0,6,0">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="⏸" Margin="0,0,6,0"/>
+                                <TextBlock Text="PAUSE"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Click="OnClearClicked" Style="{StaticResource CyberButton}" Margin="0,0,6,0">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="🧹" Margin="0,0,6,0"/>
+                                <TextBlock Text="CLEAR"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Click="OnExportPcapClicked" Style="{StaticResource CyberButton}" Margin="0,0,6,0">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="💾" Margin="0,0,6,0"/>
+                                <TextBlock Text="EXPORT PCAP"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Click="OnInjectPacketClicked" Style="{StaticResource CyberButton}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="⚡" Margin="0,0,6,0"/>
+                                <TextBlock Text="INJECT TEST PACKET"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+
+                    <!-- Packet Metrics -->
+                    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock x:Name="TxtPacketCount" Text="TOTAL: 0 | OUT: 0 | IN: 0" FontSize="11" FontWeight="Bold" Foreground="#00FFA3" FontFamily="JetBrains Mono, Consolas"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- 3. PACKET CAPTURE DATAGRID (WIRESHARK STYLE) -->
+            <Border Grid.Row="2" Background="#050914" Padding="12,8">
+                <DataGrid x:Name="GridPackets" AutoGenerateColumns="False" CanUserAddRows="False"
+                          Background="#070D1A" BorderBrush="#1E293B" BorderThickness="1"
+                          Foreground="#F8FAFC" RowBackground="#091122" AlternatingRowBackground="#0B152B"
+                          GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#142038"
+                          HeadersVisibility="Column" SelectionMode="Single"
+                          SelectionChanged="OnPacketSelectionChanged"
+                          FontFamily="JetBrains Mono, Consolas" FontSize="11">
+
+                    <DataGrid.ColumnHeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Background" Value="#111B30"/>
+                            <Setter Property="Foreground" Value="#00F0FF"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                            <Setter Property="Padding" Value="8,6"/>
+                            <Setter Property="BorderThickness" Value="0,0,1,1"/>
+                            <Setter Property="BorderBrush" Value="#1E293B"/>
+                        </Style>
+                    </DataGrid.ColumnHeaderStyle>
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="#" Binding="{Binding No}" Width="50" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="TIME (MS)" Binding="{Binding TimeDelta}" Width="85" Foreground="#94A3B8" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="DIR" Binding="{Binding Direction}" Width="75" FontWeight="Bold" Foreground="{Binding DirectionColor}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="ENDPOINT" Binding="{Binding Endpoint}" Width="95" Foreground="#C084FC" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="TYPE" Binding="{Binding TransferType}" Width="75" Foreground="#F59E0B" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="BYTES" Binding="{Binding Length}" Width="65" Foreground="#38BDF8" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="PROTOCOL / SUMMARY" Binding="{Binding Summary}" Width="*" FontWeight="SemiBold" Foreground="#F8FAFC" IsReadOnly="True"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
+
+            <!-- 4. BOTTOM HEX & ASCII DUMP INSPECTOR -->
+            <Border Grid.Row="3" Background="#060B16" BorderBrush="#1E293B" BorderThickness="0,1,0,0" CornerRadius="0,0,11,11" Padding="14,10">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0" Margin="0,0,0,6">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0" Orientation="Horizontal">
+                            <TextBlock Text="HEX &amp; ASCII PAYLOAD INSPECTOR" FontSize="11" FontWeight="Bold" Foreground="#00F0FF" FontFamily="JetBrains Mono, Consolas"/>
+                            <TextBlock x:Name="TxtSelectedPacketSummary" Text=" // Select a packet above to inspect raw buffer" FontSize="11" Foreground="#94A3B8" FontFamily="JetBrains Mono, Consolas"/>
+                        </StackPanel>
+
+                        <Button Grid.Column="1" Click="OnCopyHexPayloadClicked" Content="Copy Raw Hex" Style="{StaticResource CyberButton}" Padding="8,3" FontSize="10"/>
+                    </Grid>
+
+                    <!-- Dual Hex / ASCII Dump View -->
+                    <TextBox x:Name="TxtHexDump" Grid.Row="1" Background="#030712" Foreground="#00FFA3" BorderBrush="#1E293B"
+                             FontFamily="JetBrains Mono, Consolas" FontSize="11"
+                             IsReadOnly="True" VerticalScrollBarVisibility="Auto" TextWrapping="NoWrap"/>
+                </Grid>
+            </Border>
+
+        </Grid>
+    </Border>
+</Window>

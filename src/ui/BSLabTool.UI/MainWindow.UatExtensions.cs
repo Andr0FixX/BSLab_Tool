@@ -251,6 +251,51 @@ namespace BSLabTool.UI
             }
         }
 
+        private void OnOpenPartitionManagerClicked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var partWin = new BSLabTool.UI.Views.PartitionManagerSuiteWindow();
+                partWin.Owner = this;
+                partWin.Show();
+                AppendAutoHubLog("[+] 💾 Advanced GPT Partition Manager & Raw Read/Write Suite engaged.");
+            }
+            catch (Exception ex)
+            {
+                AppendAutoHubLog($"[!] Partition Manager Launch Error: {ex.Message}");
+            }
+        }
+
+        private void OnOpenLiveUsbSnifferClicked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var snifferWin = new BSLabTool.UI.Views.LiveUsbSnifferWindow();
+                snifferWin.Owner = this;
+                snifferWin.Show();
+                AppendAutoHubLog("[+] 📡 Real-Time USB Hex Packet Sniffer & Protocol Radar opened.");
+            }
+            catch (Exception ex)
+            {
+                AppendAutoHubLog($"[!] Live USB Sniffer Launch Error: {ex.Message}");
+            }
+        }
+
+        private void OnOpenAutoUpdaterClicked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var updaterWin = new BSLabTool.UI.Views.AutoUpdaterDialogWindow();
+                updaterWin.Owner = this;
+                updaterWin.Show();
+                AppendAutoHubLog("[+] 🔄 In-App Auto-Updater & GitHub Synchronizer check launched.");
+            }
+            catch (Exception ex)
+            {
+                AppendAutoHubLog($"[!] Auto-Updater Launch Error: {ex.Message}");
+            }
+        }
+
         #region Fastboot to EDL & BL Unlock Helper Suite
 
         private async void OnFastbootMultiEdlClicked(object sender, RoutedEventArgs e)
