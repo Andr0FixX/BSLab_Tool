@@ -503,6 +503,8 @@
                     </Border>
                     <!-- Multi-Language Switcher (Urdu / Arabic / English) -->
                     <Button x:Name="BtnLanguageSwitcher" Content="🌐 EN | اردو | العربية" ToolTip="Switch Language: English / اردو / العربية" Style="{StaticResource WindowCtrlButton}" Width="Auto" Padding="6,2" Height="24" Click="OnLanguageSwitchClicked" Margin="0,0,4,0" Foreground="#00FFA3" FontWeight="Bold" FontSize="10"/>
+                    <!-- In-App Auto-Update Button (1-Click Silent Cloud Sync) -->
+                    <Button x:Name="BtnTitleAutoUpdate" Content="⚡ AUTO UPDATE" ToolTip="1-Click Silent Auto-Update: Checks online, downloads and upgrades software in-place without manual installation wizard" Style="{StaticResource WindowCtrlButton}" Width="Auto" Padding="8,2" Height="24" Click="OnOpenAutoUpdaterClicked" Margin="0,0,4,0" Foreground="#FFB800" Background="#261C04" BorderBrush="#FFB800" BorderThickness="1" FontWeight="ExtraBold" FontSize="10"/>
                     <Button x:Name="BtnMinimize" Content="—" ToolTip="Minimize" Style="{StaticResource WindowCtrlButton}" Click="OnMinimizeClicked"/>
                     <Button x:Name="BtnMaximize" Content="🗗" ToolTip="Maximize / Restore" Style="{StaticResource WindowCtrlButton}" Click="OnMaximizeClicked"/>
                     <Button x:Name="BtnClose" Content="✕" ToolTip="Close Application" Style="{StaticResource WindowCloseButton}" Click="OnCloseClicked"/>
@@ -527,7 +529,8 @@
                 <Button x:Name="TabUatRomDownloader" Content="📥 ROM CENTER" ToolTip="High-Speed Official Stock ROM Downloader" Style="{StaticResource CyberNavTab}" Foreground="#00F0FF" FontWeight="ExtraBold" Click="OnOpenFirmwareDownloaderClicked" Margin="0,0,4,0"/>
                 <Button x:Name="TabUatWorkshopPos" Content="🧾 WORKSHOP POS" ToolTip="Workshop POS, Job Ticket &amp; Invoice Generator" Style="{StaticResource CyberNavTab}" Foreground="#00FFA3" FontWeight="ExtraBold" Click="OnOpenWorkshopPosClicked" Margin="0,0,4,0"/>
                 <Button x:Name="TabUatCloudCredits" Content="💳 CLOUD CREDITS" ToolTip="Cloud User Profile, Server Credits &amp; Reseller Hub" Style="{StaticResource CyberNavTab}" Foreground="#38BDF8" FontWeight="ExtraBold" Click="OnOpenCloudCreditsClicked" Margin="0,0,4,0"/>
-                <Button x:Name="TabUatIspJtag" Content="🔬 ISP JTAG" ToolTip="Direct ISP eMMC/UFS JTAG Flasher &amp; Boot Repair Suite" Style="{StaticResource CyberNavTab}" Foreground="#EC4899" FontWeight="ExtraBold" Click="OnOpenIspJtagSuiteClicked" Margin="0,0,8,0"/>
+                <Button x:Name="TabUatIspJtag" Content="🔬 ISP JTAG" ToolTip="Direct ISP eMMC/UFS JTAG Flasher &amp; Boot Repair Suite" Style="{StaticResource CyberNavTab}" Foreground="#EC4899" FontWeight="ExtraBold" Click="OnOpenIspJtagSuiteClicked" Margin="0,0,4,0"/>
+                <Button x:Name="TabUatAutoUpdate" Content="⚡ AUTO UPDATE" ToolTip="1-Click Silent Auto-Updater: Checks online, downloads and upgrades software in-place without manual installation wizard" Style="{StaticResource CyberNavTab}" Foreground="#FFB800" FontWeight="ExtraBold" Click="OnOpenAutoUpdaterClicked" Margin="0,0,8,0"/>
 
                 <!-- Legacy Navigation Buttons Kept Hidden to preserve C# field bindings with 0 errors -->
                 <StackPanel Visibility="Collapsed">

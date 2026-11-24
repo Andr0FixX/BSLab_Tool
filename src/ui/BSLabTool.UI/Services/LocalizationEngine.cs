@@ -116,6 +116,12 @@ namespace BSLabTool.UI.Services
                 [AppLanguage.Urdu] = "⚡ پری لوڈر تا میٹا موڈ ➔ اے ڈی بی ایکٹیو کریں",
                 [AppLanguage.Arabic] = "⚡ من البريلودر إلى وضع الميتا ➔ تفعيل تصحيح USB (ADB)"
             },
+            ["Btn_AutoUpdate"] = new()
+            {
+                [AppLanguage.English] = "⚡ AUTO UPDATE",
+                [AppLanguage.Urdu] = "⚡ خودکار اپڈیٹ",
+                [AppLanguage.Arabic] = "⚡ التحديث التلقائي"
+            },
             ["Btn_LiveUsbSniffer"] = new()
             {
                 [AppLanguage.English] = "Live USB Hex Sniffer",
