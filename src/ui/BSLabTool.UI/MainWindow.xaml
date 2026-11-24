@@ -523,18 +523,18 @@
                     <Button x:Name="TabUatBackup" Content="⋮ BACKUP" Style="{StaticResource CyberNavTab}" Click="OnNavTabClicked" Margin="0,0,3,0"/>
                     <Button x:Name="TabUatDiag" Content="⋮ DIAG" Style="{StaticResource CyberNavTab}" Click="OnNavTabClicked" Margin="0,0,3,0"/>
                     <Button x:Name="TabUatDump" Content="⋮ DUMP" Style="{StaticResource CyberNavTab}" Click="OnNavTabClicked" Margin="0,0,3,0"/>
-                    <Button x:Name="TabUatPinouts" Content="⋮ PINOUTS &amp; TP" ToolTip="Interactive Visual TestPoint &amp; ISP Schematic Gallery" Style="{StaticResource CyberNavTab}" Click="OnOpenTestPointGalleryClicked" Margin="0,0,3,0"/>
-                    <Button x:Name="TabUatFrpWizard" Content="⚡ 1-CLICK FRP" ToolTip="Unified 1-Click FRP, Mi Account &amp; Cloud Lock Bypass Wizard" Style="{StaticResource CyberNavTab}" Foreground="#F59E0B" FontWeight="ExtraBold" Click="OnOpenFrpWizardClicked" Margin="0,0,3,0"/>
-                    <Button x:Name="TabUatCloudLoader" Content="☁️ CLOUD LOADERS" ToolTip="Dynamic Cloud Loaders, Programmers &amp; TestPoints Vault" Style="{StaticResource CyberNavTab}" Foreground="#38BDF8" FontWeight="ExtraBold" Click="OnOpenCloudLoaderClicked" Margin="0,0,3,0"/>
-                    <Button x:Name="TabUatSimulator" Content="🧪 SIMULATOR" ToolTip="Virtual Phone Hardware Simulator &amp; Sandbox" Style="{StaticResource CyberNavTab}" Foreground="#A855F7" FontWeight="ExtraBold" Click="OnOpenVirtualSimulatorClicked" Margin="0,0,3,0"/>
-                    <Button x:Name="TabUatRomDownloader" Content="📥 ROM CENTER" ToolTip="High-Speed Official Stock ROM Downloader" Style="{StaticResource CyberNavTab}" Foreground="#00F0FF" FontWeight="ExtraBold" Click="OnOpenFirmwareDownloaderClicked" Margin="0,0,3,0"/>
-                    <Button x:Name="TabUatWorkshopPos" Content="🧾 POS BILLING" ToolTip="Workshop POS, Job Ticket &amp; Invoice Generator" Style="{StaticResource CyberNavTab}" Foreground="#00FFA3" FontWeight="ExtraBold" Click="OnOpenWorkshopPosClicked" Margin="0,0,3,0"/>
-                    <Button x:Name="TabUatCloudCredits" Content="💳 CREDITS" ToolTip="Cloud User Profile, Server Credits &amp; Reseller Hub" Style="{StaticResource CyberNavTab}" Foreground="#38BDF8" FontWeight="ExtraBold" Click="OnOpenCloudCreditsClicked" Margin="0,0,3,0"/>
-                    <Button x:Name="TabUatIspJtag" Content="🔬 ISP JTAG" ToolTip="Direct ISP eMMC/UFS JTAG Flasher &amp; Boot Repair Suite" Style="{StaticResource CyberNavTab}" Foreground="#EC4899" FontWeight="ExtraBold" Click="OnOpenIspJtagSuiteClicked" Margin="0,0,3,0"/>
-                    <Button x:Name="TabUatAutoUpdate" Content="⚡ AUTO UPDATE" ToolTip="1-Click Silent Auto-Updater: Checks online, downloads and upgrades software in-place without manual installation wizard" Style="{StaticResource CyberNavTab}" Foreground="#FDE047" Background="#3B2606" BorderBrush="#F59E0B" BorderThickness="1.5" FontWeight="ExtraBold" Click="OnOpenAutoUpdaterClicked" Margin="0,0,6,0"/>
 
-                    <!-- Legacy Navigation Buttons Kept Hidden to preserve C# field bindings with 0 errors -->
+                    <!-- Legacy & Left-Dock-Only Navigation Buttons Kept Hidden to preserve C# field bindings with 0 errors -->
                     <StackPanel Visibility="Collapsed">
+                        <Button x:Name="TabUatPinouts" Click="OnOpenTestPointGalleryClicked"/>
+                        <Button x:Name="TabUatFrpWizard" Click="OnOpenFrpWizardClicked"/>
+                        <Button x:Name="TabUatCloudLoader" Click="OnOpenCloudLoaderClicked"/>
+                        <Button x:Name="TabUatSimulator" Click="OnOpenVirtualSimulatorClicked"/>
+                        <Button x:Name="TabUatRomDownloader" Click="OnOpenFirmwareDownloaderClicked"/>
+                        <Button x:Name="TabUatWorkshopPos" Click="OnOpenWorkshopPosClicked"/>
+                        <Button x:Name="TabUatCloudCredits" Click="OnOpenCloudCreditsClicked"/>
+                        <Button x:Name="TabUatIspJtag" Click="OnOpenIspJtagSuiteClicked"/>
+                        <Button x:Name="TabUatAutoUpdate" Click="OnOpenAutoUpdaterClicked"/>
                         <Button x:Name="TabBtnAutoHub" Click="OnNavTabClicked"/>
                         <Button x:Name="TabBtnAiAnalyse" Click="OnNavTabClicked"/>
                         <Button x:Name="TabBtnMtk" Click="OnNavTabClicked"/>
@@ -582,7 +582,6 @@
                         <Button Content="☁️" ToolTip="Cloud Loader &amp; TestPoint Auto-Downloader" Width="38" Height="28" Margin="0,1" Foreground="#38BDF8" Style="{StaticResource WindowCtrlButton}" Click="OnOpenCloudLoaderClicked"/>
                         <Button Content="💾" ToolTip="Advanced GPT Partition Manager &amp; Raw Read/Write Suite" Width="38" Height="28" Margin="0,1" Foreground="#00FFA3" Style="{StaticResource WindowCtrlButton}" Click="OnOpenPartitionManagerClicked"/>
                         <Button Content="📡" ToolTip="Real-Time USB Hex Packet Sniffer &amp; Protocol Radar" Width="38" Height="28" Margin="0,1" Foreground="#00F0FF" Style="{StaticResource WindowCtrlButton}" Click="OnOpenLiveUsbSnifferClicked"/>
-                        <Button Content="⚡" ToolTip="⚡ In-App Auto-Updater (v2.6.0) &amp; GitHub Sync" Width="38" Height="28" Margin="0,1" Foreground="#FDE047" Background="#3B2606" BorderBrush="#F59E0B" BorderThickness="1" Style="{StaticResource WindowCtrlButton}" Click="OnOpenAutoUpdaterClicked"/>
                         <Button Content="🔒" ToolTip="Samsung Knox Guard (KG) &amp; PayJoy MDM Killer Suite" Width="38" Height="28" Margin="0,1" Foreground="#38BDF8" Style="{StaticResource WindowCtrlButton}" Click="OnOpenKnoxGuardSuiteClicked"/>
                         <Button Content="🧪" ToolTip="Virtual Phone Hardware Simulator &amp; Playground" Width="38" Height="28" Margin="0,1" Foreground="#A855F7" Style="{StaticResource WindowCtrlButton}" Click="OnOpenVirtualSimulatorClicked"/>
                         <Button Content="📥" ToolTip="High-Speed Official Stock Firmware Downloader" Width="38" Height="28" Margin="0,1" Foreground="#00F0FF" Style="{StaticResource WindowCtrlButton}" Click="OnOpenFirmwareDownloaderClicked"/>
@@ -881,7 +880,6 @@
                                 </Border>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                <Button Content="⚡ AUTO UPDATE" Height="22" Padding="8,0" Background="#78350F" Foreground="#FDE047" BorderBrush="#F59E0B" BorderThickness="1" FontSize="8.5" FontWeight="ExtraBold" Margin="0,0,6,0" Click="OnOpenAutoUpdaterClicked" ToolTip="1-Click Silent Auto-Updater (v2.6.0)"/>
                                 <Button Content="🔍 Read Device Info" Height="22" Padding="8,0" Background="#0284C7" Foreground="#FFFFFF" FontSize="8.5" FontWeight="Bold" BorderThickness="0" Margin="0,0,6,0" Click="OnAutoHubReadInfoClicked" ToolTip="1-Click Universal Hardware, Security &amp; IMEI Telemetry Audit"/>
                                 <Button Content="📺 Full Execution Screen" Height="22" Padding="8,0" Background="#1F2B35" Foreground="#FFA726" FontSize="8.5" FontWeight="Bold" BorderBrush="#37474F" Margin="0,0,6,0" Click="OnUatViewFullScreenLogClicked"/>
                                 <Button Content="Copy Log" Width="65" Height="22" Background="#1F2B35" Foreground="#4DD0E1" FontSize="8.5" FontWeight="Bold" BorderBrush="#37474F" Click="OnAutoHubCopyLogClicked" Margin="0,0,6,0"/>
@@ -4944,7 +4942,6 @@
                                     <CheckBox Grid.Row="1" Grid.Column="0" Content="Auto Reboot" IsChecked="True" Foreground="#ECEFF1" FontSize="9" Margin="0,2"/>
                                     <CheckBox Grid.Row="1" Grid.Column="1" Content="Skip Drivers Info." Foreground="#ECEFF1" FontSize="9" Margin="0,2"/>
                                 </Grid>
-                                <Button Content="⚡ Check Online for Updates" Height="22" Background="#78350F" Foreground="#FDE047" BorderBrush="#F59E0B" BorderThickness="1" FontSize="8.5" FontWeight="Bold" Margin="0,5,0,0" Click="OnOpenAutoUpdaterClicked" ToolTip="1-Click In-App Auto-Updater (v2.6.0)"/>
                             </StackPanel>
                         </Border>
 
@@ -5075,7 +5072,6 @@
 
             <!-- Active Engine & Live Clock -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                <Button Content="⚡ v2.6.0 AUTO UPDATE" ToolTip="Click to check online for software updates" Background="#78350F" Foreground="#FDE047" BorderBrush="#F59E0B" BorderThickness="1" FontSize="8" FontWeight="ExtraBold" Padding="6,1" Margin="0,0,10,0" Click="OnOpenAutoUpdaterClicked"/>
                 <TextBlock Text="Updated : 24-Nov-2026 (v2.6.0)" FontSize="8.5" Foreground="#78909C" Margin="0,0,16,0" VerticalAlignment="Center"/>
                 <TextBlock x:Name="TxtUatClock" Text="15 - November - 2026 - 07:15:00 PM" FontSize="9" Foreground="#ECEFF1" Margin="0,0,16,0" FontFamily="Consolas" VerticalAlignment="Center"/>
                 <TextBlock x:Name="TxtLiveClock" Visibility="Collapsed"/>
