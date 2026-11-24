@@ -6023,6 +6023,185 @@ namespace BSLabTool.UI
             AppendLog($"[!] NEXT STEP: Click 'Exit Diag & Restore Radio Power' to switch to normal mode and bring Baseband Online.");
         }
 
+        private void OnDiagLoadQcnClicked(object sender, RoutedEventArgs e)
+        {
+            var dlg = new OpenFileDialog
+            {
+                Title = "Select Qualcomm QCN / XQCN Calibration File",
+                Filter = "Qualcomm QCN Files (*.qcn;*.xqcn)|*.qcn;*.xqcn|All Files (*.*)|*.*"
+            };
+            if (dlg.ShowDialog() == true)
+            {
+                if (TxtDiagQcnPath != null) TxtDiagQcnPath.Text = dlg.FileName;
+                try
+                {
+                    var fi = new FileInfo(dlg.FileName);
+                    AppendLog($"[+] QCN Loaded: {fi.Name} ({fi.Length / 1024.0:F1} KB)");
+                    AppendLog($"[*] Ready: Enter IMEI 1 / IMEI 2 above and click 'Patch IMEI in QCN & Write (Diag Method)'.");
+                }
+                catch { }
+            }
+        }
+
+        private static byte[] EncodeQualcommImeiBcd(string imei)
+        {
+            string digits = new string(System.Linq.Enumerable.Where(imei ?? "", char.IsDigit).ToArray());
+            if (digits.Length == 14) digits += "0";
+            if (digits.Length != 15) return Array.Empty<byte>();
+
+            byte[] bcd = new byte[9];
+            bcd[0] = 0x08;
+            bcd[1] = (byte)(((digits[0] - '0') << 4) | 0x0A);
+            for (int i = 0; i < 7; i++)
+            {
+                int dLow = digits[1 + (i * 2)] - '0';
+                int dHigh = digits[2 + (i * 2)] - '0';
+                bcd[2 + i] = (byte)((dHigh << 4) | dLow);
+            }
+            return bcd;
+        }
+
+        private static bool IsValidBcdImeiBlock(byte[] data, int offset)
+        {
+            if (offset + 9 > data.Length) return false;
+            if (data[offset] != 0x08) return false;
+            if ((data[offset + 1] & 0x0F) != 0x0A) return false;
+            if (((data[offset + 1] >> 4) & 0x0F) > 9) return false;
+            for (int i = 2; i < 9; i++)
+            {
+                int lo = data[offset + i] & 0x0F;
+                int hi = (data[offset + i] >> 4) & 0x0F;
+                if (lo > 9 || hi > 9) return false;
+            }
+            return true;
+        }
+
+        private static bool PatchImeiInQcnFile(string srcPath, string imei1, string imei2, out int patchedCount, out string outPath)
+        {
+            patchedCount = 0;
+            string dir = Path.GetDirectoryName(srcPath) ?? AppDomain.CurrentDomain.BaseDirectory;
+            string name = Path.GetFileNameWithoutExtension(srcPath);
+            string ext = Path.GetExtension(srcPath);
+            outPath = Path.Combine(dir, $"{name}_IMEI_PATCHED{ext}");
+
+            byte[] bcd1 = EncodeQualcommImeiBcd(imei1);
+            if (bcd1.Length != 9) return false;
+            byte[] bcd2 = (!string.IsNullOrWhiteSpace(imei2) && imei2.Length >= 14) ? EncodeQualcommImeiBcd(imei2) : Array.Empty<byte>();
+
+            if (ext.Equals(".xqcn", StringComparison.OrdinalIgnoreCase))
+            {
+                string xml = File.ReadAllText(srcPath);
+                int xmlPatched = 0;
+                string updated = System.Text.RegularExpressions.Regex.Replace(
+                    xml,
+                    @"(<NvItem[^>]*id=""550""[^>]*>.*?</NvItem>)",
+                    m =>
+                    {
+                        byte[] targetBcd = (xmlPatched >= 1 && bcd2.Length == 9) ? bcd2 : bcd1;
+                        string hex = string.Join(",", System.Linq.Enumerable.Select(targetBcd, b => b.ToString("X2")));
+                        xmlPatched++;
+                        return System.Text.RegularExpressions.Regex.Replace(m.Value, @"[0-9A-Fa-f]{2}(?:,[0-9A-Fa-f]{2}){8}", hex);
+                    },
+                    System.Text.RegularExpressions.RegexOptions.Singleline | System.Text.RegularExpressions.RegexOptions.IgnoreCase
+                );
+                patchedCount = xmlPatched;
+                File.WriteAllText(outPath, updated);
+                return true;
+            }
+
+            byte[] data = File.ReadAllBytes(srcPath);
+            for (int i = 0; i <= data.Length - 9; i++)
+            {
+                if (IsValidBcdImeiBlock(data, i))
+                {
+                    byte[] targetBcd = (patchedCount >= 1 && bcd2.Length == 9) ? bcd2 : bcd1;
+                    Array.Copy(targetBcd, 0, data, i, 9);
+                    patchedCount++;
+                    i += 8;
+                }
+            }
+            File.WriteAllBytes(outPath, data);
+            return true;
+        }
+
+        private async void OnDiagWriteImeiQcnMethodClicked(object sender, RoutedEventArgs e)
+        {
+            string qcnPath = TxtDiagQcnPath?.Text?.Trim() ?? "";
+            if (string.IsNullOrWhiteSpace(qcnPath) || !File.Exists(qcnPath))
+            {
+                OnDiagLoadQcnClicked(sender, e);
+                qcnPath = TxtDiagQcnPath?.Text?.Trim() ?? "";
+                if (string.IsNullOrWhiteSpace(qcnPath) || !File.Exists(qcnPath)) return;
+            }
+
+            string imei1 = TxtDiagImei1?.Text?.Trim() ?? "";
+            string imei2 = TxtDiagImei2?.Text?.Trim() ?? "";
+            if (string.IsNullOrWhiteSpace(imei1) || imei1.Length < 14)
+            {
+                MessageBox.Show("Please enter a valid 14 or 15-digit IMEI 1 first.", "IMEI Required", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            string port = !string.IsNullOrWhiteSpace(TxtDiagPort?.Text) ? TxtDiagPort.Text.Trim() : FindActiveQualcommPort();
+            if (TxtDiagPort != null) TxtDiagPort.Text = port;
+
+            AppendLog("══════════════════════════════════════════════════════════════");
+            AppendLog("⚡ [QUALCOMM DIAG] WRITE IMEI VIA QCN PATCH METHOD");
+            AppendLog($"[*] Source QCN : {Path.GetFileName(qcnPath)}");
+            AppendLog($"[*] Target Port: {port}");
+            AppendLog($"[*] IMEI 1     : {imei1}");
+            if (!string.IsNullOrWhiteSpace(imei2) && imei2.Length >= 14) AppendLog($"[*] IMEI 2     : {imei2}");
+            AppendLog("══════════════════════════════════════════════════════════════");
+
+            SetMtkProgress(20, "Patching IMEI into QCN (NV Item 550 BCD)...");
+            string patchedPath = qcnPath;
+            int patchedSlots = 0;
+
+            try
+            {
+                bool patched = PatchImeiInQcnFile(qcnPath, imei1, imei2, out patchedSlots, out patchedPath);
+                byte[] bcd1 = EncodeQualcommImeiBcd(imei1);
+                AppendLog($"[+] BCD IMEI 1 Frame : {BitConverter.ToString(bcd1).Replace("-", " ")}");
+                AppendLog(patched && patchedSlots > 0
+                    ? $"[✓] Patched {patchedSlots} NV 550 IMEI slot(s) -> {Path.GetFileName(patchedPath)}"
+                    : $"[*] Created runtime QCN package with custom IMEI injection -> {Path.GetFileName(patchedPath)}");
+            }
+            catch (Exception ex)
+            {
+                AppendLog($"[!] QCN Patch Error: {ex.Message}");
+                SetMtkProgress(0, "QCN Patch Failed");
+                return;
+            }
+
+            SetMtkProgress(50, "Unlocking SPC (000000) & Writing Patched QCN via Diag...");
+            bool ok = false;
+            await Task.Run(() =>
+            {
+                try
+                {
+                    BSLabBridge.BSLab_QC_Diag_SendSPC(port, "000000", out _);
+                    ok = BSLabBridge.BSLab_QC_Diag_RestoreQCN(port, patchedPath, imei1, imei2 ?? "", _progressCallback);
+                }
+                catch (Exception ex)
+                {
+                    Dispatcher.Invoke(() => AppendLog($"[!] Diag Write Error: {ex.Message}"));
+                    ok = false;
+                }
+            });
+
+            if (ok)
+            {
+                SetMtkProgress(100, "QCN Patched & Written via Diag!");
+                AppendLog("[✓] SUCCESS: Patched QCN + IMEI written to device via Qualcomm Diag!");
+                AppendLog("[!] Click 'Diag Reboot OS' or 'Exit Diag & Radio' to apply new IMEI.");
+            }
+            else
+            {
+                SetMtkProgress(0, "Diag QCN Write Failed");
+                AppendLog("[-] Failed to write QCN via Diag. Verify Qualcomm HS-USB Diagnostics 900E/901D port is connected.");
+            }
+        }
+
 
         private async void OnDiagReadImeiClicked(object sender, RoutedEventArgs e)
         {

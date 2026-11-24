@@ -12,10 +12,11 @@ namespace BSLabTool.UI.Views
 {
     public partial class AutoUpdaterDialogWindow : Window
     {
-        private const string CurrentVersion = "v2.6.0";
+        private const string CurrentVersion = "v2.6.1";
         private const string RepoOwner = "Andr0FixX";
         private const string RepoName = "BSLab_Tool";
-        private string _downloadUrl = "https://github.com/Andr0FixX/BSLab_Tool/releases/download/v2.6.0/BSLab_Tool_PRO_v2.6.0_Setup.exe";
+        private string _downloadUrl = "https://github.com/Andr0FixX/BSLab_Tool/releases/download/v2.6.1/BSLab_Tool_PRO_v2.6.1_Setup.exe";
+        private string _latestTag = "v2.6.1";
         private string _downloadedFilePath = "";
         private bool _isBusy = false;
 
@@ -91,6 +92,7 @@ namespace BSLabTool.UI.Views
                 var root = doc.RootElement;
 
                 string tagName = root.GetProperty("tag_name").GetString() ?? CurrentVersion;
+                _latestTag = tagName;
                 TxtLatestVersion.Text = $"{tagName} (VERIFIED PRODUCTION)";
 
                 // Check assets for direct .exe setup download URL
@@ -158,12 +160,15 @@ namespace BSLabTool.UI.Views
 
                 string targetDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "BSLabTool", "Updates");
                 Directory.CreateDirectory(targetDir);
-                _downloadedFilePath = Path.Combine(targetDir, "BSLab_Tool_PRO_v2.6.0_Setup.exe");
+                string assetName = "BSLab_Tool_PRO_Setup.exe";
+                try { assetName = Path.GetFileName(new Uri(_downloadUrl).LocalPath); } catch { }
+                if (string.IsNullOrWhiteSpace(assetName)) assetName = $"BSLab_Tool_PRO_{_latestTag}_Setup.exe";
+                _downloadedFilePath = Path.Combine(targetDir, assetName);
 
-                // Check local staging candidates (so local tests or offline installs are instantaneous)
-                string localCand1 = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "installer_output", "BSLab_Tool_PRO_v2.6.0_Setup.exe");
-                string localCand2 = @"C:\BSLab_Tool\installer_output\BSLab_Tool_PRO_v2.6.0_Setup.exe";
-                string localCand3 = @"C:\Users\AndroFixX\OneDrive\Desktop\Persnal Tested Work Job\BSLab_Tool_PRO_v2.6.0_Setup.exe";
+                // Only use local cache if it matches the exact target release filename
+                string localCand1 = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "installer_output", assetName);
+                string localCand2 = Path.Combine(@"C:\BSLab_Tool\installer_output", assetName);
+                string localCand3 = Path.Combine(@"C:\Users\AndroFixX\OneDrive\Desktop\Persnal Tested Work Job", assetName);
 
                 string foundLocal = "";
                 if (File.Exists(localCand1)) foundLocal = localCand1;

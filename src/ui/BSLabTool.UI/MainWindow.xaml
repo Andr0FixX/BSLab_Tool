@@ -1942,42 +1942,64 @@
                                     </Border>
 
                                     <!-- Diag Port & Activation -->
-                                    <Border Background="#1A1A24" CornerRadius="5" Padding="6,6" Margin="0,0,0,6">
+                                    <Border Background="#1A1A24" CornerRadius="5" Padding="6,4" Margin="0,0,0,4">
                                         <StackPanel>
-                                            <TextBlock Text="TARGET QUALCOMM DIAG PORT:" FontSize="9" FontWeight="Bold" Foreground="#94A3B8" Margin="4,0,0,3"/>
-                                            <DockPanel Margin="0,0,0,4">
-                                                <TextBox x:Name="TxtDiagPort" Text="" Background="#0F0F14" Foreground="#FFFFFF" BorderBrush="#2E2E40" Height="24" FontSize="11" Padding="5,2" Width="170" DockPanel.Dock="Left"/>
-                                                <Button Content="Auto Detect" Background="#D97706" Foreground="#FFFFFF" BorderThickness="0" Height="24" Margin="6,0,0,0" Click="OnAutoDetectClicked"/>
+                                            <TextBlock Text="TARGET QUALCOMM DIAG PORT:" FontSize="8.5" FontWeight="Bold" Foreground="#94A3B8" Margin="2,0,0,2"/>
+                                            <DockPanel Margin="0,0,0,3">
+                                                <TextBox x:Name="TxtDiagPort" Text="" Background="#0F0F14" Foreground="#FFFFFF" BorderBrush="#2E2E40" Height="22" FontSize="10" Padding="4,1" Width="170" DockPanel.Dock="Left"/>
+                                                <Button Content="Auto Detect" Background="#D97706" Foreground="#FFFFFF" BorderThickness="0" Height="22" FontSize="9" Margin="5,0,0,0" Click="OnAutoDetectClicked"/>
                                             </DockPanel>
-                                            <Button Content="Enable Diag Port (*#*#717717#*#* / AT Modem)" Style="{StaticResource CyberBulletButton}" Click="OnDiagEnablePortClicked"/>
-                                            <Button Content="Read Live Diag Info (Baseband &amp; Hardware)" Style="{StaticResource CyberBulletButton}" Click="OnDiagReadInfoClicked"/>
+                                            <Button Content="Enable Diag Port (*#*#717717#*#* / AT Modem)" Style="{StaticResource CyberBulletButton}" Margin="0,1" Click="OnDiagEnablePortClicked"/>
+                                            <Button Content="Read Live Diag Info (Baseband &amp; Hardware)" Style="{StaticResource CyberBulletButton}" Margin="0,1" Click="OnDiagReadInfoClicked"/>
                                         </StackPanel>
                                     </Border>
 
                                     <!-- Qualcomm IMEI & MEID Calibration -->
-                                    <Border Background="#161A26" CornerRadius="5" Padding="6,6" Margin="0,0,0,6" BorderBrush="#1E293B" BorderThickness="1">
+                                    <Border Background="#161A26" CornerRadius="5" Padding="6,4" Margin="0,0,0,4" BorderBrush="#1E293B" BorderThickness="1">
                                         <StackPanel>
-                                            <TextBlock Text="📶 QUALCOMM NV ITEMS &amp; IMEI CALIBRATION:" FontSize="9" FontWeight="Bold" Foreground="#34D399" Margin="4,0,0,4"/>
-                                            <TextBlock Text="MEID / PESN (Optional):" FontSize="8.5" Foreground="#CBD5E1" Margin="4,0,0,1"/>
-                                            <TextBox x:Name="TxtDiagMeid" Text="" Height="24" Background="#0F0F14" Foreground="#38BDF8" BorderBrush="#2E2E40" FontSize="10" Padding="5,2" Margin="0,0,0,4"/>
-                                            <TextBlock Text="IMEI 1 (Physical SIM / Primary):" FontSize="8.5" Foreground="#CBD5E1" Margin="4,0,0,1"/>
-                                            <TextBox x:Name="TxtDiagImei1" Text="" Height="24" Background="#0F0F14" Foreground="#34D399" BorderBrush="#2E2E40" FontSize="10.5" FontWeight="Bold" Padding="5,2" Margin="0,0,0,4"/>
-                                            <TextBlock Text="IMEI 2 (Optional / eSIM / Dual SIM):" FontSize="8.5" Foreground="#CBD5E1" Margin="4,0,0,1"/>
-                                            <TextBox x:Name="TxtDiagImei2" Text="" Height="24" Background="#0F0F14" Foreground="#34D399" BorderBrush="#2E2E40" FontSize="10.5" FontWeight="Bold" Padding="5,2" Margin="0,0,0,4"/>
-                                            <Button Content="Write Diag IMEI (NVRAM Items)" Style="{StaticResource CyberBulletButton}" Click="OnDiagWriteImeiClicked"/>
-                                            <Button Content="Read Diag IMEI from Phone" Style="{StaticResource CyberBulletButton}" Click="OnDiagReadImeiClicked"/>
+                                            <TextBlock Text="📶 QUALCOMM NV ITEMS &amp; IMEI CALIBRATION:" FontSize="8.5" FontWeight="Bold" Foreground="#34D399" Margin="2,0,0,3"/>
+                                            <Grid Margin="0,0,0,3">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="5"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <StackPanel Grid.Column="0">
+                                                    <TextBlock Text="IMEI 1 (Physical SIM):" FontSize="8" Foreground="#CBD5E1" Margin="2,0,0,1"/>
+                                                    <TextBox x:Name="TxtDiagImei1" Text="" Height="22" Background="#0F0F14" Foreground="#34D399" BorderBrush="#2E2E40" FontSize="10" FontWeight="Bold" Padding="4,1"/>
+                                                </StackPanel>
+                                                <StackPanel Grid.Column="2">
+                                                    <TextBlock Text="IMEI 2 (Dual / eSIM):" FontSize="8" Foreground="#CBD5E1" Margin="2,0,0,1"/>
+                                                    <TextBox x:Name="TxtDiagImei2" Text="" Height="22" Background="#0F0F14" Foreground="#34D399" BorderBrush="#2E2E40" FontSize="10" FontWeight="Bold" Padding="4,1"/>
+                                                </StackPanel>
+                                            </Grid>
+                                            <TextBlock Text="MEID / PESN (Optional):" FontSize="8" Foreground="#CBD5E1" Margin="2,0,0,1"/>
+                                            <TextBox x:Name="TxtDiagMeid" Text="" Height="20" Background="#0F0F14" Foreground="#38BDF8" BorderBrush="#2E2E40" FontSize="9.5" Padding="4,1" Margin="0,0,0,3"/>
+                                            <UniformGrid Columns="2" Margin="0,0,0,2">
+                                                <Button Content="Write Diag IMEI (NV)" Style="{StaticResource CyberBulletButton}" Margin="0,1,2,1" Click="OnDiagWriteImeiClicked"/>
+                                                <Button Content="Read Diag IMEI" Style="{StaticResource CyberBulletButton}" Margin="2,1,0,1" Click="OnDiagReadImeiClicked"/>
+                                            </UniformGrid>
                                         </StackPanel>
                                     </Border>
 
-                                    <!-- QCN Network Calibration & EFS Reset -->
-                                    <Border Background="#161A26" CornerRadius="5" Padding="6,6" Margin="0,0,0,6" BorderBrush="#1E293B" BorderThickness="1">
+                                    <!-- QCN Patch IMEI, Network Calibration & EFS Reset -->
+                                    <Border Background="#161A26" CornerRadius="5" Padding="6,4" Margin="0,0,0,4" BorderBrush="#1E293B" BorderThickness="1">
                                         <StackPanel>
-                                            <TextBlock Text="💾 QCN &amp; EFS NETWORK REPAIR:" FontSize="9" FontWeight="Bold" Foreground="#38BDF8" Margin="4,0,0,4"/>
-                                            <Button Content="Read QCN Backup from Phone" Style="{StaticResource CyberBulletButton}" Click="OnDiagBackupQcnClicked"/>
-                                            <Button Content="Write QCN Calibration File" Style="{StaticResource CyberBulletButton}" Click="OnDiagRestoreQcnClicked"/>
-                                            <Button Content="Wipe &amp; Reset Corrupted EFS (Modemst1/2)" Style="{StaticResource CyberBulletButton}" Click="OnDiagResetEfsClicked"/>
-                                            <Button Content="Diag Reboot Device (Soft-Reset to Normal OS)" Style="{StaticResource CyberBulletButton}" Click="OnDiagRebootClicked"/>
-                                            <Button Content="Exit Diag &amp; Restore Radio Power (Normal Boot)" Style="{StaticResource CyberBulletButton}" Click="OnDiagExitAndRestoreRadioClicked"/>
+                                            <TextBlock Text="💾 QCN PATCH IMEI &amp; EFS NETWORK REPAIR:" FontSize="8.5" FontWeight="Bold" Foreground="#38BDF8" Margin="2,0,0,3"/>
+                                            <DockPanel Margin="0,0,0,4">
+                                                <Button Content="📂 Load QCN" Width="74" Background="#0284C7" Foreground="#FFFFFF" FontWeight="Bold" FontSize="8.5" BorderThickness="0" Height="22" Margin="4,0,0,0" DockPanel.Dock="Right" Click="OnDiagLoadQcnClicked" ToolTip="Load Qualcomm .qcn or .xqcn calibration file"/>
+                                                <TextBox x:Name="TxtDiagQcnPath" Text="" Background="#0F0F14" Foreground="#38BDF8" BorderBrush="#2E2E40" Height="22" FontSize="8.5" Padding="4,1" VerticalContentAlignment="Center" ToolTip="Loaded .qcn / .xqcn file path for IMEI patching"/>
+                                            </DockPanel>
+                                            <Button Content="⚡ Patch IMEI in QCN &amp; Write (Diag Method)" Style="{StaticResource CyberBulletButton}" Foreground="#00FFA3" FontWeight="Bold" Margin="0,1" Click="OnDiagWriteImeiQcnMethodClicked"/>
+                                            <UniformGrid Columns="2" Margin="0,1">
+                                                <Button Content="Read QCN Backup" Style="{StaticResource CyberBulletButton}" Margin="0,1,2,1" Click="OnDiagBackupQcnClicked"/>
+                                                <Button Content="Write QCN Only" Style="{StaticResource CyberBulletButton}" Margin="2,1,0,1" Click="OnDiagRestoreQcnClicked"/>
+                                            </UniformGrid>
+                                            <Button Content="Wipe &amp; Reset Corrupted EFS (Modemst1/2)" Style="{StaticResource CyberBulletButton}" Margin="0,1" Click="OnDiagResetEfsClicked"/>
+                                            <UniformGrid Columns="2" Margin="0,1,0,0">
+                                                <Button Content="Diag Reboot OS" Style="{StaticResource CyberBulletButton}" Margin="0,1,2,1" Click="OnDiagRebootClicked"/>
+                                                <Button Content="Exit Diag &amp; Radio" Style="{StaticResource CyberBulletButton}" Margin="2,1,0,1" Click="OnDiagExitAndRestoreRadioClicked"/>
+                                            </UniformGrid>
                                         </StackPanel>
                                     </Border>
                                 </StackPanel>
