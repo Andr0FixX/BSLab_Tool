@@ -366,6 +366,36 @@ namespace BSLabTool.UI
             }
         }
 
+        private void OnOpenCloudCreditsClicked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var creditsWin = new BSLabTool.UI.Views.CloudResellerPortalWindow();
+                creditsWin.Owner = this;
+                creditsWin.Show();
+                AppendAutoHubLog("[+] ☁️ Cloud Credits Wallet & Reseller Hub opened.");
+            }
+            catch (Exception ex)
+            {
+                AppendAutoHubLog($"[!] Cloud Portal Launch Error: {ex.Message}");
+            }
+        }
+
+        private void OnOpenIspJtagSuiteClicked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var jtagWin = new BSLabTool.UI.Views.DirectIspJtagFlasherWindow();
+                jtagWin.Owner = this;
+                jtagWin.Show();
+                AppendAutoHubLog("[+] 🔬 Direct ISP eMMC/UFS JTAG Flasher & Boot Repair Suite opened.");
+            }
+            catch (Exception ex)
+            {
+                AppendAutoHubLog($"[!] ISP JTAG Launch Error: {ex.Message}");
+            }
+        }
+
         private void OnLanguageSwitchClicked(object sender, RoutedEventArgs e)
         {
             try
@@ -403,6 +433,8 @@ namespace BSLabTool.UI
                 if (TabUatSimulator != null) TabUatSimulator.Content = "🧪 ورچوئل سمیلیٹر";
                 if (TabUatRomDownloader != null) TabUatRomDownloader.Content = "📥 اسٹاک روم سینٹر";
                 if (TabUatWorkshopPos != null) TabUatWorkshopPos.Content = "🧾 ورکشاپ پی او ایس";
+                if (TabUatCloudCredits != null) TabUatCloudCredits.Content = "💳 کلاؤڈ کریڈٹس";
+                if (TabUatIspJtag != null) TabUatIspJtag.Content = "🔬 ڈائریکٹ جے ٹیگ";
 
                 AppendAutoHubLog("[🌐 LOCALIZATION] زبان کامیابی سے تبدیل کر دی گئی: اردو (Urdu Active)");
             }
@@ -421,6 +453,8 @@ namespace BSLabTool.UI
                 if (TabUatSimulator != null) TabUatSimulator.Content = "🧪 محاكي الجهاز";
                 if (TabUatRomDownloader != null) TabUatRomDownloader.Content = "📥 مركز الرومات";
                 if (TabUatWorkshopPos != null) TabUatWorkshopPos.Content = "🧾 فواتير الصيانة";
+                if (TabUatCloudCredits != null) TabUatCloudCredits.Content = "💳 رصيد السيرفر";
+                if (TabUatIspJtag != null) TabUatIspJtag.Content = "🔬 جيتاج مباشر";
 
                 AppendAutoHubLog("[🌐 LOCALIZATION] تم تغيير لغة الواجهة بنجاح: العربية (Arabic Active)");
             }
@@ -439,6 +473,8 @@ namespace BSLabTool.UI
                 if (TabUatSimulator != null) TabUatSimulator.Content = "🧪 SIMULATOR";
                 if (TabUatRomDownloader != null) TabUatRomDownloader.Content = "📥 ROM CENTER";
                 if (TabUatWorkshopPos != null) TabUatWorkshopPos.Content = "🧾 WORKSHOP POS";
+                if (TabUatCloudCredits != null) TabUatCloudCredits.Content = "💳 CLOUD CREDITS";
+                if (TabUatIspJtag != null) TabUatIspJtag.Content = "🔬 ISP JTAG";
 
                 AppendAutoHubLog("[🌐 LOCALIZATION] Application language dynamically switched to: English (Default)");
             }

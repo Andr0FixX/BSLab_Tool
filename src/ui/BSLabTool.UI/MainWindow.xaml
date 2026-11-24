@@ -525,7 +525,9 @@
                 <Button x:Name="TabUatCloudLoader" Content="☁️ CLOUD LOADERS" ToolTip="Dynamic Cloud Loaders, Programmers &amp; TestPoints Vault" Style="{StaticResource CyberNavTab}" Foreground="#38BDF8" FontWeight="ExtraBold" Click="OnOpenCloudLoaderClicked" Margin="0,0,4,0"/>
                 <Button x:Name="TabUatSimulator" Content="🧪 SIMULATOR" ToolTip="Virtual Phone Hardware Simulator &amp; Sandbox" Style="{StaticResource CyberNavTab}" Foreground="#A855F7" FontWeight="ExtraBold" Click="OnOpenVirtualSimulatorClicked" Margin="0,0,4,0"/>
                 <Button x:Name="TabUatRomDownloader" Content="📥 ROM CENTER" ToolTip="High-Speed Official Stock ROM Downloader" Style="{StaticResource CyberNavTab}" Foreground="#00F0FF" FontWeight="ExtraBold" Click="OnOpenFirmwareDownloaderClicked" Margin="0,0,4,0"/>
-                <Button x:Name="TabUatWorkshopPos" Content="🧾 WORKSHOP POS" ToolTip="Workshop POS, Job Ticket &amp; Invoice Generator" Style="{StaticResource CyberNavTab}" Foreground="#00FFA3" FontWeight="ExtraBold" Click="OnOpenWorkshopPosClicked" Margin="0,0,8,0"/>
+                <Button x:Name="TabUatWorkshopPos" Content="🧾 WORKSHOP POS" ToolTip="Workshop POS, Job Ticket &amp; Invoice Generator" Style="{StaticResource CyberNavTab}" Foreground="#00FFA3" FontWeight="ExtraBold" Click="OnOpenWorkshopPosClicked" Margin="0,0,4,0"/>
+                <Button x:Name="TabUatCloudCredits" Content="💳 CLOUD CREDITS" ToolTip="Cloud User Profile, Server Credits &amp; Reseller Hub" Style="{StaticResource CyberNavTab}" Foreground="#38BDF8" FontWeight="ExtraBold" Click="OnOpenCloudCreditsClicked" Margin="0,0,4,0"/>
+                <Button x:Name="TabUatIspJtag" Content="🔬 ISP JTAG" ToolTip="Direct ISP eMMC/UFS JTAG Flasher &amp; Boot Repair Suite" Style="{StaticResource CyberNavTab}" Foreground="#EC4899" FontWeight="ExtraBold" Click="OnOpenIspJtagSuiteClicked" Margin="0,0,8,0"/>
 
                 <!-- Legacy Navigation Buttons Kept Hidden to preserve C# field bindings with 0 errors -->
                 <StackPanel Visibility="Collapsed">
@@ -580,6 +582,8 @@
                         <Button Content="🧪" ToolTip="Virtual Phone Hardware Simulator &amp; Playground" Width="38" Height="28" Margin="0,1" Foreground="#A855F7" Style="{StaticResource WindowCtrlButton}" Click="OnOpenVirtualSimulatorClicked"/>
                         <Button Content="📥" ToolTip="High-Speed Official Stock Firmware Downloader" Width="38" Height="28" Margin="0,1" Foreground="#00F0FF" Style="{StaticResource WindowCtrlButton}" Click="OnOpenFirmwareDownloaderClicked"/>
                         <Button Content="🧾" ToolTip="Workshop POS, Job Ticket &amp; Invoice Generator" Width="38" Height="28" Margin="0,1" Foreground="#00FFA3" Style="{StaticResource WindowCtrlButton}" Click="OnOpenWorkshopPosClicked"/>
+                        <Button Content="💳" ToolTip="Cloud User Profile, Server Credits &amp; Reseller Hub" Width="38" Height="28" Margin="0,1" Foreground="#38BDF8" Style="{StaticResource WindowCtrlButton}" Click="OnOpenCloudCreditsClicked"/>
+                        <Button Content="🔬" ToolTip="Direct ISP eMMC/UFS JTAG Flasher &amp; Boot Repair Suite" Width="38" Height="28" Margin="0,1" Foreground="#EC4899" Style="{StaticResource WindowCtrlButton}" Click="OnOpenIspJtagSuiteClicked"/>
                         <Button Content="f" FontWeight="ExtraBold" FontSize="13" Foreground="#4267B2" ToolTip="Facebook Community Support" Width="38" Height="28" Margin="0,1" Style="{StaticResource WindowCtrlButton}" Click="OnUatFacebookClicked"/>
                         <Button Content="✈️" ToolTip="Official Telegram Updates" Width="38" Height="28" Margin="0,1" Style="{StaticResource WindowCtrlButton}" Click="OnUatTelegramClicked"/>
                         <Button Content="▶️" ToolTip="Official Video Guides" Width="38" Height="28" Margin="0,1" Style="{StaticResource WindowCtrlButton}" Click="OnUatYouTubeClicked"/>
