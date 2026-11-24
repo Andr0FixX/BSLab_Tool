@@ -408,7 +408,7 @@
 
                 <!-- Col 0: Left Title & Version Badge -->
                 <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock Text="BS LAB TOOL™ v2.6.0" FontSize="11.5" FontWeight="ExtraBold" Foreground="#4DD0E1" VerticalAlignment="Center"/>
+                    <TextBlock Text="BS LAB TOOL™ v2.6.2" FontSize="11.5" FontWeight="ExtraBold" Foreground="#4DD0E1" VerticalAlignment="Center"/>
                     <Border Background="#1A3A54" BorderBrush="#0288D1" BorderThickness="1" CornerRadius="3" Padding="5,1" Margin="6,0,6,0" VerticalAlignment="Center">
                         <TextBlock Text="PRO ENTERPRISE" FontSize="8" FontWeight="Bold" Foreground="#4FC3F7"/>
                     </Border>
@@ -1801,37 +1801,43 @@
                                 <!-- ======================================================== -->
                                 <StackPanel x:Name="PanelServiceEngine" Visibility="Collapsed">
                                     <!-- Section 1: Hardware Protocol & Handshake -->
-                                    <Border Background="#161A26" CornerRadius="5" Padding="6,6" Margin="0,0,0,6" BorderBrush="#1E293B" BorderThickness="1">
+                                    <Border Background="#161A26" CornerRadius="5" Padding="6,5" Margin="0,0,0,5" BorderBrush="#1E293B" BorderThickness="1">
                                         <StackPanel>
-                                            <TextBlock x:Name="TxtActionsHeader" Text="HARDWARE PROTOCOL &amp; DA ACTIONS:" FontSize="9" FontWeight="Bold" Foreground="#38BDF8" Margin="4,2,0,4"/>
-                                            <Button x:Name="BtnMtkReadInfo" Content="🔍 Read Info (Hardware Telemetry)" Style="{StaticResource CyberBulletButton}" Click="OnMtkReadInfoClicked" Margin="0,0,0,2"/>
-                                            <Button x:Name="BtnHandshake" Content="Phase 1: Sync Handshake (BROM / Sahara)" Style="{StaticResource CyberBulletButton}" Click="OnHandshakeClicked"/>
-                                            <Button x:Name="BtnLoadDa" Content="Phase 2: Load Download Agent / Firehose" Style="{StaticResource CyberBulletButton}" Click="OnLoadDaClicked"/>
-                                            <Button x:Name="BtnReadGpt" Content="Read Partition Table (Live GPT Sectors)" Style="{StaticResource CyberBulletButton}" Click="OnReadGptClicked"/>
+                                            <TextBlock x:Name="TxtActionsHeader" Text="HARDWARE PROTOCOL &amp; DA ACTIONS:" FontSize="8.5" FontWeight="Bold" Foreground="#38BDF8" Margin="2,0,0,3"/>
+                                            <UniformGrid Columns="2">
+                                                <Button x:Name="BtnMtkReadInfo" Content="🔍 Read Info" Style="{StaticResource CyberBulletButton}" Margin="0,1,2,1" Click="OnMtkReadInfoClicked"/>
+                                                <Button x:Name="BtnHandshake" Content="1: Sync Handshake" Style="{StaticResource CyberBulletButton}" Margin="2,1,0,1" Click="OnHandshakeClicked"/>
+                                                <Button x:Name="BtnLoadDa" Content="2: Load DA / Firehose" Style="{StaticResource CyberBulletButton}" Margin="0,1,2,1" Click="OnLoadDaClicked"/>
+                                                <Button x:Name="BtnReadGpt" Content="Read Live GPT" Style="{StaticResource CyberBulletButton}" Margin="2,1,0,1" Click="OnReadGptClicked"/>
+                                            </UniformGrid>
                                         </StackPanel>
                                     </Border>
 
                                     <!-- Section 2: Recommended 1-Click Operations -->
-                                    <Border Background="#161A26" CornerRadius="5" Padding="6,6" Margin="0,0,0,6" BorderBrush="#1E293B" BorderThickness="1">
+                                    <Border Background="#161A26" CornerRadius="5" Padding="6,5" Margin="0,0,0,5" BorderBrush="#1E293B" BorderThickness="1">
                                         <StackPanel>
-                                            <TextBlock x:Name="TxtOneClickHeader" Text="RECOMMENDED 1-CLICK SERVICING (MTK):" FontSize="9" FontWeight="Bold" Foreground="#F59E0B" Margin="4,2,0,4"/>
-                                            <Button x:Name="BtnResetFrp" Content="Reset FRP Lock (Google Account)" Style="{StaticResource CyberBulletButton}" Click="OnResetFrpClicked"/>
-                                            <Button x:Name="BtnMiAccount" Content="Bypass Mi Account (Cloud Lock Safe)" Style="{StaticResource CyberBulletButton}" Click="OnResetMiAccountClicked"/>
-                                            <Button x:Name="BtnFactoryReset" Content="Factory Reset (Safe Userdata Format)" Style="{StaticResource CyberBulletButton}" Click="OnFactoryResetClicked"/>
-                                            <Button x:Name="BtnUnlockBl" Content="Unlock Bootloader (Instant BROM / EDL)" Style="{StaticResource CyberBulletButton}" Click="OnUnlockBootloaderClicked"/>
-                                            <Button x:Name="BtnRelockBl" Content="Relock Bootloader" Style="{StaticResource CyberBulletButton}" Click="OnRelockBlClicked"/>
-                                            <Button x:Name="BtnDemoMode" Content="Remove Retail Demo Mode (Vivo/Oppo)" Style="{StaticResource CyberBulletButton}" Click="OnDemoModeClicked"/>
+                                            <TextBlock x:Name="TxtOneClickHeader" Text="RECOMMENDED 1-CLICK SERVICING (MTK):" FontSize="8.5" FontWeight="Bold" Foreground="#F59E0B" Margin="2,0,0,3"/>
+                                            <UniformGrid Columns="2">
+                                                <Button x:Name="BtnResetFrp" Content="Reset FRP Lock" Style="{StaticResource CyberBulletButton}" Margin="0,1,2,1" Click="OnResetFrpClicked"/>
+                                                <Button x:Name="BtnMiAccount" Content="Bypass Mi Account" Style="{StaticResource CyberBulletButton}" Margin="2,1,0,1" Click="OnResetMiAccountClicked"/>
+                                                <Button x:Name="BtnFactoryReset" Content="Factory Reset" Style="{StaticResource CyberBulletButton}" Margin="0,1,2,1" Click="OnFactoryResetClicked"/>
+                                                <Button x:Name="BtnUnlockBl" Content="Unlock Bootloader" Style="{StaticResource CyberBulletButton}" Margin="2,1,0,1" Click="OnUnlockBootloaderClicked"/>
+                                                <Button x:Name="BtnRelockBl" Content="Relock Bootloader" Style="{StaticResource CyberBulletButton}" Margin="0,1,2,1" Click="OnRelockBlClicked"/>
+                                                <Button x:Name="BtnDemoMode" Content="Remove Demo Mode" Style="{StaticResource CyberBulletButton}" Margin="2,1,0,1" Click="OnDemoModeClicked"/>
+                                            </UniformGrid>
                                         </StackPanel>
                                     </Border>
 
                                     <!-- Section 3: NVRAM & Baseband / IMEI Calibration -->
-                                    <Border Background="#161A26" CornerRadius="5" Padding="6,6" Margin="0,0,0,6" BorderBrush="#1E293B" BorderThickness="1">
+                                    <Border Background="#161A26" CornerRadius="5" Padding="6,5" Margin="0,0,0,5" BorderBrush="#1E293B" BorderThickness="1">
                                         <StackPanel>
-                                            <TextBlock x:Name="TxtSecurityHeader" Text="NVRAM, BASEBAND &amp; IMEI PROTECTION:" FontSize="9" FontWeight="Bold" Foreground="#34D399" Margin="4,2,0,4"/>
-                                            <Button x:Name="BtnBackupNvram" Content="Backup Security / NVRAM / QCN / EFS" Style="{StaticResource CyberBulletButton}" Click="OnBackupNvramClicked"/>
-                                            <Button x:Name="BtnRestoreNvram" Content="Restore Security / NVRAM / QCN / EFS" Style="{StaticResource CyberBulletButton}" Click="OnRestoreNvramClicked"/>
-                                            <Button x:Name="BtnRepairBaseband" Content="Repair Baseband Unknown / Fix Null IMEI" Style="{StaticResource CyberBulletButton}" Click="OnRepairBasebandClicked"/>
-                                            <Button x:Name="BtnReboot" Content="Hardware Watchdog Reboot Device" Style="{StaticResource CyberBulletButton}" Click="OnRebootClicked"/>
+                                            <TextBlock x:Name="TxtSecurityHeader" Text="NVRAM, BASEBAND &amp; IMEI PROTECTION:" FontSize="8.5" FontWeight="Bold" Foreground="#34D399" Margin="2,0,0,3"/>
+                                            <UniformGrid Columns="2">
+                                                <Button x:Name="BtnBackupNvram" Content="Backup Security/NV" Style="{StaticResource CyberBulletButton}" Margin="0,1,2,1" Click="OnBackupNvramClicked"/>
+                                                <Button x:Name="BtnRestoreNvram" Content="Restore Security/NV" Style="{StaticResource CyberBulletButton}" Margin="2,1,0,1" Click="OnRestoreNvramClicked"/>
+                                                <Button x:Name="BtnRepairBaseband" Content="Repair Baseband" Style="{StaticResource CyberBulletButton}" Margin="0,1,2,1" Click="OnRepairBasebandClicked"/>
+                                                <Button x:Name="BtnReboot" Content="Watchdog Reboot" Style="{StaticResource CyberBulletButton}" Margin="2,1,0,1" Click="OnRebootClicked"/>
+                                            </UniformGrid>
                                         </StackPanel>
                                     </Border>
                                 </StackPanel>
@@ -5069,7 +5075,7 @@
 
             <!-- Active Engine & Live Clock -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                <TextBlock Text="Updated : 24-Nov-2026 (v2.6.0)" FontSize="8.5" Foreground="#78909C" Margin="0,0,16,0" VerticalAlignment="Center"/>
+                <TextBlock Text="Updated : 25-Nov-2026 (v2.6.2)" FontSize="8.5" Foreground="#78909C" Margin="0,0,16,0" VerticalAlignment="Center"/>
                 <TextBlock x:Name="TxtUatClock" Text="15 - November - 2026 - 07:15:00 PM" FontSize="9" Foreground="#ECEFF1" Margin="0,0,16,0" FontFamily="Consolas" VerticalAlignment="Center"/>
                 <TextBlock x:Name="TxtLiveClock" Visibility="Collapsed"/>
                 <Border Background="#1A3A54" BorderBrush="#0288D1" BorderThickness="1" CornerRadius="3" Padding="6,1">
