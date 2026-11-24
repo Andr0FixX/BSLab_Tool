@@ -657,10 +657,11 @@
                                             <TextBlock Text="ODIN/MTP" FontSize="7" FontWeight="Bold" Foreground="#BFDBFE"/>
                                         </Border>
                                     </DockPanel>
-                                    <UniformGrid Columns="3">
+                                    <UniformGrid Columns="4">
                                         <Button Style="{StaticResource BrandCardQuickBtn}" Background="#1D4ED8" Content="MTP FRP" ToolTip="Samsung 1-Click MTP FRP Reset" Click="OnSamsungMtpFrpClicked"/>
                                         <Button Style="{StaticResource BrandCardQuickBtn}" Background="#2563EB" Content="Read Info" ToolTip="Read Samsung Device Info via MTP" Click="OnSamsungMtpReadInfoClicked"/>
                                         <Button Style="{StaticResource BrandCardQuickBtn}" Background="#1E40AF" Content="Download" ToolTip="Reboot Samsung to Download Mode" Click="OnSamsungRebootDownloadClicked"/>
+                                        <Button Style="{StaticResource BrandCardQuickBtn}" Background="#C2410C" Content="EFS Reset" ToolTip="Samsung Reset EFS in Download Mode" Click="OnSamsungResetEfsDownloadClicked"/>
                                     </UniformGrid>
                                 </StackPanel>
                             </Border>
@@ -2438,6 +2439,7 @@
                                     <Button Content="Samsung Reboot Device (Normal)" Style="{StaticResource CyberBulletButton}" Click="OnSamsungRebootSystemClicked"/>
                                     <Button Content="Samsung Disable Factory Mode / Retail Demo" Style="{StaticResource CyberBulletButton}" Click="OnSamsungDisableDemoClicked"/>
                                     <Button Content="Samsung Read PIT Table (MTP Mode)" Style="{StaticResource CyberBulletButton}" Click="OnSamsungReadPitMtpClicked"/>
+                                    <Button x:Name="BtnSamsungResetEfsMtp" Content="⚡ Samsung Reset EFS &amp; Fix Baseband (Auto Download Mode)" Style="{StaticResource CyberBulletButton}" Foreground="#F97316" FontWeight="Bold" Click="OnSamsungResetEfsDownloadClicked"/>
                                 </StackPanel>
 
                                 <!-- PANEL 2: ODIN MULTI-DOWNLOADER FLASHER -->
@@ -2513,6 +2515,27 @@
                                     <!-- Flash Action Buttons -->
                                     <Button Content="⚡ Flash Samsung Firmware (Odin)" Height="34" Background="#0284C7" Foreground="#FFFFFF" FontWeight="Bold" BorderThickness="0" Margin="0,0,0,5" Click="OnSamsungFlashOdinClicked"/>
                                     <Button Content="📑 Read PIT from Download Mode" Height="28" Background="#0D9488" Foreground="#FFFFFF" FontWeight="Bold" BorderThickness="0" Margin="0,0,0,8" Click="OnSamsungReadPitDownloadClicked"/>
+
+                                    <!-- SAMSUNG EFS & BASEBAND RECOVERY (DOWNLOAD MODE) -->
+                                    <Border Background="#1C1917" CornerRadius="4" Padding="6" Margin="0,0,0,8" BorderBrush="#EA580C" BorderThickness="1">
+                                        <StackPanel>
+                                            <DockPanel Margin="0,0,0,4">
+                                                <TextBlock Text="🧹 SAMSUNG EFS RESET (DOWNLOAD MODE)" FontSize="9.5" FontWeight="ExtraBold" Foreground="#F97316"/>
+                                                <Border Background="#7C2D12" CornerRadius="2" Padding="4,1" HorizontalAlignment="Right">
+                                                    <TextBlock Text="ODIN LOKE" FontSize="7.5" FontWeight="Bold" Foreground="#FDBA74"/>
+                                                </Border>
+                                            </DockPanel>
+                                            <TextBlock Text="Zero-fills corrupted EFS/NVRAM partitions directly in Download Mode to fix 'Baseband Unknown', 'IMEI Null', and 'No Service'." FontSize="8.5" Foreground="#CBD5E1" TextWrapping="Wrap" Margin="0,0,0,6"/>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Button x:Name="BtnSamsungResetEfsDl" Grid.Column="0" Content="⚡ 1-Click Reset EFS (DL Mode)" Height="28" Background="#C2410C" Foreground="#FFFFFF" FontWeight="Bold" FontSize="9" BorderThickness="0" Margin="0,0,3,0" Click="OnSamsungResetEfsDownloadClicked" ToolTip="Wipes corrupted EFS partition directly in Download Mode via Odin"/>
+                                                <Button x:Name="BtnSamsungBackupEfsDl" Grid.Column="1" Content="🛡️ Backup EFS (TAR)" Height="28" Background="#1E293B" Foreground="#38BDF8" FontWeight="Bold" FontSize="9" BorderBrush="#0284C7" BorderThickness="1" Margin="3,0,0,0" Click="OnSamsungBackupEfsDownloadClicked" ToolTip="Dumps active EFS partition into backup tarball"/>
+                                            </Grid>
+                                        </StackPanel>
+                                    </Border>
 
                                     <!-- Odin Progress Bar -->
                                     <Border Background="#1A1A24" CornerRadius="4" Padding="6" Margin="0,2,0,0">

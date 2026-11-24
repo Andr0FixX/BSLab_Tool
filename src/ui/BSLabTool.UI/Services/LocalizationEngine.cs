@@ -122,6 +122,12 @@ namespace BSLabTool.UI.Services
                 [AppLanguage.Urdu] = "⚡ خودکار اپڈیٹ",
                 [AppLanguage.Arabic] = "⚡ التحديث التلقائي"
             },
+            ["Btn_SamsungResetEfs"] = new()
+            {
+                [AppLanguage.English] = "⚡ Samsung Reset EFS & Fix Baseband (Download Mode)",
+                [AppLanguage.Urdu] = "⚡ سام سنگ ای ایف ایس ری سیٹ و بیس بینڈ فکس (ڈاؤن لوڈ موڈ)",
+                [AppLanguage.Arabic] = "⚡ إعادة ضبط EFS وإصلاح البيسباند (وضع الداونلود)"
+            },
             ["Btn_LiveUsbSniffer"] = new()
             {
                 [AppLanguage.English] = "Live USB Hex Sniffer",

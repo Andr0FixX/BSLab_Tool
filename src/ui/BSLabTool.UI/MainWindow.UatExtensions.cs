@@ -438,6 +438,9 @@ namespace BSLabTool.UI
                 if (BtnMetaEnableAdb != null) BtnMetaEnableAdb.Content = "⚡ پری لوڈر تا میٹا موڈ ➔ اے ڈی بی ایکٹیو کریں";
                 if (BtnTitleAutoUpdate != null) BtnTitleAutoUpdate.Content = "⚡ خودکار اپڈیٹ";
                 if (TabUatAutoUpdate != null) TabUatAutoUpdate.Content = "🔄 خودکار اپڈیٹ";
+                if (BtnSamsungResetEfsMtp != null) BtnSamsungResetEfsMtp.Content = "⚡ سام سنگ ای ایف ایس ری سیٹ و بیس بینڈ فکس (ڈاؤن لوڈ موڈ)";
+                if (BtnSamsungResetEfsDl != null) BtnSamsungResetEfsDl.Content = "⚡ 1-کلک ای ایف ایس ری سیٹ (DL موڈ)";
+                if (BtnSamsungBackupEfsDl != null) BtnSamsungBackupEfsDl.Content = "🛡️ بیک اپ ای ایف ایس (TAR)";
 
                 AppendAutoHubLog("[🌐 LOCALIZATION] زبان کامیابی سے تبدیل کر دی گئی: اردو (Urdu Active)");
             }
@@ -461,6 +464,9 @@ namespace BSLabTool.UI
                 if (BtnMetaEnableAdb != null) BtnMetaEnableAdb.Content = "⚡ من البريلودر إلى وضع الميتا ➔ تفعيل تصحيح USB (ADB)";
                 if (BtnTitleAutoUpdate != null) BtnTitleAutoUpdate.Content = "⚡ التحديث التلقائي";
                 if (TabUatAutoUpdate != null) TabUatAutoUpdate.Content = "🔄 التحديث التلقائي";
+                if (BtnSamsungResetEfsMtp != null) BtnSamsungResetEfsMtp.Content = "⚡ إعادة ضبط EFS وإصلاح البيسباند (وضع الداونلود)";
+                if (BtnSamsungResetEfsDl != null) BtnSamsungResetEfsDl.Content = "⚡ 1-نقرة إعادة ضبط EFS (وضع DL)";
+                if (BtnSamsungBackupEfsDl != null) BtnSamsungBackupEfsDl.Content = "🛡️ نسخ احتياطي EFS (TAR)";
 
                 AppendAutoHubLog("[🌐 LOCALIZATION] تم تغيير لغة الواجهة بنجاح: العربية (Arabic Active)");
             }
@@ -484,6 +490,9 @@ namespace BSLabTool.UI
                 if (BtnMetaEnableAdb != null) BtnMetaEnableAdb.Content = "⚡ PRELOADER ➔ META MODE ➔ ENABLE ADB (ACTIVE)";
                 if (BtnTitleAutoUpdate != null) BtnTitleAutoUpdate.Content = "⚡ AUTO UPDATE";
                 if (TabUatAutoUpdate != null) TabUatAutoUpdate.Content = "⚡ AUTO UPDATE";
+                if (BtnSamsungResetEfsMtp != null) BtnSamsungResetEfsMtp.Content = "⚡ Samsung Reset EFS & Fix Baseband (Auto Download Mode)";
+                if (BtnSamsungResetEfsDl != null) BtnSamsungResetEfsDl.Content = "⚡ 1-Click Reset EFS (DL Mode)";
+                if (BtnSamsungBackupEfsDl != null) BtnSamsungBackupEfsDl.Content = "🛡️ Backup EFS (TAR)";
 
                 AppendAutoHubLog("[🌐 LOCALIZATION] Application language dynamically switched to: English (Default)");
             }
