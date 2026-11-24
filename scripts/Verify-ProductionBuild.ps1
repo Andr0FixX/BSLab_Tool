@@ -1,54 +1,67 @@
 ﻿Write-Host "══════════════════════════════════════════════════════════════" -ForegroundColor Cyan
-Write-Host "🔍 BS LAB TOOL PRO V2.5 — PRODUCTION VERIFICATION SMOKE RUN" -ForegroundColor Green
+Write-Host "🔍 BS LAB TOOL PRO V2.5.1 — PRODUCTION VERIFICATION SMOKE RUN" -ForegroundColor Green
 Write-Host "══════════════════════════════════════════════════════════════" -ForegroundColor Cyan
 
-# 1. Check Installer
-$setupPath = "installer_output\BSLab_Tool_PRO_v2.5_Setup.exe"
-$desktopPath = "C:\Users\AndroFixX\OneDrive\Desktop\Persnal Tested Work Job\BSLab_Tool_PRO_v2.5_Setup.exe"
+# 1. Check Installers
+$setupPath251 = "installer_output\BSLab_Tool_PRO_v2.5.1_Setup.exe"
+$desktopPath251 = "C:\Users\AndroFixX\OneDrive\Desktop\Persnal Tested Work Job\BSLab_Tool_PRO_v2.5.1_Setup.exe"
 
-if (Test-Path $setupPath) {
-    $s = Get-Item $setupPath
+if (Test-Path $setupPath251) {
+    $s = Get-Item $setupPath251
     $mb = [math]::Round($s.Length / 1MB, 2)
-    Write-Host "[✓] Installer Output Setup : $($s.FullName) ($mb MB)" -ForegroundColor Green
+    Write-Host "[✓] Installer Output v2.5.1 : $($s.FullName) ($mb MB)" -ForegroundColor Green
 } else {
-    Write-Host "[!] Setup not found in installer_output" -ForegroundColor Red
+    Write-Host "[!] v2.5.1 Setup not found in installer_output" -ForegroundColor Red
 }
 
-if (Test-Path $desktopPath) {
-    $d = Get-Item $desktopPath
+if (Test-Path $desktopPath251) {
+    $d = Get-Item $desktopPath251
     $dmb = [math]::Round($d.Length / 1MB, 2)
-    Write-Host "[✓] Desktop Test Installer : $($d.FullName) ($dmb MB)" -ForegroundColor Green
+    Write-Host "[✓] Desktop v2.5.1 Deliverable : $($d.FullName) ($dmb MB)" -ForegroundColor Green
 } else {
-    Write-Host "[!] Desktop Setup not found" -ForegroundColor Red
+    Write-Host "[!] Desktop v2.5.1 Setup not found" -ForegroundColor Red
 }
 
 # 2. Check Authenticode Signature
 Write-Host "──────────────────────────────────────────────────────────────" -ForegroundColor DarkGray
-Write-Host "[*] Inspecting Authenticode Signature on Setup..." -ForegroundColor Yellow
-$sig = Get-AuthenticodeSignature $setupPath
+Write-Host "[*] Inspecting Authenticode Signature on v2.5.1 Setup..." -ForegroundColor Yellow
+$sig = Get-AuthenticodeSignature $setupPath251
+Write-Host "[+] Status          : $($sig.Status)" -ForegroundColor Green
 Write-Host "[+] Signer Subject  : $($sig.SignerCertificate.Subject)" -ForegroundColor White
-Write-Host "[+] Signer Issuer   : $($sig.SignerCertificate.Issuer)" -ForegroundColor White
 Write-Host "[+] Thumbprint      : $($sig.SignerCertificate.Thumbprint)" -ForegroundColor White
 Write-Host "[+] Not After (Exp) : $($sig.SignerCertificate.NotAfter)" -ForegroundColor White
 
-# 3. Check Web Portal & Docs
+# 3. Check Web Portal, TestPoint Radar & Launch Kit
 Write-Host "──────────────────────────────────────────────────────────────" -ForegroundColor DarkGray
-if (Test-Path "docs\index.html") {
-    $len = (Get-Item "docs\index.html").Length
-    Write-Host "[✓] Cyberpunk Web Landing Page : docs\index.html ($len bytes)" -ForegroundColor Green
+$docs = @(
+    "docs\index.html",
+    "docs\testpoints.html",
+    "docs\LAUNCH_KIT_TELEGRAM_GSM_FORUM.md"
+)
+foreach ($doc in $docs) {
+    if (Test-Path $doc) {
+        $len = (Get-Item $doc).Length
+        Write-Host "[✓] Web & Launch Asset : $doc ($len bytes)" -ForegroundColor Green
+    } else {
+        Write-Host "[!] Missing : $doc" -ForegroundColor Red
+    }
 }
 
-# 4. Check Key Views & Code Modules
+# 4. Check All 8 UI Modules
+Write-Host "──────────────────────────────────────────────────────────────" -ForegroundColor DarkGray
 $views = @(
     "src\ui\BSLabTool.UI\Views\VisualTestPointWindow.xaml",
     "src\ui\BSLabTool.UI\Views\UniversalFrpWizardWindow.xaml",
     "src\ui\BSLabTool.UI\Views\NetworkBasebandSuiteWindow.xaml",
     "src\ui\BSLabTool.UI\Views\CloudLoaderManagerWindow.xaml",
-    "src\ui\BSLabTool.UI\Views\UsbDriverDoctorWindow.xaml"
+    "src\ui\BSLabTool.UI\Views\UsbDriverDoctorWindow.xaml",
+    "src\ui\BSLabTool.UI\Views\PartitionManagerSuiteWindow.xaml",
+    "src\ui\BSLabTool.UI\Views\LiveUsbSnifferWindow.xaml",
+    "src\ui\BSLabTool.UI\Views\AutoUpdaterDialogWindow.xaml"
 )
 foreach ($v in $views) {
     if (Test-Path $v) {
-        Write-Host "[✓] UI Module : $v (Ready)" -ForegroundColor Green
+        Write-Host "[✓] UI Hardware Suite : $v (Ready)" -ForegroundColor Green
     } else {
         Write-Host "[!] Missing : $v" -ForegroundColor Red
     }
