@@ -435,6 +435,7 @@ namespace BSLabTool.UI
                 if (TabUatWorkshopPos != null) TabUatWorkshopPos.Content = "🧾 ورکشاپ پی او ایس";
                 if (TabUatCloudCredits != null) TabUatCloudCredits.Content = "💳 کلاؤڈ کریڈٹس";
                 if (TabUatIspJtag != null) TabUatIspJtag.Content = "🔬 ڈائریکٹ جے ٹیگ";
+                if (BtnMetaEnableAdb != null) BtnMetaEnableAdb.Content = "⚡ پری لوڈر تا میٹا موڈ ➔ اے ڈی بی ایکٹیو کریں";
 
                 AppendAutoHubLog("[🌐 LOCALIZATION] زبان کامیابی سے تبدیل کر دی گئی: اردو (Urdu Active)");
             }
@@ -455,6 +456,7 @@ namespace BSLabTool.UI
                 if (TabUatWorkshopPos != null) TabUatWorkshopPos.Content = "🧾 فواتير الصيانة";
                 if (TabUatCloudCredits != null) TabUatCloudCredits.Content = "💳 رصيد السيرفر";
                 if (TabUatIspJtag != null) TabUatIspJtag.Content = "🔬 جيتاج مباشر";
+                if (BtnMetaEnableAdb != null) BtnMetaEnableAdb.Content = "⚡ من البريلودر إلى وضع الميتا ➔ تفعيل تصحيح USB (ADB)";
 
                 AppendAutoHubLog("[🌐 LOCALIZATION] تم تغيير لغة الواجهة بنجاح: العربية (Arabic Active)");
             }
@@ -475,6 +477,7 @@ namespace BSLabTool.UI
                 if (TabUatWorkshopPos != null) TabUatWorkshopPos.Content = "🧾 WORKSHOP POS";
                 if (TabUatCloudCredits != null) TabUatCloudCredits.Content = "💳 CLOUD CREDITS";
                 if (TabUatIspJtag != null) TabUatIspJtag.Content = "🔬 ISP JTAG";
+                if (BtnMetaEnableAdb != null) BtnMetaEnableAdb.Content = "⚡ PRELOADER ➔ META MODE ➔ ENABLE ADB (ACTIVE)";
 
                 AppendAutoHubLog("[🌐 LOCALIZATION] Application language dynamically switched to: English (Default)");
             }

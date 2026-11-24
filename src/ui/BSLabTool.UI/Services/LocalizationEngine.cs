@@ -110,6 +110,12 @@ namespace BSLabTool.UI.Services
                 [AppLanguage.Urdu] = "ورکشاپ پی او ایس اور کسٹمر رسید",
                 [AppLanguage.Arabic] = "نظام الفواتير وإيصالات الصيانة"
             },
+            ["Btn_MetaEnableAdb"] = new()
+            {
+                [AppLanguage.English] = "⚡ PRELOADER ➔ META MODE ➔ ENABLE ADB (ACTIVE)",
+                [AppLanguage.Urdu] = "⚡ پری لوڈر تا میٹا موڈ ➔ اے ڈی بی ایکٹیو کریں",
+                [AppLanguage.Arabic] = "⚡ من البريلودر إلى وضع الميتا ➔ تفعيل تصحيح USB (ADB)"
+            },
             ["Btn_LiveUsbSniffer"] = new()
             {
                 [AppLanguage.English] = "Live USB Hex Sniffer",

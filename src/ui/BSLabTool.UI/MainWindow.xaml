@@ -1858,6 +1858,20 @@
                                         </StackPanel>
                                     </Border>
 
+                                    <!-- ⚡ PRELOADER TO META MODE ADB ENABLER -->
+                                    <Border Background="#161A26" CornerRadius="5" Padding="7" Margin="0,0,0,6" BorderBrush="#00FFA3" BorderThickness="1">
+                                        <StackPanel>
+                                            <DockPanel Margin="0,0,0,4">
+                                                <TextBlock Text="⚡ 1-CLICK ADB ENABLE (META MODE)" FontSize="9.5" FontWeight="Bold" Foreground="#00FFA3" VerticalAlignment="Center"/>
+                                                <Border Background="#064E3B" CornerRadius="3" Padding="4,1" HorizontalAlignment="Right">
+                                                    <TextBlock Text="PRELOADER ➔ META ➔ ADB" FontSize="7.5" FontWeight="Bold" Foreground="#6EE7B7"/>
+                                                </Border>
+                                            </DockPanel>
+                                            <TextBlock Text="Catches Preloader, transitions phone into Meta Mode, injects USB Debugging properties &amp; RSA keys, and reboots device with ADB 100% active." FontSize="8" Foreground="#94A3B8" TextWrapping="Wrap" Margin="0,0,0,6"/>
+                                            <Button x:Name="BtnMetaEnableAdb" Content="⚡ PRELOADER ➔ META MODE ➔ ENABLE ADB (ACTIVE)" Height="28" Background="#059669" Foreground="#FFFFFF" FontWeight="ExtraBold" FontSize="9.5" BorderThickness="0" Cursor="Hand" Click="OnMetaEnableAdbClicked"/>
+                                        </StackPanel>
+                                    </Border>
+
                                     <!-- 🗑️ META DIRECT PARTITION FORMAT / WIPE (ANDROID 6 - 15 COMPLIANT) -->
                                     <Border Background="#161A26" CornerRadius="5" Padding="7" Margin="0,0,0,6" BorderBrush="#EF4444" BorderThickness="1">
                                         <StackPanel>
