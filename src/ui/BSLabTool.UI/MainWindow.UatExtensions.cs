@@ -421,7 +421,7 @@ namespace BSLabTool.UI
         {
             if (lang == BSLabTool.UI.Services.AppLanguage.Urdu)
             {
-                if (BtnLanguageSwitcher != null) BtnLanguageSwitcher.Content = "🌐 اردو (Urdu)";
+                if (BtnLanguageSwitcher != null) BtnLanguageSwitcher.Content = "🌐 اردو";
                 if (TabUatServices != null) TabUatServices.Content = "⋮ سروسز";
                 if (TabUatFlasher != null) TabUatFlasher.Content = "⋮ فلیشر";
                 if (TabUatPartition != null) TabUatPartition.Content = "💾 پارٹیشن مینیجر";
@@ -447,7 +447,7 @@ namespace BSLabTool.UI
             }
             else if (lang == BSLabTool.UI.Services.AppLanguage.Arabic)
             {
-                if (BtnLanguageSwitcher != null) BtnLanguageSwitcher.Content = "🌐 العربية (Arabic)";
+                if (BtnLanguageSwitcher != null) BtnLanguageSwitcher.Content = "🌐 العربية";
                 if (TabUatServices != null) TabUatServices.Content = "⋮ الخدمات";
                 if (TabUatFlasher != null) TabUatFlasher.Content = "⋮ الفلاش";
                 if (TabUatPartition != null) TabUatPartition.Content = "💾 مدير الأقسام";
@@ -473,7 +473,7 @@ namespace BSLabTool.UI
             }
             else
             {
-                if (BtnLanguageSwitcher != null) BtnLanguageSwitcher.Content = "🌐 EN (English)";
+                if (BtnLanguageSwitcher != null) BtnLanguageSwitcher.Content = "🌐 EN";
                 if (TabUatServices != null) TabUatServices.Content = "⋮ SERVICES";
                 if (TabUatFlasher != null) TabUatFlasher.Content = "⋮ FLASHER";
                 if (TabUatPartition != null) TabUatPartition.Content = "💾 PARTITION MANAGER";

@@ -406,29 +406,25 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Col 0: Left Title & Quick Action Icons -->
+                <!-- Col 0: Left Title & Version Badge -->
                 <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-                    <Button Content="🏛️" ToolTip="Master Dashboard" Style="{StaticResource WindowCtrlButton}" Width="26" Height="24" Click="OnUatHomeClicked" Margin="0,0,2,0"/>
-                    <Button Content="🖥️" ToolTip="Windows Device Manager" Style="{StaticResource WindowCtrlButton}" Width="26" Height="24" Click="OnUatDeviceManagerClicked" Margin="0,0,2,0"/>
-                    <Button Content="⚙️" ToolTip="Global Settings" Style="{StaticResource WindowCtrlButton}" Width="26" Height="24" Click="OnUatSettingsClicked" Margin="0,0,2,0"/>
-                    <Button Content="🔗" ToolTip="Share / Copy Logs" Style="{StaticResource WindowCtrlButton}" Width="26" Height="24" Click="OnUatShareClicked" Margin="0,0,6,0"/>
-                    <TextBlock Text="BS LAB TOOL™ v2.6.0 PRO ENTERPRISE" FontSize="11" FontWeight="ExtraBold" Foreground="#4DD0E1" VerticalAlignment="Center"/>
-                    <Border Background="#1A3A54" BorderBrush="#0288D1" BorderThickness="1" CornerRadius="3" Padding="6,1" Margin="6,0,0,0" VerticalAlignment="Center">
-                        <TextBlock Text="BS LAB ENGINE (C++20/C#)" FontSize="8.5" FontWeight="Bold" Foreground="#4FC3F7"/>
+                    <TextBlock Text="BS LAB TOOL™ v2.6.0" FontSize="11.5" FontWeight="ExtraBold" Foreground="#4DD0E1" VerticalAlignment="Center"/>
+                    <Border Background="#1A3A54" BorderBrush="#0288D1" BorderThickness="1" CornerRadius="3" Padding="5,1" Margin="6,0,6,0" VerticalAlignment="Center">
+                        <TextBlock Text="PRO ENTERPRISE" FontSize="8" FontWeight="Bold" Foreground="#4FC3F7"/>
                     </Border>
                 </StackPanel>
 
-                <!-- Col 1: Centered Profile & Hardware Telemetry (No Text Overlap) -->
+                <!-- Col 1: Centered Profile & Hardware Telemetry (Compact, Zero Overlap) -->
                 <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <!-- User Profile Avatar & Account Launcher -->
-                    <Border Cursor="Hand" MouseDown="OnUserProfileHeaderClicked" ToolTip="Click to view Account, HWID Binding &amp; License Status" Background="Transparent" CornerRadius="6" Padding="4,2" Margin="0,0,8,0">
+                    <Border Cursor="Hand" MouseDown="OnUserProfileHeaderClicked" ToolTip="Click to view Account, HWID Binding &amp; License Status" Background="Transparent" CornerRadius="6" Padding="3,2" Margin="0,0,5,0">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <Border Width="26" Height="26" CornerRadius="13" Background="#FBC02D" Margin="0,0,6,0" VerticalAlignment="Center">
-                                <TextBlock Text="👤" FontSize="13" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#37474F"/>
+                            <Border Width="24" Height="24" CornerRadius="12" Background="#FBC02D" Margin="0,0,5,0" VerticalAlignment="Center">
+                                <TextBlock Text="👤" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#37474F"/>
                             </Border>
                             <StackPanel VerticalAlignment="Center">
-                                <TextBlock x:Name="TxtHeaderUserName" Text="Syed Bisharat Ali" FontSize="9" FontWeight="Bold" Foreground="#ECEFF1"/>
-                                <TextBlock x:Name="TxtHeaderUserSubtitle" Text="Shop #5, Arif Center (HWID Bound)" FontSize="7.5" Foreground="#90A4AE"/>
+                                <TextBlock x:Name="TxtHeaderUserName" Text="Syed Bisharat Ali" FontSize="8.5" FontWeight="Bold" Foreground="#ECEFF1" MaxWidth="135" TextTrimming="CharacterEllipsis"/>
+                                <TextBlock x:Name="TxtHeaderUserSubtitle" Text="Shop #5, Arif Center" FontSize="7.5" Foreground="#90A4AE" MaxWidth="135" TextTrimming="CharacterEllipsis"/>
                             </StackPanel>
                         </StackPanel>
                     </Border>
@@ -454,57 +450,57 @@
                     </StackPanel>
 
                     <!-- System PC & CPU Telemetry Card -->
-                    <Border Background="#24333E" BorderBrush="#324452" BorderThickness="1" CornerRadius="4" Padding="6,3" Margin="0,0,6,0" VerticalAlignment="Center">
+                    <Border Background="#24333E" BorderBrush="#324452" BorderThickness="1" CornerRadius="4" Padding="5,2" Margin="0,0,5,0" VerticalAlignment="Center">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Text="💻" FontSize="13" Foreground="#4DD0E1" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="💻" FontSize="12" Foreground="#4DD0E1" Margin="0,0,5,0" VerticalAlignment="Center"/>
                             <StackPanel VerticalAlignment="Center">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="System: " FontSize="8" Foreground="#90A4AE"/>
-                                    <TextBlock x:Name="TxtUatPcName" Text="DESKTOP-IE9S34C" FontSize="8.5" FontWeight="Bold" Foreground="#4DD0E1"/>
+                                    <TextBlock Text="System: " FontSize="7.5" Foreground="#90A4AE"/>
+                                    <TextBlock x:Name="TxtUatPcName" Text="DESKTOP-IE9S34C" FontSize="8" FontWeight="Bold" Foreground="#4DD0E1" MaxWidth="105" TextTrimming="CharacterEllipsis"/>
                                 </StackPanel>
-                                <TextBlock x:Name="TxtUatCpuModel" Text="Intel(R) Core(TM) i3-5005U CPU" FontSize="8" Foreground="#CFD8DC" MaxWidth="140" TextTrimming="CharacterEllipsis"/>
+                                <TextBlock x:Name="TxtUatCpuModel" Text="Intel(R) Core(TM) i3-5005U" FontSize="7.5" Foreground="#CFD8DC" MaxWidth="120" TextTrimming="CharacterEllipsis"/>
                             </StackPanel>
                         </StackPanel>
                     </Border>
 
                     <!-- Target Device Preview Card -->
-                    <Border x:Name="BorderDevicePreview" Background="#24333E" BorderBrush="#324452" BorderThickness="1" CornerRadius="4" Padding="6,3" Margin="0,0,6,0" VerticalAlignment="Center">
+                    <Border x:Name="BorderDevicePreview" Background="#24333E" BorderBrush="#324452" BorderThickness="1" CornerRadius="4" Padding="5,2" Margin="0,0,5,0" VerticalAlignment="Center">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Text="📱" FontSize="15" Margin="0,0,4,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="📱" FontSize="13" Margin="0,0,4,0" VerticalAlignment="Center"/>
                             <StackPanel VerticalAlignment="Center">
                                 <Border x:Name="BadgeBrandContainer" Background="#008450" CornerRadius="3" Padding="4,1" Margin="0,0,0,1" HorizontalAlignment="Left">
-                                    <TextBlock x:Name="TxtUatBrandBadge" Text="oppo" FontSize="7.5" FontWeight="ExtraBold" Foreground="#FFFFFF"/>
+                                    <TextBlock x:Name="TxtUatBrandBadge" Text="oppo" FontSize="7" FontWeight="ExtraBold" Foreground="#FFFFFF"/>
                                 </Border>
-                                <TextBlock x:Name="TxtUatDeviceRenderName" Text="F21 PRO (CPH2363)" FontSize="8" FontWeight="Bold" Foreground="#ECEFF1"/>
+                                <TextBlock x:Name="TxtUatDeviceRenderName" Text="F21 PRO (CPH2363)" FontSize="7.5" FontWeight="Bold" Foreground="#ECEFF1" MaxWidth="125" TextTrimming="CharacterEllipsis"/>
                             </StackPanel>
                         </StackPanel>
                     </Border>
 
-                    <!-- COM Port Selection Dropdown -->
+                    <!-- COM Port Selection Dropdown (Dark Cyber Styled) -->
                     <Border Background="#24333E" BorderBrush="#324452" BorderThickness="1" CornerRadius="4" Padding="5,2" VerticalAlignment="Center">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <TextBlock Text="🔌" FontSize="11" Foreground="#FFA726" Margin="0,0,4,0" VerticalAlignment="Center"/>
-                            <ComboBox x:Name="CmbPortUat" Width="105" Height="20" FontSize="8.5" Background="#1A232A" Foreground="#ECEFF1" BorderBrush="#37474F" VerticalContentAlignment="Center" Margin="0,0,4,0">
+                            <ComboBox x:Name="CmbPortUat" Style="{StaticResource DarkCyberComboBox}" Width="105" Height="22" FontSize="8.5" Foreground="#ECEFF1" VerticalContentAlignment="Center" Margin="0,0,5,0">
                                 <ComboBoxItem Content="Port Selection..." IsSelected="True"/>
                                 <ComboBoxItem Content="COM3: Qualcomm 9008"/>
                                 <ComboBoxItem Content="COM4: MediaTek Port"/>
                             </ComboBox>
-                            <CheckBox x:Name="ChkAutoDetectPort" Content="Auto detect" IsChecked="True" Foreground="#FFA726" FontSize="8" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                            <CheckBox x:Name="ChkAutoDetectPort" Content="Auto" ToolTip="Auto detect COM Port" IsChecked="True" Foreground="#FFA726" FontSize="8" FontWeight="SemiBold" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Border>
                 </StackPanel>
 
                 <!-- Col 2: Right Controls & Snapshot -->
                 <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
-                    <Button Content="📷" ToolTip="Take Instant UI Snapshot" Style="{StaticResource WindowCtrlButton}" Width="26" Height="24" Click="OnUatSnapshotClicked" Margin="0,0,2,0"/>
-                    <Button Content="🔄" ToolTip="Refresh Ports" Style="{StaticResource WindowCtrlButton}" Width="26" Height="24" Click="OnScanPortsClicked" Margin="0,0,2,0"/>
+                    <Button Content="📷" ToolTip="Take Instant UI Snapshot" Style="{StaticResource WindowCtrlButton}" Width="24" Height="24" Click="OnUatSnapshotClicked" Margin="0,0,2,0"/>
+                    <Button Content="🔄" ToolTip="Refresh Ports" Style="{StaticResource WindowCtrlButton}" Width="24" Height="24" Click="OnScanPortsClicked" Margin="0,0,3,0"/>
                     <Border Background="#1B5E20" CornerRadius="3" Padding="5,2" Margin="0,0,4,0" VerticalAlignment="Center">
-                        <TextBlock Text="LIVE" FontSize="9" FontWeight="ExtraBold" Foreground="#69F0AE"/>
+                        <TextBlock Text="LIVE" FontSize="8.5" FontWeight="ExtraBold" Foreground="#69F0AE"/>
                     </Border>
                     <!-- Multi-Language Switcher (Urdu / Arabic / English) -->
-                    <Button x:Name="BtnLanguageSwitcher" Content="🌐 EN | اردو | العربية" ToolTip="Switch Language: English / اردو / العربية" Style="{StaticResource WindowCtrlButton}" Width="Auto" Padding="6,2" Height="24" Click="OnLanguageSwitchClicked" Margin="0,0,4,0" Foreground="#00FFA3" FontWeight="Bold" FontSize="10"/>
+                    <Button x:Name="BtnLanguageSwitcher" Content="🌐 EN" ToolTip="Switch Language: English / اردو / العربية" Style="{StaticResource WindowCtrlButton}" Width="Auto" Padding="6,2" Height="24" Click="OnLanguageSwitchClicked" Margin="0,0,4,0" Foreground="#00FFA3" FontWeight="Bold" FontSize="9.5"/>
                     <!-- In-App Auto-Update Button (1-Click Silent Cloud Sync) -->
-                    <Button x:Name="BtnTitleAutoUpdate" Content="⚡ AUTO UPDATE" ToolTip="1-Click Silent Auto-Update: Checks online, downloads and upgrades software in-place without manual installation wizard" Style="{StaticResource WindowCtrlButton}" Width="Auto" Padding="8,2" Height="24" Click="OnOpenAutoUpdaterClicked" Margin="0,0,4,0" Foreground="#FFB800" Background="#261C04" BorderBrush="#FFB800" BorderThickness="1" FontWeight="ExtraBold" FontSize="10"/>
+                    <Button x:Name="BtnTitleAutoUpdate" Content="⚡ AUTO UPDATE" ToolTip="1-Click Silent Auto-Update: Checks online, downloads and upgrades software in-place without manual installation wizard" Style="{StaticResource WindowCtrlButton}" Width="Auto" Padding="7,2" Height="24" Click="OnOpenAutoUpdaterClicked" Margin="0,0,4,0" Foreground="#FFB800" Background="#261C04" BorderBrush="#FFB800" BorderThickness="1" FontWeight="ExtraBold" FontSize="9.5"/>
                     <Button x:Name="BtnMinimize" Content="—" ToolTip="Minimize" Style="{StaticResource WindowCtrlButton}" Click="OnMinimizeClicked"/>
                     <Button x:Name="BtnMaximize" Content="🗗" ToolTip="Maximize / Restore" Style="{StaticResource WindowCtrlButton}" Click="OnMaximizeClicked"/>
                     <Button x:Name="BtnClose" Content="✕" ToolTip="Close Application" Style="{StaticResource WindowCloseButton}" Click="OnCloseClicked"/>
@@ -565,40 +561,42 @@
             <!-- COL 0: LEFTMOST VERTICAL ACTION DOCK (15 ACTION ICONS)           -->
             <!-- ================================================================ -->
             <Border Grid.Column="0" Background="#171F26" BorderBrush="#24333E" BorderThickness="0,0,1,0" CornerRadius="4,0,0,4">
-                <DockPanel LastChildFill="False">
-                    <!-- Top Action Icons Stack -->
-                    <StackPanel DockPanel.Dock="Top" HorizontalAlignment="Center" Margin="0,4,0,0">
-                        <Button Content="🏛️" ToolTip="Master Dashboard" Width="38" Height="28" Margin="0,1" Style="{StaticResource WindowCtrlButton}" Click="OnUatHomeClicked"/>
-                        <Button Content="🖥️" ToolTip="Windows Device Manager" Width="38" Height="28" Margin="0,1" Style="{StaticResource WindowCtrlButton}" Click="OnUatDeviceManagerClicked"/>
-                        <Button Content="⚙️" ToolTip="Tool &amp; Driver Settings" Width="38" Height="28" Margin="0,1" Style="{StaticResource WindowCtrlButton}" Click="OnUatSettingsClicked"/>
-                        <Button Content="🔗" ToolTip="Share / Export Logs" Width="38" Height="28" Margin="0,1" Style="{StaticResource WindowCtrlButton}" Click="OnUatShareClicked"/>
-                        <Button Content="👥" ToolTip="User Account &amp; Credits" Width="38" Height="28" Margin="0,1" Style="{StaticResource WindowCtrlButton}" Click="OnUatAccountsClicked"/>
-                        <Button Content="🔌" ToolTip="USB Driver &amp; Filter Wizard" Width="38" Height="28" Margin="0,1" Style="{StaticResource WindowCtrlButton}" Click="OnUatUsbWizardClicked"/>
-                        <Button Content="💻" ToolTip="Serial AT Command Terminal" Width="38" Height="28" Margin="0,1" Style="{StaticResource WindowCtrlButton}" Click="OnUatTerminalClicked"/>
-                        <Button Content="📱" ToolTip="ADB &amp; Fastboot Toolkit" Width="38" Height="28" Margin="0,1" Style="{StaticResource WindowCtrlButton}" Click="OnUatFastbootSuiteClicked"/>
-                        <Button Content="🦊" ToolTip="Hardware Pinout &amp; EDL Testpoint Database" Width="38" Height="28" Margin="0,1" Style="{StaticResource WindowCtrlButton}" Click="OnUatTestPointsClicked"/>
-                        <Button Content="⚡" ToolTip="Universal 1-Click FRP &amp; Cloud Lock Wizard" Width="38" Height="28" Margin="0,1" Foreground="#F59E0B" Style="{StaticResource WindowCtrlButton}" Click="OnOpenFrpWizardClicked"/>
-                        <Button Content="📶" ToolTip="Qualcomm QCN &amp; MTK NVRAM Network / Baseband Suite" Width="38" Height="28" Margin="0,1" Foreground="#00E5FF" Style="{StaticResource WindowCtrlButton}" Click="OnOpenNetworkSuiteClicked"/>
-                        <Button Content="☁️" ToolTip="Cloud Loader &amp; TestPoint Auto-Downloader" Width="38" Height="28" Margin="0,1" Foreground="#38BDF8" Style="{StaticResource WindowCtrlButton}" Click="OnOpenCloudLoaderClicked"/>
-                        <Button Content="💾" ToolTip="Advanced GPT Partition Manager &amp; Raw Read/Write Suite" Width="38" Height="28" Margin="0,1" Foreground="#00FFA3" Style="{StaticResource WindowCtrlButton}" Click="OnOpenPartitionManagerClicked"/>
-                        <Button Content="📡" ToolTip="Real-Time USB Hex Packet Sniffer &amp; Protocol Radar" Width="38" Height="28" Margin="0,1" Foreground="#00F0FF" Style="{StaticResource WindowCtrlButton}" Click="OnOpenLiveUsbSnifferClicked"/>
-                        <Button Content="🔒" ToolTip="Samsung Knox Guard (KG) &amp; PayJoy MDM Killer Suite" Width="38" Height="28" Margin="0,1" Foreground="#38BDF8" Style="{StaticResource WindowCtrlButton}" Click="OnOpenKnoxGuardSuiteClicked"/>
-                        <Button Content="🧪" ToolTip="Virtual Phone Hardware Simulator &amp; Playground" Width="38" Height="28" Margin="0,1" Foreground="#A855F7" Style="{StaticResource WindowCtrlButton}" Click="OnOpenVirtualSimulatorClicked"/>
-                        <Button Content="📥" ToolTip="High-Speed Official Stock Firmware Downloader" Width="38" Height="28" Margin="0,1" Foreground="#00F0FF" Style="{StaticResource WindowCtrlButton}" Click="OnOpenFirmwareDownloaderClicked"/>
-                        <Button Content="🧾" ToolTip="Workshop POS, Job Ticket &amp; Invoice Generator" Width="38" Height="28" Margin="0,1" Foreground="#00FFA3" Style="{StaticResource WindowCtrlButton}" Click="OnOpenWorkshopPosClicked"/>
-                        <Button Content="💳" ToolTip="Cloud User Profile, Server Credits &amp; Reseller Hub" Width="38" Height="28" Margin="0,1" Foreground="#38BDF8" Style="{StaticResource WindowCtrlButton}" Click="OnOpenCloudCreditsClicked"/>
-                        <Button Content="🔬" ToolTip="Direct ISP eMMC/UFS JTAG Flasher &amp; Boot Repair Suite" Width="38" Height="28" Margin="0,1" Foreground="#EC4899" Style="{StaticResource WindowCtrlButton}" Click="OnOpenIspJtagSuiteClicked"/>
-                        <Button Content="f" FontWeight="ExtraBold" FontSize="13" Foreground="#4267B2" ToolTip="Facebook Community Support" Width="38" Height="28" Margin="0,1" Style="{StaticResource WindowCtrlButton}" Click="OnUatFacebookClicked"/>
-                        <Button Content="✈️" ToolTip="Official Telegram Updates" Width="38" Height="28" Margin="0,1" Style="{StaticResource WindowCtrlButton}" Click="OnUatTelegramClicked"/>
-                        <Button Content="▶️" ToolTip="Official Video Guides" Width="38" Height="28" Margin="0,1" Style="{StaticResource WindowCtrlButton}" Click="OnUatYouTubeClicked"/>
-                        <Button Content="🛒" ToolTip="Buy Credits &amp; Renew License" Width="38" Height="28" Margin="0,1" Style="{StaticResource WindowCtrlButton}" Click="OnUatCartClicked"/>
-                        <Button Content="🛡️" ToolTip="Anti-Brick Protection Guard" Width="38" Height="28" Margin="0,1" Style="{StaticResource WindowCtrlButton}" Click="OnUatShieldClicked"/>
+                <DockPanel LastChildFill="True">
+                    <!-- Bottom Power Button (Pinned at bottom so it never clips) -->
+                    <StackPanel DockPanel.Dock="Bottom" HorizontalAlignment="Center" Margin="0,4,0,6">
+                        <Button Content="⏻" ToolTip="Emergency Exit / Safe Shutdown" Width="36" Height="28" FontSize="14" Foreground="#FF5252" Background="#261C1F" BorderBrush="#5C1D24" BorderThickness="1" Click="OnUatPowerExitClicked"/>
                     </StackPanel>
 
-                    <!-- Bottom Power Button -->
-                    <StackPanel DockPanel.Dock="Bottom" HorizontalAlignment="Center" Margin="0,0,0,6">
-                        <Button Content="⏻" ToolTip="Emergency Exit / Safe Shutdown" Width="38" Height="30" FontSize="15" Foreground="#FF5252" Background="#261C1F" BorderBrush="#5C1D24" BorderThickness="1" Click="OnUatPowerExitClicked"/>
-                    </StackPanel>
+                    <!-- Scrollable Action Icons Stack -->
+                    <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled" PanningMode="VerticalOnly">
+                        <StackPanel HorizontalAlignment="Center" Margin="0,4,0,4">
+                            <Button Content="🏛️" ToolTip="Master Dashboard" Width="36" Height="24" Margin="0,1" Style="{StaticResource WindowCtrlButton}" Click="OnUatHomeClicked"/>
+                            <Button Content="🖥️" ToolTip="Windows Device Manager" Width="36" Height="24" Margin="0,1" Style="{StaticResource WindowCtrlButton}" Click="OnUatDeviceManagerClicked"/>
+                            <Button Content="⚙️" ToolTip="Tool &amp; Driver Settings" Width="36" Height="24" Margin="0,1" Style="{StaticResource WindowCtrlButton}" Click="OnUatSettingsClicked"/>
+                            <Button Content="🔗" ToolTip="Share / Export Logs" Width="36" Height="24" Margin="0,1" Style="{StaticResource WindowCtrlButton}" Click="OnUatShareClicked"/>
+                            <Button Content="👥" ToolTip="User Account &amp; Credits" Width="36" Height="24" Margin="0,1" Style="{StaticResource WindowCtrlButton}" Click="OnUatAccountsClicked"/>
+                            <Button Content="🔌" ToolTip="USB Driver &amp; Filter Wizard" Width="36" Height="24" Margin="0,1" Style="{StaticResource WindowCtrlButton}" Click="OnUatUsbWizardClicked"/>
+                            <Button Content="💻" ToolTip="Serial AT Command Terminal" Width="36" Height="24" Margin="0,1" Style="{StaticResource WindowCtrlButton}" Click="OnUatTerminalClicked"/>
+                            <Button Content="📱" ToolTip="ADB &amp; Fastboot Toolkit" Width="36" Height="24" Margin="0,1" Style="{StaticResource WindowCtrlButton}" Click="OnUatFastbootSuiteClicked"/>
+                            <Button Content="🦊" ToolTip="Hardware Pinout &amp; EDL Testpoint Database" Width="36" Height="24" Margin="0,1" Style="{StaticResource WindowCtrlButton}" Click="OnUatTestPointsClicked"/>
+                            <Button Content="⚡" ToolTip="Universal 1-Click FRP &amp; Cloud Lock Wizard" Width="36" Height="24" Margin="0,1" Foreground="#F59E0B" Style="{StaticResource WindowCtrlButton}" Click="OnOpenFrpWizardClicked"/>
+                            <Button Content="📶" ToolTip="Qualcomm QCN &amp; MTK NVRAM Network / Baseband Suite" Width="36" Height="24" Margin="0,1" Foreground="#00E5FF" Style="{StaticResource WindowCtrlButton}" Click="OnOpenNetworkSuiteClicked"/>
+                            <Button Content="☁️" ToolTip="Cloud Loader &amp; TestPoint Auto-Downloader" Width="36" Height="24" Margin="0,1" Foreground="#38BDF8" Style="{StaticResource WindowCtrlButton}" Click="OnOpenCloudLoaderClicked"/>
+                            <Button Content="💾" ToolTip="Advanced GPT Partition Manager &amp; Raw Read/Write Suite" Width="36" Height="24" Margin="0,1" Foreground="#00FFA3" Style="{StaticResource WindowCtrlButton}" Click="OnOpenPartitionManagerClicked"/>
+                            <Button Content="📡" ToolTip="Real-Time USB Hex Packet Sniffer &amp; Protocol Radar" Width="36" Height="24" Margin="0,1" Foreground="#00F0FF" Style="{StaticResource WindowCtrlButton}" Click="OnOpenLiveUsbSnifferClicked"/>
+                            <Button Content="🔒" ToolTip="Samsung Knox Guard (KG) &amp; PayJoy MDM Killer Suite" Width="36" Height="24" Margin="0,1" Foreground="#38BDF8" Style="{StaticResource WindowCtrlButton}" Click="OnOpenKnoxGuardSuiteClicked"/>
+                            <Button Content="🧪" ToolTip="Virtual Phone Hardware Simulator &amp; Playground" Width="36" Height="24" Margin="0,1" Foreground="#A855F7" Style="{StaticResource WindowCtrlButton}" Click="OnOpenVirtualSimulatorClicked"/>
+                            <Button Content="📥" ToolTip="High-Speed Official Stock Firmware Downloader" Width="36" Height="24" Margin="0,1" Foreground="#00F0FF" Style="{StaticResource WindowCtrlButton}" Click="OnOpenFirmwareDownloaderClicked"/>
+                            <Button Content="🧾" ToolTip="Workshop POS, Job Ticket &amp; Invoice Generator" Width="36" Height="24" Margin="0,1" Foreground="#00FFA3" Style="{StaticResource WindowCtrlButton}" Click="OnOpenWorkshopPosClicked"/>
+                            <Button Content="💳" ToolTip="Cloud User Profile, Server Credits &amp; Reseller Hub" Width="36" Height="24" Margin="0,1" Foreground="#38BDF8" Style="{StaticResource WindowCtrlButton}" Click="OnOpenCloudCreditsClicked"/>
+                            <Button Content="🔬" ToolTip="Direct ISP eMMC/UFS JTAG Flasher &amp; Boot Repair Suite" Width="36" Height="24" Margin="0,1" Foreground="#EC4899" Style="{StaticResource WindowCtrlButton}" Click="OnOpenIspJtagSuiteClicked"/>
+                            <Button Content="f" FontWeight="ExtraBold" FontSize="12" Foreground="#4267B2" ToolTip="Facebook Community Support" Width="36" Height="24" Margin="0,1" Style="{StaticResource WindowCtrlButton}" Click="OnUatFacebookClicked"/>
+                            <Button Content="✈️" ToolTip="Official Telegram Updates" Width="36" Height="24" Margin="0,1" Style="{StaticResource WindowCtrlButton}" Click="OnUatTelegramClicked"/>
+                            <Button Content="▶️" ToolTip="Official Video Guides" Width="36" Height="24" Margin="0,1" Style="{StaticResource WindowCtrlButton}" Click="OnUatYouTubeClicked"/>
+                            <Button Content="🛒" ToolTip="Buy Credits &amp; Renew License" Width="36" Height="24" Margin="0,1" Style="{StaticResource WindowCtrlButton}" Click="OnUatCartClicked"/>
+                            <Button Content="🛡️" ToolTip="Anti-Brick Protection Guard" Width="36" Height="24" Margin="0,1" Style="{StaticResource WindowCtrlButton}" Click="OnUatShieldClicked"/>
+                        </StackPanel>
+                    </ScrollViewer>
                 </DockPanel>
             </Border>
 
@@ -1646,84 +1644,84 @@
                 <!-- ROW 1: SPLIT PANELS (LEFT CONTROLS + RIGHT DATA/LOGS) -->
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="430"/>
-                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="345"/>
+                        <ColumnDefinition Width="8"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
                     <!-- LEFT COLUMN: DYNAMIC ENGINES (FLASH / META / DIAG) -->
-                    <Border Grid.Column="0" Background="#13131A" CornerRadius="6" BorderBrush="#232332" BorderThickness="1" Padding="10">
-                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <Border Grid.Column="0" Background="#13131A" CornerRadius="6" BorderBrush="#232332" BorderThickness="1" Padding="7">
+                        <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
                             <StackPanel>
                                 <!-- ======================================================== -->
                                 <!-- COMMON MTK & QUALCOMM HEADER (PORT, LOADER & BYPASS)     -->
                                 <!-- ======================================================== -->
                                 <StackPanel x:Name="PanelCommonMtkHeader" Visibility="Visible">
                                     <!-- Platform Switcher Header -->
-                                    <DockPanel Margin="0,0,0,8">
-                                        <TextBlock x:Name="TxtPlatformHeader" Text="❖ MEDIATEK (MTK) ENGINE" FontSize="11" FontWeight="Bold" Foreground="#00D2FF" VerticalAlignment="Center"/>
-                                        <ComboBox x:Name="CmbPlatform" Style="{StaticResource DarkCyberComboBox}" Width="135" Height="24" HorizontalAlignment="Right" SelectionChanged="OnPlatformSelectionChanged">
+                                    <DockPanel Margin="0,0,0,5">
+                                        <ComboBox x:Name="CmbPlatform" DockPanel.Dock="Right" Style="{StaticResource DarkCyberComboBox}" Width="122" Height="22" Margin="6,0,0,0" SelectionChanged="OnPlatformSelectionChanged">
                                             <ComboBoxItem Content="MediaTek (MTK)" IsSelected="True"/>
                                             <ComboBoxItem Content="Qualcomm (EDL)"/>
                                         </ComboBox>
+                                        <TextBlock x:Name="TxtPlatformHeader" Text="❖ MEDIATEK (MTK) ENGINE" FontSize="10" FontWeight="Bold" Foreground="#00D2FF" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
                                     </DockPanel>
 
                                     <!-- Smart Model & Variant Selector Card -->
-                                    <Border Background="#161A26" CornerRadius="5" Padding="8" Margin="0,0,0,8" BorderBrush="#1E293B" BorderThickness="1">
+                                    <Border Background="#161A26" CornerRadius="5" Padding="6" Margin="0,0,0,5" BorderBrush="#1E293B" BorderThickness="1">
                                         <StackPanel>
-                                            <DockPanel Margin="0,0,0,4">
-                                                <TextBlock Text="🎯 SMART MODEL &amp; VARIANT SELECTOR:" FontSize="9" FontWeight="Bold" Foreground="#38BDF8" VerticalAlignment="Center"/>
-                                                <TextBlock x:Name="TxtAutoLoaderBadge" Text="✓ Auto-Loader Configured" FontSize="9" FontWeight="Bold" Foreground="#34D399" HorizontalAlignment="Right"/>
+                                            <DockPanel Margin="0,0,0,3">
+                                                <TextBlock x:Name="TxtAutoLoaderBadge" DockPanel.Dock="Right" Text="✓ Auto-Loader" FontSize="8.5" FontWeight="Bold" Foreground="#34D399" Margin="4,0,0,0"/>
+                                                <TextBlock Text="🎯 SMART MODEL SELECTOR:" FontSize="8.5" FontWeight="Bold" Foreground="#38BDF8" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
                                             </DockPanel>
 
                                             <!-- Brand and Model Dropdowns -->
-                                            <Grid Margin="0,0,0,6">
+                                            <Grid Margin="0,0,0,4">
                                                 <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="90"/>
-                                                    <ColumnDefinition Width="6"/>
+                                                    <ColumnDefinition Width="85"/>
+                                                    <ColumnDefinition Width="5"/>
                                                     <ColumnDefinition Width="*"/>
                                                 </Grid.ColumnDefinitions>
-                                                <ComboBox x:Name="CmbBrandSelector" Style="{StaticResource DarkCyberComboBox}" IsTextSearchEnabled="True" Grid.Column="0" Height="26" SelectionChanged="OnBrandSelectionChanged"/>
-                                                <ComboBox x:Name="CmbModelSelector" Style="{StaticResource DarkCyberComboBox}" IsTextSearchEnabled="True" Grid.Column="2" Height="26" SelectionChanged="OnModelSelectionChanged"/>
+                                                <ComboBox x:Name="CmbBrandSelector" Style="{StaticResource DarkCyberComboBox}" IsTextSearchEnabled="True" Grid.Column="0" Height="23" SelectionChanged="OnBrandSelectionChanged"/>
+                                                <ComboBox x:Name="CmbModelSelector" Style="{StaticResource DarkCyberComboBox}" IsTextSearchEnabled="True" Grid.Column="2" Height="23" SelectionChanged="OnModelSelectionChanged"/>
                                             </Grid>
 
                                             <!-- Detected Chipset & Testpoint Info Banner -->
-                                            <Border Background="#0B0F19" CornerRadius="3" Padding="6,4">
+                                            <Border Background="#0B0F19" CornerRadius="3" Padding="5,3">
                                                 <StackPanel>
-                                                    <TextBlock x:Name="TxtSelectedModelInfo" Text="Select Brand &amp; Model (e.g. Oppo A37m MTK vs A37f QC)" FontSize="9" Foreground="#94A3B8"/>
-                                                    <TextBlock x:Name="TxtSelectedTestpoint" Text="Testpoint: Hold Volume Down + Insert USB Cable" FontSize="9" Foreground="#F59E0B" FontWeight="SemiBold" Margin="0,2,0,0"/>
+                                                    <TextBlock x:Name="TxtSelectedModelInfo" Text="Select Brand &amp; Model (e.g. Oppo A37m MTK vs A37f QC)" FontSize="8" Foreground="#94A3B8" TextTrimming="CharacterEllipsis"/>
+                                                    <TextBlock x:Name="TxtSelectedTestpoint" Text="Testpoint: Hold Volume Down + Insert USB Cable" FontSize="8" Foreground="#F59E0B" FontWeight="SemiBold" Margin="0,1,0,0" TextTrimming="CharacterEllipsis"/>
                                                 </StackPanel>
                                             </Border>
                                         </StackPanel>
                                     </Border>
 
-                                                                        <!-- Security & Auth Bypass Suite (LED Style) -->
-                                    <Border Background="#121722" CornerRadius="5" Padding="8,6" Margin="0,0,0,8" BorderBrush="#1E293B" BorderThickness="1">
+                                    <!-- Security & Auth Bypass Suite (LED Style) -->
+                                    <Border Background="#121722" CornerRadius="5" Padding="6,4" Margin="0,0,0,5" BorderBrush="#1E293B" BorderThickness="1">
                                         <StackPanel>
-                                            <DockPanel Margin="0,0,0,5">
-                                                <TextBlock Text="🛡️ SECURITY &amp; AUTH BYPASS SUITE:" FontSize="9" FontWeight="Bold" Foreground="#38BDF8" VerticalAlignment="Center"/>
-                                                <Border x:Name="BadgeBypassStatus" Background="#064E3B" CornerRadius="3" Padding="6,1" HorizontalAlignment="Right">
-                                                    <TextBlock x:Name="TxtBypassStatus" Text="● BYPASS READY" FontSize="8" FontWeight="Bold" Foreground="#34D399"/>
+                                            <DockPanel Margin="0,0,0,4">
+                                                <Border x:Name="BadgeBypassStatus" DockPanel.Dock="Right" Background="#064E3B" CornerRadius="3" Padding="5,1" HorizontalAlignment="Right">
+                                                    <TextBlock x:Name="TxtBypassStatus" Text="● READY" FontSize="7.5" FontWeight="Bold" Foreground="#34D399"/>
                                                 </Border>
+                                                <TextBlock Text="🛡️ SECURITY &amp; AUTH BYPASS:" FontSize="8.5" FontWeight="Bold" Foreground="#38BDF8" VerticalAlignment="Center"/>
                                             </DockPanel>
                                             <Grid>
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="*"/>
-                                                    <ColumnDefinition Width="6"/>
+                                                    <ColumnDefinition Width="5"/>
                                                     <ColumnDefinition Width="*"/>
                                                 </Grid.ColumnDefinitions>
                                                 <!-- Button 1: BROM Auth / SLA Bypass -->
-                                                <Button x:Name="BtnBromAuthBypass" Grid.Column="0" Height="28" Background="#064E3B" BorderBrush="#10B981" BorderThickness="1" Click="OnToggleBromAuthClicked" Cursor="Hand">
+                                                <Button x:Name="BtnBromAuthBypass" Grid.Column="0" Height="24" Background="#064E3B" BorderBrush="#10B981" BorderThickness="1" Click="OnToggleBromAuthClicked" Cursor="Hand">
                                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                                        <TextBlock x:Name="LedBromAuth" Text="●" FontSize="11" Foreground="#10B981" Margin="0,0,5,0" VerticalAlignment="Center"/>
-                                                        <TextBlock x:Name="TxtBromAuthLabel" Text="BROM Auth / SLA" FontSize="9" FontWeight="Bold" Foreground="#FFFFFF" VerticalAlignment="Center"/>
+                                                        <TextBlock x:Name="LedBromAuth" Text="●" FontSize="10" Foreground="#10B981" Margin="0,0,4,0" VerticalAlignment="Center"/>
+                                                        <TextBlock x:Name="TxtBromAuthLabel" Text="BROM Auth / SLA" FontSize="8.5" FontWeight="Bold" Foreground="#FFFFFF" VerticalAlignment="Center"/>
                                                     </StackPanel>
                                                 </Button>
                                                 <!-- Button 2: Preloader EMI Exploit -->
-                                                <Button x:Name="BtnPreloaderExploit" Grid.Column="2" Height="28" Background="#064E3B" BorderBrush="#10B981" BorderThickness="1" Click="OnTogglePreloaderExploitClicked" Cursor="Hand">
+                                                <Button x:Name="BtnPreloaderExploit" Grid.Column="2" Height="24" Background="#064E3B" BorderBrush="#10B981" BorderThickness="1" Click="OnTogglePreloaderExploitClicked" Cursor="Hand">
                                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                                        <TextBlock x:Name="LedPreloader" Text="●" FontSize="11" Foreground="#10B981" Margin="0,0,5,0" VerticalAlignment="Center"/>
-                                                        <TextBlock x:Name="TxtPreloaderLabel" Text="Preloader Exploit" FontSize="9" FontWeight="Bold" Foreground="#FFFFFF" VerticalAlignment="Center"/>
+                                                        <TextBlock x:Name="LedPreloader" Text="●" FontSize="10" Foreground="#10B981" Margin="0,0,4,0" VerticalAlignment="Center"/>
+                                                        <TextBlock x:Name="TxtPreloaderLabel" Text="Preloader Exploit" FontSize="8.5" FontWeight="Bold" Foreground="#FFFFFF" VerticalAlignment="Center"/>
                                                     </StackPanel>
                                                 </Button>
                                             </Grid>
@@ -2007,88 +2005,89 @@
                         </Grid.RowDefinitions>
 
                         <!-- Row 0: DUAL LIVE HARDWARE NOTIFICATION RADAR DOCK (COM PORT & USB DEVICE) -->
-                        <Border Grid.Row="0" Background="#0C101C" CornerRadius="6" BorderBrush="#1E293B" BorderThickness="1" Padding="8">
+                        <Border Grid.Row="0" Background="#0C101C" CornerRadius="6" BorderBrush="#1E293B" BorderThickness="1" Padding="6">
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="1.2*"/> <!-- Box 1: COM Port Box -->
-                                    <ColumnDefinition Width="6"/>
-                                    <ColumnDefinition Width="1.5*"/> <!-- Box 2: USB Interface Box -->
-                                    <ColumnDefinition Width="6"/>
+                                    <ColumnDefinition Width="1*"/>   <!-- Box 1: COM Port Box -->
+                                    <ColumnDefinition Width="5"/>
+                                    <ColumnDefinition Width="1.2*"/> <!-- Box 2: USB Interface Box -->
+                                    <ColumnDefinition Width="5"/>
                                     <ColumnDefinition Width="Auto"/> <!-- Action Buttons -->
                                 </Grid.ColumnDefinitions>
 
                                 <!-- BOX 1: CONNECTED COM PORT WITH LIVE LED LIGHT -->
-                                <Border Grid.Column="0" Background="#111827" BorderBrush="#253248" BorderThickness="1" CornerRadius="4" Padding="8,5">
+                                <Border Grid.Column="0" Background="#111827" BorderBrush="#253248" BorderThickness="1" CornerRadius="4" Padding="6,4">
                                     <DockPanel>
-                                        <Ellipse x:Name="LedMtkCom" Width="12" Height="12" Fill="#EF4444" Margin="0,0,8,0" VerticalAlignment="Center">
+                                        <Ellipse x:Name="LedMtkCom" Width="10" Height="10" Fill="#EF4444" Margin="0,0,6,0" VerticalAlignment="Center">
                                             <Ellipse.Effect>
                                                 <DropShadowEffect x:Name="GlowMtkCom" BlurRadius="10" ShadowDepth="0" Color="#EF4444"/>
                                             </Ellipse.Effect>
                                         </Ellipse>
-                                        <Border x:Name="BadgeMtkCom" DockPanel.Dock="Right" Background="#1F2937" CornerRadius="3" Padding="5,2" VerticalAlignment="Center" Margin="4,0,0,0">
-                                            <TextBlock x:Name="TxtMtkComState" Text="OFFLINE" FontSize="8" FontWeight="ExtraBold" Foreground="#9CA3AF"/>
+                                        <Border x:Name="BadgeMtkCom" DockPanel.Dock="Right" Background="#1F2937" CornerRadius="3" Padding="4,1" VerticalAlignment="Center" Margin="4,0,0,0">
+                                            <TextBlock x:Name="TxtMtkComState" Text="OFFLINE" FontSize="7.5" FontWeight="ExtraBold" Foreground="#9CA3AF"/>
                                         </Border>
                                         <StackPanel VerticalAlignment="Center">
-                                            <TextBlock Text="🔌 COM PORT BUS" FontSize="8" FontWeight="Bold" Foreground="#94A3B8"/>
-                                            <TextBlock x:Name="TxtMtkComBox" Text="NO COM PORT DETECTED" FontSize="10.5" FontWeight="ExtraBold" Foreground="#F87171" FontFamily="Consolas"/>
+                                            <TextBlock Text="🔌 COM PORT" FontSize="7.5" FontWeight="Bold" Foreground="#94A3B8" TextTrimming="CharacterEllipsis"/>
+                                            <TextBlock x:Name="TxtMtkComBox" Text="NO COM PORT" FontSize="9" FontWeight="ExtraBold" Foreground="#F87171" FontFamily="Consolas" TextTrimming="CharacterEllipsis"/>
                                         </StackPanel>
                                     </DockPanel>
                                 </Border>
 
                                 <!-- BOX 2: CONNECTED USB INTERFACE WITH LIVE LED LIGHT -->
-                                <Border Grid.Column="2" Background="#111827" BorderBrush="#253248" BorderThickness="1" CornerRadius="4" Padding="8,5">
+                                <Border Grid.Column="2" Background="#111827" BorderBrush="#253248" BorderThickness="1" CornerRadius="4" Padding="6,4">
                                     <DockPanel>
-                                        <Ellipse x:Name="LedMtkUsb" Width="12" Height="12" Fill="#EF4444" Margin="0,0,8,0" VerticalAlignment="Center">
+                                        <Ellipse x:Name="LedMtkUsb" Width="10" Height="10" Fill="#EF4444" Margin="0,0,6,0" VerticalAlignment="Center">
                                             <Ellipse.Effect>
                                                 <DropShadowEffect x:Name="GlowMtkUsb" BlurRadius="10" ShadowDepth="0" Color="#EF4444"/>
                                             </Ellipse.Effect>
                                         </Ellipse>
-                                        <Border x:Name="BadgeMtkUsb" DockPanel.Dock="Right" Background="#1F2937" CornerRadius="3" Padding="5,2" VerticalAlignment="Center" Margin="4,0,0,0">
-                                            <TextBlock x:Name="TxtMtkUsbState" Text="OFFLINE" FontSize="8" FontWeight="ExtraBold" Foreground="#9CA3AF"/>
+                                        <Border x:Name="BadgeMtkUsb" DockPanel.Dock="Right" Background="#1F2937" CornerRadius="3" Padding="4,1" VerticalAlignment="Center" Margin="4,0,0,0">
+                                            <TextBlock x:Name="TxtMtkUsbState" Text="OFFLINE" FontSize="7.5" FontWeight="ExtraBold" Foreground="#9CA3AF"/>
                                         </Border>
                                         <StackPanel VerticalAlignment="Center">
-                                            <TextBlock Text="⚡ USB DEVICE / MODE" FontSize="8" FontWeight="Bold" Foreground="#94A3B8"/>
-                                            <TextBlock x:Name="TxtMtkUsbBox" Text="WAITING FOR USB CONNECTION..." FontSize="10.5" FontWeight="ExtraBold" Foreground="#F87171" FontFamily="Consolas"/>
+                                            <TextBlock Text="⚡ USB DEVICE" FontSize="7.5" FontWeight="Bold" Foreground="#94A3B8" TextTrimming="CharacterEllipsis"/>
+                                            <TextBlock x:Name="TxtMtkUsbBox" Text="WAITING FOR USB..." FontSize="9" FontWeight="ExtraBold" Foreground="#F87171" FontFamily="Consolas" TextTrimming="CharacterEllipsis"/>
                                         </StackPanel>
                                     </DockPanel>
                                 </Border>
 
                                 <!-- ACTION BUTTONS: SCAN, ABORT & CLEAR -->
                                 <StackPanel Grid.Column="4" Orientation="Horizontal" VerticalAlignment="Center">
-                                    <Button Content="🔍 Scan" Height="28" Padding="10,0" Background="#0284C7" Foreground="#FFFFFF" FontWeight="Bold" FontSize="10" BorderThickness="0" Margin="0,0,6,0" Click="OnAutoDetectClicked"/>
-                                    <Button Content="⛔ ABORT" Height="28" Padding="10,0" Background="#991B1B" Foreground="#FECACA" FontWeight="Bold" FontSize="10" BorderThickness="0" Margin="0,0,6,0" Click="OnEmergencyAbortClicked"/>
-                                    <Button Content="Clear Console" Height="28" Padding="10,0" Background="#1E1E2A" Foreground="#94A3B8" FontSize="10" BorderThickness="0" Click="OnClearLogClicked"/>
+                                    <Button Content="🔍 Scan" Height="26" Padding="8,0" Background="#0284C7" Foreground="#FFFFFF" FontWeight="Bold" FontSize="9" BorderThickness="0" Margin="0,0,4,0" Click="OnAutoDetectClicked"/>
+                                    <Button Content="⛔ ABORT" Height="26" Padding="8,0" Background="#991B1B" Foreground="#FECACA" FontWeight="Bold" FontSize="9" BorderThickness="0" Margin="0,0,4,0" Click="OnEmergencyAbortClicked"/>
+                                    <Button Content="Clear" Height="26" Padding="8,0" Background="#1E1E2A" Foreground="#94A3B8" FontSize="9" BorderThickness="0" Click="OnClearLogClicked"/>
                                 </StackPanel>
                             </Grid>
                         </Border>
 
                         <!-- TOP: UPGRADED PARTITION MANAGER -->
-                        <Border Grid.Row="2" Background="#13131A" CornerRadius="6" BorderBrush="#232332" BorderThickness="1" Padding="10">
+                        <Border Grid.Row="2" Background="#13131A" CornerRadius="6" BorderBrush="#232332" BorderThickness="1" Padding="8">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
 
-                                <!-- Partition Manager Header Controls -->
-                                <DockPanel Grid.Row="0" Margin="0,0,0,6">
-                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                        <TextBlock Text="📑 PARTITION MANAGER (LIVE GPT / FIREHOSE)" FontSize="10" FontWeight="Bold" Foreground="#2DD4BF" VerticalAlignment="Center"/>
-                                        <TextBlock x:Name="TxtPartCount" Text=" (0 Partitions Loaded)" FontSize="9" Foreground="#94A3B8" VerticalAlignment="Center" Margin="4,0,0,0"/>
-                                    </StackPanel>
+                                <!-- Partition Manager Header Controls (2-Row Clean Layout, Zero Clipping) -->
+                                <StackPanel Grid.Row="0" Margin="0,0,0,5">
+                                    <DockPanel Margin="0,0,0,4">
+                                        <TextBox x:Name="TxtPartitionSearch" DockPanel.Dock="Right" Width="130" Height="20" Background="#0B0F19" Foreground="#CBD5E1" BorderBrush="#1E293B" Padding="4,1" FontSize="8.5" VerticalContentAlignment="Center" Margin="6,0,0,0" TextChanged="OnPartitionSearchTextChanged" ToolTip="Search partitions..."/>
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                            <TextBlock Text="📑 PARTITION MANAGER" FontSize="9.5" FontWeight="Bold" Foreground="#2DD4BF" VerticalAlignment="Center"/>
+                                            <TextBlock x:Name="TxtPartCount" Text=" (0 Loaded)" FontSize="8.5" Foreground="#94A3B8" VerticalAlignment="Center" Margin="4,0,0,0"/>
+                                        </StackPanel>
+                                    </DockPanel>
 
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                        <!-- Search Filter Box -->
-                                        <TextBox x:Name="TxtPartitionSearch" Width="120" Height="22" Background="#0B0F19" Foreground="#CBD5E1" BorderBrush="#1E293B" Padding="4,2" FontSize="9" VerticalContentAlignment="Center" Margin="0,0,4,0" TextChanged="OnPartitionSearchTextChanged"/>
-                                        <Button Content="☑️ All" Width="36" Height="22" Background="#1E293B" Foreground="#38BDF8" FontSize="8.5" FontWeight="Bold" BorderThickness="0" Margin="0,0,3,0" Click="OnSelectAllPartitionsClicked"/>
-                                        <Button Content="◻️ None" Width="42" Height="22" Background="#1E293B" Foreground="#94A3B8" FontSize="8.5" FontWeight="Bold" BorderThickness="0" Margin="0,0,3,0" Click="OnDeselectAllPartitionsClicked"/>
-                                        <Button Content="🔄 Reload" Background="#1E293B" Foreground="#38BDF8" FontSize="8.5" FontWeight="Bold" BorderThickness="0" Height="22" Padding="6,0" Margin="0,0,3,0" Click="OnReloadGptClicked"/>
-                                        <Button Content="💾 Dump Selected" Background="#0284C7" Foreground="#FFFFFF" FontSize="8.5" FontWeight="Bold" BorderThickness="0" Height="22" Padding="6,0" Margin="0,0,3,0" Click="OnDumpSelectedClicked"/>
-                                        <Button Content="✍️ Flash Single" Background="#7C3AED" Foreground="#FFFFFF" FontSize="8.5" FontWeight="Bold" BorderThickness="0" Height="22" Padding="6,0" Margin="0,0,3,0" Click="OnFlashSinglePartitionClicked"/>
-                                        <Button Content="🔍 Inspect Hex" Background="#0F766E" Foreground="#5EEAD4" FontSize="8.5" FontWeight="Bold" BorderThickness="0" Height="22" Padding="6,0" Margin="0,0,3,0" Click="OnInspectHexSectorClicked"/>
-                                        <Button Content="🗑️ Erase Selected" Background="#7F1D1D" Foreground="#FCA5A5" FontSize="8.5" FontWeight="Bold" BorderThickness="0" Height="22" Padding="6,0" Click="OnEraseSelectedClicked"/>
-                                    </StackPanel>
-                                </DockPanel>
+                                    <WrapPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                        <Button Content="☑️ All" Height="20" Padding="6,0" Background="#1E293B" Foreground="#38BDF8" FontSize="8" FontWeight="Bold" BorderThickness="0" Margin="0,0,3,0" Click="OnSelectAllPartitionsClicked"/>
+                                        <Button Content="◻️ None" Height="20" Padding="6,0" Background="#1E293B" Foreground="#94A3B8" FontSize="8" FontWeight="Bold" BorderThickness="0" Margin="0,0,3,0" Click="OnDeselectAllPartitionsClicked"/>
+                                        <Button Content="🔄 Reload" Background="#1E293B" Foreground="#38BDF8" FontSize="8" FontWeight="Bold" BorderThickness="0" Height="20" Padding="6,0" Margin="0,0,3,0" Click="OnReloadGptClicked"/>
+                                        <Button Content="💾 Dump" Background="#0284C7" Foreground="#FFFFFF" FontSize="8" FontWeight="Bold" BorderThickness="0" Height="20" Padding="7,0" Margin="0,0,3,0" Click="OnDumpSelectedClicked"/>
+                                        <Button Content="✍️ Flash Single" Background="#7C3AED" Foreground="#FFFFFF" FontSize="8" FontWeight="Bold" BorderThickness="0" Height="20" Padding="7,0" Margin="0,0,3,0" Click="OnFlashSinglePartitionClicked"/>
+                                        <Button Content="🔍 Inspect Hex" Background="#0F766E" Foreground="#5EEAD4" FontSize="8" FontWeight="Bold" BorderThickness="0" Height="20" Padding="7,0" Margin="0,0,3,0" Click="OnInspectHexSectorClicked"/>
+                                        <Button Content="🗑️ Erase" Background="#7F1D1D" Foreground="#FCA5A5" FontSize="8" FontWeight="Bold" BorderThickness="0" Height="20" Padding="7,0" Click="OnEraseSelectedClicked"/>
+                                    </WrapPanel>
+                                </StackPanel>
 
                                 <!-- Pure Upgraded Partition DataGrid -->
                                 <DataGrid x:Name="GridPartitions" Grid.Row="1" AutoGenerateColumns="False" 
@@ -2140,21 +2139,21 @@
             <!-- ================================================================ -->
             <Grid x:Name="ViewFastboot" Visibility="Collapsed">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="380"/> <!-- Left Checklist Actions Card -->
-                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="345"/> <!-- Left Checklist Actions Card -->
+                    <ColumnDefinition Width="8"/>
                     <ColumnDefinition Width="*"/>   <!-- Right Console & Command Runner -->
                 </Grid.ColumnDefinitions>
 
                 <!-- Left: Sub-Tabs & Action Checklist -->
-                <Border Grid.Column="0" Background="#13131A" CornerRadius="6" BorderBrush="#232332" BorderThickness="1" Padding="8">
+                <Border Grid.Column="0" Background="#13131A" CornerRadius="6" BorderBrush="#232332" BorderThickness="1" Padding="7">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/> <!-- Sub-Tabs: ADB vs FASTBOOT -->
-                            <RowDefinition Height="*"/>    <!-- Scrollable Action Button List -->
+                            <RowDefinition Height="*"/>    <!-- Action Button List -->
                         </Grid.RowDefinitions>
 
-                        <!-- Sub-Tabs: [ADB] and [FASTBOOT] (Matches exact screenshot styling) -->
-                        <Border Grid.Row="0" Background="#1A1A24" CornerRadius="3" Padding="2" Margin="0,0,0,6">
+                        <!-- Sub-Tabs: [ADB] and [FASTBOOT] -->
+                        <Border Grid.Row="0" Background="#1A1A24" CornerRadius="3" Padding="2" Margin="0,0,0,5">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
@@ -2165,42 +2164,54 @@
                             </Grid>
                         </Border>
 
-                        <!-- Action Lists Container -->
-                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                        <!-- Action Lists Container (No Scrollbar Needed) -->
+                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
                             <Grid>
-                                <!-- ADB Action Checklist (Exact 15 items from screenshot) -->
+                                <!-- ADB Action Checklist -->
                                 <StackPanel x:Name="PanelAdbActions" Visibility="Visible">
-                                    <Button Content="ADB Read Info" Style="{StaticResource CyberBulletButton}" Click="OnAdbGetpropClicked"/>
-                                    <Button Content="⚡ 1-Click ADB Temp Root (Without Reboot)" Style="{StaticResource CyberBulletButton}" Foreground="#38BDF8" FontWeight="Bold" Click="OnAdbTempRootClicked"/>
-                                    <Button Content="🧬 1-Click Temp Kernel SU (KernelSU / GKI)" Style="{StaticResource CyberBulletButton}" Foreground="#A78BFA" FontWeight="Bold" Click="OnAdbTempKernelSuClicked"/>
+                                    <Button Content="ADB Read Info" Style="{StaticResource CyberBulletButton}" Margin="0,1" Click="OnAdbGetpropClicked"/>
+                                    <Button Content="⚡ 1-Click ADB Temp Root (Without Reboot)" Style="{StaticResource CyberBulletButton}" Foreground="#38BDF8" FontWeight="Bold" Margin="0,1" Click="OnAdbTempRootClicked"/>
+                                    <Button Content="🧬 1-Click Temp Kernel SU (KernelSU / GKI)" Style="{StaticResource CyberBulletButton}" Foreground="#A78BFA" FontWeight="Bold" Margin="0,1,0,4" Click="OnAdbTempKernelSuClicked"/>
 
                                     <!-- 📶 ADB DUAL IMEI REPAIR (ROOTED / UNROOTED LIVE ENGINE) -->
-                                    <Border Background="#161A26" CornerRadius="6" Padding="8" Margin="0,4,0,8" BorderBrush="#0284C7" BorderThickness="1">
+                                    <Border Background="#161A26" CornerRadius="6" Padding="7" Margin="0,2,0,5" BorderBrush="#0284C7" BorderThickness="1">
                                         <StackPanel>
-                                            <DockPanel Margin="0,0,0,4">
-                                                <TextBlock Text="📶 ADB DUAL IMEI REPAIR" FontSize="9.5" FontWeight="Bold" Foreground="#38BDF8" VerticalAlignment="Center"/>
-                                                <Border Background="#0F172A" CornerRadius="3" Padding="4,1" HorizontalAlignment="Right">
-                                                    <TextBlock Text="LUHN COMPLIANT" FontSize="7.5" FontWeight="Bold" Foreground="#34D399"/>
+                                            <DockPanel Margin="0,0,0,3">
+                                                <Border DockPanel.Dock="Right" Background="#0F172A" CornerRadius="3" Padding="4,1" HorizontalAlignment="Right">
+                                                    <TextBlock Text="LUHN COMPLIANT" FontSize="7" FontWeight="Bold" Foreground="#34D399"/>
                                                 </Border>
+                                                <TextBlock Text="📶 ADB DUAL IMEI REPAIR" FontSize="9" FontWeight="Bold" Foreground="#38BDF8" VerticalAlignment="Center"/>
                                             </DockPanel>
 
                                             <!-- ROOTED / UNROOTED MODE SELECTOR CHECKBOXES -->
-                                            <Border Background="#0B0F19" CornerRadius="4" Padding="6,4" Margin="0,0,0,4" BorderBrush="#1E293B" BorderThickness="1">
+                                            <Border Background="#0B0F19" CornerRadius="4" Padding="5,3" Margin="0,0,0,4" BorderBrush="#1E293B" BorderThickness="1">
                                                 <StackPanel>
                                                     <WrapPanel>
-                                                        <CheckBox x:Name="ChkAdbRooted" Content="🔓 Rooted (SU/Magisk)" IsChecked="False" Foreground="#38BDF8" FontSize="8.5" FontWeight="Bold" Margin="0,0,6,0" Click="OnAdbRootModeClicked"/>
-                                                        <CheckBox x:Name="ChkAdbKernelSu" Content="🧬 Temp Kernel SU" IsChecked="False" Foreground="#A78BFA" FontSize="8.5" FontWeight="Bold" Margin="0,0,6,0" Click="OnAdbKernelSuModeClicked"/>
-                                                        <CheckBox x:Name="ChkAdbUnrooted" Content="🔒 Unrooted (Direct/AT)" IsChecked="True" Foreground="#34D399" FontSize="8.5" FontWeight="Bold" Click="OnAdbUnrootModeClicked"/>
+                                                        <CheckBox x:Name="ChkAdbRooted" Content="🔓 Rooted" IsChecked="False" Foreground="#38BDF8" FontSize="8" FontWeight="Bold" Margin="0,0,6,0" Click="OnAdbRootModeClicked"/>
+                                                        <CheckBox x:Name="ChkAdbKernelSu" Content="🧬 Kernel SU" IsChecked="False" Foreground="#A78BFA" FontSize="8" FontWeight="Bold" Margin="0,0,6,0" Click="OnAdbKernelSuModeClicked"/>
+                                                        <CheckBox x:Name="ChkAdbUnrooted" Content="🔒 Unrooted" IsChecked="True" Foreground="#34D399" FontSize="8" FontWeight="Bold" Click="OnAdbUnrootModeClicked"/>
                                                     </WrapPanel>
-                                                    <TextBlock x:Name="TxtAdbImeiModeDesc" Text="⚡ Mode: Unrooted / AT Service Bridge (Click 'Read IMEI' to probe)" FontSize="7.5" Foreground="#94A3B8" Margin="0,2,0,0"/>
+                                                    <TextBlock x:Name="TxtAdbImeiModeDesc" Text="⚡ Mode: Unrooted / AT Service Bridge" FontSize="7.5" Foreground="#94A3B8" Margin="0,1,0,0" TextTrimming="CharacterEllipsis"/>
                                                 </StackPanel>
                                             </Border>
 
-                                            <TextBlock Text="IMEI 1 (Primary SIM):" FontSize="8.5" Foreground="#94A3B8" Margin="0,0,0,2"/>
-                                            <TextBox x:Name="TxtAdbImei1" Text="" Height="24" Background="#0B0F19" Foreground="#38BDF8" BorderBrush="#1E293B" Padding="4,2" FontSize="9.5" FontFamily="Consolas" VerticalContentAlignment="Center"/>
-                                            <TextBlock Text="IMEI 2 (Secondary SIM):" FontSize="8.5" Foreground="#94A3B8" Margin="0,4,0,2"/>
-                                            <TextBox x:Name="TxtAdbImei2" Text="" Height="24" Background="#0B0F19" Foreground="#38BDF8" BorderBrush="#1E293B" Padding="4,2" FontSize="9.5" FontFamily="Consolas" VerticalContentAlignment="Center"/>
-                                            <Grid Margin="0,6,0,0">
+                                            <Grid Margin="0,0,0,4">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="5"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <StackPanel Grid.Column="0">
+                                                    <TextBlock Text="IMEI 1 (Primary):" FontSize="8" Foreground="#94A3B8" Margin="0,0,0,1"/>
+                                                    <TextBox x:Name="TxtAdbImei1" Text="" Height="22" Background="#0B0F19" Foreground="#38BDF8" BorderBrush="#1E293B" Padding="4,1" FontSize="9" FontFamily="Consolas" VerticalContentAlignment="Center"/>
+                                                </StackPanel>
+                                                <StackPanel Grid.Column="2">
+                                                    <TextBlock Text="IMEI 2 (Secondary):" FontSize="8" Foreground="#94A3B8" Margin="0,0,0,1"/>
+                                                    <TextBox x:Name="TxtAdbImei2" Text="" Height="22" Background="#0B0F19" Foreground="#38BDF8" BorderBrush="#1E293B" Padding="4,1" FontSize="9" FontFamily="Consolas" VerticalContentAlignment="Center"/>
+                                                </StackPanel>
+                                            </Grid>
+
+                                            <Grid>
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="*"/>
                                                     <ColumnDefinition Width="4"/>
@@ -2208,29 +2219,32 @@
                                                     <ColumnDefinition Width="4"/>
                                                     <ColumnDefinition Width="Auto"/>
                                                 </Grid.ColumnDefinitions>
-                                                <Button Grid.Column="0" Content="📖 Read IMEI" Height="24" Background="#1E293B" Foreground="#38BDF8" FontWeight="Bold" FontSize="8.5" Click="OnAdbReadImeiClicked"/>
-                                                <Button Grid.Column="2" Content="✍️ Write Dual" Height="24" Background="#0284C7" Foreground="#FFFFFF" FontWeight="Bold" FontSize="8.5" Click="OnAdbWriteImeiClicked"/>
-                                                <Button Grid.Column="4" Content="🎲 Gen" Width="38" Height="24" Background="#1E293B" Foreground="#34D399" FontWeight="Bold" FontSize="8.5" ToolTip="Generate Valid Luhn Checksum IMEI" Click="OnAdbGenerateImeiClicked"/>
+                                                <Button Grid.Column="0" Content="📖 Read IMEI" Height="22" Background="#1E293B" Foreground="#38BDF8" FontWeight="Bold" FontSize="8" Click="OnAdbReadImeiClicked"/>
+                                                <Button Grid.Column="2" Content="✍️ Write Dual" Height="22" Background="#0284C7" Foreground="#FFFFFF" FontWeight="Bold" FontSize="8" Click="OnAdbWriteImeiClicked"/>
+                                                <Button Grid.Column="4" Content="🎲 Gen" Width="36" Height="22" Background="#1E293B" Foreground="#34D399" FontWeight="Bold" FontSize="8" ToolTip="Generate Valid Luhn Checksum IMEI" Click="OnAdbGenerateImeiClicked"/>
                                             </Grid>
                                         </StackPanel>
                                     </Border>
 
-                                    <Button Content="ADB Reboot to Fastboot" Style="{StaticResource CyberBulletButton}" Click="OnAdbRebootFastbootClicked"/>
-                                    <Button Content="ADB Reboot to Recovery" Style="{StaticResource CyberBulletButton}" Click="OnAdbRebootRecoveryClicked"/>
-                                    <Button Content="ADB Reboot to EDL" Style="{StaticResource CyberBulletButton}" Click="OnAdbRebootEdlClicked"/>
-                                    <Button Content="ADB Reboot to META (MTK)" Style="{StaticResource CyberBulletButton}" Click="OnAdbRebootMetaClicked"/>
-                                    <Button Content="ADB Restart Device" Style="{StaticResource CyberBulletButton}" Click="OnAdbRebootSystemClicked"/>
-                                    <Button Content="ADB ShutDown Device" Style="{StaticResource CyberBulletButton}" Click="OnAdbPowerOffClicked"/>
-                                    <Button Content="ADB Factory Reset (old Android)" Style="{StaticResource CyberBulletButton}" Click="OnAdbFactoryResetOldClicked"/>
-                                    <Button Content="ADB Remove FRP Lock (ADB)" Style="{StaticResource CyberBulletButton}" Click="OnAdbResetFrpClicked"/>
-                                    <Button Content="Xiaomi Enable Diag (ADB)" Style="{StaticResource CyberBulletButton}" Click="OnAdbEnableDiagClicked"/>
-                                    <Button Content="Install APK (Adb)" Style="{StaticResource CyberBulletButton}" Click="OnAdbInstallApkClicked"/>
-                                    <Button Content="⚡ ADB Sideload OTA Package (.ZIP)" Style="{StaticResource CyberBulletButton}" Foreground="#38BDF8" Click="OnAdbSideloadOtaClicked"/>
-                                    <Button Content="Disable PayJoy APP (ADB)" Style="{StaticResource CyberBulletButton}" Click="OnAdbDisablePayjoyClicked"/>
-                                    <Button Content="Vivo Demo Remove (MT6877T)" Style="{StaticResource CyberBulletButton}" Click="OnAdbVivoDemoClicked"/>
-                                    <Button Content="Vivo Demo Remove (AT)" Style="{StaticResource CyberBulletButton}" Click="OnAdbVivoDemoAtClicked"/>
-                                    <Button Content="RealME (Wireless Test Assistant mode) Disable" Style="{StaticResource CyberBulletButton}" Click="OnAdbRealmeDisableClicked"/>
-                                    <Button Content="⚡ 1-Click Auto-Patch &amp; Root (Magisk Fastboot)" Style="{StaticResource CyberBulletButton}" Foreground="#A78BFA" Click="OnFastbootAutoMagiskRootClicked"/>
+                                    <!-- 2-Column Compact Grid so ALL 16 ADB Actions fit WITHOUT scrolling -->
+                                    <UniformGrid Columns="2" Margin="0,2,0,0">
+                                        <Button Content="Reboot Fastboot" Style="{StaticResource CyberBulletButton}" Margin="0,1,2,1" Click="OnAdbRebootFastbootClicked"/>
+                                        <Button Content="Reboot Recovery" Style="{StaticResource CyberBulletButton}" Margin="2,1,0,1" Click="OnAdbRebootRecoveryClicked"/>
+                                        <Button Content="Reboot EDL (9008)" Style="{StaticResource CyberBulletButton}" Margin="0,1,2,1" Click="OnAdbRebootEdlClicked"/>
+                                        <Button Content="Reboot META (MTK)" Style="{StaticResource CyberBulletButton}" Margin="2,1,0,1" Click="OnAdbRebootMetaClicked"/>
+                                        <Button Content="Restart Device" Style="{StaticResource CyberBulletButton}" Margin="0,1,2,1" Click="OnAdbRebootSystemClicked"/>
+                                        <Button Content="ShutDown Device" Style="{StaticResource CyberBulletButton}" Margin="2,1,0,1" Click="OnAdbPowerOffClicked"/>
+                                        <Button Content="Factory Reset (Old)" Style="{StaticResource CyberBulletButton}" Margin="0,1,2,1" Click="OnAdbFactoryResetOldClicked"/>
+                                        <Button Content="Remove FRP (ADB)" Style="{StaticResource CyberBulletButton}" Margin="2,1,0,1" Click="OnAdbResetFrpClicked"/>
+                                        <Button Content="Xiaomi Enable Diag" Style="{StaticResource CyberBulletButton}" Margin="0,1,2,1" Click="OnAdbEnableDiagClicked"/>
+                                        <Button Content="Install APK (ADB)" Style="{StaticResource CyberBulletButton}" Margin="2,1,0,1" Click="OnAdbInstallApkClicked"/>
+                                        <Button Content="⚡ Sideload OTA (.ZIP)" Style="{StaticResource CyberBulletButton}" Foreground="#38BDF8" Margin="0,1,2,1" Click="OnAdbSideloadOtaClicked"/>
+                                        <Button Content="Disable PayJoy (ADB)" Style="{StaticResource CyberBulletButton}" Margin="2,1,0,1" Click="OnAdbDisablePayjoyClicked"/>
+                                        <Button Content="Vivo Demo (MT6877T)" Style="{StaticResource CyberBulletButton}" Margin="0,1,2,1" Click="OnAdbVivoDemoClicked"/>
+                                        <Button Content="Vivo Demo (AT)" Style="{StaticResource CyberBulletButton}" Margin="2,1,0,1" Click="OnAdbVivoDemoAtClicked"/>
+                                        <Button Content="RealME Wireless Fix" Style="{StaticResource CyberBulletButton}" Margin="0,1,2,1" Click="OnAdbRealmeDisableClicked"/>
+                                        <Button Content="⚡ Auto-Patch Magisk" Style="{StaticResource CyberBulletButton}" Foreground="#A78BFA" Margin="2,1,0,1" Click="OnFastbootAutoMagiskRootClicked"/>
+                                    </UniformGrid>
                                 </StackPanel>
 
                                 <!-- FASTBOOT Action Checklist (Exact 12 items from screenshot) -->
@@ -2307,47 +2321,47 @@
                             </Grid.RowDefinitions>
 
                             <!-- Row 0: Dual Live Hardware Notification Radar Dock -->
-                            <Grid Grid.Row="0" Margin="0,0,0,6">
+                            <Grid Grid.Row="0" Margin="0,0,0,5">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="1.2*"/> <!-- Box 1: COM Port Box -->
-                                    <ColumnDefinition Width="6"/>
-                                    <ColumnDefinition Width="1.5*"/> <!-- Box 2: USB Interface Box -->
-                                    <ColumnDefinition Width="6"/>
+                                    <ColumnDefinition Width="1*"/>   <!-- Box 1: COM Port Box -->
+                                    <ColumnDefinition Width="5"/>
+                                    <ColumnDefinition Width="1.2*"/> <!-- Box 2: USB Interface Box -->
+                                    <ColumnDefinition Width="5"/>
                                     <ColumnDefinition Width="Auto"/> <!-- Action Buttons -->
                                 </Grid.ColumnDefinitions>
 
                                 <!-- BOX 1: CONNECTED COM PORT WITH LIVE LED LIGHT -->
-                                <Border Grid.Column="0" Background="#111827" BorderBrush="#253248" BorderThickness="1" CornerRadius="4" Padding="8,5">
+                                <Border Grid.Column="0" Background="#111827" BorderBrush="#253248" BorderThickness="1" CornerRadius="4" Padding="6,4">
                                     <DockPanel>
-                                        <Ellipse x:Name="LedFastbootCom" Width="12" Height="12" Fill="#EF4444" Margin="0,0,8,0" VerticalAlignment="Center">
+                                        <Ellipse x:Name="LedFastbootCom" Width="10" Height="10" Fill="#EF4444" Margin="0,0,6,0" VerticalAlignment="Center">
                                             <Ellipse.Effect>
                                                 <DropShadowEffect x:Name="GlowFastbootCom" BlurRadius="10" ShadowDepth="0" Color="#EF4444"/>
                                             </Ellipse.Effect>
                                         </Ellipse>
-                                        <Border x:Name="BadgeFastbootCom" DockPanel.Dock="Right" Background="#1F2937" CornerRadius="3" Padding="5,2" VerticalAlignment="Center" Margin="4,0,0,0">
-                                            <TextBlock x:Name="TxtFastbootComState" Text="OFFLINE" FontSize="8" FontWeight="ExtraBold" Foreground="#9CA3AF"/>
+                                        <Border x:Name="BadgeFastbootCom" DockPanel.Dock="Right" Background="#1F2937" CornerRadius="3" Padding="4,1" VerticalAlignment="Center" Margin="4,0,0,0">
+                                            <TextBlock x:Name="TxtFastbootComState" Text="OFFLINE" FontSize="7.5" FontWeight="ExtraBold" Foreground="#9CA3AF"/>
                                         </Border>
                                         <StackPanel VerticalAlignment="Center">
-                                            <TextBlock Text="🔌 COM PORT BUS" FontSize="8" FontWeight="Bold" Foreground="#94A3B8"/>
-                                            <TextBlock x:Name="TxtFastbootComBox" Text="NO COM PORT DETECTED" FontSize="10.5" FontWeight="ExtraBold" Foreground="#F87171" FontFamily="Consolas"/>
+                                            <TextBlock Text="🔌 COM PORT" FontSize="7.5" FontWeight="Bold" Foreground="#94A3B8" TextTrimming="CharacterEllipsis"/>
+                                            <TextBlock x:Name="TxtFastbootComBox" Text="NO COM PORT" FontSize="9" FontWeight="ExtraBold" Foreground="#F87171" FontFamily="Consolas" TextTrimming="CharacterEllipsis"/>
                                         </StackPanel>
                                     </DockPanel>
                                 </Border>
 
                                 <!-- BOX 2: CONNECTED USB INTERFACE WITH LIVE LED LIGHT -->
-                                <Border Grid.Column="2" Background="#111827" BorderBrush="#253248" BorderThickness="1" CornerRadius="4" Padding="8,5">
+                                <Border Grid.Column="2" Background="#111827" BorderBrush="#253248" BorderThickness="1" CornerRadius="4" Padding="6,4">
                                     <DockPanel>
-                                        <Ellipse x:Name="LedFastbootUsb" Width="12" Height="12" Fill="#EF4444" Margin="0,0,8,0" VerticalAlignment="Center">
+                                        <Ellipse x:Name="LedFastbootUsb" Width="10" Height="10" Fill="#EF4444" Margin="0,0,6,0" VerticalAlignment="Center">
                                             <Ellipse.Effect>
                                                 <DropShadowEffect x:Name="GlowFastbootUsb" BlurRadius="10" ShadowDepth="0" Color="#EF4444"/>
                                             </Ellipse.Effect>
                                         </Ellipse>
-                                        <Border x:Name="BadgeFastbootUsb" DockPanel.Dock="Right" Background="#1F2937" CornerRadius="3" Padding="5,2" VerticalAlignment="Center" Margin="4,0,0,0">
-                                            <TextBlock x:Name="TxtFastbootUsbState" Text="OFFLINE" FontSize="8" FontWeight="ExtraBold" Foreground="#9CA3AF"/>
+                                        <Border x:Name="BadgeFastbootUsb" DockPanel.Dock="Right" Background="#1F2937" CornerRadius="3" Padding="4,1" VerticalAlignment="Center" Margin="4,0,0,0">
+                                            <TextBlock x:Name="TxtFastbootUsbState" Text="OFFLINE" FontSize="7.5" FontWeight="ExtraBold" Foreground="#9CA3AF"/>
                                         </Border>
                                         <StackPanel VerticalAlignment="Center">
-                                            <TextBlock Text="⚡ USB DEVICE / MODE" FontSize="8" FontWeight="Bold" Foreground="#94A3B8"/>
-                                            <TextBlock x:Name="TxtFastbootUsbBox" Text="WAITING FOR USB CONNECTION..." FontSize="10.5" FontWeight="ExtraBold" Foreground="#F87171" FontFamily="Consolas"/>
+                                            <TextBlock Text="⚡ USB DEVICE" FontSize="7.5" FontWeight="Bold" Foreground="#94A3B8" TextTrimming="CharacterEllipsis"/>
+                                            <TextBlock x:Name="TxtFastbootUsbBox" Text="WAITING FOR USB..." FontSize="9" FontWeight="ExtraBold" Foreground="#F87171" FontFamily="Consolas" TextTrimming="CharacterEllipsis"/>
                                         </StackPanel>
                                     </DockPanel>
                                 </Border>
@@ -2356,9 +2370,9 @@
                                 <StackPanel Grid.Column="4" Orientation="Horizontal" VerticalAlignment="Center">
                                     <TextBlock x:Name="TxtAdbStatus" Visibility="Collapsed"/>
                                     <TextBlock x:Name="TxtAdbDeviceSerial" Visibility="Collapsed"/>
-                                    <Button Content="🔍 Check" Height="28" Padding="10,0" Background="#0284C7" Foreground="#FFFFFF" FontWeight="Bold" FontSize="10" BorderThickness="0" Margin="0,0,6,0" Click="OnCheckAdbClicked"/>
-                                    <Button Content="⛔ ABORT" Height="28" Padding="10,0" Background="#991B1B" Foreground="#FECACA" FontWeight="Bold" FontSize="10" BorderThickness="0" Margin="0,0,6,0" Click="OnEmergencyAbortClicked"/>
-                                    <Button Content="Clear Console" Height="28" Padding="10,0" Background="#1E1E2A" Foreground="#94A3B8" FontSize="10" BorderThickness="0" Click="OnClearLogClicked"/>
+                                    <Button Content="🔍 Check" Height="26" Padding="8,0" Background="#0284C7" Foreground="#FFFFFF" FontWeight="Bold" FontSize="9" BorderThickness="0" Margin="0,0,4,0" Click="OnCheckAdbClicked"/>
+                                    <Button Content="⛔ ABORT" Height="26" Padding="8,0" Background="#991B1B" Foreground="#FECACA" FontWeight="Bold" FontSize="9" BorderThickness="0" Margin="0,0,4,0" Click="OnEmergencyAbortClicked"/>
+                                    <Button Content="Clear" Height="26" Padding="8,0" Background="#1E1E2A" Foreground="#94A3B8" FontSize="9" BorderThickness="0" Click="OnClearLogClicked"/>
                                 </StackPanel>
                             </Grid>
 
