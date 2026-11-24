@@ -1762,34 +1762,36 @@
                                                 <TextBlock x:Name="TxtScatterLabel" Text="FIRMWARE FILE (SCATTER / OFP / OPS / OZIP):" FontSize="9" FontWeight="Bold" Foreground="#38BDF8" VerticalAlignment="Center"/>
                                                 <TextBlock Text=".txt | .ofp | .ops | .xml" FontSize="8" Foreground="#64748B" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                                             </DockPanel>
-                                            <Grid Margin="0,0,0,6">
+                                            <Grid Margin="0,0,0,4">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="*"/>
                                                     <ColumnDefinition Width="Auto"/>
                                                 </Grid.ColumnDefinitions>
-                                                <TextBox Grid.Column="0" x:Name="TxtScatterPath" Text="Select Android_scatter.txt, OFP, OPS or Rawprogram XML" Background="#0F0F14" Foreground="#94A3B8" BorderBrush="#2E2E40" Height="26" FontSize="10" Padding="5,3"/>
-                                                <Button Grid.Column="1" x:Name="BtnBrowseScatter" Content="Browse" Width="65" Background="#1E293B" Foreground="#38BDF8" BorderThickness="0" Height="26" Margin="6,0,0,0" Click="OnBrowseScatterClicked" Cursor="Hand"/>
+                                                <TextBox Grid.Column="0" x:Name="TxtScatterPath" Text="Select Android_scatter.txt, OFP, OPS or Rawprogram XML" Background="#0F0F14" Foreground="#94A3B8" BorderBrush="#2E2E40" Height="23" FontSize="9" Padding="4,2"/>
+                                                <Button Grid.Column="1" x:Name="BtnBrowseScatter" Content="Browse" Width="58" Background="#1E293B" Foreground="#38BDF8" BorderThickness="0" Height="23" Margin="5,0,0,0" Click="OnBrowseScatterClicked" Cursor="Hand"/>
                                             </Grid>
 
                                             <!-- Flashing Security Checkboxes -->
-                                            <WrapPanel Margin="0,0,0,6">
-                                                <CheckBox Content="Auto Reboot" IsChecked="True" Foreground="#CBD5E1" FontSize="8.5" Margin="0,0,8,2"/>
-                                                <CheckBox Content="Backup Security" IsChecked="True" Foreground="#CBD5E1" FontSize="8.5" Margin="0,0,8,2"/>
-                                                <CheckBox Content="Verify Checksum" IsChecked="True" Foreground="#CBD5E1" FontSize="8.5" Margin="0,0,8,2"/>
+                                            <WrapPanel Margin="0,0,0,4">
+                                                <CheckBox Content="Auto Reboot" IsChecked="True" Foreground="#CBD5E1" FontSize="8" Margin="0,0,6,0"/>
+                                                <CheckBox Content="Backup Security" IsChecked="True" Foreground="#CBD5E1" FontSize="8" Margin="0,0,6,0"/>
+                                                <CheckBox Content="Verify Checksum" IsChecked="True" Foreground="#CBD5E1" FontSize="8" Margin="0,0,6,0"/>
                                             </WrapPanel>
 
                                             <!-- Master Write Button -->
-                                            <Button x:Name="BtnFlashFirmware" Content="⚡ FLASH FIRMWARE (WRITE PARTITIONS)" Height="32" Background="#0284C7" Foreground="#FFFFFF" FontWeight="ExtraBold" FontSize="10.5" BorderThickness="0" Margin="0,2,0,0" Click="OnFlashFirmwareClicked" Cursor="Hand"/>
+                                            <Button x:Name="BtnFlashFirmware" Content="⚡ FLASH FIRMWARE (WRITE PARTITIONS)" Height="28" Background="#0284C7" Foreground="#FFFFFF" FontWeight="ExtraBold" FontSize="9.5" BorderThickness="0" Margin="0,1,0,0" Click="OnFlashFirmwareClicked" Cursor="Hand"/>
                                         </StackPanel>
                                     </Border>
 
-                                    <!-- Flashing Protocol Helpers -->
-                                    <Border Background="#161A26" CornerRadius="5" Padding="6,6" Margin="0,0,0,6" BorderBrush="#1E293B" BorderThickness="1">
+                                    <!-- Flashing Protocol Helpers (Compact so zero scroll) -->
+                                    <Border Background="#161A26" CornerRadius="5" Padding="6,4" Margin="0,0,0,4" BorderBrush="#1E293B" BorderThickness="1">
                                         <StackPanel>
-                                            <TextBlock Text="FLASHER PROTOCOL &amp; VERIFICATION:" FontSize="9" FontWeight="Bold" Foreground="#38BDF8" Margin="4,2,0,4"/>
-                                            <Button x:Name="BtnFlashHandshake" Content="Phase 1: Sync Handshake (BROM / Sahara)" Style="{StaticResource CyberBulletButton}" Click="OnHandshakeClicked"/>
-                                            <Button x:Name="BtnFlashLoadDa" Content="Phase 2: Load Download Agent / Firehose" Style="{StaticResource CyberBulletButton}" Click="OnLoadDaClicked"/>
-                                            <Button x:Name="BtnFlashReadGpt" Content="Read Partition Table (Live GPT Sectors)" Style="{StaticResource CyberBulletButton}" Click="OnReadGptClicked"/>
+                                            <TextBlock Text="FLASHER PROTOCOL &amp; VERIFICATION:" FontSize="8.5" FontWeight="Bold" Foreground="#38BDF8" Margin="2,1,0,3"/>
+                                            <UniformGrid Columns="2">
+                                                <Button x:Name="BtnFlashHandshake" Content="1: Sync Handshake" Style="{StaticResource CyberBulletButton}" Margin="0,1,2,1" Click="OnHandshakeClicked"/>
+                                                <Button x:Name="BtnFlashLoadDa" Content="2: Load DA / Firehose" Style="{StaticResource CyberBulletButton}" Margin="2,1,0,1" Click="OnLoadDaClicked"/>
+                                            </UniformGrid>
+                                            <Button x:Name="BtnFlashReadGpt" Content="3: Read Partition Table (Live GPT)" Style="{StaticResource CyberBulletButton}" Margin="0,1,0,0" Click="OnReadGptClicked"/>
                                         </StackPanel>
                                     </Border>
                                 </StackPanel>
@@ -2098,15 +2100,15 @@
                                           CellStyle="{StaticResource CyberCell}"
                                           CanUserAddRows="False">
                                     <DataGrid.Columns>
-                                        <DataGridCheckBoxColumn Header="✓" Binding="{Binding IsChecked}" Width="35"/>
-                                        <DataGridTextColumn Header="#" Binding="{Binding Index}" Width="35"/>
-                                        <DataGridTextColumn Header="Partition Name" Binding="{Binding Name}" Width="130" FontWeight="Bold"/>
-                                        <DataGridTextColumn Header="Start LBA" Binding="{Binding StartLba}" Width="95"/>
-                                        <DataGridTextColumn Header="End LBA" Binding="{Binding EndLba}" Width="95"/>
-                                        <DataGridTextColumn Header="Size" Binding="{Binding SizeStr}" Width="80" Foreground="#34D399"/>
-                                        <DataGridTextColumn Header="Filesystem" Binding="{Binding Filesystem}" Width="90" Foreground="#38BDF8"/>
-                                        <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="110" Foreground="#F59E0B"/>
-                                        <DataGridTextColumn Header="Sectors" Binding="{Binding SectorCount}" Width="*"/>
+                                        <DataGridCheckBoxColumn Header="✓" Binding="{Binding IsChecked}" Width="24"/>
+                                        <DataGridTextColumn Header="#" Binding="{Binding Index}" Width="24"/>
+                                        <DataGridTextColumn Header="Partition" Binding="{Binding Name}" Width="1.2*" FontWeight="Bold"/>
+                                        <DataGridTextColumn Header="Start LBA" Binding="{Binding StartLba}" Width="0.85*"/>
+                                        <DataGridTextColumn Header="End LBA" Binding="{Binding EndLba}" Width="0.85*"/>
+                                        <DataGridTextColumn Header="Size" Binding="{Binding SizeStr}" Width="0.65*" Foreground="#34D399"/>
+                                        <DataGridTextColumn Header="FS" Binding="{Binding Filesystem}" Width="0.8*" Foreground="#38BDF8"/>
+                                        <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="0.95*" Foreground="#F59E0B"/>
+                                        <DataGridTextColumn Header="Sectors" Binding="{Binding SectorCount}" Width="0.75*"/>
                                     </DataGrid.Columns>
                                 </DataGrid>
                             </Grid>
@@ -2247,57 +2249,55 @@
                                     </UniformGrid>
                                 </StackPanel>
 
-                                <!-- FASTBOOT Action Checklist (Exact 12 items from screenshot) -->
+                                <!-- FASTBOOT Action Checklist (2-Column Pro Grid - Zero Scroll) -->
                                 <StackPanel x:Name="PanelFastbootActions" Visibility="Collapsed">
                                     <!-- 1-Click Magisk Auto-Patcher & Root Engine (Unlocked Bootloader) -->
-                                    <Border Background="#161A26" CornerRadius="6" Padding="10,8" Margin="0,0,0,10" BorderBrush="#7C3AED" BorderThickness="1.5">
+                                    <Border Background="#161A26" CornerRadius="6" Padding="7,6" Margin="0,0,0,6" BorderBrush="#7C3AED" BorderThickness="1.5">
                                         <StackPanel>
-                                            <TextBlock Text="⚡ 1-CLICK MAGISK AUTO-PATCHER &amp; ROOT ENGINE" FontSize="9.5" FontWeight="ExtraBold" Foreground="#A78BFA" Margin="0,0,0,3"/>
-                                            <TextBlock Text="Zero Database Required: Auto-dumps from live phone or extracts from OTA/Firmware." FontSize="8" Foreground="#94A3B8" TextWrapping="Wrap" Margin="0,0,0,6"/>
+                                            <TextBlock Text="⚡ 1-CLICK MAGISK AUTO-PATCHER &amp; ROOT ENGINE" FontSize="9" FontWeight="ExtraBold" Foreground="#A78BFA" Margin="0,0,0,2"/>
+                                            <TextBlock Text="Auto-dumps from live phone or extracts from OTA/Firmware." FontSize="7.5" Foreground="#94A3B8" TextWrapping="Wrap" Margin="0,0,0,4"/>
 
                                             <!-- Extracted Boot Badge -->
-                                            <Border Background="#0D1117" CornerRadius="4" Padding="6,4" Margin="0,0,0,6" BorderBrush="#30363D" BorderThickness="1">
-                                                <TextBlock x:Name="TxtMagiskBootInfo" Text="📦 Boot Image: (Not loaded - click Dump or Extract below)" FontSize="8" Foreground="#F59E0B" TextWrapping="Wrap"/>
+                                            <Border Background="#0D1117" CornerRadius="4" Padding="5,3" Margin="0,0,0,4" BorderBrush="#30363D" BorderThickness="1">
+                                                <TextBlock x:Name="TxtMagiskBootInfo" Text="📦 Boot Image: (Not loaded - click Dump or Extract)" FontSize="7.5" Foreground="#F59E0B" TextTrimming="CharacterEllipsis"/>
                                             </Border>
 
                                             <!-- Two Smart Auto-Extractor Buttons -->
-                                            <Grid Margin="0,0,0,6">
+                                            <Grid Margin="0,0,0,4">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="*"/>
-                                                    <ColumnDefinition Width="6"/>
+                                                    <ColumnDefinition Width="5"/>
                                                     <ColumnDefinition Width="*"/>
                                                 </Grid.ColumnDefinitions>
-                                                <Button Grid.Column="0" Content="📥 Auto-Dump Phone" Height="26" Background="#1E293B" Foreground="#38BDF8" FontWeight="SemiBold" FontSize="8" BorderBrush="#38BDF8" BorderThickness="1" Click="OnAutoDumpBootFromDeviceClicked" ToolTip="Dumps active boot partition live from connected phone via ADB / Fastboot"/>
-                                                <Button Grid.Column="2" Content="📦 Extract OTA/ZIP" Height="26" Background="#1E293B" Foreground="#F43F5E" FontWeight="SemiBold" FontSize="8" BorderBrush="#F43F5E" BorderThickness="1" Click="OnAutoExtractBootFromFirmwareClicked" ToolTip="Auto-extracts boot.img from OTA zip (payload.bin), Factory zip, or Samsung tar in 3 seconds"/>
+                                                <Button Grid.Column="0" Content="📥 Auto-Dump Phone" Height="23" Background="#1E293B" Foreground="#38BDF8" FontWeight="SemiBold" FontSize="8" BorderBrush="#38BDF8" BorderThickness="1" Click="OnAutoDumpBootFromDeviceClicked" ToolTip="Dumps active boot partition live from connected phone via ADB / Fastboot"/>
+                                                <Button Grid.Column="2" Content="📦 Extract OTA/ZIP" Height="23" Background="#1E293B" Foreground="#F43F5E" FontWeight="SemiBold" FontSize="8" BorderBrush="#F43F5E" BorderThickness="1" Click="OnAutoExtractBootFromFirmwareClicked" ToolTip="Auto-extracts boot.img from OTA zip (payload.bin), Factory zip, or Samsung tar in 3 seconds"/>
                                             </Grid>
 
-                                            <CheckBox x:Name="ChkMagiskTempBootOnly" Content="Temporary Boot Only (Safe - Zero Flash Risk)" IsChecked="True" Foreground="#CBD5E1" FontSize="8.5" Margin="0,0,0,6"/>
-                                            <Button Content="🚀 Auto-Patch &amp; Root via Magisk" Height="28" Background="#7C3AED" Foreground="#FFFFFF" FontWeight="Bold" FontSize="9.5" BorderThickness="0" Click="OnFastbootAutoMagiskRootClicked"/>
+                                            <CheckBox x:Name="ChkMagiskTempBootOnly" Content="Temporary Boot Only (Safe - Zero Flash Risk)" IsChecked="True" Foreground="#CBD5E1" FontSize="8" Margin="0,0,0,4"/>
+                                            <Button Content="🚀 Auto-Patch &amp; Root via Magisk" Height="25" Background="#7C3AED" Foreground="#FFFFFF" FontWeight="Bold" FontSize="9" BorderThickness="0" Click="OnFastbootAutoMagiskRootClicked"/>
                                         </StackPanel>
                                     </Border>
 
-                                    <Button Content="Fastboot Read Info" Style="{StaticResource CyberBulletButton}" Click="OnFastbootReadInfoClicked"/>
-                                    <Button Content="Exit Fastboot Mode" Style="{StaticResource CyberBulletButton}" Click="OnFastbootExitClicked"/>
-                                    <Button Content="Fastboot Flash Partition" Style="{StaticResource CyberBulletButton}" Click="OnFastbootFlashPartitionClicked"/>
-                                    <Button Content="Fastboot Set Active Slot [A]" Style="{StaticResource CyberBulletButton}" Click="OnSetSlotAClicked"/>
-                                    <Button Content="Fastboot Set Active Slot [B]" Style="{StaticResource CyberBulletButton}" Click="OnSetSlotBClicked"/>
-                                    <Button Content="Fastboot Reboot Recovery (Nokia)" Style="{StaticResource CyberBulletButton}" Click="OnFastbootRebootRecoveryNokiaClicked"/>
-                                    <Button Content="Fastboot Reboot FastbootD (Nokia)" Style="{StaticResource CyberBulletButton}" Click="OnFastbootRebootFastbootdNokiaClicked"/>
-                                    <Button Content="Fastboot OEM EDL (BL-Unlocked)" Style="{StaticResource CyberBulletButton}" Click="OnFastbootOemEdlClicked"/>
-                                    <Button Content="⚡ 1-Click Fastboot to EDL 9008 (Deep Flash)" Style="{StaticResource CyberBulletButton}" Foreground="#00E5FF" FontWeight="Bold" Click="OnFastbootMultiEdlClicked"/>
-                                    <Button Content="🛡️ Check Anti-Rollback (ARB) Protection Index" Style="{StaticResource CyberBulletButton}" Foreground="#F59E0B" FontWeight="Bold" Click="OnFastbootCheckArbClicked"/>
-                                    <Button Content="🔓 Instant Bootloader Unlock (Fastboot / BROM)" Style="{StaticResource CyberBulletButton}" Foreground="#34D399" FontWeight="Bold" Click="OnFastbootUnlockBlClicked"/>
-                                    <Button Content="🚀 1-Click Fix 'The system has been destroyed'" Style="{StaticResource CyberBulletButton}" Foreground="#F43F5E" FontWeight="Bold" Click="OnFastbootFixDestroyedClicked"/>
-                                    <Button Content="Fastboot WIPE EFS (BL-Unlocked)" Style="{StaticResource CyberBulletButton}" Click="OnFastbootWipeEfsClicked"/>
-                                    <Button Content="⚡ Flash Google Factory Image (flash-all.bat)" Style="{StaticResource CyberBulletButton}" Foreground="#F59E0B" Click="OnFastbootFlashAllClicked"/>
-                                    <Button Content="⚡ 1-Click Fastboot Temp Root" Style="{StaticResource CyberBulletButton}" Foreground="#38BDF8" FontWeight="Bold" Click="OnFastbootTempRootClicked"/>
-
-                                    <!-- Spacing before lower group (matches screenshot) -->
-                                    <Border Height="1" Background="#232332" Margin="4,24,4,16"/>
-
-                                    <Button Content="Fastboot Fix DM-Verity Error" Style="{StaticResource CyberBulletButton}" Click="OnFastbootFixDmVerityClicked"/>
-                                    <Button Content="Generic Fastboot G-Lock Wipe" Style="{StaticResource CyberBulletButton}" Click="OnFastbootGLockWipeClicked"/>
-                                    <Button Content="Generic Fastboot Factory Reset" Style="{StaticResource CyberBulletButton}" Click="OnFastbootFactoryResetClicked"/>
+                                    <UniformGrid Columns="2" Margin="0,0,0,2">
+                                        <Button Content="Fastboot Read Info" Style="{StaticResource CyberBulletButton}" Margin="0,1,2,1" Click="OnFastbootReadInfoClicked"/>
+                                        <Button Content="Exit Fastboot Mode" Style="{StaticResource CyberBulletButton}" Margin="2,1,0,1" Click="OnFastbootExitClicked"/>
+                                        <Button Content="Flash Partition" Style="{StaticResource CyberBulletButton}" Margin="0,1,2,1" Click="OnFastbootFlashPartitionClicked"/>
+                                        <Button Content="Set Active Slot [A]" Style="{StaticResource CyberBulletButton}" Margin="2,1,0,1" Click="OnSetSlotAClicked"/>
+                                        <Button Content="Set Active Slot [B]" Style="{StaticResource CyberBulletButton}" Margin="0,1,2,1" Click="OnSetSlotBClicked"/>
+                                        <Button Content="Recovery (Nokia)" Style="{StaticResource CyberBulletButton}" Margin="2,1,0,1" Click="OnFastbootRebootRecoveryNokiaClicked"/>
+                                        <Button Content="FastbootD (Nokia)" Style="{StaticResource CyberBulletButton}" Margin="0,1,2,1" Click="OnFastbootRebootFastbootdNokiaClicked"/>
+                                        <Button Content="OEM EDL (Unlocked)" Style="{StaticResource CyberBulletButton}" Margin="2,1,0,1" Click="OnFastbootOemEdlClicked"/>
+                                        <Button Content="⚡ Fastboot to EDL" Style="{StaticResource CyberBulletButton}" Foreground="#00E5FF" FontWeight="Bold" Margin="0,1,2,1" Click="OnFastbootMultiEdlClicked"/>
+                                        <Button Content="🛡️ Check ARB Index" Style="{StaticResource CyberBulletButton}" Foreground="#F59E0B" FontWeight="Bold" Margin="2,1,0,1" Click="OnFastbootCheckArbClicked"/>
+                                        <Button Content="🔓 Unlock Bootloader" Style="{StaticResource CyberBulletButton}" Foreground="#34D399" FontWeight="Bold" Margin="0,1,2,1" Click="OnFastbootUnlockBlClicked"/>
+                                        <Button Content="🚀 Fix System Destroyed" Style="{StaticResource CyberBulletButton}" Foreground="#F43F5E" FontWeight="Bold" Margin="2,1,0,1" Click="OnFastbootFixDestroyedClicked"/>
+                                        <Button Content="Fastboot WIPE EFS" Style="{StaticResource CyberBulletButton}" Margin="0,1,2,1" Click="OnFastbootWipeEfsClicked"/>
+                                        <Button Content="⚡ Flash-All (Google)" Style="{StaticResource CyberBulletButton}" Foreground="#F59E0B" Margin="2,1,0,1" Click="OnFastbootFlashAllClicked"/>
+                                        <Button Content="⚡ Fastboot Temp Root" Style="{StaticResource CyberBulletButton}" Foreground="#38BDF8" FontWeight="Bold" Margin="0,1,2,1" Click="OnFastbootTempRootClicked"/>
+                                        <Button Content="Fix DM-Verity Error" Style="{StaticResource CyberBulletButton}" Margin="2,1,0,1" Click="OnFastbootFixDmVerityClicked"/>
+                                        <Button Content="Generic G-Lock Wipe" Style="{StaticResource CyberBulletButton}" Margin="0,1,2,1" Click="OnFastbootGLockWipeClicked"/>
+                                        <Button Content="Generic Factory Reset" Style="{StaticResource CyberBulletButton}" Margin="2,1,0,1" Click="OnFastbootFactoryResetClicked"/>
+                                    </UniformGrid>
                                 </StackPanel>
                             </Grid>
                         </ScrollViewer>
@@ -2751,92 +2751,61 @@
             <!-- ================================================================ -->
             <Grid x:Name="ViewUnisoc" Visibility="Collapsed">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="430"/> <!-- Left Sub-Tabs & Actions -->
-                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="345"/> <!-- Left Sub-Tabs & Actions -->
+                    <ColumnDefinition Width="8"/>
                     <ColumnDefinition Width="*"/>   <!-- Right Console & Port -->
                 </Grid.ColumnDefinitions>
 
                 <!-- Left: 4 Sub-Tabs & Dedicated Panels -->
-                <Border Grid.Column="0" Background="#13131A" CornerRadius="6" BorderBrush="#232332" BorderThickness="1" Padding="8">
+                <Border Grid.Column="0" Background="#13131A" CornerRadius="6" BorderBrush="#232332" BorderThickness="1" Padding="7">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/> <!-- Smart Brand & Model Selector -->
-                            <RowDefinition Height="Auto"/> <!-- Mode Header Dual Live Hardware Radar -->
+                            <RowDefinition Height="Auto"/> <!-- Hidden Mode Header to preserve C# bindings -->
                             <RowDefinition Height="Auto"/> <!-- 4 Sub-Tabs strip -->
-                            <RowDefinition Height="*"/>    <!-- Scrollable container -->
+                            <RowDefinition Height="*"/>    <!-- Panel container (Zero Scroll) -->
                         </Grid.RowDefinitions>
 
                         <!-- CARD 1: SMART BRAND & MODEL SELECTOR FOR UNISOC -->
-                        <Border Grid.Row="0" Background="#161A26" CornerRadius="5" Padding="8" Margin="0,0,0,8" BorderBrush="#253248" BorderThickness="1">
+                        <Border Grid.Row="0" Background="#161A26" CornerRadius="5" Padding="6" Margin="0,0,0,5" BorderBrush="#253248" BorderThickness="1">
                             <StackPanel>
-                                <DockPanel Margin="0,0,0,6">
-                                    <TextBlock Text="🎯 TARGET BRAND &amp; MODEL (UNISOC DB):" FontSize="9" FontWeight="Bold" Foreground="#38BDF8" VerticalAlignment="Center"/>
-                                    <TextBlock x:Name="TxtUnisocModelBadge" Text="Tiger T7250 / T606 / SC9863A" FontSize="8" FontWeight="Bold" Foreground="#10B981" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                <DockPanel Margin="0,0,0,4">
+                                    <TextBlock x:Name="TxtUnisocModelBadge" DockPanel.Dock="Right" Text="T7250 / T606 / SC9863A" FontSize="7.5" FontWeight="Bold" Foreground="#10B981" VerticalAlignment="Center" Margin="4,0,0,0"/>
+                                    <TextBlock Text="🎯 TARGET BRAND &amp; MODEL:" FontSize="8.5" FontWeight="Bold" Foreground="#38BDF8" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
                                 </DockPanel>
 
-                                <Grid Margin="0,0,0,6">
+                                <Grid Margin="0,0,0,4">
                                     <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="95"/>
+                                        <ColumnDefinition Width="5"/>
                                         <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="6"/>
-                                        <ColumnDefinition Width="1.5*"/>
                                     </Grid.ColumnDefinitions>
-                                    <ComboBox x:Name="CmbUnisocBrand" Style="{StaticResource DarkCyberComboBox}" IsTextSearchEnabled="True" Grid.Column="0" Height="24" SelectionChanged="OnUnisocBrandChanged"/>
-                                    <ComboBox x:Name="CmbUnisocModel" Style="{StaticResource DarkCyberComboBox}" IsTextSearchEnabled="True" Grid.Column="2" Height="24" SelectionChanged="OnUnisocModelChanged"/>
+                                    <ComboBox x:Name="CmbUnisocBrand" Style="{StaticResource DarkCyberComboBox}" IsTextSearchEnabled="True" Grid.Column="0" Height="22" SelectionChanged="OnUnisocBrandChanged"/>
+                                    <ComboBox x:Name="CmbUnisocModel" Style="{StaticResource DarkCyberComboBox}" IsTextSearchEnabled="True" Grid.Column="2" Height="22" SelectionChanged="OnUnisocModelChanged"/>
                                 </Grid>
 
                                 <!-- Detected Chipset & Boot Key Info Banner -->
-                                <Border Background="#0F172A" CornerRadius="3" Padding="8,4">
+                                <Border Background="#0F172A" CornerRadius="3" Padding="6,3">
                                     <StackPanel>
-                                        <TextBlock x:Name="TxtUnisocModelInfo" Text="Select Brand &amp; Model (Auto-routes FDL1, FDL2 &amp; Handshake)" FontSize="8.5" Foreground="#F59E0B" FontWeight="SemiBold"/>
-                                        <TextBlock x:Name="TxtUnisocTpInfo" Text="Boot Key: Hold [Vol-] &amp; Connect USB Cable" FontSize="8" Foreground="#94A3B8" Margin="0,2,0,0"/>
+                                        <TextBlock x:Name="TxtUnisocModelInfo" Text="Select Brand &amp; Model (Auto-routes FDL1, FDL2)" FontSize="8" Foreground="#F59E0B" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
+                                        <TextBlock x:Name="TxtUnisocTpInfo" Text="Boot Key: Hold [Vol-] &amp; Connect USB Cable" FontSize="7.5" Foreground="#94A3B8" Margin="0,1,0,0" TextTrimming="CharacterEllipsis"/>
                                     </StackPanel>
                                 </Border>
                             </StackPanel>
                         </Border>
 
-                        <!-- CARD 1.5: MODE LIVE NOTIFICATION PANEL (COM BOX & USB BOX WITH LIVE LEDS) -->
-                        <Border Grid.Row="1" Background="#0C101C" CornerRadius="4" Padding="6,4" Margin="0,0,0,6" BorderBrush="#1E293B" BorderThickness="1">
+                        <!-- CARD 1.5: Hidden Mode Live Indicators (Radar Dock is on Right) -->
+                        <Border Grid.Row="1" Visibility="Collapsed">
                             <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="6"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-
-                                <!-- COM Port Box (Mode Header) -->
-                                <Border Grid.Column="0" Background="#111827" BorderBrush="#1F2937" BorderThickness="1" CornerRadius="3" Padding="6,4">
-                                    <DockPanel>
-                                        <Ellipse x:Name="LedUnisocModeCom" Width="9" Height="9" Fill="#EF4444" Margin="0,0,6,0" VerticalAlignment="Center">
-                                            <Ellipse.Effect>
-                                                <DropShadowEffect x:Name="GlowUnisocModeCom" BlurRadius="8" ShadowDepth="0" Color="#EF4444"/>
-                                            </Ellipse.Effect>
-                                        </Ellipse>
-                                        <StackPanel VerticalAlignment="Center">
-                                            <TextBlock Text="🔌 COM BUS" FontSize="7.5" FontWeight="Bold" Foreground="#9CA3AF"/>
-                                            <TextBlock x:Name="TxtUnisocModeCom" Text="NO PORT" FontSize="9" FontWeight="ExtraBold" Foreground="#F87171" FontFamily="Consolas"/>
-                                        </StackPanel>
-                                    </DockPanel>
-                                </Border>
-
-                                <!-- USB Interface Box (Mode Header) -->
-                                <Border Grid.Column="2" Background="#111827" BorderBrush="#1F2937" BorderThickness="1" CornerRadius="3" Padding="6,4">
-                                    <DockPanel>
-                                        <Ellipse x:Name="LedUnisocModeUsb" Width="9" Height="9" Fill="#EF4444" Margin="0,0,6,0" VerticalAlignment="Center">
-                                            <Ellipse.Effect>
-                                                <DropShadowEffect x:Name="GlowUnisocModeUsb" BlurRadius="8" ShadowDepth="0" Color="#EF4444"/>
-                                            </Ellipse.Effect>
-                                        </Ellipse>
-                                        <StackPanel VerticalAlignment="Center">
-                                            <TextBlock Text="⚡ USB MODE" FontSize="7.5" FontWeight="Bold" Foreground="#9CA3AF"/>
-                                            <TextBlock x:Name="TxtUnisocModeUsb" Text="WAITING..." FontSize="9" FontWeight="ExtraBold" Foreground="#F87171" FontFamily="Consolas"/>
-                                        </StackPanel>
-                                    </DockPanel>
-                                </Border>
+                                <Ellipse x:Name="LedUnisocModeCom"><Ellipse.Effect><DropShadowEffect x:Name="GlowUnisocModeCom"/></Ellipse.Effect></Ellipse>
+                                <TextBlock x:Name="TxtUnisocModeCom"/>
+                                <Ellipse x:Name="LedUnisocModeUsb"><Ellipse.Effect><DropShadowEffect x:Name="GlowUnisocModeUsb"/></Ellipse.Effect></Ellipse>
+                                <TextBlock x:Name="TxtUnisocModeUsb"/>
                             </Grid>
                         </Border>
 
                         <!-- Sub-Tabs: [ BROM ] [ PAC FLASH ] [ DIAG REPAIR ] [ FASTBOOT ] -->
-                        <Border Grid.Row="2" Background="#1A1A24" CornerRadius="3" Padding="2" Margin="0,0,0,6">
+                        <Border Grid.Row="2" Background="#1A1A24" CornerRadius="3" Padding="2" Margin="0,0,0,5">
                             <UniformGrid Columns="4">
                                 <Button x:Name="BtnUnisocSubTabBrom" Content="BROM" Style="{StaticResource SubTabButtonActive}" Click="OnUnisocSubTabBromClicked" Margin="1,0"/>
                                 <Button x:Name="BtnUnisocSubTabPac" Content="PAC FLASH" Style="{StaticResource SubTabButtonInactive}" Click="OnUnisocSubTabPacClicked" Margin="1,0"/>
@@ -2845,43 +2814,45 @@
                             </UniformGrid>
                         </Border>
 
-                        <!-- Panel Container -->
-                        <ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                        <!-- Panel Container (No Scrollbar Needed) -->
+                        <ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
                             <Grid>
                                 <!-- PANEL 1: BROM SERVICE (FDL1 / FDL2 ENGINE) -->
                                 <StackPanel x:Name="PanelUnisocBrom" Visibility="Visible">
-                                    <TextBlock Text="⚡ UNISOC BROM / FDL BOOTROM SERVICE:" FontSize="9" FontWeight="Bold" Foreground="#38BDF8" Margin="4,2,0,6"/>
+                                    <TextBlock Text="⚡ UNISOC BROM / FDL BOOTROM SERVICE:" FontSize="8.5" FontWeight="Bold" Foreground="#38BDF8" Margin="2,0,0,4"/>
 
                                     <!-- FDL 1 & FDL 2 LOADER BOXES -->
-                                    <Border Background="#1A1A24" CornerRadius="4" Padding="6,4" Margin="0,0,0,6">
+                                    <Border Background="#1A1A24" CornerRadius="4" Padding="5,4" Margin="0,0,0,5">
                                         <StackPanel>
-                                            <DockPanel Margin="0,0,0,4">
-                                                <TextBlock Text="FDL 1:" Width="45" Foreground="#38BDF8" FontWeight="Bold" FontSize="10" VerticalAlignment="Center"/>
-                                                <Button Content="Browse" Width="50" Background="#1E293B" Foreground="#FFFFFF" BorderThickness="0" Height="22" Margin="4,0,0,0" DockPanel.Dock="Right" Click="OnBrowseUnisocBromFdl1Clicked"/>
-                                                <TextBox x:Name="TxtUnisocBromFdl1" Text="resources/loaders/spd/fdl1.bin (Auto / Custom)" Background="#0F0F14" Foreground="#94A3B8" BorderBrush="#2E2E40" Height="22" FontSize="10" Padding="4,2"/>
+                                            <DockPanel Margin="0,0,0,3">
+                                                <TextBlock Text="FDL 1:" Width="38" Foreground="#38BDF8" FontWeight="Bold" FontSize="9" VerticalAlignment="Center"/>
+                                                <Button Content="Browse" Width="46" Background="#1E293B" Foreground="#FFFFFF" BorderThickness="0" Height="20" FontSize="8.5" Margin="4,0,0,0" DockPanel.Dock="Right" Click="OnBrowseUnisocBromFdl1Clicked"/>
+                                                <TextBox x:Name="TxtUnisocBromFdl1" Text="resources/loaders/spd/fdl1.bin (Auto)" Background="#0F0F14" Foreground="#94A3B8" BorderBrush="#2E2E40" Height="20" FontSize="8.5" Padding="4,1"/>
                                             </DockPanel>
                                             <DockPanel>
-                                                <TextBlock Text="FDL 2:" Width="45" Foreground="#34D399" FontWeight="Bold" FontSize="10" VerticalAlignment="Center"/>
-                                                <Button Content="Browse" Width="50" Background="#1E293B" Foreground="#FFFFFF" BorderThickness="0" Height="22" Margin="4,0,0,0" DockPanel.Dock="Right" Click="OnBrowseUnisocBromFdl2Clicked"/>
-                                                <TextBox x:Name="TxtUnisocBromFdl2" Text="resources/loaders/spd/fdl2.bin (Auto / Custom)" Background="#0F0F14" Foreground="#94A3B8" BorderBrush="#2E2E40" Height="22" FontSize="10" Padding="4,2"/>
+                                                <TextBlock Text="FDL 2:" Width="38" Foreground="#34D399" FontWeight="Bold" FontSize="9" VerticalAlignment="Center"/>
+                                                <Button Content="Browse" Width="46" Background="#1E293B" Foreground="#FFFFFF" BorderThickness="0" Height="20" FontSize="8.5" Margin="4,0,0,0" DockPanel.Dock="Right" Click="OnBrowseUnisocBromFdl2Clicked"/>
+                                                <TextBox x:Name="TxtUnisocBromFdl2" Text="resources/loaders/spd/fdl2.bin (Auto)" Background="#0F0F14" Foreground="#94A3B8" BorderBrush="#2E2E40" Height="20" FontSize="8.5" Padding="4,1"/>
                                             </DockPanel>
                                         </StackPanel>
                                     </Border>
 
-                                    <Button Content="Sync Handshake &amp; Load FDL1 / FDL2" Style="{StaticResource CyberBulletButton}" Click="OnUnisocBromHandshakeClicked"/>
-                                    <Button Content="📖 Read Device Info (Hardware Descriptors &amp; SoC)" Style="{StaticResource CyberBulletButton}" Foreground="#38BDF8" Click="OnUnisocBromReadInfoClicked"/>
-                                    <Button Content="Enter DIAG Mode (BROM to Diag Switch)" Style="{StaticResource CyberBulletButton}" Click="OnUnisocBromEnterDiagClicked"/>
-                                    <Button Content="Reset FRP Lock (Direct Persist/FRP Wipe)" Style="{StaticResource CyberBulletButton}" Click="OnUnisocBromFrpClicked"/>
-                                    <Button Content="Safe Factory Reset (Format Userdata)" Style="{StaticResource CyberBulletButton}" Click="OnUnisocBromFactoryResetClicked"/>
-                                    <Button Content="Read Live GPT Partition Table" Style="{StaticResource CyberBulletButton}" Click="OnUnisocBromReadGptClicked"/>
-                                    <Button Content="Backup Important Security Partitions (NV/Misc)" Style="{StaticResource CyberBulletButton}" Click="OnUnisocBromBackupClicked"/>
-                                    <Button Content="Erase Active Selected Partition" Style="{StaticResource CyberBulletButton}" Click="OnUnisocBromErasePartitionClicked"/>
-                                    <Button Content="🩺 eMMC / UFS Storage Health Doctor" Style="{StaticResource CyberBulletButton}" Foreground="#34D399" Click="OnUnisocEmmcHealthCheckClicked"/>
+                                    <UniformGrid Columns="2" Margin="0,0,0,2">
+                                        <Button Content="Sync &amp; Load FDL1/2" Style="{StaticResource CyberBulletButton}" Margin="0,1,2,1" Click="OnUnisocBromHandshakeClicked"/>
+                                        <Button Content="📖 Read Device Info" Style="{StaticResource CyberBulletButton}" Foreground="#38BDF8" Margin="2,1,0,1" Click="OnUnisocBromReadInfoClicked"/>
+                                        <Button Content="Enter DIAG Mode" Style="{StaticResource CyberBulletButton}" Margin="0,1,2,1" Click="OnUnisocBromEnterDiagClicked"/>
+                                        <Button Content="Reset FRP Lock" Style="{StaticResource CyberBulletButton}" Margin="2,1,0,1" Click="OnUnisocBromFrpClicked"/>
+                                        <Button Content="Safe Factory Reset" Style="{StaticResource CyberBulletButton}" Margin="0,1,2,1" Click="OnUnisocBromFactoryResetClicked"/>
+                                        <Button Content="Read Live GPT Table" Style="{StaticResource CyberBulletButton}" Margin="2,1,0,1" Click="OnUnisocBromReadGptClicked"/>
+                                        <Button Content="Backup Security (NV)" Style="{StaticResource CyberBulletButton}" Margin="0,1,2,1" Click="OnUnisocBromBackupClicked"/>
+                                        <Button Content="Erase Partition" Style="{StaticResource CyberBulletButton}" Margin="2,1,0,1" Click="OnUnisocBromErasePartitionClicked"/>
+                                    </UniformGrid>
+                                    <Button Content="🩺 eMMC / UFS Storage Health Doctor" Style="{StaticResource CyberBulletButton}" Foreground="#34D399" Margin="0,1,0,4" Click="OnUnisocEmmcHealthCheckClicked"/>
 
-                                    <Border Height="1" Background="#232332" Margin="4,12,4,10"/>
-                                    <TextBlock Text="SUPPORTED CHIPSET ARCHITECTURES:" FontSize="9" FontWeight="Bold" Foreground="#94A3B8" Margin="4,0,0,4"/>
-                                    <Border Background="#1A1A24" CornerRadius="4" Padding="6,4">
-                                        <TextBlock Text="• Tiger Series: T606, T610, T612, T616, T700&#x0a;• SC Series: SC9863A, SC7731E, SC9832E&#x0a;• Brands: Realme, Infinix, Tecno, itel, Nokia, Samsung A03/A03 Core" FontSize="9" Foreground="#64748B" LineHeight="14"/>
+                                    <Border Height="1" Background="#232332" Margin="2,4,2,5"/>
+                                    <TextBlock Text="SUPPORTED CHIPSET ARCHITECTURES:" FontSize="8" FontWeight="Bold" Foreground="#94A3B8" Margin="2,0,0,3"/>
+                                    <Border Background="#1A1A24" CornerRadius="4" Padding="5,3">
+                                        <TextBlock Text="• Tiger: T606, T610, T612, T616, T700 | SC: SC9863A, SC7731E&#x0a;• Brands: Realme, Infinix, Tecno, itel, Nokia, Samsung A03" FontSize="8" Foreground="#64748B" LineHeight="12" TextWrapping="Wrap"/>
                                     </Border>
                                 </StackPanel>
 
@@ -3095,58 +3066,48 @@
                     </Grid.RowDefinitions>
 
                     <!-- Top Device Status & Command Toolbar: DUAL LIVE HARDWARE NOTIFICATION RADAR -->
-                    <Border Grid.Row="0" Background="#0C101C" CornerRadius="6" BorderBrush="#1E293B" BorderThickness="1" Padding="8">
+                    <Border Grid.Row="0" Background="#0C101C" CornerRadius="6" BorderBrush="#1E293B" BorderThickness="1" Padding="6">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1.2*"/> <!-- Box 1: COM Port Box -->
-                                <ColumnDefinition Width="6"/>
-                                <ColumnDefinition Width="1.5*"/> <!-- Box 2: USB Interface Box -->
-                                <ColumnDefinition Width="6"/>
+                                <ColumnDefinition Width="1*"/>   <!-- Box 1: COM Port Box -->
+                                <ColumnDefinition Width="5"/>
+                                <ColumnDefinition Width="1.2*"/> <!-- Box 2: USB Interface Box -->
+                                <ColumnDefinition Width="5"/>
                                 <ColumnDefinition Width="Auto"/> <!-- Action Buttons -->
                             </Grid.ColumnDefinitions>
 
                             <!-- BOX 1: CONNECTED COM PORT WITH LIVE LED LIGHT -->
-                            <Border Grid.Column="0" Background="#111827" BorderBrush="#253248" BorderThickness="1" CornerRadius="4" Padding="8,5">
+                            <Border Grid.Column="0" Background="#111827" BorderBrush="#253248" BorderThickness="1" CornerRadius="4" Padding="6,4">
                                 <DockPanel>
-                                    <!-- Glowing LED Light -->
-                                    <Ellipse x:Name="LedUnisocCom" Width="12" Height="12" Fill="#EF4444" Margin="0,0,8,0" VerticalAlignment="Center">
+                                    <Ellipse x:Name="LedUnisocCom" Width="10" Height="10" Fill="#EF4444" Margin="0,0,6,0" VerticalAlignment="Center">
                                         <Ellipse.Effect>
                                             <DropShadowEffect x:Name="GlowUnisocCom" BlurRadius="10" ShadowDepth="0" Color="#EF4444"/>
                                         </Ellipse.Effect>
                                     </Ellipse>
-
-                                    <!-- Badge on Right -->
-                                    <Border x:Name="BadgeUnisocCom" DockPanel.Dock="Right" Background="#1F2937" CornerRadius="3" Padding="5,2" VerticalAlignment="Center" Margin="4,0,0,0">
-                                        <TextBlock x:Name="TxtUnisocComState" Text="OFFLINE" FontSize="8" FontWeight="ExtraBold" Foreground="#9CA3AF"/>
+                                    <Border x:Name="BadgeUnisocCom" DockPanel.Dock="Right" Background="#1F2937" CornerRadius="3" Padding="4,1" VerticalAlignment="Center" Margin="4,0,0,0">
+                                        <TextBlock x:Name="TxtUnisocComState" Text="OFFLINE" FontSize="7.5" FontWeight="ExtraBold" Foreground="#9CA3AF"/>
                                     </Border>
-
-                                    <!-- Text Content -->
                                     <StackPanel VerticalAlignment="Center">
-                                        <TextBlock Text="🔌 COM PORT BUS" FontSize="8" FontWeight="Bold" Foreground="#94A3B8"/>
-                                        <TextBlock x:Name="TxtUnisocComBox" Text="NO COM PORT DETECTED" FontSize="10.5" FontWeight="ExtraBold" Foreground="#F87171" FontFamily="Consolas"/>
+                                        <TextBlock Text="🔌 COM PORT" FontSize="7.5" FontWeight="Bold" Foreground="#94A3B8" TextTrimming="CharacterEllipsis"/>
+                                        <TextBlock x:Name="TxtUnisocComBox" Text="NO COM PORT" FontSize="9" FontWeight="ExtraBold" Foreground="#F87171" FontFamily="Consolas" TextTrimming="CharacterEllipsis"/>
                                     </StackPanel>
                                 </DockPanel>
                             </Border>
 
                             <!-- BOX 2: CONNECTED USB INTERFACE WITH LIVE LED LIGHT -->
-                            <Border Grid.Column="2" Background="#111827" BorderBrush="#253248" BorderThickness="1" CornerRadius="4" Padding="8,5">
+                            <Border Grid.Column="2" Background="#111827" BorderBrush="#253248" BorderThickness="1" CornerRadius="4" Padding="6,4">
                                 <DockPanel>
-                                    <!-- Glowing LED Light -->
-                                    <Ellipse x:Name="LedUnisocUsb" Width="12" Height="12" Fill="#EF4444" Margin="0,0,8,0" VerticalAlignment="Center">
+                                    <Ellipse x:Name="LedUnisocUsb" Width="10" Height="10" Fill="#EF4444" Margin="0,0,6,0" VerticalAlignment="Center">
                                         <Ellipse.Effect>
                                             <DropShadowEffect x:Name="GlowUnisocUsb" BlurRadius="10" ShadowDepth="0" Color="#EF4444"/>
                                         </Ellipse.Effect>
                                     </Ellipse>
-
-                                    <!-- Badge on Right -->
-                                    <Border x:Name="BadgeUnisocUsb" DockPanel.Dock="Right" Background="#1F2937" CornerRadius="3" Padding="5,2" VerticalAlignment="Center" Margin="4,0,0,0">
-                                        <TextBlock x:Name="TxtUnisocUsbState" Text="OFFLINE" FontSize="8" FontWeight="ExtraBold" Foreground="#9CA3AF"/>
+                                    <Border x:Name="BadgeUnisocUsb" DockPanel.Dock="Right" Background="#1F2937" CornerRadius="3" Padding="4,1" VerticalAlignment="Center" Margin="4,0,0,0">
+                                        <TextBlock x:Name="TxtUnisocUsbState" Text="OFFLINE" FontSize="7.5" FontWeight="ExtraBold" Foreground="#9CA3AF"/>
                                     </Border>
-
-                                    <!-- Text Content -->
                                     <StackPanel VerticalAlignment="Center">
-                                        <TextBlock Text="⚡ USB DEVICE / MODE" FontSize="8" FontWeight="Bold" Foreground="#94A3B8"/>
-                                        <TextBlock x:Name="TxtUnisocUsbBox" Text="WAITING FOR USB CONNECTION..." FontSize="10.5" FontWeight="ExtraBold" Foreground="#F87171" FontFamily="Consolas"/>
+                                        <TextBlock Text="⚡ USB DEVICE" FontSize="7.5" FontWeight="Bold" Foreground="#94A3B8" TextTrimming="CharacterEllipsis"/>
+                                        <TextBlock x:Name="TxtUnisocUsbBox" Text="WAITING FOR USB..." FontSize="9" FontWeight="ExtraBold" Foreground="#F87171" FontFamily="Consolas" TextTrimming="CharacterEllipsis"/>
                                     </StackPanel>
                                 </DockPanel>
                             </Border>
@@ -3156,9 +3117,9 @@
                                 <TextBlock x:Name="TxtUnisocPortStatus" Visibility="Collapsed"/>
                                 <TextBlock x:Name="TxtUnisocPort" Visibility="Collapsed"/>
 
-                                <Button Content="🔍 Scan Ports" Height="28" Padding="12,0" Background="#0284C7" Foreground="#FFFFFF" FontWeight="Bold" FontSize="10" BorderThickness="0" Margin="0,0,6,0" Click="OnScanUnisocPortsClicked"/>
-                                <Button Content="⛔ ABORT" Height="28" Padding="10,0" Background="#991B1B" Foreground="#FECACA" FontWeight="Bold" FontSize="10" BorderThickness="0" Margin="0,0,6,0" Click="OnEmergencyAbortClicked"/>
-                                <Button Content="Clear Console" Height="28" Padding="10,0" Background="#1E1E2A" Foreground="#94A3B8" FontSize="10" BorderThickness="0" Click="OnClearUnisocLogClicked"/>
+                                <Button Content="🔍 Scan" Height="26" Padding="8,0" Background="#0284C7" Foreground="#FFFFFF" FontWeight="Bold" FontSize="9" BorderThickness="0" Margin="0,0,4,0" Click="OnScanUnisocPortsClicked"/>
+                                <Button Content="⛔ ABORT" Height="26" Padding="8,0" Background="#991B1B" Foreground="#FECACA" FontWeight="Bold" FontSize="9" BorderThickness="0" Margin="0,0,4,0" Click="OnEmergencyAbortClicked"/>
+                                <Button Content="Clear" Height="26" Padding="8,0" Background="#1E1E2A" Foreground="#94A3B8" FontSize="9" BorderThickness="0" Click="OnClearUnisocLogClicked"/>
                             </StackPanel>
                         </Grid>
                     </Border>
@@ -3243,13 +3204,13 @@
             <!-- ================================================================ -->
             <Grid x:Name="ViewHuawei" Visibility="Collapsed">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="460"/>
-                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="360"/>
+                    <ColumnDefinition Width="8"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
                 <!-- Left Controls: 4 Sub-Tabs & Operation Panels -->
-                <Border Grid.Column="0" Background="#13131A" CornerRadius="6" BorderBrush="#232332" BorderThickness="1" Padding="10">
+                <Border Grid.Column="0" Background="#13131A" CornerRadius="6" BorderBrush="#232332" BorderThickness="1" Padding="8">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/> <!-- Sub-Tabs Strip -->
@@ -3517,48 +3478,48 @@
                     </Grid.RowDefinitions>
 
                     <!-- Top Device Status & Command Toolbar: DUAL LIVE HARDWARE NOTIFICATION RADAR -->
-                    <Border Grid.Row="0" Background="#0C101C" CornerRadius="6" BorderBrush="#1E293B" BorderThickness="1" Padding="8">
+                    <Border Grid.Row="0" Background="#0C101C" CornerRadius="6" BorderBrush="#1E293B" BorderThickness="1" Padding="6">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1.2*"/> <!-- Box 1: COM Port Box -->
-                                <ColumnDefinition Width="6"/>
-                                <ColumnDefinition Width="1.5*"/> <!-- Box 2: USB Interface Box -->
-                                <ColumnDefinition Width="6"/>
+                                <ColumnDefinition Width="1*"/>   <!-- Box 1: COM Port Box -->
+                                <ColumnDefinition Width="5"/>
+                                <ColumnDefinition Width="1.2*"/> <!-- Box 2: USB Interface Box -->
+                                <ColumnDefinition Width="5"/>
                                 <ColumnDefinition Width="Auto"/> <!-- Action Buttons -->
                             </Grid.ColumnDefinitions>
 
                             <!-- BOX 1: CONNECTED COM PORT WITH LIVE LED LIGHT -->
-                            <Border Grid.Column="0" Background="#111827" BorderBrush="#253248" BorderThickness="1" CornerRadius="4" Padding="8,5">
+                            <Border Grid.Column="0" Background="#111827" BorderBrush="#253248" BorderThickness="1" CornerRadius="4" Padding="6,4">
                                 <DockPanel>
-                                    <Ellipse x:Name="LedHuaweiCom" Width="12" Height="12" Fill="#EF4444" Margin="0,0,8,0" VerticalAlignment="Center">
+                                    <Ellipse x:Name="LedHuaweiCom" Width="10" Height="10" Fill="#EF4444" Margin="0,0,6,0" VerticalAlignment="Center">
                                         <Ellipse.Effect>
                                             <DropShadowEffect x:Name="GlowHuaweiCom" BlurRadius="10" ShadowDepth="0" Color="#EF4444"/>
                                         </Ellipse.Effect>
                                     </Ellipse>
-                                    <Border x:Name="BadgeHuaweiCom" DockPanel.Dock="Right" Background="#1F2937" CornerRadius="3" Padding="5,2" VerticalAlignment="Center" Margin="4,0,0,0">
-                                        <TextBlock x:Name="TxtHuaweiComState" Text="OFFLINE" FontSize="8" FontWeight="ExtraBold" Foreground="#9CA3AF"/>
+                                    <Border x:Name="BadgeHuaweiCom" DockPanel.Dock="Right" Background="#1F2937" CornerRadius="3" Padding="4,1" VerticalAlignment="Center" Margin="4,0,0,0">
+                                        <TextBlock x:Name="TxtHuaweiComState" Text="OFFLINE" FontSize="7.5" FontWeight="ExtraBold" Foreground="#9CA3AF"/>
                                     </Border>
                                     <StackPanel VerticalAlignment="Center">
-                                        <TextBlock Text="🔌 HUAWEI COM PORT" FontSize="8" FontWeight="Bold" Foreground="#94A3B8"/>
-                                        <TextBlock x:Name="TxtHuaweiComBox" Text="NO COM PORT DETECTED" FontSize="10.5" FontWeight="ExtraBold" Foreground="#F87171" FontFamily="Consolas"/>
+                                        <TextBlock Text="🔌 HUAWEI COM" FontSize="7.5" FontWeight="Bold" Foreground="#94A3B8" TextTrimming="CharacterEllipsis"/>
+                                        <TextBlock x:Name="TxtHuaweiComBox" Text="NO COM PORT" FontSize="9" FontWeight="ExtraBold" Foreground="#F87171" FontFamily="Consolas" TextTrimming="CharacterEllipsis"/>
                                     </StackPanel>
                                 </DockPanel>
                             </Border>
 
                             <!-- BOX 2: CONNECTED USB INTERFACE WITH LIVE LED LIGHT -->
-                            <Border Grid.Column="2" Background="#111827" BorderBrush="#253248" BorderThickness="1" CornerRadius="4" Padding="8,5">
+                            <Border Grid.Column="2" Background="#111827" BorderBrush="#253248" BorderThickness="1" CornerRadius="4" Padding="6,4">
                                 <DockPanel>
-                                    <Ellipse x:Name="LedHuaweiUsb" Width="12" Height="12" Fill="#EF4444" Margin="0,0,8,0" VerticalAlignment="Center">
+                                    <Ellipse x:Name="LedHuaweiUsb" Width="10" Height="10" Fill="#EF4444" Margin="0,0,6,0" VerticalAlignment="Center">
                                         <Ellipse.Effect>
                                             <DropShadowEffect x:Name="GlowHuaweiUsb" BlurRadius="10" ShadowDepth="0" Color="#EF4444"/>
                                         </Ellipse.Effect>
                                     </Ellipse>
-                                    <Border x:Name="BadgeHuaweiUsb" DockPanel.Dock="Right" Background="#1F2937" CornerRadius="3" Padding="5,2" VerticalAlignment="Center" Margin="4,0,0,0">
-                                        <TextBlock x:Name="TxtHuaweiUsbState" Text="OFFLINE" FontSize="8" FontWeight="ExtraBold" Foreground="#9CA3AF"/>
+                                    <Border x:Name="BadgeHuaweiUsb" DockPanel.Dock="Right" Background="#1F2937" CornerRadius="3" Padding="4,1" VerticalAlignment="Center" Margin="4,0,0,0">
+                                        <TextBlock x:Name="TxtHuaweiUsbState" Text="OFFLINE" FontSize="7.5" FontWeight="ExtraBold" Foreground="#9CA3AF"/>
                                     </Border>
                                     <StackPanel VerticalAlignment="Center">
-                                        <TextBlock Text="⚡ HUAWEI USB INTERFACE" FontSize="8" FontWeight="Bold" Foreground="#94A3B8"/>
-                                        <TextBlock x:Name="TxtHuaweiUsbBox" Text="WAITING FOR HUAWEI DEVICE..." FontSize="10.5" FontWeight="ExtraBold" Foreground="#F87171" FontFamily="Consolas"/>
+                                        <TextBlock Text="⚡ HUAWEI USB" FontSize="7.5" FontWeight="Bold" Foreground="#94A3B8" TextTrimming="CharacterEllipsis"/>
+                                        <TextBlock x:Name="TxtHuaweiUsbBox" Text="WAITING FOR DEVICE..." FontSize="9" FontWeight="ExtraBold" Foreground="#F87171" FontFamily="Consolas" TextTrimming="CharacterEllipsis"/>
                                     </StackPanel>
                                 </DockPanel>
                             </Border>
@@ -3568,9 +3529,9 @@
                                 <TextBlock x:Name="TxtHuaweiPortStatus" Visibility="Collapsed"/>
                                 <TextBlock x:Name="TxtHuaweiPort" Visibility="Collapsed"/>
 
-                                <Button Content="🔍 Scan Ports" Height="28" Padding="12,0" Background="#0284C7" Foreground="#FFFFFF" FontWeight="Bold" FontSize="10" BorderThickness="0" Margin="0,0,6,0" Click="OnScanHuaweiPortsClicked"/>
-                                <Button Content="⛔ ABORT" Height="28" Padding="10,0" Background="#991B1B" Foreground="#FECACA" FontWeight="Bold" FontSize="10" BorderThickness="0" Margin="0,0,6,0" Click="OnEmergencyAbortClicked"/>
-                                <Button Content="Clear Console" Height="28" Padding="10,0" Background="#1E1E2A" Foreground="#94A3B8" FontSize="10" BorderThickness="0" Click="OnClearHuaweiLogClicked"/>
+                                <Button Content="🔍 Scan" Height="26" Padding="8,0" Background="#0284C7" Foreground="#FFFFFF" FontWeight="Bold" FontSize="9" BorderThickness="0" Margin="0,0,4,0" Click="OnScanHuaweiPortsClicked"/>
+                                <Button Content="⛔ ABORT" Height="26" Padding="8,0" Background="#991B1B" Foreground="#FECACA" FontWeight="Bold" FontSize="9" BorderThickness="0" Margin="0,0,4,0" Click="OnEmergencyAbortClicked"/>
+                                <Button Content="Clear" Height="26" Padding="8,0" Background="#1E1E2A" Foreground="#94A3B8" FontSize="9" BorderThickness="0" Click="OnClearHuaweiLogClicked"/>
                             </StackPanel>
                         </Grid>
                     </Border>
