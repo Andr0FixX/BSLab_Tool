@@ -109,7 +109,7 @@
                         </Border>
                         <StackPanel VerticalAlignment="Center">
                             <TextBlock Text="BS LAB TOOL™" FontSize="13" FontWeight="Bold" Foreground="#38BDF8"/>
-                            <TextBlock Text="v2.5 PRO ENTERPRISE • AUTH SUITE" FontSize="9" FontWeight="SemiBold" Foreground="#64748B"/>
+                            <TextBlock Text="v2.6.0 PRO ENTERPRISE • AUTH SUITE" FontSize="9" FontWeight="SemiBold" Foreground="#64748B"/>
                         </StackPanel>
                     </StackPanel>
 

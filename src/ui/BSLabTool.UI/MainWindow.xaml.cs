@@ -155,7 +155,7 @@ namespace BSLabTool.UI
 
             AppendAutoHubLog("══════════════════════════════════════════════════════════════");
 
-            AppendAutoHubLog("⚡ BS LAB TOOL v2.5 PRO ENTERPRISE — SMART AUTO-HUB ONLINE");
+            AppendAutoHubLog("⚡ BS LAB TOOL v2.6.0 PRO ENTERPRISE — SMART AUTO-HUB ONLINE");
 
             AppendAutoHubLog("👤 Syed Bisharat Ali | Hamza Block, Arif Center, Hall Road, Lahore");
 
@@ -171,7 +171,7 @@ namespace BSLabTool.UI
 
 
 
-            AppendLog($"[*] Initializing BS Lab Tool v2.5 PRO Enterprise (Multi-Module Engine Online)...");
+            AppendLog($"[*] Initializing BS Lab Tool v2.6.0 PRO Enterprise (Multi-Module Engine Online)...");
 
             AppendAdbLog($"[*] Universal Fastboot & ADB Subsystem Active. Platform-tools linked.");
 
@@ -4961,7 +4961,7 @@ namespace BSLabTool.UI
                 }
 
                 AppendLog("══════════════════════════════════════════════════════════════════════════");
-                AppendLog("⚡ BS LAB TOOL v2.5 PRO — MEDIATEK META HARDWARE & BASEBAND AUDIT REPORT");
+                AppendLog("⚡ BS LAB TOOL v2.6.0 PRO — MEDIATEK META HARDWARE & BASEBAND AUDIT REPORT");
                 AppendLog("══════════════════════════════════════════════════════════════════════════");
                 AppendLog($"[+] Hardware Port          : {port} (MediaTek USB VCOM Port)");
                 AppendLog($"[+] Link State             : ACTIVE META MODE (Direct Diagnostic Link)");
@@ -8768,7 +8768,7 @@ namespace BSLabTool.UI
             // 8. Build the Master Report
             var sb = new StringBuilder();
             sb.AppendLine("══════════════════════════════════════════════════════════════════════════");
-            sb.AppendLine("⚡ BS LAB TOOL v2.5 PRO ENTERPRISE — ADB HARDWARE & SECURITY AUDIT REPORT");
+            sb.AppendLine("⚡ BS LAB TOOL v2.6.0 ENTERPRISE — ADB HARDWARE & SECURITY AUDIT REPORT");
             sb.AppendLine("👤 Syed Bisharat Ali | Hamza Block, Arif Center, Hall Road, Lahore");
             sb.AppendLine("══════════════════════════════════════════════════════════════════════════");
             sb.AppendLine($"[+] Date / Time        : {DateTime.Now:dd-MMM-yyyy HH:mm:ss}");
