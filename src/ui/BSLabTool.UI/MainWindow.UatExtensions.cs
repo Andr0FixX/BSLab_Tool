@@ -321,6 +321,129 @@ namespace BSLabTool.UI
             }
         }
 
+        private void OnOpenVirtualSimulatorClicked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var simWin = new BSLabTool.UI.Views.VirtualDeviceSimulatorWindow();
+                simWin.Owner = this;
+                simWin.Show();
+                AppendAutoHubLog("[+] 🧪 Virtual Phone Hardware Simulator & Interactive Sandbox opened.");
+            }
+            catch (Exception ex)
+            {
+                AppendAutoHubLog($"[!] Simulator Launch Error: {ex.Message}");
+            }
+        }
+
+        private void OnOpenFirmwareDownloaderClicked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var romWin = new BSLabTool.UI.Views.OfficialFirmwareDownloaderWindow();
+                romWin.Owner = this;
+                romWin.Show();
+                AppendAutoHubLog("[+] 📥 High-Speed Official Stock Firmware Downloader opened.");
+            }
+            catch (Exception ex)
+            {
+                AppendAutoHubLog($"[!] ROM Downloader Launch Error: {ex.Message}");
+            }
+        }
+
+        private void OnOpenWorkshopPosClicked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var posWin = new BSLabTool.UI.Views.WorkshopPosBillingWindow();
+                posWin.Owner = this;
+                posWin.Show();
+                AppendAutoHubLog("[+] 🧾 Workshop POS, Repair Job Ticket & Customer Invoice Generator opened.");
+            }
+            catch (Exception ex)
+            {
+                AppendAutoHubLog($"[!] POS Billing Launch Error: {ex.Message}");
+            }
+        }
+
+        private void OnLanguageSwitchClicked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var nextLang = BSLabTool.UI.Services.LocalizationEngine.CurrentLanguage switch
+                {
+                    BSLabTool.UI.Services.AppLanguage.English => BSLabTool.UI.Services.AppLanguage.Urdu,
+                    BSLabTool.UI.Services.AppLanguage.Urdu => BSLabTool.UI.Services.AppLanguage.Arabic,
+                    _ => BSLabTool.UI.Services.AppLanguage.English
+                };
+
+                BSLabTool.UI.Services.LocalizationEngine.CurrentLanguage = nextLang;
+                ApplyLocalization(nextLang);
+            }
+            catch (Exception ex)
+            {
+                AppendAutoHubLog($"[!] Localization Error: {ex.Message}");
+            }
+        }
+
+        private void ApplyLocalization(BSLabTool.UI.Services.AppLanguage lang)
+        {
+            if (lang == BSLabTool.UI.Services.AppLanguage.Urdu)
+            {
+                if (BtnLanguageSwitcher != null) BtnLanguageSwitcher.Content = "🌐 اردو (Urdu)";
+                if (TabUatServices != null) TabUatServices.Content = "⋮ سروسز";
+                if (TabUatFlasher != null) TabUatFlasher.Content = "⋮ فلیشر";
+                if (TabUatPartition != null) TabUatPartition.Content = "💾 پارٹیشن مینیجر";
+                if (TabUatBackup != null) TabUatBackup.Content = "⋮ فرم ویئر بیک اپ";
+                if (TabUatDiag != null) TabUatDiag.Content = "⋮ ڈائیگناسٹک";
+                if (TabUatDump != null) TabUatDump.Content = "⋮ ڈمپ ریڈ";
+                if (TabUatPinouts != null) TabUatPinouts.Content = "⋮ ٹیسٹ پوائنٹس";
+                if (TabUatFrpWizard != null) TabUatFrpWizard.Content = "⚡ 1-کلک ایف آر پی";
+                if (TabUatCloudLoader != null) TabUatCloudLoader.Content = "☁️ کلاؤڈ لوڈرز";
+                if (TabUatSimulator != null) TabUatSimulator.Content = "🧪 ورچوئل سمیلیٹر";
+                if (TabUatRomDownloader != null) TabUatRomDownloader.Content = "📥 اسٹاک روم سینٹر";
+                if (TabUatWorkshopPos != null) TabUatWorkshopPos.Content = "🧾 ورکشاپ پی او ایس";
+
+                AppendAutoHubLog("[🌐 LOCALIZATION] زبان کامیابی سے تبدیل کر دی گئی: اردو (Urdu Active)");
+            }
+            else if (lang == BSLabTool.UI.Services.AppLanguage.Arabic)
+            {
+                if (BtnLanguageSwitcher != null) BtnLanguageSwitcher.Content = "🌐 العربية (Arabic)";
+                if (TabUatServices != null) TabUatServices.Content = "⋮ الخدمات";
+                if (TabUatFlasher != null) TabUatFlasher.Content = "⋮ الفلاش";
+                if (TabUatPartition != null) TabUatPartition.Content = "💾 مدير الأقسام";
+                if (TabUatBackup != null) TabUatBackup.Content = "⋮ نسخ احتياطي";
+                if (TabUatDiag != null) TabUatDiag.Content = "⋮ تشخيص الأعطال";
+                if (TabUatDump != null) TabUatDump.Content = "⋮ قراءة الذاكرة";
+                if (TabUatPinouts != null) TabUatPinouts.Content = "⋮ نقاط الاختبار";
+                if (TabUatFrpWizard != null) TabUatFrpWizard.Content = "⚡ معالج التخطي";
+                if (TabUatCloudLoader != null) TabUatCloudLoader.Content = "☁️ لودرات سحابية";
+                if (TabUatSimulator != null) TabUatSimulator.Content = "🧪 محاكي الجهاز";
+                if (TabUatRomDownloader != null) TabUatRomDownloader.Content = "📥 مركز الرومات";
+                if (TabUatWorkshopPos != null) TabUatWorkshopPos.Content = "🧾 فواتير الصيانة";
+
+                AppendAutoHubLog("[🌐 LOCALIZATION] تم تغيير لغة الواجهة بنجاح: العربية (Arabic Active)");
+            }
+            else
+            {
+                if (BtnLanguageSwitcher != null) BtnLanguageSwitcher.Content = "🌐 EN (English)";
+                if (TabUatServices != null) TabUatServices.Content = "⋮ SERVICES";
+                if (TabUatFlasher != null) TabUatFlasher.Content = "⋮ FLASHER";
+                if (TabUatPartition != null) TabUatPartition.Content = "💾 PARTITION MANAGER";
+                if (TabUatBackup != null) TabUatBackup.Content = "⋮ BACKUP FIRMWARE";
+                if (TabUatDiag != null) TabUatDiag.Content = "⋮ DIAG";
+                if (TabUatDump != null) TabUatDump.Content = "⋮ DUMP";
+                if (TabUatPinouts != null) TabUatPinouts.Content = "⋮ PINOUTS & TP";
+                if (TabUatFrpWizard != null) TabUatFrpWizard.Content = "⚡ 1-CLICK FRP WIZARD";
+                if (TabUatCloudLoader != null) TabUatCloudLoader.Content = "☁️ CLOUD LOADERS";
+                if (TabUatSimulator != null) TabUatSimulator.Content = "🧪 SIMULATOR";
+                if (TabUatRomDownloader != null) TabUatRomDownloader.Content = "📥 ROM CENTER";
+                if (TabUatWorkshopPos != null) TabUatWorkshopPos.Content = "🧾 WORKSHOP POS";
+
+                AppendAutoHubLog("[🌐 LOCALIZATION] Application language dynamically switched to: English (Default)");
+            }
+        }
+
         #region Fastboot to EDL & BL Unlock Helper Suite
 
         private async void OnFastbootMultiEdlClicked(object sender, RoutedEventArgs e)

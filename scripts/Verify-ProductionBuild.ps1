@@ -47,7 +47,7 @@ foreach ($doc in $docs) {
     }
 }
 
-# 4. Check All 8 UI Modules
+# 4. Check All UI Modules & Hardware Engines
 Write-Host "──────────────────────────────────────────────────────────────" -ForegroundColor DarkGray
 $views = @(
     "src\ui\BSLabTool.UI\Views\VisualTestPointWindow.xaml",
@@ -57,7 +57,14 @@ $views = @(
     "src\ui\BSLabTool.UI\Views\UsbDriverDoctorWindow.xaml",
     "src\ui\BSLabTool.UI\Views\PartitionManagerSuiteWindow.xaml",
     "src\ui\BSLabTool.UI\Views\LiveUsbSnifferWindow.xaml",
-    "src\ui\BSLabTool.UI\Views\AutoUpdaterDialogWindow.xaml"
+    "src\ui\BSLabTool.UI\Views\AutoUpdaterDialogWindow.xaml",
+    "src\ui\BSLabTool.UI\Views\SamsungKnoxGuardSuiteWindow.xaml",
+    "src\ui\BSLabTool.UI\Views\AdminKeyGenWindow.xaml",
+    "src\ui\BSLabTool.UI\Views\VirtualDeviceSimulatorWindow.xaml",
+    "src\ui\BSLabTool.UI\Views\OfficialFirmwareDownloaderWindow.xaml",
+    "src\ui\BSLabTool.UI\Views\WorkshopPosBillingWindow.xaml",
+    "src\ui\BSLabTool.UI\Services\LocalizationEngine.cs",
+    "src\ui\BSLabTool.UI\Services\LicensingEngine.cs"
 )
 foreach ($v in $views) {
     if (Test-Path $v) {

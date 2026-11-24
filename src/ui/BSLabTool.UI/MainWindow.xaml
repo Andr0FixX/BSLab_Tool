@@ -501,6 +501,8 @@
                     <Border Background="#1B5E20" CornerRadius="3" Padding="5,2" Margin="0,0,4,0" VerticalAlignment="Center">
                         <TextBlock Text="LIVE" FontSize="9" FontWeight="ExtraBold" Foreground="#69F0AE"/>
                     </Border>
+                    <!-- Multi-Language Switcher (Urdu / Arabic / English) -->
+                    <Button x:Name="BtnLanguageSwitcher" Content="🌐 EN | اردو | العربية" ToolTip="Switch Language: English / اردو / العربية" Style="{StaticResource WindowCtrlButton}" Width="Auto" Padding="6,2" Height="24" Click="OnLanguageSwitchClicked" Margin="0,0,4,0" Foreground="#00FFA3" FontWeight="Bold" FontSize="10"/>
                     <Button x:Name="BtnMinimize" Content="—" ToolTip="Minimize" Style="{StaticResource WindowCtrlButton}" Click="OnMinimizeClicked"/>
                     <Button x:Name="BtnMaximize" Content="🗗" ToolTip="Maximize / Restore" Style="{StaticResource WindowCtrlButton}" Click="OnMaximizeClicked"/>
                     <Button x:Name="BtnClose" Content="✕" ToolTip="Close Application" Style="{StaticResource WindowCloseButton}" Click="OnCloseClicked"/>
@@ -520,7 +522,10 @@
                 <Button x:Name="TabUatDump" Content="⋮ DUMP" Style="{StaticResource CyberNavTab}" Click="OnNavTabClicked" Margin="0,0,4,0"/>
                 <Button x:Name="TabUatPinouts" Content="⋮ PINOUTS &amp; TP" ToolTip="Interactive Visual TestPoint &amp; ISP Schematic Gallery" Style="{StaticResource CyberNavTab}" Click="OnOpenTestPointGalleryClicked" Margin="0,0,4,0"/>
                 <Button x:Name="TabUatFrpWizard" Content="⚡ 1-CLICK FRP WIZARD" ToolTip="Unified 1-Click FRP, Mi Account &amp; Cloud Lock Bypass Wizard" Style="{StaticResource CyberNavTab}" Foreground="#F59E0B" FontWeight="ExtraBold" Click="OnOpenFrpWizardClicked" Margin="0,0,4,0"/>
-                <Button x:Name="TabUatCloudLoader" Content="☁️ CLOUD LOADERS" ToolTip="Dynamic Cloud Loaders, Programmers &amp; TestPoints Vault" Style="{StaticResource CyberNavTab}" Foreground="#38BDF8" FontWeight="ExtraBold" Click="OnOpenCloudLoaderClicked" Margin="0,0,8,0"/>
+                <Button x:Name="TabUatCloudLoader" Content="☁️ CLOUD LOADERS" ToolTip="Dynamic Cloud Loaders, Programmers &amp; TestPoints Vault" Style="{StaticResource CyberNavTab}" Foreground="#38BDF8" FontWeight="ExtraBold" Click="OnOpenCloudLoaderClicked" Margin="0,0,4,0"/>
+                <Button x:Name="TabUatSimulator" Content="🧪 SIMULATOR" ToolTip="Virtual Phone Hardware Simulator &amp; Sandbox" Style="{StaticResource CyberNavTab}" Foreground="#A855F7" FontWeight="ExtraBold" Click="OnOpenVirtualSimulatorClicked" Margin="0,0,4,0"/>
+                <Button x:Name="TabUatRomDownloader" Content="📥 ROM CENTER" ToolTip="High-Speed Official Stock ROM Downloader" Style="{StaticResource CyberNavTab}" Foreground="#00F0FF" FontWeight="ExtraBold" Click="OnOpenFirmwareDownloaderClicked" Margin="0,0,4,0"/>
+                <Button x:Name="TabUatWorkshopPos" Content="🧾 WORKSHOP POS" ToolTip="Workshop POS, Job Ticket &amp; Invoice Generator" Style="{StaticResource CyberNavTab}" Foreground="#00FFA3" FontWeight="ExtraBold" Click="OnOpenWorkshopPosClicked" Margin="0,0,8,0"/>
 
                 <!-- Legacy Navigation Buttons Kept Hidden to preserve C# field bindings with 0 errors -->
                 <StackPanel Visibility="Collapsed">
@@ -572,6 +577,9 @@
                         <Button Content="📡" ToolTip="Real-Time USB Hex Packet Sniffer &amp; Protocol Radar" Width="38" Height="28" Margin="0,1" Foreground="#00F0FF" Style="{StaticResource WindowCtrlButton}" Click="OnOpenLiveUsbSnifferClicked"/>
                         <Button Content="🔄" ToolTip="In-App Auto-Updater &amp; GitHub Synchronizer" Width="38" Height="28" Margin="0,1" Foreground="#FFB800" Style="{StaticResource WindowCtrlButton}" Click="OnOpenAutoUpdaterClicked"/>
                         <Button Content="🔒" ToolTip="Samsung Knox Guard (KG) &amp; PayJoy MDM Killer Suite" Width="38" Height="28" Margin="0,1" Foreground="#38BDF8" Style="{StaticResource WindowCtrlButton}" Click="OnOpenKnoxGuardSuiteClicked"/>
+                        <Button Content="🧪" ToolTip="Virtual Phone Hardware Simulator &amp; Playground" Width="38" Height="28" Margin="0,1" Foreground="#A855F7" Style="{StaticResource WindowCtrlButton}" Click="OnOpenVirtualSimulatorClicked"/>
+                        <Button Content="📥" ToolTip="High-Speed Official Stock Firmware Downloader" Width="38" Height="28" Margin="0,1" Foreground="#00F0FF" Style="{StaticResource WindowCtrlButton}" Click="OnOpenFirmwareDownloaderClicked"/>
+                        <Button Content="🧾" ToolTip="Workshop POS, Job Ticket &amp; Invoice Generator" Width="38" Height="28" Margin="0,1" Foreground="#00FFA3" Style="{StaticResource WindowCtrlButton}" Click="OnOpenWorkshopPosClicked"/>
                         <Button Content="f" FontWeight="ExtraBold" FontSize="13" Foreground="#4267B2" ToolTip="Facebook Community Support" Width="38" Height="28" Margin="0,1" Style="{StaticResource WindowCtrlButton}" Click="OnUatFacebookClicked"/>
                         <Button Content="✈️" ToolTip="Official Telegram Updates" Width="38" Height="28" Margin="0,1" Style="{StaticResource WindowCtrlButton}" Click="OnUatTelegramClicked"/>
                         <Button Content="▶️" ToolTip="Official Video Guides" Width="38" Height="28" Margin="0,1" Style="{StaticResource WindowCtrlButton}" Click="OnUatYouTubeClicked"/>
