@@ -408,7 +408,7 @@
 
                 <!-- Col 0: Left Title & Version Badge -->
                 <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock Text="BS LAB TOOL™ v2.6.3" FontSize="11.5" FontWeight="ExtraBold" Foreground="#4DD0E1" VerticalAlignment="Center"/>
+                    <TextBlock Text="BS LAB TOOL™ v2.6.4" FontSize="11.5" FontWeight="ExtraBold" Foreground="#4DD0E1" VerticalAlignment="Center"/>
                     <Border Background="#1A3A54" BorderBrush="#0288D1" BorderThickness="1" CornerRadius="3" Padding="5,1" Margin="6,0,6,0" VerticalAlignment="Center">
                         <TextBlock Text="PRO ENTERPRISE" FontSize="8" FontWeight="Bold" Foreground="#4FC3F7"/>
                     </Border>
@@ -5043,7 +5043,7 @@
 
             <!-- Active Engine & Live Clock -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                <TextBlock Text="Updated : 25-Nov-2026 (v2.6.3)" FontSize="8.5" Foreground="#78909C" Margin="0,0,16,0" VerticalAlignment="Center"/>
+                <TextBlock Text="Updated : 26-Nov-2026 (v2.6.4)" FontSize="8.5" Foreground="#78909C" Margin="0,0,16,0" VerticalAlignment="Center"/>
                 <TextBlock x:Name="TxtUatClock" Text="15 - November - 2026 - 07:15:00 PM" FontSize="9" Foreground="#ECEFF1" Margin="0,0,16,0" FontFamily="Consolas" VerticalAlignment="Center"/>
                 <TextBlock x:Name="TxtLiveClock" Visibility="Collapsed"/>
                 <Border Background="#1A3A54" BorderBrush="#0288D1" BorderThickness="1" CornerRadius="3" Padding="6,1">

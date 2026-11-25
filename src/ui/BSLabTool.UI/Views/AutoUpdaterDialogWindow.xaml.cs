@@ -12,11 +12,11 @@ namespace BSLabTool.UI.Views
 {
     public partial class AutoUpdaterDialogWindow : Window
     {
-        private const string CurrentVersion = "v2.6.3";
+        private const string CurrentVersion = "v2.6.4";
         private const string RepoOwner = "Andr0FixX";
         private const string RepoName = "BSLab_Tool";
-        private string _downloadUrl = "https://github.com/Andr0FixX/BSLab_Tool/releases/download/v2.6.3/BSLab_Tool_PRO_v2.6.3_Setup.exe";
-        private string _latestTag = "v2.6.3";
+        private string _downloadUrl = "https://github.com/Andr0FixX/BSLab_Tool/releases/download/v2.6.4/BSLab_Tool_PRO_v2.6.4_Setup.exe";
+        private string _latestTag = "v2.6.4";
         private string _downloadedFilePath = "";
         private bool _isBusy = false;
 

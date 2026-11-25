@@ -19,7 +19,7 @@
 ; ==============================================================================
 
 #define MyAppName "BS Lab Tool PRO"
-#define MyAppVersion "2.6.3"
+#define MyAppVersion "2.6.4"
 #define MyAppPublisher "BS Lab Tool Team"
 #define MyAppURL "https://andr0fixx.github.io/BSLab_Tool/"
 #define MyAppExeName "BSLabTool.exe"
@@ -36,7 +36,7 @@ DefaultDirName={autopf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
 OutputDir=C:\BSLab_Tool\installer_output
-OutputBaseFilename=BSLab_Tool_PRO_v2.6.3_Setup
+OutputBaseFilename=BSLab_Tool_PRO_v2.6.4_Setup
 SetupIconFile=C:\BSLab_Tool\resources\icons\app_icon.ico
 UninstallDisplayIcon={app}\{#MyAppExeName}
 Compression=lzma2/ultra64

@@ -12042,189 +12042,88 @@ namespace BSLabTool.UI
 
 
         private async void OnSamsungFlashOdinClicked(object sender, RoutedEventArgs e)
-
         {
-
+            AppendSamsungLog("══════════════════════════════════════════════════════");
+            AppendSamsungLog("[*] ⚡ SAMSUNG ODIN LOKE FLASH ENGINE ENGAGED");
             AppendSamsungLog("══════════════════════════════════════════════════════");
 
-            AppendSamsungLog("[*] ⚡ SAMSUNG ODIN FLASH ENGINE ENGAGED");
-
-            AppendSamsungLog("══════════════════════════════════════════════════════");
-
-
-
-            TxtOdinStatus.Text = "Initializing Odin Flash Engine...";
-
-            ProgressBarOdin.Value = 10;
-
-            TxtOdinPct.Text = "10%";
-
-
+            TxtOdinStatus.Text = "Checking firmware packages...";
+            ProgressBarOdin.Value = 2;
+            TxtOdinPct.Text = "2%";
 
             bool hasBl = ChkOdinBl.IsChecked == true && File.Exists(TxtOdinBl.Text);
-
             bool hasAp = ChkOdinAp.IsChecked == true && File.Exists(TxtOdinAp.Text);
-
             bool hasCp = ChkOdinCp.IsChecked == true && File.Exists(TxtOdinCp.Text);
-
             bool hasCsc = ChkOdinCsc.IsChecked == true && File.Exists(TxtOdinCsc.Text);
+            bool hasUserdata = ChkOdinUserdata?.IsChecked == true && File.Exists(TxtOdinUserdata.Text);
+            bool hasPit = ChkOdinPit.IsChecked == true && File.Exists(TxtOdinPit.Text);
+            bool rePartition = ChkOdinRePartition.IsChecked == true && hasPit;
 
-
-
-            if (!hasBl && !hasAp && !hasCp && !hasCsc)
-
+            if (!hasBl && !hasAp && !hasCp && !hasCsc && !hasUserdata && !rePartition)
             {
-
                 AppendSamsungLog("[-] No valid firmware binary packages selected.");
-
-                AppendSamsungLog("[*] Action Required: Click 'BL', 'AP', 'CP' or 'CSC' buttons to load official Samsung tar.md5 packages.");
-
+                AppendSamsungLog("[*] Action Required: Select BL, AP, CP, CSC, or USERDATA (.tar / .tar.md5) packages.");
                 TxtOdinStatus.Text = "Flashing Aborted: Select tar.md5 files";
-
                 ProgressBarOdin.Value = 0;
-
                 TxtOdinPct.Text = "0%";
-
                 return;
-
             }
 
-
-
-
-            AppendSamsungLog("[1] Checking Samsung Download Mode Port & USB Handshake...");
-
-            string portText = TxtSamsungPort.Text;
-
-            AppendSamsungLog($"[*] Target Connection: {portText}");
-
-
-
-            AppendSamsungLog("[2] Validating Package Signatures & Checksums...");
-            ProgressBarOdin.Value = 35;
-            TxtOdinPct.Text = "35%";
-
-            string blPath = TxtOdinBl?.Text ?? "";
-            string apPath = TxtOdinAp?.Text ?? "";
-            string cpPath = TxtOdinCp?.Text ?? "";
-            string cscPath = TxtOdinCsc?.Text ?? "";
-
-            await Task.Run(() =>
+            var options = new Core.OdinFlashOptions
             {
-                var filesToCheck = new List<string>();
-                if (hasBl) filesToCheck.Add(blPath);
-                if (hasAp) filesToCheck.Add(apPath);
-                if (hasCp) filesToCheck.Add(cpPath);
-                if (hasCsc) filesToCheck.Add(cscPath);
+                PreferredPortText = TxtSamsungPort?.Text,
+                BlPath = hasBl ? TxtOdinBl.Text : null,
+                ApPath = hasAp ? TxtOdinAp.Text : null,
+                CpPath = hasCp ? TxtOdinCp.Text : null,
+                CscPath = hasCsc ? TxtOdinCsc.Text : null,
+                UserdataPath = hasUserdata ? TxtOdinUserdata.Text : null,
+                PitPath = hasPit ? TxtOdinPit.Text : null,
+                AutoReboot = ChkOdinAutoReboot.IsChecked == true,
+                FResetTime = ChkOdinFReset.IsChecked == true,
+                NandErase = ChkOdinNandErase.IsChecked == true,
+                RePartition = rePartition
+            };
 
+            string? detectedPort = Core.SamsungOdinLokeFlasher.DetectSamsungDownloadComPort(options.PreferredPortText);
+            if (string.IsNullOrEmpty(detectedPort))
+            {
+                AppendSamsungLog("[-] No Samsung Download Mode COM port detected.");
+                AppendSamsungLog("[*] Put phone in Download Mode (Vol Down + Vol Up + USB), install Samsung USB Drivers, and click Scan.");
+                TxtOdinStatus.Text = "FAIL: No Samsung Download Mode COM port detected";
+                ProgressBarOdin.Value = 0;
+                TxtOdinPct.Text = "0%";
+                return;
+            }
 
+            AppendSamsungLog($"[*] Target Download Mode Port: {detectedPort}");
+            TxtSamsungPort.Text = $" {detectedPort} (SAMSUNG Download Mode)";
 
-                foreach (var f in filesToCheck)
-
+            var result = await Task.Run(() => Core.SamsungOdinLokeFlasher.Flash(
+                options,
+                msg => Dispatcher.Invoke(() => AppendSamsungLog(msg)),
+                (pct, status) => Dispatcher.Invoke(() =>
                 {
+                    ProgressBarOdin.Value = pct;
+                    TxtOdinPct.Text = $"{pct}%";
+                    TxtOdinStatus.Text = status;
+                })));
 
-                    var fi = new FileInfo(f);
-
-                    Dispatcher.Invoke(() => AppendSamsungLog($"[+] Binary Verified: {fi.Name} (Size: {fi.Length / (1024 * 1024):N0} MB)"));
-
-                }
-
-
-            }
-);
-
-
-
-            if (ChkOdinPit.IsChecked == true && File.Exists(TxtOdinPit.Text))
-
+            if (result.Success)
             {
-
-                AppendSamsungLog($"[3] Injecting Partition Information Table: {System.IO.Path.GetFileName(TxtOdinPit.Text)}");
-
-                ProgressBarOdin.Value = 60;
-
-                TxtOdinPct.Text = "60%";
-
+                ProgressBarOdin.Value = 100;
+                TxtOdinPct.Text = "100%";
+                TxtOdinStatus.Text = $"PASS! {result.PartitionsFlashed} partition(s) flashed on {result.ComPort}.";
+                AppendSamsungLog($"[+] {result.Message}");
             }
-
-
             else
-
             {
-
-                AppendSamsungLog("[3] Using Device Factory Partition Geometry...");
-
-                ProgressBarOdin.Value = 60;
-
-                TxtOdinPct.Text = "60%";
-
+                ProgressBarOdin.Value = 0;
+                TxtOdinPct.Text = "0%";
+                TxtOdinStatus.Text = $"FAIL: {result.Message}";
+                AppendSamsungLog($"[-] {result.Message}");
             }
-
-
-
-
-            AppendSamsungLog("[4] Flashing Firmware Partitions into NAND Flash Storage...");
-
-            string odinExe = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "resources", "loaders", "samsung", "odin", "Odin3_v3.14.4", "Odin3_v3.14.4.exe");
-            if (!File.Exists(odinExe))
-            {
-                odinExe = @"C:\BSLab_Tool\resources\loaders\samsung\odin\Odin3_v3.14.4\Odin3_v3.14.4.exe";
-            }
-
-            if (File.Exists(odinExe))
-            {
-                try
-                {
-                    string odinDir = Path.GetDirectoryName(odinExe)!;
-                    string iniPath = Path.Combine(odinDir, "Odin3.ini");
-                    var sb = new System.Text.StringBuilder();
-                    sb.AppendLine("[Option]");
-                    sb.AppendLine("Title=BS Lab Tool - Official Samsung Odin Engine");
-                    sb.AppendLine("FactoryResetTime=1");
-                    sb.AppendLine("OptionEnable=1");
-                    sb.AppendLine("DeviceInfo=1");
-                    sb.AppendLine("Warning=0");
-                    sb.AppendLine();
-                    sb.AppendLine("[APOption]");
-                    sb.AppendLine($"RePartition={(ChkOdinRePartition.IsChecked == true ? "1" : "0")}");
-                    sb.AppendLine($"AutoReboot={(ChkOdinAutoReboot.IsChecked == true ? "1" : "0")}");
-                    sb.AppendLine($"FResetTime={(ChkOdinFReset.IsChecked == true ? "1" : "0")}");
-                    sb.AppendLine($"NandErase={(ChkOdinNandErase.IsChecked == true ? "1" : "0")}");
-                    sb.AppendLine();
-                    sb.AppendLine("[ButtonOption]");
-                    sb.AppendLine("Bootloader=1");
-                    sb.AppendLine("PDA=1");
-                    sb.AppendLine("Phone=1");
-                    sb.AppendLine("CSC=1");
-                    sb.AppendLine("UMS/PATCH=1");
-                    File.WriteAllText(iniPath, sb.ToString());
-
-                    Process.Start(new ProcessStartInfo(odinExe) { WorkingDirectory = odinDir, UseShellExecute = true });
-                    AppendSamsungLog($"[+] 🚀 Official Samsung Odin Engine v3.14.4 activated in high-speed hardware mode!");
-                }
-                catch (Exception ex)
-                {
-                    AppendSamsungLog($"[!] Note: {ex.Message}");
-                }
-            }
-
-            ProgressBarOdin.Value = 85;
-
-            TxtOdinPct.Text = "85%";
-
-
-
-
-            ProgressBarOdin.Value = 100;
-
-            TxtOdinPct.Text = "100%";
-
-            TxtOdinStatus.Text = "PASS! All binary threads verified & committed.";
-
-            AppendSamsungLog("[+] Odin Flash Succeeded! Device rebooting to Android system.");
 
             AppendSamsungLog("══════════════════════════════════════════════════════");
-
         }
 
 
